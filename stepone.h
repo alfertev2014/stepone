@@ -413,6 +413,8 @@ public:
 
     virtual bool isInteger() const {return false;}
     virtual Integer * asInteger() {return 0;}
+    virtual bool isFloat() const {return false;}
+    virtual Float * asFloat() {return 0;}
 
     string toString() const {return "{SpecType}";}
 };

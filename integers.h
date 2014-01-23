@@ -21,7 +21,7 @@ protected:
     Ob::Ptr applyX(const Ptr &x)
     {
         SpecType * stx = x->asSpecType();
-        Integer * i = stx->asInteger();
+        Integer * i = stx != 0 ? stx->asInteger() : 0;
         return i == 0 ? Ob::anil : Ob::at;
     }
 

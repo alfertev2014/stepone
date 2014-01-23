@@ -18,5 +18,6 @@ HEADERS += \
     basenumfunc.h \
     basefunc.h \
     basemacro.h \
-    integers.h
+    integers.h \
+    floats.h
 
