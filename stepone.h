@@ -363,22 +363,14 @@ public:
     Ptr apply(const Ptr &p, const Ptr &a) {
         if(p == Ob::anil)
             return this;
-        Ptr ob = p->car()->eval(a);
-        Ptr e = applyX(ob);
+        Ptr e = applyX(p->car()->eval(a));
         Ob::Ptr p1 = p->cdr();
         while(!(p1 == Ob::anil)) {
-            Function * f = e->asFunction(); // Этот код основывается на том, что при применении функции возвращается функция, а не макрос
+            Function * f = e->asFunction();
             if(f == 0) {
-                Macro * m = e->asMacro();
-                if(m == 0) {
-                    cout << "throw can\'t apply " << __LINE__;
-                    throw 0;
-                } else {
-                    e = m->apply(p1, a);
-                }
+                return e->apply(p1, a); // если вернули, возможно, макрос
             } else {
-                ob = p1->car()->eval(a);
-                e = f->applyX(ob);
+                e = f->applyX(p1->car()->eval(a));
                 p1 = p1->cdr();
             }
         }
