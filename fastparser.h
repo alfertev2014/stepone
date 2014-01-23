@@ -2,10 +2,10 @@
 #define FASTPARSER_H
 
 #include "stepone.h"
-#include "typestemp.h"
-#include "numfunctemp.h"
+#include "basemacro.h"
 #include "basefunc.h"
 #include "basenumfunc.h"
+#include "numbers.h"
 
 #include <string>
 #include <map>
@@ -59,60 +59,64 @@ class FastParser
     void initTable()
     {
         parsingTable.clear();
-        parsingTable.insert("nil", Ob::anil);
-        parsingTable.insert("t", Ob::at);
-        parsingTable.insert("?", Ob::aif);
-        parsingTable.insert("\'", Ob::aquote);
-        parsingTable.insert(">-", Ob::alet);
-        parsingTable.insert("~", Ob::aeval);
-        parsingTable.insert("\\", Ob::alambda);
-        parsingTable.insert("#", Ob::alazy);
-        parsingTable.insert("$", Ob::aunlazy);
-        parsingTable.insert("@", Ob::alabel);
-        parsingTable.insert("|", Ob::atry);
-        parsingTable.insert(";", Ob::ado);
-        parsingTable.insert("_", Ob::abot);
+        parsingTable.insert(pair<string, Ob::Ptr>("nil", Ob::anil));
+        parsingTable.insert(pair<string, Ob::Ptr>("t", Ob::at));
+        parsingTable.insert(pair<string, Ob::Ptr>("?", Ob::aif));
+        parsingTable.insert(pair<string, Ob::Ptr>("\'", Ob::aquote));
+        parsingTable.insert(pair<string, Ob::Ptr>(">-", Ob::alet));
+        parsingTable.insert(pair<string, Ob::Ptr>("~", Ob::aeval));
+        parsingTable.insert(pair<string, Ob::Ptr>("\\", Ob::alambda));
+        parsingTable.insert(pair<string, Ob::Ptr>("#", Ob::alazy));
+        parsingTable.insert(pair<string, Ob::Ptr>("$", Ob::aunlazy));
+        parsingTable.insert(pair<string, Ob::Ptr>("@", Ob::alabel));
 
-        parsingTable.insert("car", acar);
-        parsingTable.insert("cdr", acdr);
-        parsingTable.insert("cons", acons);
-        parsingTable.insert("atom", aatom);
-        parsingTable.insert("eq", aeq);
+        parsingTable.insert(pair<string, Ob::Ptr>("car", acar));
+        parsingTable.insert(pair<string, Ob::Ptr>("cdr", acdr));
+        parsingTable.insert(pair<string, Ob::Ptr>("cons", acons));
+        parsingTable.insert(pair<string, Ob::Ptr>("atom", aatom));
+        parsingTable.insert(pair<string, Ob::Ptr>("eq", aeq));
 
-        parsingTable.insert("i+", aintPlus);
-        parsingTable.insert("i-", aintMinus);
-        parsingTable.insert("i*", aintProduct);
-        parsingTable.insert("i/", aintDivision);
-        parsingTable.insert("i%", aintMod);
-        parsingTable.insert("i?", aintp);
-        parsingTable.insert("i=", aintEql);
-        parsingTable.insert("i!=", aintNE);
-        parsingTable.insert("i<", aintLT);
-        parsingTable.insert("i>", aintGT);
-        parsingTable.insert("i<=", aintLE);
-        parsingTable.insert("i>=", aintGE);
+        parsingTable.insert(pair<string, Ob::Ptr>("i+", aintPlus));
+        parsingTable.insert(pair<string, Ob::Ptr>("i-", aintMinus));
+        parsingTable.insert(pair<string, Ob::Ptr>("i*", aintProduct));
+        parsingTable.insert(pair<string, Ob::Ptr>("i/", aintDivision));
+        parsingTable.insert(pair<string, Ob::Ptr>("i%", aintMod));
+        parsingTable.insert(pair<string, Ob::Ptr>("i?", aintp));
+        parsingTable.insert(pair<string, Ob::Ptr>("i=", aintEql));
+        parsingTable.insert(pair<string, Ob::Ptr>("i!=", aintNE));
+        parsingTable.insert(pair<string, Ob::Ptr>("i<", aintLT));
+        parsingTable.insert(pair<string, Ob::Ptr>("i>", aintGT));
+        parsingTable.insert(pair<string, Ob::Ptr>("i<=", aintLE));
+        parsingTable.insert(pair<string, Ob::Ptr>("i>=", aintGE));
 
-        parsingTable.insert("f+", afloatPlus);
-        parsingTable.insert("f-", afloatMinus);
-        parsingTable.insert("f*", afloatProduct);
-        parsingTable.insert("f/", afloatDivision);
-        parsingTable.insert("f?", afloatp);
-        parsingTable.insert("f=", afloatEql);
-        parsingTable.insert("f!=", afloatNE);
-        parsingTable.insert("f<", afloatLT);
-        parsingTable.insert("f>", afloatGT);
-        parsingTable.insert("f<=", afloatLE);
-        parsingTable.insert("f>=", afloatGE);
+        parsingTable.insert(pair<string, Ob::Ptr>("f+", afloatPlus));
+        parsingTable.insert(pair<string, Ob::Ptr>("f-", afloatMinus));
+        parsingTable.insert(pair<string, Ob::Ptr>("f*", afloatProduct));
+        parsingTable.insert(pair<string, Ob::Ptr>("f/", afloatDivision));
+        parsingTable.insert(pair<string, Ob::Ptr>("f?", afloatp));
+        parsingTable.insert(pair<string, Ob::Ptr>("f=", afloatEql));
+        parsingTable.insert(pair<string, Ob::Ptr>("f!=", afloatNE));
+        parsingTable.insert(pair<string, Ob::Ptr>("f<", afloatLT));
+        parsingTable.insert(pair<string, Ob::Ptr>("f>", afloatGT));
+        parsingTable.insert(pair<string, Ob::Ptr>("f<=", afloatLE));
+        parsingTable.insert(pair<string, Ob::Ptr>("f>=", afloatGE));
 
-        parsingTable.insert("f2i", afloat2int);
-        parsingTable.insert("i2f", aint2float);
+        parsingTable.insert(pair<string, Ob::Ptr>("f2i", afloat2int));
+        parsingTable.insert(pair<string, Ob::Ptr>("i2f", aint2float));
     }
 
 public:
     FastParser()
         : s(""), nosymbol("(){}[].\""), a(Ob::anil)
     {
-        a = new Context(Ob::abot, Ob::abot, a);
+        a = new Context(Ob::aif, BaseMacro::mif, a);
+        a = new Context(Ob::aquote, BaseMacro::mquote, a);
+        a = new Context(Ob::alambda, BaseMacro::mlambda, a);
+        a = new Context(Ob::alet, BaseMacro::mlet, a);
+        a = new Context(Ob::alabel, BaseMacro::mlabel, a);
+        a = new Context(Ob::alazy, BaseMacro::mlazy, a);
+        a = new Context(Ob::aunlazy, BaseMacro::munlazy, a);
+        a = new Context(Ob::aeval, BaseMacro::meval, a);
 
         a = new Context(acar, BaseFunc::fcar, a);
         a = new Context(acdr, BaseFunc::fcdr, a);
@@ -155,7 +159,7 @@ public:
     {
         s = _s;
         parseRes pr = parseExpression(s.begin());
-        return pr.success ? pr.e : Ob::abot;
+        return pr.success ? pr.e : Ob::anil;
     }
 
     Ob::Ptr parseEval(string _s)
@@ -165,35 +169,34 @@ public:
 
     string evalToString(string _s)
     {
-        return print(parse(_s)->eval(a));
+        stringstream ss;
+        print(ss, parse(_s)->eval(a));
+        return ss.str();
     }
 
-    string print(const Ob::Ptr & p)
+    string print(ostream ts, const Ob::Ptr & p)
     {
         string res;
-        QTextStream ts(&res, QIODevice::WriteOnly);
         printOb(ts, p);
         return res;
     }
 private:
 
-    QTextStream & printOb(QTextStream & ts, const Ob::Ptr & p)
+    ostream & printOb(ostream & ts, const Ob::Ptr & p)
     {
-        //cout << "printOb";
         Symbol * sym = p->asSymbol();
         if(sym != 0)
             return printSymbol(ts, sym);
-        Pair * pr = p->asPair();
-        if(pr != 0)
+        if(p->isPair())
         {
             ts << "(";
-            return printList(ts, pr);
+            return printList(ts, p->asPair());
         }
         if(p->isFunction())
         {
             Function * f = p->asFunction();
             if(f->isOperation())
-                ts << "{operation}";
+                ts << f->toString();
             else
                 ts << "{closure}";
         }
@@ -204,17 +207,17 @@ private:
         else if(p->isSpecType())
         {
             SpecType * spt = p->asSpecType();
-            if(spt->hasType(SpecTypeTemp<int>::type_id))
-                ts << spt->cast<SpecTypeTemp<int> >()->getValue();
-            else if(spt->hasType(SpecTypeTemp<float>::type_id))
-                ts << spt->cast<SpecTypeTemp<float> >()->getValue();
+            if(spt->isInteger())
+                ts << spt->asInteger()->getInteger();
+            else if(spt->isFloat())
+                ts << spt->asFloat()->getFloat();
             else
                 ts << "{SpecType}";
         }
         return ts;
     }
 
-    QTextStream & printSymbol(QTextStream & ts, Symbol * sym)
+    ostream & printSymbol(ostream & ts, Symbol * sym)
     {
         //cout << "printSymbol";
         if(sym == Ob::anil->asSymbol())
@@ -226,10 +229,10 @@ private:
         {
             for(map<string, Ob::Ptr>::iterator it = parsingTable.begin(); it != parsingTable.end(); ++it)
             {
-                if(it.value() == sym)
+                if(it->second == sym)
                 {
                     //cout << "print symbol:" << it.key();
-                    ts << it.key();
+                    ts << it->first;
                     break;
                 }
             }
@@ -237,7 +240,7 @@ private:
         return ts;
     }
 
-    QTextStream & printList(QTextStream & ts, Pair * pr)
+    ostream & printList(ostream & ts, Pair * pr)
     {
         //cout << "printList";
         printOb(ts, pr->car());
@@ -358,20 +361,20 @@ private:
     {
         string symbol("");
         string::const_iterator sii = si;
-        if(sii == s.end() || sii->isSpace() || nosymbol.contains(*sii))
+        if(sii == s.end() || isspace(*sii) || (nosymbol.find(*sii) != string::npos))
         {
-            cout << "symbol fail first char" << *sii;
+            cout << "symbol fail first char " << *sii;
             return parseRes(Ob::anil, si, false);
         }
         symbol.push_back(*sii);
         ++sii;
-        while(sii != s.end() && !sii->isSpace() && !nosymbol.contains(*sii))
+        while(sii != s.end() && !isspace(*sii) && (nosymbol.find(*sii) == string::npos))
         {
             symbol.push_back(*sii);
             ++sii;
         }
         Ob::Ptr e(Ob::anil);
-        if(parsingTable.contains(symbol))
+        if(parsingTable.count(symbol) > 0)
         {
             //cout << "already existing symbol: " << symbol;
             e = parsingTable[symbol];
@@ -379,7 +382,7 @@ private:
         else
         {
             Symbol * sym = new Symbol();
-            parsingTable.insert(symbol, sym);
+            parsingTable.insert(pair<string, Ob::Ptr>(symbol, sym));
             //cout << "new symbol: " << symbol;
             e = sym;
         }
@@ -391,41 +394,41 @@ private:
     {
         string number("");
         string::const_iterator sii = si;
-        if(sii == s.end() || !sii->isDigit() && *sii != '-' || sii->isSpace() || nosymbol.contains(*sii))
+        if(sii == s.end() || !isdigit(*sii) && *sii != '-' || isspace(*sii) || (nosymbol.find(*sii) != string::npos))
         {
             //cout << "number fail first char" << *sii;
             return parseRes(Ob::anil, si, false);
         }
         number.push_back(*sii);
         ++sii;
-        while(sii != s.end() && sii->isDigit() && !sii->isSpace() && !nosymbol.contains(*sii))
+        while(sii != s.end() && isdigit(*sii) && !isspace(*sii) && (nosymbol.find(*sii) == string::npos))
         {
             number.push_back(*sii);
             ++sii;
         }
         if(sii == s.end() || *sii != '.')
         {
-            bool b = false;
-            int i = number.toInt(&b);
-            if(b)
+            istringstream ss(number);
+            int i;
+            if(ss >> i)
             {
-                return parseRes(new SpecTypeTemp<int>(i), sii, true);
+                return parseRes(new Integer(i), sii, true);
             }
         }
         else
         {
             number.push_back(*sii);
             ++sii;
-            while(sii != s.end() && sii->isDigit() && !sii->isSpace() && !nosymbol.contains(*sii))
+            while(sii != s.end() && isdigit(*sii) && !isspace(*sii) && (nosymbol.find(*sii) == string::npos))
             {
                 number.push_back(*sii);
                 ++sii;
             }
-            bool b = false;
-            float f = number.toFloat(&b);
-            if(b)
+            float f;
+            istringstream ss(number);
+            if(ss >> f)
             {
-                return parseRes(new SpecTypeTemp<float>(f), sii, true);
+                return parseRes(new Float(f), sii, true);
             }
         }
         return parseRes(Ob::anil, si, false);
@@ -434,9 +437,9 @@ private:
     lexRes lexem(string lex, string::const_iterator si)
     {
         string::const_iterator sii = si;
-        foreach(QChar c, lex)
+        for(string::const_iterator it = lex.begin(); it != lex.end(); ++it)
         {
-            if(sii == s.end() || *sii != c)
+            if(sii == s.end() || *sii != *it)
             {
                 //cout << "lexem fail: " << lex;
                 return lexRes(si, false);
@@ -449,7 +452,7 @@ private:
 
     lexRes spaces(string::const_iterator si)
     {
-        while(si != s.end() && si->isSpace())
+        while(si != s.end() && isspace(*si))
             ++si;
         //cout << "spaces";
         return lexRes(si, true);

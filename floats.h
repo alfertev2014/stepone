@@ -4,24 +4,27 @@
 #include "stepone.h"
 
 class Float : public SpecType {
-    Float f;
+    float f;
 public:
-    Float(Float _f) : f(_f) {}
-    Float getFloat() const {return f;}
+    Float(float _f) : f(_f) {}
+    float getFloat() const {return f;}
 
     virtual bool isFloat() const {return true;}
     virtual Float * asFloat() {return this;}
 
-    string toString() const {return string("{f: ") << f << "}"; }
+    string toString() const {
+        stringstream ss;
+        ss << "{f: " << f << "}";
+        return ss.str();
+    }
 };
 
-class FFloatP : public Operation
-{
+class FFloatP : public Operation {
 protected:
-    Ob::Ptr applyX(const Ptr &x)
-    {
+    Ob::Ptr applyX(const Ptr &x) {
         SpecType * stx = x->asSpecType();
-        Float * f = stx != 0 ? stx->asFloat() : 0;
+        if(stx == 0) return Ob::anil;
+        Float * f = stx->asFloat();
         return f == 0 ? Ob::anil : Ob::at;
     }
 
@@ -29,82 +32,67 @@ public:
     string toString() const {return "{FFloatP}";}
 };
 
-class FFloatToInt : public Operation
-{
-protected:
-    Ptr applyX(const Ptr &x)
-    {
-        SpecType * stx = x->asSpecType();
-        if(stx == 0) throw 0;
-        Float * f = stx->asFloat();
-        if(f == 0) throw 0;
-        return new Integer(f->getFloat());
-    }
-
-public:
-    string toString() const
-    {return "{FFloatToInt}";}
-};
-
 template <typename BinOp>
-class FFloatBinOp : public Operation
-{
-    class FFloatBinOp2 : public Operation
-    {
-        Float i1;
+class FFloatBinOp : public Operation {
+    class FFloatBinOp2 : public Operation {
+        float f1;
     public:
-        FFloatBinOp2(Float _i1) : i1(_i1) {}
+        FFloatBinOp2(float _f1) : f1(_f1) {}
     protected:
-        Ptr applyX(const Ptr &x)
-        {
+        Ptr applyX(const Ptr &x) {
             SpecType * stx = x->asSpecType();
             if(stx == 0) throw 0;
             Float * f = stx->asFloat();
             if(f == 0) throw 0;
-            return new Float(BinOp::op(i1, f->getFloat()));
+            return new Float(BinOp::op(f1, f->getFloat()));
         }
     public:
-        string toString() const
-        {return "FFloatBinOp2{" + i1 + BinOp::toString() + "}";}
+        string toString() const {
+            stringstream ss;
+            ss << "FFloatBinOp2{" << f1 << BinOp::toString() << "}";
+            return ss.str();
+        }
     };
 protected:
-    Ptr applyX(const Ptr &x)
-    {
+    Ptr applyX(const Ptr &x) {
         SpecType * stx = x->asSpecType();
         if(stx == 0) throw 0;
         Float * f = stx->asFloat();
         if(f == 0) throw 0;
-        return new FFloatBinOp2(f->getValue());
+        return new FFloatBinOp2(f->getFloat());
     }
 
 public:
-    string toString() const {return "FFloatBinOp{" + BinOp::toString() + "}";}
+    string toString() const {
+        stringstream ss;
+        ss << "FFloatBinOp{" << BinOp::toString() << "}";
+        return ss.str();
+    }
 };
 
 template <class CmpOp>
-class FFloatCmpOp : public Operation
-{
-    class FFloatCmpOp2 : public Operation
-    {
-        Float i1;
+class FFloatCmpOp : public Operation {
+    class FFloatCmpOp2 : public Operation {
+        float f1;
     public:
-        FFloatCmpOp2(Float _i1) : i1(_i1) {}
+        FFloatCmpOp2(float _f1) : f1(_f1) {}
     protected:
-        Ptr applyX(const Ptr &x)
-        {
+        Ptr applyX(const Ptr &x) {
             SpecType * stx = x->asSpecType();
             if(stx == 0) throw 0;
             Float * f = stx->asFloat();
             if(f == 0) throw 0;
-            return CmpOp::op(i1, f->getFloat()) ? Ob::at : Ob::anil;
+            return CmpOp::op(f1, f->getFloat()) ? Ob::at : Ob::anil;
         }
     public:
-        string toString() const
-        {return "FFloatCmpOp2{" + i1 + CmpOp::toString() + "}";}
+        string toString() const {
+            stringstream ss;
+            ss << "FFloatCmpOp2{" << f1 << CmpOp::toString() << "}";
+            return ss.str();
+        }
     };
 protected:
-    Ptr applyX(const Ptr &x)
-    {
+    Ptr applyX(const Ptr &x) {
         SpecType * stx = x->asSpecType();
         if(stx == 0) throw 0;
         Float * f = stx->asFloat();
@@ -113,7 +101,11 @@ protected:
     }
 
 public:
-    string toString() const {return "FFloatCmpOp{" + CmpOp::toString() + "}";}
+    string toString() const {
+        stringstream ss;
+        ss << "FFloatCmpOp{" << CmpOp::toString() << "}";
+        return ss.str();
+    }
 };
 
 #endif // FLOATS_H

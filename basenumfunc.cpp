@@ -1,7 +1,6 @@
 #include "basenumfunc.h"
 #include "numfunctemp.h"
-#include "integers.h"
-#include "floats.h"
+#include "numbers.h"
 
 const Ob::Ptr BaseNumFunc::fintPlus(new FIntBinOp<PlusBinOp<int> >);
 const Ob::Ptr BaseNumFunc::fintMinus(new FIntBinOp<MinusBinOp<int> >);

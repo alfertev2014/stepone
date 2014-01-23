@@ -30,22 +30,22 @@ public:
 class MLet : public Macro {
 public:
     Ob::Ptr apply(const Ptr &p, const Ptr &a) {
-        Ob::Ptr val = pcdr->cdr();
-        return val->cdr()->eval(new Context(pcdr->car(), val->car()->eval(a), a));
+        Ob::Ptr val = p->cdr();
+        return val->cdr()->eval(new Context(p->car(), val->car()->eval(a), a));
     }
 };
 
 class MLazy : public Macro {
 public:
     Ob::Ptr apply(const Ptr &p, const Ptr &a) {
-        return new Lazy(pcdr, a);
+        return new Lazy(p, a);
     }
 };
 
 class MUnlazy : public Macro {
 public:
     Ob::Ptr apply(const Ptr &p, const Ptr &a) {
-        return pcdr->eval(a)->unlazy();
+        return p->eval(a)->unlazy();
     }
 };
 
@@ -63,6 +63,19 @@ public:
     }
 };
 
+class BaseMacro {
+private:
+    BaseMacro(){}
+public:
+    static const Ob::Ptr mif;
+    static const Ob::Ptr mquote;
+    static const Ob::Ptr mlambda;
+    static const Ob::Ptr mlet;
+    static const Ob::Ptr mlazy;
+    static const Ob::Ptr munlazy;
+    static const Ob::Ptr mlabel;
+    static const Ob::Ptr meval;
+};
 
 
 #endif // BASEMACRO_H

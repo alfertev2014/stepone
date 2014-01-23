@@ -3,6 +3,7 @@
 
 #include <string>
 #include <iostream>
+#include <sstream>
 
 using namespace std;
 
@@ -155,7 +156,7 @@ public:
     Ptr car() {return pcar;}
     Ptr cdr() {return pcdr;}
 
-    Ptr eval(const Ptr & a) {pcar->eval(a)->apply(pcdr);}
+    Ptr eval(const Ptr & a) {pcar->eval(a)->apply(pcdr, a);}
 
     string toString() const {
         if(this == pcar || this == pcdr)
@@ -321,14 +322,13 @@ public:
         else if(this == Ob::aunlazy) return "$";
         else if(this == Ob::alabel) return "@";
         else if(this == Ob::aif) return "?";
-        else if(this == Ob::atry) return "|";
-        else if(this == Ob::ado) return ";";
-        else if(this == Ob::abot) return "_";
         else {
-            int i = ((int)(void *)this);
-            i += (i >> 16) & 0xFFFF;
-            i += (i >> 16) & 0xFFFF;
-            return "s" + string::number(i % (256 * 16), 16);
+            //int i = ((int)this);
+            //i += (i >> 16) & 0xFFFF;
+            //i += (i >> 16) & 0xFFFF;
+            stringstream ss;
+            ss << "s" << (void *)this;
+            return ss.str();
         }
     }
 };

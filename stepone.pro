@@ -7,7 +7,8 @@ SOURCES += main.cpp \
     stepone.cpp \
     fastparser.cpp \
     basenumfunc.cpp \
-    basefunc.cpp
+    basefunc.cpp \
+    basemacro.cpp
 
 HEADERS += \
     typestemp.h \
@@ -19,5 +20,6 @@ HEADERS += \
     basefunc.h \
     basemacro.h \
     integers.h \
-    floats.h
+    floats.h \
+    numbers.h
 
