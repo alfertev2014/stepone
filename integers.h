@@ -81,4 +81,39 @@ public:
     string toString() const {return "FIntBinOp{" + BinOp::toString() + "}";}
 };
 
+template <class CmpOp>
+class FIntCmpOp : public Operation
+{
+    class FIntCmpOp2 : public Operation
+    {
+        int i1;
+    public:
+        FIntCmpOp2(int _i1) : i1(_i1) {}
+    protected:
+        Ptr applyX(const Ptr &x)
+        {
+            SpecType * stx = x->asSpecType();
+            if(stx == 0) throw 0;
+            Integer * i = stx->asInteger();
+            if(i == 0) throw 0;
+            return CmpOp::op(i1, i->getInteger()) ? Ob::at : Ob::anil;
+        }
+    public:
+        string toString() const
+        {return "FIntCmpOp2{" + i1 + CmpOp::toString() + "}";}
+    };
+protected:
+    Ptr applyX(const Ptr &x)
+    {
+        SpecType * stx = x->asSpecType();
+        if(stx == 0) throw 0;
+        Integer * i = stx->asInteger();
+        if(i == 0) throw 0;
+        return new FIntCmpOp2(i->getInteger());
+    }
+
+public:
+    string toString() const {return "FIntCmpOp{" + CmpOp::toString() + "}";}
+};
+
 #endif // INTEGERS_H
