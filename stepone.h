@@ -25,7 +25,7 @@ class SpecType;
 class Ob {
     int refcount;
 
-public:
+public: // static
     class Ptr {
         Ob * ob;
     public:
@@ -98,14 +98,21 @@ public:
     static const Ptr abot;
 
 public:
-    virtual Ptr assoc(const Ptr & s) const {cout << "throw assoc " << __LINE__; throw 0;}
-
-public:
     Ob() : refcount(0) {}
     virtual ~Ob() {}
 
     virtual Ptr car() {cout << "throw car " << __LINE__; throw 0;}
     virtual Ptr cdr() {cout << "throw cdr " << __LINE__; throw 0;}
+
+    virtual Ptr eval(const Ptr & a) {throw 0;}
+    virtual Ptr apply(const Ptr & p, const Ptr & a) {
+        if(p == Ob::anil) return this;
+        throw 0;
+    }
+    virtual Ptr unlazy() {return this;}
+    virtual Ptr assoc(const Ptr & s) const {cout << "throw assoc " << __LINE__; throw 0;}
+
+    //Методы для определения типа
 
     virtual bool isAtom() const {return false;}
     virtual Atom * asAtom() {return 0;}
@@ -131,13 +138,7 @@ public:
     virtual bool isSpecType() const {return false;}
     virtual SpecType * asSpecType() {return 0;}
 
-    virtual Ptr eval(const Ptr & a) {throw 0;}
-    virtual Ptr apply(const Ptr & p, const Ptr & a) {
-        if(p == Ob::anil) return this;
-        throw 0;
-    }
-    virtual Ptr unlazy() {return this;}
-
+    // Методы для отладки
     virtual string toString() const = 0;
 };
 
@@ -340,15 +341,6 @@ public:
     bool isConst() const {return true;}
     Const * asConst() {return this;}
 
-    virtual bool isMacro() const {return false;}
-    virtual Macro * asMacro() {return 0;}
-    virtual bool isFunction() const {return false;}
-    virtual Function * asFunction() {return 0;}
-    virtual bool isSpecType() const {return false;}
-    virtual SpecType * asSpecType() {return 0;}
-    virtual bool isAction() const {return false;}
-    virtual Action * asAction() {return 0;}
-
     Ob::Ptr eval(const Ptr &a) {return this;}
 };
 
@@ -381,7 +373,7 @@ public:
             ob = p1->car()->eval(a);
             Function * f = e->asFunction();
             if(f == 0) {
-                cout << "throw can\'t apply" << e->toString();
+                cout << "throw can\'t apply " << __LINE__;
                 throw 0;
             }
             e = f->applyX(ob);
