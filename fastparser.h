@@ -12,8 +12,7 @@
 
 using namespace std;
 
-class FastParser
-{
+class FastParser {
     map<string, Ob::Ptr> parsingTable;
 
     string s;
@@ -56,8 +55,7 @@ class FastParser
     static const Ob::Ptr afloat2int;
     static const Ob::Ptr aint2float;
 
-    void initTable()
-    {
+    void initTable() {
         parsingTable.clear();
         parsingTable.insert(pair<string, Ob::Ptr>("nil", Ob::anil));
         parsingTable.insert(pair<string, Ob::Ptr>("t", Ob::at));
@@ -106,9 +104,7 @@ class FastParser
     }
 
 public:
-    FastParser()
-        : s(""), nosymbol("(){}[].\""), a(Ob::anil)
-    {
+    FastParser() : s(""), nosymbol("(){}[].\""), a(Ob::anil) {
         a = new Context(Ob::aif, BaseMacro::mif, a);
         a = new Context(Ob::aquote, BaseMacro::mquote, a);
         a = new Context(Ob::alambda, BaseMacro::mlambda, a);
@@ -155,45 +151,31 @@ public:
         initTable();
     }
 
-    Ob::Ptr parse(string _s)
-    {
+    Ob::Ptr parse(string _s) {
         s = _s;
         parseRes pr = parseExpression(s.begin());
         return pr.success ? pr.e : Ob::anil;
     }
 
-    Ob::Ptr parseEval(string _s)
-    {
-        return parse(_s)->eval(a);
-    }
+    Ob::Ptr parseEval(string _s) {return parse(_s)->eval(a);}
 
-    string evalToString(string _s)
-    {
+    string evalToString(string _s) {
         stringstream ss;
         print(ss, parse(_s)->eval(a));
         return ss.str();
     }
 
-    string print(ostream & ts, const Ob::Ptr & p)
-    {
-        string res;
-        printOb(ts, p);
-        return res;
-    }
+    void print(ostream & ts, const Ob::Ptr & p) {printOb(ts, p);}
 private:
-
-    ostream & printOb(ostream & ts, const Ob::Ptr & p)
-    {
+    ostream & printOb(ostream & ts, const Ob::Ptr & p) {
         Symbol * sym = p->asSymbol();
         if(sym != 0)
             return printSymbol(ts, sym);
-        if(p->isPair())
-        {
+        if(p->isPair()) {
             ts << "(";
             return printList(ts, p->asPair());
         }
-        if(p->isFunction())
-        {
+        if(p->isFunction()) {
             Function * f = p->asFunction();
             if(f->isOperation())
                 ts << f->toString();
@@ -204,8 +186,7 @@ private:
             ts << "{lazy}";
         else if(p->isLabel())
             ts << "{label}";
-        else if(p->isSpecType())
-        {
+        else if(p->isSpecType()) {
             SpecType * spt = p->asSpecType();
             if(spt->isInteger())
                 ts << spt->asInteger()->getInteger();
@@ -217,21 +198,12 @@ private:
         return ts;
     }
 
-    ostream & printSymbol(ostream & ts, Symbol * sym)
-    {
-        //cout << "printSymbol";
-        if(sym == Ob::anil->asSymbol())
-        {
-            //cout << "print: ()";
+    ostream & printSymbol(ostream & ts, Symbol * sym) {
+        if(sym == Ob::anil->asSymbol()) {
             ts << "()";
-        }
-        else
-        {
-            for(map<string, Ob::Ptr>::iterator it = parsingTable.begin(); it != parsingTable.end(); ++it)
-            {
-                if(it->second == sym)
-                {
-                    //cout << "print symbol:" << it.key();
+        } else {
+            for(map<string, Ob::Ptr>::iterator it = parsingTable.begin(); it != parsingTable.end(); ++it) {
+                if(it->second == sym) {
                     ts << it->first;
                     break;
                 }
@@ -240,24 +212,17 @@ private:
         return ts;
     }
 
-    ostream & printList(ostream & ts, Pair * pr)
-    {
-        //cout << "printList";
+    ostream & printList(ostream & ts, Pair * pr) {
         printOb(ts, pr->car());
         Ob::Ptr pcdr = pr->cdr();
         Symbol * sym = pcdr->asSymbol();
-        if(sym != 0)
-        {
-            if(sym != Ob::anil->asSymbol())
-            {
-                //cout << "print .";
+        if(sym != 0) {
+            if(sym != Ob::anil->asSymbol()) {
                 ts << " . ";
                 printOb(ts, pcdr);
             }
             ts << ")";
-        }
-        else
-        {
+        } else {
             ts << " ";
             printList(ts, pcdr->asPair());
         }
@@ -265,8 +230,7 @@ private:
     }
 
 
-    struct parseRes
-    {
+    struct parseRes {
         Ob::Ptr e;
         string::const_iterator rest;
         bool success;
@@ -275,8 +239,7 @@ private:
             :e(_e), rest(_rest), success(_success) {}
     };
 
-    struct lexRes
-    {
+    struct lexRes {
         string::const_iterator rest;
         bool success;
 
@@ -284,109 +247,78 @@ private:
             : rest(_rest), success(_success) {}
     };
 
-    parseRes parseExpression(string::const_iterator si)
-    {
-        //cout << "parseExpression";
+    parseRes parseExpression(string::const_iterator si) {
         lexRes lr = spaces(si);
         lr = lexem("(", lr.rest);
-        if(lr.success)
-        {
-            return parseTail(lr.rest);
-        }
-        else
-            return parseAtom(lr.rest);
+        return lr.success ? parseTail(lr.rest) : parseAtom(lr.rest);
     }
 
-    parseRes parseTail(string::const_iterator si)
-    {
-        //cout << "parseTail";
+    parseRes parseTail(string::const_iterator si) {
         lexRes lr = spaces(si);
         lr = lexem(")", lr.rest);
         if(lr.success)
-        {
-            //cout << "ret nil";
             return parseRes(Ob::anil, lr.rest, true);
-        }
         lr = lexem(".", lr.rest);
-        if(lr.success)
-        {
+        if(lr.success) {
             lr = spaces(lr.rest);
             parseRes pr = parseExpression(lr.rest);
-            if(!pr.success)
-            {
-                cout << "parseTail fail";
+            if(!pr.success) {
+                DBG("parseTail fail");
                 return parseRes(Ob::anil, si, false);
             }
             lr = spaces(pr.rest);
             lr = lexem(")", lr.rest);
-            if(lr.success)
-            {
-                //cout << "ret tail: " << print(pr.e);
+            if(lr.success)  {
                 return parseRes(pr.e, lr.rest, true);
-            }
-            else
-            {
-                cout << "fail ) expected";
+            } else {
+                DBG("fail ) expected");
                 parseRes(Ob::anil, si, false);
             }
         }
         parseRes pr1 = parseExpression(lr.rest);
-        if(!pr1.success)
-        {
-            cout << "parseTail fail";
+        if(!pr1.success) {
+            DBG("parseTail fail");
             return parseRes(Ob::anil, si, false);
         }
         parseRes pr2 = parseTail(pr1.rest);
-        if(!pr2.success)
-        {
-            cout << "parseTail fail";
+        if(!pr2.success) {
+            DBG("parseTail fail");
             return parseRes(Ob::anil, si, false);
         }
-        Ob::Ptr e = new Pair(pr1.e, pr2.e);
-        //cout << "ret pair: " << print(e);
-        return parseRes(e, pr2.rest, true);
+        return parseRes(new Pair(pr1.e, pr2.e), pr2.rest, true);
     }
 
-    parseRes parseAtom(string::const_iterator si)
-    {
-        //cout << "parseAtom";
+    parseRes parseAtom(string::const_iterator si) {
         parseRes pr = parseNumber(si);
-        if(pr.success)
-            return pr;
+        if(pr.success) return pr;
         pr = parseSymbol(si);
         return pr.success ? pr : parseRes(Ob::anil, si, false);
     }
 
-    parseRes parseSymbol(string::const_iterator si)
-    {
+    parseRes parseSymbol(string::const_iterator si) {
         string symbol("");
         string::const_iterator sii = si;
-        if(sii == s.end() || isspace(*sii) || (nosymbol.find(*sii) != string::npos))
-        {
-            cout << "symbol fail first char " << *sii;
+        if(sii == s.end() || isspace(*sii) || (nosymbol.find(*sii) != string::npos)) {
+            DBG("symbol fail first char ") << "\"" << *sii << "\"" << endl;
+            if(sii == s.end()) DBG("isend");
+            if(isspace(*sii)) DBG("isspace");
+            if((nosymbol.find(*sii) != string::npos)) DBG("nosym");
             return parseRes(Ob::anil, si, false);
         }
         symbol.push_back(*sii);
         ++sii;
-        while(sii != s.end() && !isspace(*sii) && (nosymbol.find(*sii) == string::npos))
-        {
+        while(sii != s.end() && !isspace(*sii) && (nosymbol.find(*sii) == string::npos)) {
             symbol.push_back(*sii);
             ++sii;
         }
         Ob::Ptr e(Ob::anil);
-        if(parsingTable.count(symbol) > 0)
-        {
-            //cout << "already existing symbol: " << symbol;
+        if(parsingTable.count(symbol) > 0) {
             e = parsingTable[symbol];
-        }
-        else
-        {
+        } else {
             Symbol * sym = new Symbol();
             parsingTable.insert(pair<string, Ob::Ptr>(symbol, sym));
-            //cout << "new symbol: " << symbol;
             e = sym;
         }
-        //cout << "ret atom: " << print(e);
         return parseRes(e, sii, true);
     }
 
@@ -394,67 +326,50 @@ private:
     {
         string number("");
         string::const_iterator sii = si;
-        if(sii == s.end() || !isdigit(*sii) || *sii != '-' || isspace(*sii) || (nosymbol.find(*sii) != string::npos))
-        {
-            //cout << "number fail first char" << *sii;
+        if(sii == s.end() || !isdigit(*sii) && *sii != '-' || isspace(*sii) || (nosymbol.find(*sii) != string::npos)) {
             return parseRes(Ob::anil, si, false);
         }
         number.push_back(*sii);
         ++sii;
-        while(sii != s.end() && isdigit(*sii) && !isspace(*sii) && (nosymbol.find(*sii) == string::npos))
-        {
+        while(sii != s.end() && isdigit(*sii) && !isspace(*sii) && (nosymbol.find(*sii) == string::npos)) {
             number.push_back(*sii);
             ++sii;
         }
-        if(sii == s.end() || *sii != '.')
-        {
+        if(sii == s.end() || *sii != '.') {
             istringstream ss(number);
             int i;
             if(ss >> i)
-            {
                 return parseRes(new Integer(i), sii, true);
-            }
-        }
-        else
-        {
+            else
+                DBG("int is not int");
+        } else {
             number.push_back(*sii);
             ++sii;
-            while(sii != s.end() && isdigit(*sii) && !isspace(*sii) && (nosymbol.find(*sii) == string::npos))
-            {
+            while(sii != s.end() && isdigit(*sii) && !isspace(*sii) && (nosymbol.find(*sii) == string::npos)) {
                 number.push_back(*sii);
                 ++sii;
             }
             float f;
             istringstream ss(number);
             if(ss >> f)
-            {
                 return parseRes(new Float(f), sii, true);
-            }
         }
         return parseRes(Ob::anil, si, false);
     }
 
-    lexRes lexem(string lex, string::const_iterator si)
-    {
+    lexRes lexem(string lex, string::const_iterator si) {
         string::const_iterator sii = si;
-        for(string::const_iterator it = lex.begin(); it != lex.end(); ++it)
-        {
+        for(string::const_iterator it = lex.begin(); it != lex.end(); ++it) {
             if(sii == s.end() || *sii != *it)
-            {
-                //cout << "lexem fail: " << lex;
                 return lexRes(si, false);
-            }
             ++sii;
         }
-        //cout << "lexem: " << lex;
         return lexRes(sii, true);
     }
 
-    lexRes spaces(string::const_iterator si)
-    {
+    lexRes spaces(string::const_iterator si) {
         while(si != s.end() && isspace(*si))
             ++si;
-        //cout << "spaces";
         return lexRes(si, true);
     }
 };

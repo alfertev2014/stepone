@@ -9,10 +9,12 @@ int main()
     cout << "Hello World!" << endl;
     FastParser fp;
     while(true) {
-        cout << ">> ";
+        cout << "~> ";
         string s;
-        cin >> s;
-        cout << fp.evalToString(s) << endl;
+        getline(cin, s);
+        if(s == ":exit") break;
+        fp.print(cout, fp.parseEval(s));
+        cout << endl;
     }
     return 0;
 }

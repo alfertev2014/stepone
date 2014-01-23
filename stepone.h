@@ -1,6 +1,8 @@
 #ifndef STEPONE_H
 #define STEPONE_H
 
+#define DBG(x) (cout << (x) << " at file: " << __FILE__ << " line: " << __LINE__ << endl)
+
 #include <string>
 #include <iostream>
 #include <sstream>
@@ -30,34 +32,10 @@ public: // static
     class Ptr {
         Ob * ob;
     public:
-        Ptr() : ob(Ob::anil.ob) {
-            if(ob != 0) {
-                ob->refcount++;
-                //cout << "Ptr(): " << ob->refcount << ob->toString() << __LINE__;
-            }
-        }
-        Ptr(Ob * _ob) : ob(_ob) {
-            if(ob != 0) {
-                ob->refcount++;
-                //cout << "Ptr(Ob*): " << ob->refcount << ob->toString() << __LINE__;
-            }
-        }
-        Ptr(const Ob::Ptr & _ob) : ob(_ob.ob) {
-            if(ob != 0) {
-                ob->refcount++;
-                //cout << "Ptr(Ptr): " << ob->refcount << ob->toString() << __LINE__;
-            }
-        }
-
-        ~Ptr() {
-            if(ob == 0) return;
-            ob->refcount--;
-            //cout << "~Ptr: " << ob->refcount << ob->toString() << __LINE__;
-            if(ob->refcount == 0)  {
-                //cout << "~Ptr delete: " << ob->refcount << ob->toString() << __LINE__;
-                delete ob;
-            }
-        }
+        Ptr() : ob(Ob::anil.ob) {if(ob != 0) ob->refcount++;}
+        Ptr(Ob * _ob) : ob(_ob) {if(ob != 0) ob->refcount++;}
+        Ptr(const Ob::Ptr & _ob) : ob(_ob.ob) {if(ob != 0) ob->refcount++; else {DBG("ob == 0"); throw 0;}}
+        ~Ptr() {if(ob == 0) return; ob->refcount--; if(ob->refcount == 0) delete ob;}
 
         bool operator == (const Ptr & p) const {return p.ob == ob;}
         bool operator ==(const Ob * const p) const {return ob == p;}
@@ -67,13 +45,10 @@ public: // static
 
         Ptr & operator=(Ob * _ob) {
             if(_ob == ob) return *this;
-            if(_ob != 0) {
-                //cout << "Ptr=(Ob*): " << ob->refcount << ob->toString() << __LINE__;
+            if(_ob != 0)
                 _ob->refcount++;
-            }
             if(ob != 0) {
                 ob->refcount--;
-                //cout << "Ptr= delete (Ob*): " << ob->refcount << ob->toString() << __LINE__;
                 if(ob->refcount == 0)
                     delete ob;
             }
@@ -99,8 +74,8 @@ public:
     Ob() : refcount(0) {}
     virtual ~Ob() {}
 
-    virtual Ptr car() {cout << "throw car " << __LINE__; throw 0;}
-    virtual Ptr cdr() {cout << "throw cdr " << __LINE__; throw 0;}
+    virtual Ptr car() {DBG("throw car "); throw 0;}
+    virtual Ptr cdr() {DBG("throw cdr "); throw 0;}
 
     virtual Ptr eval(const Ptr & a) {throw 0;}
     virtual Ptr apply(const Ptr & p, const Ptr & a) {
@@ -108,10 +83,9 @@ public:
         throw 0;
     }
     virtual Ptr unlazy() {return this;}
-    virtual Ptr assoc(const Ptr & s) const {cout << "throw assoc " << __LINE__; throw 0;}
+    virtual Ptr assoc(const Ptr & s) const {DBG("throw assoc "); throw 0;}
 
     //Методы для определения типа
-
     virtual bool isAtom() const {return false;}
     virtual Atom * asAtom() {return 0;}
     virtual bool isLazy() const {return false;}
@@ -145,7 +119,6 @@ public:
 class Pair : public Ob {
     Ptr pcar;
     Ptr pcdr;
-
 public:
     Pair(const Ptr & _pcar, const Ptr & _pcdr)
         : pcar(_pcar), pcdr(_pcdr) {}
@@ -208,9 +181,8 @@ public:
             if(p->s == _s) return p->e;
             p = p->next->asContext();
         }
-        cout << "Unknown symbol" << __LINE__;
+        DBG("Unknown symbol");
         throw 0;
-        //return Ob::abot;
     }
 
     virtual bool isContext() const {return true;}
@@ -281,7 +253,6 @@ class Label : public Ob {
     Ptr a;
 
     Ptr ev() {return e->eval(new Context(f, this, a));}
-
 public:
     Label(const Ptr & _f, const Ptr & _e, const Ptr & _a)
         : f(_f), e(_e), a(_a) {}
@@ -290,11 +261,7 @@ public:
     Ptr cdr() {return ev()->cdr();}
 
     Ptr eval(const Ptr &a) {return ev()->eval(a);}
-
-    Ptr apply(const Ptr &p, const Ptr &a) {
-        return p == Ob::anil ? this : ev()->apply(p, a);
-    }
-
+    Ptr apply(const Ptr &p, const Ptr &a) {return p == Ob::anil ? this : ev()->apply(p, a);}
     Ptr unlazy() {return ev()->unlazy();}
 
     bool isLabel() const {return true;}
@@ -323,9 +290,6 @@ public:
         else if(this == Ob::alabel) return "@";
         else if(this == Ob::aif) return "?";
         else {
-            //int i = ((int)this);
-            //i += (i >> 16) & 0xFFFF;
-            //i += (i >> 16) & 0xFFFF;
             stringstream ss;
             ss << "s" << (void *)this;
             return ss.str();
@@ -361,14 +325,13 @@ public:
     Function * asFunction() {return this;}
 
     Ptr apply(const Ptr &p, const Ptr &a) {
-        if(p == Ob::anil)
-            return this;
+        if(p == Ob::anil) return this;
         Ptr e = applyX(p->car()->eval(a));
         Ob::Ptr p1 = p->cdr();
         while(!(p1 == Ob::anil)) {
             Function * f = e->asFunction();
             if(f == 0) {
-                return e->apply(p1, a); // если вернули, возможно, макрос
+                return e->apply(p1, a);
             } else {
                 e = f->applyX(p1->car()->eval(a));
                 p1 = p1->cdr();
