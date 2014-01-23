@@ -64,7 +64,6 @@ public:
 };
 
 class BaseMacro {
-private:
     BaseMacro(){}
 public:
     static const Ob::Ptr mif;

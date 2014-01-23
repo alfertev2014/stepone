@@ -139,7 +139,7 @@ public:
     virtual SpecType * asSpecType() {return 0;}
 
     // Методы для отладки
-    virtual string toString() const = 0;
+    virtual string toString() const {return "{ob}";}
 };
 
 class Pair : public Ob {
@@ -156,7 +156,7 @@ public:
     Ptr car() {return pcar;}
     Ptr cdr() {return pcdr;}
 
-    Ptr eval(const Ptr & a) {pcar->eval(a)->apply(pcdr, a);}
+    Ptr eval(const Ptr & a) {return pcar->eval(a)->apply(pcdr, a);}
 
     string toString() const {
         if(this == pcar || this == pcdr)

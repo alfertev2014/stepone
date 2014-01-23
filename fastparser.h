@@ -174,7 +174,7 @@ public:
         return ss.str();
     }
 
-    string print(ostream ts, const Ob::Ptr & p)
+    string print(ostream & ts, const Ob::Ptr & p)
     {
         string res;
         printOb(ts, p);
@@ -394,7 +394,7 @@ private:
     {
         string number("");
         string::const_iterator sii = si;
-        if(sii == s.end() || !isdigit(*sii) && *sii != '-' || isspace(*sii) || (nosymbol.find(*sii) != string::npos))
+        if(sii == s.end() || !isdigit(*sii) || *sii != '-' || isspace(*sii) || (nosymbol.find(*sii) != string::npos))
         {
             //cout << "number fail first char" << *sii;
             return parseRes(Ob::anil, si, false);
