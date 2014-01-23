@@ -93,9 +93,6 @@ public: // static
     static const Ptr aunlazy;
     static const Ptr alabel;
     static const Ptr aeval;
-    static const Ptr atry;
-    static const Ptr ado;
-    static const Ptr abot;
 
 public:
     Ob() : refcount(0) {}
@@ -135,6 +132,8 @@ public:
     virtual Macro * asMacro() {return 0;}
     virtual bool isFunction() const {return false;}
     virtual Function * asFunction() {return 0;}
+    virtual bool isOperation() const {return false;}
+    virtual Operation * asOperation() {return 0;}
     virtual bool isSpecType() const {return false;}
     virtual SpecType * asSpecType() {return 0;}
 
@@ -156,7 +155,7 @@ public:
     Ptr car() {return pcar;}
     Ptr cdr() {return pcdr;}
 
-    Ptr eval(const Ptr & a);
+    Ptr eval(const Ptr & a) {pcar->eval(a)->apply(pcdr);}
 
     string toString() const {
         if(this == pcar || this == pcdr)
@@ -337,7 +336,6 @@ public:
 class Const : public Atom {
 public:
     virtual ~Const() {}
-
     bool isConst() const {return true;}
     Const * asConst() {return this;}
 
@@ -349,7 +347,6 @@ class Macro : public Const
 {
 public:
     virtual ~Macro() {}
-
     bool isMacro() const {return true;}
     Macro * asMacro() {return this;}
 };
@@ -370,20 +367,23 @@ public:
         Ptr e = applyX(ob);
         Ob::Ptr p1 = p->cdr();
         while(!(p1 == Ob::anil)) {
-            ob = p1->car()->eval(a);
-            Function * f = e->asFunction();
+            Function * f = e->asFunction(); // Этот код основывается на том, что при применении функции возвращается функция, а не макрос
             if(f == 0) {
-                cout << "throw can\'t apply " << __LINE__;
-                throw 0;
+                Macro * m = e->asMacro();
+                if(m == 0) {
+                    cout << "throw can\'t apply " << __LINE__;
+                    throw 0;
+                } else {
+                    e = m->apply(p1, a);
+                }
+            } else {
+                ob = p1->car()->eval(a);
+                e = f->applyX(ob);
+                p1 = p1->cdr();
             }
-            e = f->applyX(ob);
-            p1 = p1->cdr();
         }
         return e;
     }
-
-    virtual bool isOperation() const {return false;}
-    virtual Operation * asOperation() {return 0;}
 };
 
 

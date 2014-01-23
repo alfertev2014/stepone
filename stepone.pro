@@ -16,5 +16,6 @@ HEADERS += \
     numfunctemp.h \
     fastparser.h \
     basenumfunc.h \
-    basefunc.h
+    basefunc.h \
+    basemacro.h
 
