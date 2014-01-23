@@ -384,6 +384,8 @@ public:
     virtual ~Operation() {}
     virtual bool isOperation() const {return true;}
     virtual Operation * asOperation() {return this;}
+
+    string toString() const {return "{Operation}";}
 };
 
 
@@ -400,42 +402,17 @@ public:
     string toString() const {return "{\\ " + x->toString() + " . " + e->toString() + " | " + a->toString() + "}";}
 };
 
-
-//////////////////////////////////////////////////
-
-class TypeId {
-    static int gt;
-
-    int t;
-public:
-    TypeId():t(gt++){}
-
-    TypeId & operator=(const TypeId & ti) { t = ti.t; return *this;}
-
-    bool operator==(const TypeId & ti) const {return ti.t == t;}
-    bool operator!=(const TypeId & ti) const {return ti.t != t;}
-
-    operator int() const {return t;}
-};
+class Integer;
+class Float;
 
 class SpecType : public Const {
-    const TypeId type;
 public:
-    SpecType(const TypeId _type) : type(_type) {}
     virtual ~SpecType() {}
     bool isSpecType() const {return true;}
     SpecType * asSpecType() {return this;}
-    const TypeId getType() const {return type;}
-    bool hasType(const TypeId _type) const {return type == _type;}
 
-    template <class T>
-    T * cast() {
-        if(type != T::type_id) {
-            cout << "Invalid cast " << toString() << __LINE__;
-            throw 0;
-        }
-        return dynamic_cast<T*>(this);
-    }
+    virtual bool isInteger() const {return false;}
+    virtual Integer * asInteger() {return 0;}
 
     string toString() const {return "{SpecType}";}
 };

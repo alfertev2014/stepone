@@ -2,8 +2,6 @@
 
 bool operator ==(const Ob * const ob, const Ob::Ptr & p) {return ob == p.ob;}
 
-int TypeId::gt = 0;
-
 const Ob::Ptr Ob::anil(new Symbol);
 const Ob::Ptr Ob::at(new Symbol);
 const Ob::Ptr Ob::aquote(new Symbol);

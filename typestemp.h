@@ -30,9 +30,8 @@ class SpecTypeTemp : public SpecType
 {
     T t;
 public:
-    static const TypeId type_id;
 
-    SpecTypeTemp(const T & _t) : SpecType(type_id), t(_t) {}
+    SpecTypeTemp(const T & _t) : t(_t) {}
 
     T getValue() const {return t;}
 
@@ -41,9 +40,6 @@ public:
         return "{" + typeToString<T>() + ": " + valueToString(t) + "}";
     }
 };
-
-template <class T>
-const TypeId SpecTypeTemp<T>::type_id;
 
 
 template <class T>

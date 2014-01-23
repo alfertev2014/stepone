@@ -17,5 +17,6 @@ HEADERS += \
     fastparser.h \
     basenumfunc.h \
     basefunc.h \
-    basemacro.h
+    basemacro.h \
+    integers.h
 
