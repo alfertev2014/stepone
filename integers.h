@@ -20,7 +20,7 @@ public:
     }
 };
 
-class FIntP : public Operation {
+class FIntP : public BaseFunction {
 protected:
     Ob::Ptr applyX(const Ptr &x) {
         SpecType * stx = x->asSpecType();
@@ -34,8 +34,8 @@ public:
 };
 
 template <typename BinOp>
-class FIntBinOp : public Operation {
-    class FIntBinOp2 : public Operation {
+class FIntBinOp : public BaseFunction {
+    class FIntBinOp2 : public BaseFunction {
         int i1;
     public:
         FIntBinOp2(int _i1) : i1(_i1) {}
@@ -72,8 +72,8 @@ public:
 };
 
 template <class CmpOp>
-class FIntCmpOp : public Operation {
-    class FIntCmpOp2 : public Operation {
+class FIntCmpOp : public BaseFunction {
+    class FIntCmpOp2 : public BaseFunction {
         int i1;
     public:
         FIntCmpOp2(int _i1) : i1(_i1) {}

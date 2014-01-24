@@ -4,7 +4,7 @@
 #include "integers.h"
 #include "floats.h"
 
-class FIntToFloat : public Operation {
+class FIntToFloat : public BaseFunction {
 protected:
     Ptr applyX(const Ptr &x) {
         SpecType * stx = x->asSpecType();
@@ -18,7 +18,7 @@ public:
     string toString() const {return "{FIntToFloat}";}
 };
 
-class FFloatToInt : public Operation {
+class FFloatToInt : public BaseFunction {
 protected:
     Ptr applyX(const Ptr &x) {
         SpecType * stx = x->asSpecType();

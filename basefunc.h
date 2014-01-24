@@ -3,22 +3,22 @@
 
 #include "stepone.h"
 
-class FCar : public Operation {
+class FCar : public BaseFunction {
 protected:
     Ob::Ptr applyX(const Ptr &x) {return x->car();}
 public:
     string toString() const {return "FCar";}
 };
 
-class FCdr : public Operation {
+class FCdr : public BaseFunction {
 protected:
     Ob::Ptr applyX(const Ptr &x) {return x->cdr();}
 public:
     string toString() const {return "FCdr";}
 };
 
-class FCons : public Operation {
-    class FCons2 : public Operation {
+class FCons : public BaseFunction {
+    class FCons2 : public BaseFunction {
         Ob::Ptr x1;
     public:
         FCons2(const Ob::Ptr & _x1) : x1(_x1){}
@@ -33,15 +33,15 @@ public:
     string toString() const {return "FCons";}
 };
 
-class FAtom : public Operation {
+class FAtom : public BaseFunction {
 protected:
     Ob::Ptr applyX(const Ptr &x) {return x->isAtom() ? Ob::at : Ob::anil;}
 public:
     string toString() const {return "FAtom";}
 };
 
-class FEq : public Operation {
-    class FEq2 : public Operation {
+class FEq : public BaseFunction {
+    class FEq2 : public BaseFunction {
         Ob::Ptr x1;
     public:
         FEq2(const Ob::Ptr & _x1) : x1(_x1) {}
@@ -57,8 +57,8 @@ public:
 };
 
 
-class BaseFunc {
-    BaseFunc(){}
+class BaseFunctions {
+    BaseFunctions(){}
 public:
     static const Ob::Ptr fcar;
     static const Ob::Ptr fcdr;

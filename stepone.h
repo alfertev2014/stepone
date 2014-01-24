@@ -20,8 +20,9 @@ class Symbol;
 class Const;
 
 class Macro;
+class BaseMacro;
 class Function;
-class Operation;
+class BaseFunction;
 class SpecType;
 
 
@@ -105,10 +106,12 @@ public:
 
     virtual bool isMacro() const {return false;}
     virtual Macro * asMacro() {return 0;}
+    virtual bool isBaseMacro() const {return false;}
+    virtual BaseMacro * asBaseMacro() {return 0;}
     virtual bool isFunction() const {return false;}
     virtual Function * asFunction() {return 0;}
     virtual bool isOperation() const {return false;}
-    virtual Operation * asOperation() {return 0;}
+    virtual BaseFunction * asOperation() {return 0;}
     virtual bool isSpecType() const {return false;}
     virtual SpecType * asSpecType() {return 0;}
 
@@ -307,14 +310,19 @@ public:
 };
 
 
-class Macro : public Const
-{
+class Macro : public Const {
 public:
     virtual ~Macro() {}
     bool isMacro() const {return true;}
     Macro * asMacro() {return this;}
 };
 
+class BaseMacro : public Macro {
+public:
+    virtual ~BaseMacro(){}
+    bool isBaseMacro() const {return true;}
+    BaseMacro * asBaseMacro() {return this;}
+};
 
 class Function : public Macro {
 protected:
@@ -342,11 +350,11 @@ public:
 };
 
 
-class Operation : public Function {
+class BaseFunction : public Function {
 public:
-    virtual ~Operation() {}
+    virtual ~BaseFunction() {}
     virtual bool isOperation() const {return true;}
-    virtual Operation * asOperation() {return this;}
+    virtual BaseFunction * asOperation() {return this;}
 
     string toString() const {return "{Operation}";}
 };

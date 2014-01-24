@@ -3,14 +3,16 @@
 
 #include "stepone.h"
 
-class MQuote : public Macro {
+class MQuote : public BaseMacro {
 public:
     Ob::Ptr apply(const Ptr &p, const Ptr &a) {
         return p;
     }
+
+    string toString() const {return "{MQuote}";}
 };
 
-class MIf : public Macro {
+class MIf : public BaseMacro {
 public:
     Ob::Ptr apply(const Ptr &p, const Ptr &a) {
         if(p->car()->eval(a) == Ob::anil)
@@ -18,53 +20,67 @@ public:
         else
             return p->cdr()->car()->eval(a);
     }
+
+    string toString() const {return "{MIf}";}
 };
 
-class MLambda : public Macro {
+class MLambda : public BaseMacro {
 public:
     Ob::Ptr apply(const Ptr &p, const Ptr &a) {
         return new Closure(p->car(), p->cdr(), a);
     }
+
+    string toString() const {return "{MLambda}";}
 };
 
-class MLet : public Macro {
+class MLet : public BaseMacro {
 public:
     Ob::Ptr apply(const Ptr &p, const Ptr &a) {
         Ob::Ptr val = p->cdr();
         return val->cdr()->eval(new Context(p->car(), val->car()->eval(a), a));
     }
+
+    string toString() const {return "{MLet}";}
 };
 
-class MLazy : public Macro {
+class MLazy : public BaseMacro {
 public:
     Ob::Ptr apply(const Ptr &p, const Ptr &a) {
         return new Lazy(p, a);
     }
+
+    string toString() const {return "{MLazy}";}
 };
 
-class MUnlazy : public Macro {
+class MUnlazy : public BaseMacro {
 public:
     Ob::Ptr apply(const Ptr &p, const Ptr &a) {
         return p->eval(a)->unlazy();
     }
+
+    string toString() const {return "{MUnlazy}";}
 };
 
-class MLabel : public Macro {
+class MLabel : public BaseMacro {
 public:
     Ob::Ptr apply(const Ptr &p, const Ptr &a) {
         return new Label(p->car(), p->cdr(), a);
     }
+
+    string toString() const {return "{MLabel}";}
 };
 
-class MEval : public Macro {
+class MEval : public BaseMacro {
 public:
     Ob::Ptr apply(const Ptr &p, const Ptr &a) {
         return p->eval(a)->eval(a);
     }
+
+    string toString() const {return "{MEval}";}
 };
 
-class BaseMacro {
-    BaseMacro(){}
+class BaseMacroses {
+    BaseMacroses(){}
 public:
     static const Ob::Ptr mif;
     static const Ob::Ptr mquote;

@@ -105,20 +105,20 @@ class FastParser {
 
 public:
     FastParser() : s(""), nosymbol("(){}[].\""), a(Ob::anil) {
-        a = new Context(Ob::aif, BaseMacro::mif, a);
-        a = new Context(Ob::aquote, BaseMacro::mquote, a);
-        a = new Context(Ob::alambda, BaseMacro::mlambda, a);
-        a = new Context(Ob::alet, BaseMacro::mlet, a);
-        a = new Context(Ob::alabel, BaseMacro::mlabel, a);
-        a = new Context(Ob::alazy, BaseMacro::mlazy, a);
-        a = new Context(Ob::aunlazy, BaseMacro::munlazy, a);
-        a = new Context(Ob::aeval, BaseMacro::meval, a);
+        a = new Context(Ob::aif, BaseMacroses::mif, a);
+        a = new Context(Ob::aquote, BaseMacroses::mquote, a);
+        a = new Context(Ob::alambda, BaseMacroses::mlambda, a);
+        a = new Context(Ob::alet, BaseMacroses::mlet, a);
+        a = new Context(Ob::alabel, BaseMacroses::mlabel, a);
+        a = new Context(Ob::alazy, BaseMacroses::mlazy, a);
+        a = new Context(Ob::aunlazy, BaseMacroses::munlazy, a);
+        a = new Context(Ob::aeval, BaseMacroses::meval, a);
 
-        a = new Context(acar, BaseFunc::fcar, a);
-        a = new Context(acdr, BaseFunc::fcdr, a);
-        a = new Context(acons, BaseFunc::fcons, a);
-        a = new Context(aatom, BaseFunc::fatom, a);
-        a = new Context(aeq, BaseFunc::feq, a);
+        a = new Context(acar, BaseFunctions::fcar, a);
+        a = new Context(acdr, BaseFunctions::fcdr, a);
+        a = new Context(acons, BaseFunctions::fcons, a);
+        a = new Context(aatom, BaseFunctions::fatom, a);
+        a = new Context(aeq, BaseFunctions::feq, a);
 
         a = new Context(aintPlus, BaseNumFunc::fintPlus, a);
         a = new Context(aintMinus, BaseNumFunc::fintMinus, a);

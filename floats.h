@@ -19,7 +19,7 @@ public:
     }
 };
 
-class FFloatP : public Operation {
+class FFloatP : public BaseFunction {
 protected:
     Ob::Ptr applyX(const Ptr &x) {
         SpecType * stx = x->asSpecType();
@@ -33,8 +33,8 @@ public:
 };
 
 template <typename BinOp>
-class FFloatBinOp : public Operation {
-    class FFloatBinOp2 : public Operation {
+class FFloatBinOp : public BaseFunction {
+    class FFloatBinOp2 : public BaseFunction {
         float f1;
     public:
         FFloatBinOp2(float _f1) : f1(_f1) {}
@@ -71,8 +71,8 @@ public:
 };
 
 template <class CmpOp>
-class FFloatCmpOp : public Operation {
-    class FFloatCmpOp2 : public Operation {
+class FFloatCmpOp : public BaseFunction {
+    class FFloatCmpOp2 : public BaseFunction {
         float f1;
     public:
         FFloatCmpOp2(float _f1) : f1(_f1) {}
