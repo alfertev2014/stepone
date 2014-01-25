@@ -3,8 +3,22 @@
 const Ob::Ptr FastParser::acar(new Symbol);
 const Ob::Ptr FastParser::acdr(new Symbol);
 const Ob::Ptr FastParser::acons(new Symbol);
-const Ob::Ptr FastParser::aatom(new Symbol);
 const Ob::Ptr FastParser::aeq(new Symbol);
+
+const Ob::Ptr FastParser::apairp(new Symbol);
+const Ob::Ptr FastParser::alazyp(new Symbol);
+const Ob::Ptr FastParser::alabelp(new Symbol);
+const Ob::Ptr FastParser::acontextp(new Symbol);
+const Ob::Ptr FastParser::aatomp(new Symbol);
+const Ob::Ptr FastParser::asymbolp(new Symbol);
+const Ob::Ptr FastParser::aconstp(new Symbol);
+const Ob::Ptr FastParser::amacrop(new Symbol);
+const Ob::Ptr FastParser::abasemacrop(new Symbol);
+const Ob::Ptr FastParser::ausermacrop(new Symbol);
+const Ob::Ptr FastParser::afunctionp(new Symbol);
+const Ob::Ptr FastParser::abasefunctionp(new Symbol);
+const Ob::Ptr FastParser::aclosurep(new Symbol);
+const Ob::Ptr FastParser::aspectypep(new Symbol);
 
 const Ob::Ptr FastParser::aintPlus(new Symbol);
 const Ob::Ptr FastParser::aintMinus(new Symbol);

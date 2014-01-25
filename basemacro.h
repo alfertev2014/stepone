@@ -70,6 +70,16 @@ public:
     string toString() const {return "{MLabel}";}
 };
 
+class MMacro : public BaseMacro {
+public:
+    Ob::Ptr apply(const Ptr &p, const Ptr &a) {
+        Ob::Ptr p1 = p->cdr();
+        return new UserMacro(p->car(), p1->car(), p1->cdr(), a);
+    }
+
+    string toString() const {return "{MMacro}";}
+};
+
 class MEval : public BaseMacro {
 public:
     Ob::Ptr apply(const Ptr &p, const Ptr &a) {
@@ -89,6 +99,7 @@ public:
     static const Ob::Ptr mlazy;
     static const Ob::Ptr munlazy;
     static const Ob::Ptr mlabel;
+    static const Ob::Ptr mmacro;
     static const Ob::Ptr meval;
 };
 

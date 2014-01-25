@@ -4,6 +4,7 @@
 #include "stepone.h"
 #include "basemacro.h"
 #include "basefunc.h"
+#include "typepredicates.h"
 #include "basenumfunc.h"
 #include "numbers.h"
 
@@ -24,8 +25,22 @@ class FastParser {
     static const Ob::Ptr acar;
     static const Ob::Ptr acdr;
     static const Ob::Ptr acons;
-    static const Ob::Ptr aatom;
     static const Ob::Ptr aeq;
+
+    static const Ob::Ptr apairp;
+    static const Ob::Ptr alazyp;
+    static const Ob::Ptr alabelp;
+    static const Ob::Ptr acontextp;
+    static const Ob::Ptr aatomp;
+    static const Ob::Ptr asymbolp;
+    static const Ob::Ptr aconstp;
+    static const Ob::Ptr amacrop;
+    static const Ob::Ptr abasemacrop;
+    static const Ob::Ptr ausermacrop;
+    static const Ob::Ptr afunctionp;
+    static const Ob::Ptr abasefunctionp;
+    static const Ob::Ptr aclosurep;
+    static const Ob::Ptr aspectypep;
 
     static const Ob::Ptr aintPlus;
     static const Ob::Ptr aintMinus;
@@ -67,12 +82,27 @@ class FastParser {
         parsingTable.insert(pair<string, Ob::Ptr>("#", Ob::alazy));
         parsingTable.insert(pair<string, Ob::Ptr>("$", Ob::aunlazy));
         parsingTable.insert(pair<string, Ob::Ptr>("@", Ob::alabel));
+        parsingTable.insert(pair<string, Ob::Ptr>("%", Ob::amacro));
 
         parsingTable.insert(pair<string, Ob::Ptr>("car", acar));
         parsingTable.insert(pair<string, Ob::Ptr>("cdr", acdr));
         parsingTable.insert(pair<string, Ob::Ptr>("cons", acons));
-        parsingTable.insert(pair<string, Ob::Ptr>("atom", aatom));
         parsingTable.insert(pair<string, Ob::Ptr>("eq", aeq));
+
+        parsingTable.insert(pair<string, Ob::Ptr>("pair?", apairp));
+        parsingTable.insert(pair<string, Ob::Ptr>("lazy?", alazyp));
+        parsingTable.insert(pair<string, Ob::Ptr>("label?", alabelp));
+        parsingTable.insert(pair<string, Ob::Ptr>("context?", acontextp));
+        parsingTable.insert(pair<string, Ob::Ptr>("atom?", aatomp));
+        parsingTable.insert(pair<string, Ob::Ptr>("symbol?", asymbolp));
+        parsingTable.insert(pair<string, Ob::Ptr>("const?", aconstp));
+        parsingTable.insert(pair<string, Ob::Ptr>("macro?", amacrop));
+        parsingTable.insert(pair<string, Ob::Ptr>("basemacro?", abasemacrop));
+        parsingTable.insert(pair<string, Ob::Ptr>("usermacro?", ausermacrop));
+        parsingTable.insert(pair<string, Ob::Ptr>("function?", afunctionp));
+        parsingTable.insert(pair<string, Ob::Ptr>("basefunction?", abasefunctionp));
+        parsingTable.insert(pair<string, Ob::Ptr>("closure?", aclosurep));
+        parsingTable.insert(pair<string, Ob::Ptr>("stectype?", aspectypep));
 
         parsingTable.insert(pair<string, Ob::Ptr>("i+", aintPlus));
         parsingTable.insert(pair<string, Ob::Ptr>("i-", aintMinus));
@@ -113,12 +143,27 @@ public:
         a = new Context(Ob::alazy, BaseMacroses::mlazy, a);
         a = new Context(Ob::aunlazy, BaseMacroses::munlazy, a);
         a = new Context(Ob::aeval, BaseMacroses::meval, a);
+        a = new Context(Ob::amacro, BaseMacroses::mmacro, a);
 
         a = new Context(acar, BaseFunctions::fcar, a);
         a = new Context(acdr, BaseFunctions::fcdr, a);
         a = new Context(acons, BaseFunctions::fcons, a);
-        a = new Context(aatom, BaseFunctions::fatom, a);
         a = new Context(aeq, BaseFunctions::feq, a);
+
+        a = new Context(apairp, BaseTypePredicates::fpairp, a);
+        a = new Context(alazyp, BaseTypePredicates::flazyp, a);
+        a = new Context(alabelp, BaseTypePredicates::flabelp, a);
+        a = new Context(acontextp, BaseTypePredicates::fcontextp, a);
+        a = new Context(aatomp, BaseTypePredicates::fatomp, a);
+        a = new Context(asymbolp, BaseTypePredicates::fsymbolp, a);
+        a = new Context(aconstp, BaseTypePredicates::fconstp, a);
+        a = new Context(amacrop, BaseTypePredicates::fmacrop, a);
+        a = new Context(abasemacrop, BaseTypePredicates::fbasemacrop, a);
+        a = new Context(ausermacrop, BaseTypePredicates::fusermacrop, a);
+        a = new Context(afunctionp, BaseTypePredicates::ffunctionp, a);
+        a = new Context(abasefunctionp, BaseTypePredicates::fbasefunctionp, a);
+        a = new Context(aclosurep, BaseTypePredicates::fclosurep, a);
+        a = new Context(aspectypep, BaseTypePredicates::fspectypep, a);
 
         a = new Context(aintPlus, BaseNumFunc::fintPlus, a);
         a = new Context(aintMinus, BaseNumFunc::fintMinus, a);
@@ -177,7 +222,7 @@ private:
         }
         if(p->isFunction()) {
             Function * f = p->asFunction();
-            if(f->isOperation())
+            if(f->isBaseFunction())
                 ts << f->toString();
             else
                 ts << "{closure}";

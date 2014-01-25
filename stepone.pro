@@ -8,7 +8,8 @@ SOURCES += main.cpp \
     fastparser.cpp \
     basenumfunc.cpp \
     basefunc.cpp \
-    basemacro.cpp
+    basemacro.cpp \
+    typepredicates.cpp
 
 HEADERS += \
     typestemp.h \
@@ -21,5 +22,6 @@ HEADERS += \
     basemacro.h \
     integers.h \
     floats.h \
-    numbers.h
+    numbers.h \
+    typepredicates.h
 

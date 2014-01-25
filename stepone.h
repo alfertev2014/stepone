@@ -21,8 +21,10 @@ class Const;
 
 class Macro;
 class BaseMacro;
+class UserMacro;
 class Function;
 class BaseFunction;
+class Closure;
 class SpecType;
 
 
@@ -69,6 +71,7 @@ public: // static
     static const Ptr alazy;
     static const Ptr aunlazy;
     static const Ptr alabel;
+    static const Ptr amacro;
     static const Ptr aeval;
 
 public:
@@ -95,7 +98,6 @@ public:
     virtual Pair * asPair() {return 0;}
     virtual bool isLabel() const {return false;}
     virtual Label * asLabel() {return 0;}
-
     virtual bool isContext() const {return false;}
     virtual Context * asContext() {return 0;}
 
@@ -108,10 +110,15 @@ public:
     virtual Macro * asMacro() {return 0;}
     virtual bool isBaseMacro() const {return false;}
     virtual BaseMacro * asBaseMacro() {return 0;}
+    virtual bool isUserMacro() const {return false;}
+    virtual UserMacro * asUserMacro() {return 0;}
+
     virtual bool isFunction() const {return false;}
     virtual Function * asFunction() {return 0;}
-    virtual bool isOperation() const {return false;}
-    virtual BaseFunction * asOperation() {return 0;}
+    virtual bool isBaseFunction() const {return false;}
+    virtual BaseFunction * asBaseFunction() {return 0;}
+    virtual bool isClosure() const {return false;}
+    virtual Closure * asClosure() {return 0;}
     virtual bool isSpecType() const {return false;}
     virtual SpecType * asSpecType() {return 0;}
 
@@ -324,6 +331,27 @@ public:
     BaseMacro * asBaseMacro() {return this;}
 };
 
+class UserMacro : public Macro {
+    Ptr sa;
+    Ptr sp;
+    Ptr e;
+    Ptr a;
+public:
+    UserMacro(const Ptr & _sa, const Ptr & _sp, const Ptr & _e, const Ptr & _a)
+        : sa(_sa), sp(_sp), e(_e), a(_a) {}
+
+    virtual ~UserMacro(){}
+
+    Ptr apply(const Ptr &p, const Ptr &a) {
+        return e->eval(new Context(sp, p, new Context(sa, a, this->a)));
+    }
+
+    bool isUserMacro() const {return true;}
+    UserMacro * asUserMacro() {return this;}
+
+    string toString() const {return "{% " + sa->toString() + ", " + sp->toString() + " . " + e->toString() + " | " + a->toString() + "}";}
+};
+
 class Function : public Macro {
 protected:
     virtual Ob::Ptr applyX(const Ob::Ptr & x) = 0;
@@ -353,10 +381,10 @@ public:
 class BaseFunction : public Function {
 public:
     virtual ~BaseFunction() {}
-    virtual bool isOperation() const {return true;}
-    virtual BaseFunction * asOperation() {return this;}
+    virtual bool isBaseFunction() const {return true;}
+    virtual BaseFunction * asBaseFunction() {return this;}
 
-    string toString() const {return "{Operation}";}
+    string toString() const {return "{BaseFunction}";}
 };
 
 
@@ -369,6 +397,9 @@ protected:
 public:
     Closure(const Ob::Ptr & _x, const Ob::Ptr & _e, const Ob::Ptr & _a)
         : x(_x), e(_e), a(_a) {}
+
+    bool isClosure() const {return true;}
+    Closure * asClosure() {return this;}
 
     string toString() const {return "{\\ " + x->toString() + " . " + e->toString() + " | " + a->toString() + "}";}
 };

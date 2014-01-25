@@ -33,13 +33,6 @@ public:
     string toString() const {return "FCons";}
 };
 
-class FAtom : public BaseFunction {
-protected:
-    Ob::Ptr applyX(const Ptr &x) {return x->isAtom() ? Ob::at : Ob::anil;}
-public:
-    string toString() const {return "FAtom";}
-};
-
 class FEq : public BaseFunction {
     class FEq2 : public BaseFunction {
         Ob::Ptr x1;
@@ -63,7 +56,6 @@ public:
     static const Ob::Ptr fcar;
     static const Ob::Ptr fcdr;
     static const Ob::Ptr fcons;
-    static const Ob::Ptr fatom;
     static const Ob::Ptr feq;
 };
 
