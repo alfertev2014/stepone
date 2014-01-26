@@ -23,5 +23,6 @@ HEADERS += \
     integers.h \
     floats.h \
     numbers.h \
-    typepredicates.h
+    typepredicates.h \
+    dbg.h
 

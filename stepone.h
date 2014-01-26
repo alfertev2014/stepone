@@ -1,7 +1,7 @@
 #ifndef STEPONE_H
 #define STEPONE_H
 
-#define DBG(x) (cout << (x) << " at file: " << __FILE__ << " line: " << __LINE__ << endl)
+#include "dbg.h"
 
 #include <string>
 #include <iostream>

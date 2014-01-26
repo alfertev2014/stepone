@@ -1,6 +1,8 @@
 #ifndef FASTPARSER_H
 #define FASTPARSER_H
 
+#include "dbg.h"
+
 #include "stepone.h"
 #include "basemacro.h"
 #include "basefunc.h"
