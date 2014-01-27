@@ -1,7 +1,7 @@
 #ifndef TYPESTEMP_H
 #define TYPESTEMP_H
 
-//#include "stepone.h"
+//#include "core.h"
 
 //template <class T>
 //string valueToString(T x)

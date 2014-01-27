@@ -1,7 +1,7 @@
 #ifndef BASETYPES_H
 #define BASETYPES_H
 
-#include "stepone.h"
+#include "core.h"
 
 class BaseNumFunc
 {

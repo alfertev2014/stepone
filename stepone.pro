@@ -4,17 +4,16 @@ CONFIG -= qt
 
 SOURCES += main.cpp \
     tuple.cpp \
-    stepone.cpp \
     fastparser.cpp \
     basenumfunc.cpp \
     basefunc.cpp \
     basemacro.cpp \
-    typepredicates.cpp
+    typepredicates.cpp \
+    core.cpp
 
 HEADERS += \
     typestemp.h \
     tuple.h \
-    stepone.h \
     numfunctemp.h \
     fastparser.h \
     basenumfunc.h \
@@ -24,5 +23,7 @@ HEADERS += \
     floats.h \
     numbers.h \
     typepredicates.h \
-    dbg.h
+    dbg.h \
+    core.h \
+    stepone.h
 

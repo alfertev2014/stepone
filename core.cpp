@@ -1,4 +1,4 @@
-#include "stepone.h"
+#include "core.h"
 
 bool operator ==(const Ob * const ob, const Ob::Ptr & p) {return ob == p.ob;}
 

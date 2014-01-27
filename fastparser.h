@@ -4,11 +4,6 @@
 #include "dbg.h"
 
 #include "stepone.h"
-#include "basemacro.h"
-#include "basefunc.h"
-#include "typepredicates.h"
-#include "basenumfunc.h"
-#include "numbers.h"
 
 #include <string>
 #include <map>

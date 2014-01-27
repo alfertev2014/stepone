@@ -1,7 +1,7 @@
 #ifndef TYPEPREDICATES_H
 #define TYPEPREDICATES_H
 
-#include "stepone.h"
+#include "core.h"
 
 class FPairP : public BaseFunction {
 protected:

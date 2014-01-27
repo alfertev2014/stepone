@@ -1,7 +1,7 @@
 #ifndef BASEMACRO_H
 #define BASEMACRO_H
 
-#include "stepone.h"
+#include "core.h"
 
 class MQuote : public BaseMacro {
 public:
