@@ -25,5 +25,7 @@ HEADERS += \
     typepredicates.h \
     dbg.h \
     core.h \
-    stepone.h
+    stepone.h \
+    test.h \
+    repl.h
 
