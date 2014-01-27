@@ -69,7 +69,6 @@ class FastParser {
 
     void initTable() {
         parsingTable.clear();
-        parsingTable.insert(pair<string, Ob::Ptr>("nil", Ob::anil));
         parsingTable.insert(pair<string, Ob::Ptr>("t", Ob::at));
         parsingTable.insert(pair<string, Ob::Ptr>("?", Ob::aif));
         parsingTable.insert(pair<string, Ob::Ptr>("\'", Ob::aquote));
@@ -132,6 +131,9 @@ class FastParser {
 
 public:
     FastParser() : s(""), nosymbol("(){}[].\""), a(Ob::anil) {
+        a = new Context(Ob::anil, Ob::anil, a);
+        a = new Context(Ob::at, Ob::at, a);
+
         a = new Context(Ob::aif, BaseMacroses::mif, a);
         a = new Context(Ob::aquote, BaseMacroses::mquote, a);
         a = new Context(Ob::alambda, BaseMacroses::mlambda, a);
