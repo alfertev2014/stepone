@@ -29,3 +29,6 @@ HEADERS += \
     test.h \
     repl.h
 
+OTHER_FILES += \
+    test.txt
+
