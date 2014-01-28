@@ -14,3 +14,4 @@ const Ob::Ptr Ob::alabel(new Symbol);
 const Ob::Ptr Ob::amacro(new Symbol);
 const Ob::Ptr Ob::aeval(new Symbol);
 
+const Ob::Ptr Evaluator::eempty(new Evaluator(Ob::anil));

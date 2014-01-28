@@ -4,6 +4,9 @@ const Ob::Ptr FastParser::acar(new Symbol);
 const Ob::Ptr FastParser::acdr(new Symbol);
 const Ob::Ptr FastParser::acons(new Symbol);
 const Ob::Ptr FastParser::aeq(new Symbol);
+const Ob::Ptr FastParser::actxget(new Symbol);
+const Ob::Ptr FastParser::actxpush(new Symbol);
+const Ob::Ptr FastParser::aemptyctx(new Symbol);
 
 const Ob::Ptr FastParser::apairp(new Symbol);
 const Ob::Ptr FastParser::alazyp(new Symbol);

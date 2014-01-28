@@ -20,6 +20,7 @@ class Symbol;
 class Const;
 
 class Macro;
+class Evaluator;
 class BaseMacro;
 class UserMacro;
 class Function;
@@ -108,6 +109,8 @@ public:
 
     virtual bool isMacro() const {return false;}
     virtual Macro * asMacro() {return 0;}
+    virtual bool isEvaluator() const {return false;}
+    virtual Evaluator * asEvaluator() {return 0;}
     virtual bool isBaseMacro() const {return false;}
     virtual BaseMacro * asBaseMacro() {return 0;}
     virtual bool isUserMacro() const {return false;}
@@ -324,6 +327,21 @@ public:
     Macro * asMacro() {return this;}
 };
 
+class Evaluator : public Macro {
+    Ptr a;
+public:
+    static const Ptr eempty;
+
+    Evaluator(Ptr _a) : a(_a) {}
+
+    Ptr getContext() const {return a;}
+
+    Ptr apply(const Ptr &p, const Ptr &a) {return p->eval(a)->eval(this->a);}
+
+    bool isEvaluator() const {return true;}
+    Evaluator * asEvaluator() {return this;}
+};
+
 class BaseMacro : public Macro {
 public:
     virtual ~BaseMacro(){}
@@ -343,7 +361,7 @@ public:
     virtual ~UserMacro(){}
 
     Ptr apply(const Ptr &p, const Ptr &a) {
-        return e->eval(new Context(sp, p, new Context(sa, a, this->a)));
+        return e->eval(new Context(sp, p, new Context(sa, new Evaluator(a), this->a)));
     }
 
     bool isUserMacro() const {return true;}

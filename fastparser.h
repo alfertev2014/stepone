@@ -23,6 +23,9 @@ class FastParser {
     static const Ob::Ptr acdr;
     static const Ob::Ptr acons;
     static const Ob::Ptr aeq;
+    static const Ob::Ptr actxget;
+    static const Ob::Ptr actxpush;
+    static const Ob::Ptr aemptyctx;
 
     static const Ob::Ptr apairp;
     static const Ob::Ptr alazyp;
@@ -84,6 +87,9 @@ class FastParser {
         parsingTable.insert(pair<string, Ob::Ptr>("cdr", acdr));
         parsingTable.insert(pair<string, Ob::Ptr>("cons", acons));
         parsingTable.insert(pair<string, Ob::Ptr>("eq", aeq));
+        parsingTable.insert(pair<string, Ob::Ptr>("ctx-get", actxget));
+        parsingTable.insert(pair<string, Ob::Ptr>("ctx-push", actxpush));
+        parsingTable.insert(pair<string, Ob::Ptr>("empty-ctx", aemptyctx));
 
         parsingTable.insert(pair<string, Ob::Ptr>("pair?", apairp));
         parsingTable.insert(pair<string, Ob::Ptr>("lazy?", alazyp));
@@ -148,6 +154,9 @@ public:
         a = new Context(acdr, BaseFunctions::fcdr, a);
         a = new Context(acons, BaseFunctions::fcons, a);
         a = new Context(aeq, BaseFunctions::feq, a);
+        a = new Context(actxget, BaseFunctions::fctxget, a);
+        a = new Context(actxpush, BaseFunctions::fctxpush, a);
+        a = new Context(aemptyctx, Evaluator::eempty, a);
 
         a = new Context(apairp, BaseTypePredicates::fpairp, a);
         a = new Context(alazyp, BaseTypePredicates::flazyp, a);
