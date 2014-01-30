@@ -10,8 +10,12 @@
 
 using namespace std;
 
+class ParserIterator {
+    string::const_iterator si;
+};
+
 class FastParser {
-    map<string, Ob::Ptr> parsingTable;
+    map<string, Ob::Ptr> symbolTable;
 
     string s;
 
@@ -71,68 +75,68 @@ class FastParser {
     static const Ob::Ptr aint2float;
 
     void initTable() {
-        parsingTable.clear();
-        parsingTable.insert(pair<string, Ob::Ptr>("t", Ob::at));
-        parsingTable.insert(pair<string, Ob::Ptr>("?", Ob::aif));
-        parsingTable.insert(pair<string, Ob::Ptr>("\'", Ob::aquote));
-        parsingTable.insert(pair<string, Ob::Ptr>(">-", Ob::alet));
-        parsingTable.insert(pair<string, Ob::Ptr>("~", Ob::aeval));
-        parsingTable.insert(pair<string, Ob::Ptr>("\\", Ob::alambda));
-        parsingTable.insert(pair<string, Ob::Ptr>("#", Ob::alazy));
-        parsingTable.insert(pair<string, Ob::Ptr>("$", Ob::aunlazy));
-        parsingTable.insert(pair<string, Ob::Ptr>("@", Ob::alabel));
-        parsingTable.insert(pair<string, Ob::Ptr>("%", Ob::amacro));
+        symbolTable.clear();
+        symbolTable.insert(pair<string, Ob::Ptr>("t", Ob::at));
+        symbolTable.insert(pair<string, Ob::Ptr>("?", Ob::aif));
+        symbolTable.insert(pair<string, Ob::Ptr>("\'", Ob::aquote));
+        symbolTable.insert(pair<string, Ob::Ptr>(">-", Ob::alet));
+        symbolTable.insert(pair<string, Ob::Ptr>("~", Ob::aeval));
+        symbolTable.insert(pair<string, Ob::Ptr>("\\", Ob::alambda));
+        symbolTable.insert(pair<string, Ob::Ptr>("#", Ob::alazy));
+        symbolTable.insert(pair<string, Ob::Ptr>("$", Ob::aunlazy));
+        symbolTable.insert(pair<string, Ob::Ptr>("@", Ob::alabel));
+        symbolTable.insert(pair<string, Ob::Ptr>("%", Ob::amacro));
 
-        parsingTable.insert(pair<string, Ob::Ptr>("car", acar));
-        parsingTable.insert(pair<string, Ob::Ptr>("cdr", acdr));
-        parsingTable.insert(pair<string, Ob::Ptr>("cons", acons));
-        parsingTable.insert(pair<string, Ob::Ptr>("eq", aeq));
-        parsingTable.insert(pair<string, Ob::Ptr>("ctx-get", actxget));
-        parsingTable.insert(pair<string, Ob::Ptr>("ctx-push", actxpush));
-        parsingTable.insert(pair<string, Ob::Ptr>("empty-ctx", aemptyctx));
+        symbolTable.insert(pair<string, Ob::Ptr>("car", acar));
+        symbolTable.insert(pair<string, Ob::Ptr>("cdr", acdr));
+        symbolTable.insert(pair<string, Ob::Ptr>("cons", acons));
+        symbolTable.insert(pair<string, Ob::Ptr>("eq", aeq));
+        symbolTable.insert(pair<string, Ob::Ptr>("ctx-get", actxget));
+        symbolTable.insert(pair<string, Ob::Ptr>("ctx-push", actxpush));
+        symbolTable.insert(pair<string, Ob::Ptr>("empty-ctx", aemptyctx));
 
-        parsingTable.insert(pair<string, Ob::Ptr>("pair?", apairp));
-        parsingTable.insert(pair<string, Ob::Ptr>("lazy?", alazyp));
-        parsingTable.insert(pair<string, Ob::Ptr>("label?", alabelp));
-        parsingTable.insert(pair<string, Ob::Ptr>("context?", acontextp));
-        parsingTable.insert(pair<string, Ob::Ptr>("atom?", aatomp));
-        parsingTable.insert(pair<string, Ob::Ptr>("symbol?", asymbolp));
-        parsingTable.insert(pair<string, Ob::Ptr>("const?", aconstp));
-        parsingTable.insert(pair<string, Ob::Ptr>("macro?", amacrop));
-        parsingTable.insert(pair<string, Ob::Ptr>("basemacro?", abasemacrop));
-        parsingTable.insert(pair<string, Ob::Ptr>("usermacro?", ausermacrop));
-        parsingTable.insert(pair<string, Ob::Ptr>("function?", afunctionp));
-        parsingTable.insert(pair<string, Ob::Ptr>("basefunction?", abasefunctionp));
-        parsingTable.insert(pair<string, Ob::Ptr>("closure?", aclosurep));
-        parsingTable.insert(pair<string, Ob::Ptr>("stectype?", aspectypep));
+        symbolTable.insert(pair<string, Ob::Ptr>("pair?", apairp));
+        symbolTable.insert(pair<string, Ob::Ptr>("lazy?", alazyp));
+        symbolTable.insert(pair<string, Ob::Ptr>("label?", alabelp));
+        symbolTable.insert(pair<string, Ob::Ptr>("context?", acontextp));
+        symbolTable.insert(pair<string, Ob::Ptr>("atom?", aatomp));
+        symbolTable.insert(pair<string, Ob::Ptr>("symbol?", asymbolp));
+        symbolTable.insert(pair<string, Ob::Ptr>("const?", aconstp));
+        symbolTable.insert(pair<string, Ob::Ptr>("macro?", amacrop));
+        symbolTable.insert(pair<string, Ob::Ptr>("basemacro?", abasemacrop));
+        symbolTable.insert(pair<string, Ob::Ptr>("usermacro?", ausermacrop));
+        symbolTable.insert(pair<string, Ob::Ptr>("function?", afunctionp));
+        symbolTable.insert(pair<string, Ob::Ptr>("basefunction?", abasefunctionp));
+        symbolTable.insert(pair<string, Ob::Ptr>("closure?", aclosurep));
+        symbolTable.insert(pair<string, Ob::Ptr>("stectype?", aspectypep));
 
-        parsingTable.insert(pair<string, Ob::Ptr>("i+", aintPlus));
-        parsingTable.insert(pair<string, Ob::Ptr>("i-", aintMinus));
-        parsingTable.insert(pair<string, Ob::Ptr>("i*", aintProduct));
-        parsingTable.insert(pair<string, Ob::Ptr>("i/", aintDivision));
-        parsingTable.insert(pair<string, Ob::Ptr>("i%", aintMod));
-        parsingTable.insert(pair<string, Ob::Ptr>("i?", aintp));
-        parsingTable.insert(pair<string, Ob::Ptr>("i=", aintEql));
-        parsingTable.insert(pair<string, Ob::Ptr>("i!=", aintNE));
-        parsingTable.insert(pair<string, Ob::Ptr>("i<", aintLT));
-        parsingTable.insert(pair<string, Ob::Ptr>("i>", aintGT));
-        parsingTable.insert(pair<string, Ob::Ptr>("i<=", aintLE));
-        parsingTable.insert(pair<string, Ob::Ptr>("i>=", aintGE));
+        symbolTable.insert(pair<string, Ob::Ptr>("i+", aintPlus));
+        symbolTable.insert(pair<string, Ob::Ptr>("i-", aintMinus));
+        symbolTable.insert(pair<string, Ob::Ptr>("i*", aintProduct));
+        symbolTable.insert(pair<string, Ob::Ptr>("i/", aintDivision));
+        symbolTable.insert(pair<string, Ob::Ptr>("i%", aintMod));
+        symbolTable.insert(pair<string, Ob::Ptr>("i?", aintp));
+        symbolTable.insert(pair<string, Ob::Ptr>("i=", aintEql));
+        symbolTable.insert(pair<string, Ob::Ptr>("i!=", aintNE));
+        symbolTable.insert(pair<string, Ob::Ptr>("i<", aintLT));
+        symbolTable.insert(pair<string, Ob::Ptr>("i>", aintGT));
+        symbolTable.insert(pair<string, Ob::Ptr>("i<=", aintLE));
+        symbolTable.insert(pair<string, Ob::Ptr>("i>=", aintGE));
 
-        parsingTable.insert(pair<string, Ob::Ptr>("f+", afloatPlus));
-        parsingTable.insert(pair<string, Ob::Ptr>("f-", afloatMinus));
-        parsingTable.insert(pair<string, Ob::Ptr>("f*", afloatProduct));
-        parsingTable.insert(pair<string, Ob::Ptr>("f/", afloatDivision));
-        parsingTable.insert(pair<string, Ob::Ptr>("f?", afloatp));
-        parsingTable.insert(pair<string, Ob::Ptr>("f=", afloatEql));
-        parsingTable.insert(pair<string, Ob::Ptr>("f!=", afloatNE));
-        parsingTable.insert(pair<string, Ob::Ptr>("f<", afloatLT));
-        parsingTable.insert(pair<string, Ob::Ptr>("f>", afloatGT));
-        parsingTable.insert(pair<string, Ob::Ptr>("f<=", afloatLE));
-        parsingTable.insert(pair<string, Ob::Ptr>("f>=", afloatGE));
+        symbolTable.insert(pair<string, Ob::Ptr>("f+", afloatPlus));
+        symbolTable.insert(pair<string, Ob::Ptr>("f-", afloatMinus));
+        symbolTable.insert(pair<string, Ob::Ptr>("f*", afloatProduct));
+        symbolTable.insert(pair<string, Ob::Ptr>("f/", afloatDivision));
+        symbolTable.insert(pair<string, Ob::Ptr>("f?", afloatp));
+        symbolTable.insert(pair<string, Ob::Ptr>("f=", afloatEql));
+        symbolTable.insert(pair<string, Ob::Ptr>("f!=", afloatNE));
+        symbolTable.insert(pair<string, Ob::Ptr>("f<", afloatLT));
+        symbolTable.insert(pair<string, Ob::Ptr>("f>", afloatGT));
+        symbolTable.insert(pair<string, Ob::Ptr>("f<=", afloatLE));
+        symbolTable.insert(pair<string, Ob::Ptr>("f>=", afloatGE));
 
-        parsingTable.insert(pair<string, Ob::Ptr>("f2i", afloat2int));
-        parsingTable.insert(pair<string, Ob::Ptr>("i2f", aint2float));
+        symbolTable.insert(pair<string, Ob::Ptr>("f2i", afloat2int));
+        symbolTable.insert(pair<string, Ob::Ptr>("i2f", aint2float));
     }
 
 public:
@@ -219,6 +223,17 @@ public:
     }
 
     void print(ostream & ts, const Ob::Ptr & p) {printOb(ts, p);}
+
+    void loadInitLibrary(string lib) {
+        Ob::Ptr res = parseEval(lib);
+        if(res->isEvaluator()) {
+            a = res->asEvaluator()->getContext();
+            cout << "initlib has loaded successfully" << endl;
+        } else {
+            cout << res->toString() << endl;
+        }
+    }
+
 private:
     ostream & printOb(ostream & ts, const Ob::Ptr & p) {
         Symbol * sym = p->asSymbol();
@@ -255,7 +270,7 @@ private:
         if(sym == Ob::anil->asSymbol()) {
             ts << "()";
         } else {
-            for(map<string, Ob::Ptr>::iterator it = parsingTable.begin(); it != parsingTable.end(); ++it) {
+            for(map<string, Ob::Ptr>::iterator it = symbolTable.begin(); it != symbolTable.end(); ++it) {
                 if(it->second == sym) {
                     ts << it->first;
                     break;
@@ -365,11 +380,11 @@ private:
             ++sii;
         }
         Ob::Ptr e(Ob::anil);
-        if(parsingTable.count(symbol) > 0) {
-            e = parsingTable[symbol];
+        if(symbolTable.count(symbol) > 0) {
+            e = symbolTable[symbol];
         } else {
             Symbol * sym = new Symbol();
-            parsingTable.insert(pair<string, Ob::Ptr>(symbol, sym));
+            symbolTable.insert(pair<string, Ob::Ptr>(symbol, sym));
             e = sym;
         }
         return parseRes(e, sii, true);

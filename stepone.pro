@@ -30,5 +30,6 @@ HEADERS += \
     repl.h
 
 OTHER_FILES += \
-    test.txt
+    test.txt \
+    initlib.txt
 
