@@ -7,5 +7,6 @@
 #include "typepredicates.h"
 #include "numbers.h"
 #include "basenumfunc.h"
+#include "tuple.h"
 
 #endif // STEPONE_H

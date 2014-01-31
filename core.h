@@ -74,6 +74,7 @@ public: // static
     static const Ptr alabel;
     static const Ptr amacro;
     static const Ptr aeval;
+    static const Ptr agensym;
 
 public:
     Ob() : refcount(0) {}
@@ -424,6 +425,7 @@ public:
 
 class Integer;
 class Float;
+class Vector;
 
 class SpecType : public Const {
 public:
@@ -435,6 +437,8 @@ public:
     virtual Integer * asInteger() {return 0;}
     virtual bool isFloat() const {return false;}
     virtual Float * asFloat() {return 0;}
+    virtual bool isVector() const {return false;}
+    virtual Vector * asVector() {return 0;}
 
     string toString() const {return "{SpecType}";}
 };

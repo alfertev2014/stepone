@@ -89,6 +89,15 @@ public:
     string toString() const {return "{MEval}";}
 };
 
+class MGenSymbol : public BaseMacro {
+public:
+    Ob::Ptr apply(const Ptr &p, const Ptr &a) {
+        return new Symbol;
+    }
+
+    string toString() const {return "{MGenSymbol}";}
+};
+
 class BaseMacroses {
     BaseMacroses(){}
 public:
@@ -101,6 +110,7 @@ public:
     static const Ob::Ptr mlabel;
     static const Ob::Ptr mmacro;
     static const Ob::Ptr meval;
+    static const Ob::Ptr mgensym;
 };
 
 

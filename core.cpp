@@ -13,5 +13,6 @@ const Ob::Ptr Ob::aunlazy(new Symbol);
 const Ob::Ptr Ob::alabel(new Symbol);
 const Ob::Ptr Ob::amacro(new Symbol);
 const Ob::Ptr Ob::aeval(new Symbol);
+const Ob::Ptr Ob::agensym(new Symbol);
 
 const Ob::Ptr Evaluator::eempty(new Evaluator(Ob::anil));

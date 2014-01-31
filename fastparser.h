@@ -74,6 +74,11 @@ class FastParser {
     static const Ob::Ptr afloat2int;
     static const Ob::Ptr aint2float;
 
+    static const Ob::Ptr avecp;
+    static const Ob::Ptr amkvec;
+    static const Ob::Ptr avecel;
+    static const Ob::Ptr aveccat;
+
     void initTable() {
         symbolTable.clear();
         symbolTable.insert(pair<string, Ob::Ptr>("t", Ob::at));
@@ -86,6 +91,7 @@ class FastParser {
         symbolTable.insert(pair<string, Ob::Ptr>("$", Ob::aunlazy));
         symbolTable.insert(pair<string, Ob::Ptr>("@", Ob::alabel));
         symbolTable.insert(pair<string, Ob::Ptr>("%", Ob::amacro));
+        symbolTable.insert(pair<string, Ob::Ptr>("^", Ob::agensym));
 
         symbolTable.insert(pair<string, Ob::Ptr>("car", acar));
         symbolTable.insert(pair<string, Ob::Ptr>("cdr", acdr));
@@ -137,6 +143,11 @@ class FastParser {
 
         symbolTable.insert(pair<string, Ob::Ptr>("f2i", afloat2int));
         symbolTable.insert(pair<string, Ob::Ptr>("i2f", aint2float));
+
+        symbolTable.insert(pair<string, Ob::Ptr>("vec?", avecp));
+        symbolTable.insert(pair<string, Ob::Ptr>("mkvec", amkvec));
+        symbolTable.insert(pair<string, Ob::Ptr>("vec-get", avecel));
+        symbolTable.insert(pair<string, Ob::Ptr>("vec-cat", aveccat));
     }
 
 public:
@@ -153,6 +164,7 @@ public:
         a = new Context(Ob::aunlazy, BaseMacroses::munlazy, a);
         a = new Context(Ob::aeval, BaseMacroses::meval, a);
         a = new Context(Ob::amacro, BaseMacroses::mmacro, a);
+        a = new Context(Ob::agensym, BaseMacroses::mgensym, a);
 
         a = new Context(acar, BaseFunctions::fcar, a);
         a = new Context(acdr, BaseFunctions::fcdr, a);
@@ -204,6 +216,11 @@ public:
 
         a = new Context(afloat2int, BaseNumFunc::ffloat2int, a);
         a = new Context(aint2float, BaseNumFunc::fint2float, a);
+
+        a = new Context(avecp, VectorFunctions::fvecp, a);
+        a = new Context(amkvec, VectorFunctions::fmkvec, a);
+        a = new Context(avecel, VectorFunctions::fvecel, a);
+        a = new Context(aveccat, VectorFunctions::fveccat, a);
 
         initTable();
     }
@@ -260,7 +277,21 @@ private:
                 ts << spt->asInteger()->getInteger();
             else if(spt->isFloat())
                 ts << spt->asFloat()->getFloat();
-            else
+            else if(spt->isVector()) {
+                Vector * v = spt->asVector();
+                int n = v->getSize();
+                if(n == 0)
+                    ts << "[]";
+                else {
+                    ts << "[";
+                    printOb(ts, v->getElement(0));
+                    for(int i = 1; i < n; ++i) {
+                        ts << ", ";
+                        printOb(ts, v->getElement(i));
+                    }
+                    ts << "]";
+                }
+            } else
                 ts << "{SpecType}";
         }
         return ts;
@@ -268,16 +299,15 @@ private:
 
     ostream & printSymbol(ostream & ts, Symbol * sym) {
         if(sym == Ob::anil->asSymbol()) {
-            ts << "()";
+            return ts << "()";
         } else {
             for(map<string, Ob::Ptr>::iterator it = symbolTable.begin(); it != symbolTable.end(); ++it) {
                 if(it->second == sym) {
-                    ts << it->first;
-                    break;
+                    return ts << it->first;
                 }
             }
         }
-        return ts;
+        return ts << "{sym}";
     }
 
     ostream & printList(ostream & ts, Pair * pr) {

@@ -2,7 +2,7 @@
 #define INTEGERS_H
 
 #include <sstream>
-#include "stepone.h"
+#include "core.h"
 
 class Integer : public SpecType {
     int i;

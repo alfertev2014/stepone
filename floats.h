@@ -1,7 +1,7 @@
 #ifndef FLOATS_H
 #define FLOATS_H
 
-#include "stepone.h"
+#include "core.h"
 
 class Float : public SpecType {
     float f;
