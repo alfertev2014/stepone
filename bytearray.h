@@ -36,15 +36,10 @@ public:
     bool isByteArray() const {return true;}
     ByteArray * asByteArray() {return this;}
 
-    static ByteArray * fromInteger(int i) {
-        ByteArray * res = new ByteArray(sizeof(int));
-        *((int*)res->arr) = i;
-        return res;
-    }
-
-    static ByteArray * fromFloat(float f) {
-        ByteArray * res = new ByteArray(sizeof(float));
-        *((float*)res->arr) = f;
+    template <class T>
+    static ByteArray * from(T f) {
+        ByteArray * res = new ByteArray(sizeof(T));
+        *((T*)res->arr) = f;
         return res;
     }
 
@@ -61,6 +56,12 @@ public:
         for(int i = 0; i < n; ++i)
             res->arr[i] = s[i1 + i];
         return res;
+    }
+
+    template <class T>
+    T get(int i) {
+        if(i < 0 || i >= n) throw 0;
+        return *((T*)arr[i]);
     }
 };
 
@@ -125,13 +126,13 @@ class FByteArrayMid : public BaseFunction {
                 return ByteArray::sub(i1, i2);
             }
         public:
-            FSubByteArray2(Ptr _x1, Ptr _x2) :x1(_x1), x2(_x2) {}
+            FSubByteArray2(const Ptr & _x1, const Ptr & _x2) :x1(_x1), x2(_x2) {}
             string toString() const {return "FByteArrayMid3";}
         };
     protected:
         Ptr applyX(const Ptr &x) {return new FByteArrayMid3(x1, x);}
     public:
-        FByteArrayMid2(Ptr _x1) :x1(_x1){}
+        FByteArrayMid2(const Ptr & _x1) :x1(_x1){}
         string toString() const {return "FByteArrayMid2";}
     };
 protected:
@@ -144,9 +145,10 @@ class FSerializeInteger : public BaseFunction {
 protected:
     Ob::Ptr applyX(const Ptr &x) {
         SpecType * stx = x->asSpecType();
-        if(stx == 0) return Ob::anil;
+        if(stx == 0) throw 0;
         Integer * i = stx->asInteger();
-        return ByteArray::fromInteger(i->getInteger());
+        if(i == 0) throw 0;
+        return ByteArray::from<int>(i->getInteger());
     }
 public:
     string toString() const {return "{FSerializeInteger}";}
@@ -156,12 +158,65 @@ class FSerializeFloat : public BaseFunction {
 protected:
     Ob::Ptr applyX(const Ptr &x) {
         SpecType * stx = x->asSpecType();
-        if(stx == 0) return Ob::anil;
+        if(stx == 0) throw 0;
         Float * f = stx->asFloat();
-        return ByteArray::fromFloat(f->getFloat());
+        if(f == 0) throw 0;
+        return ByteArray::from<float>(f->getFloat());
     }
 public:
     string toString() const {return "{FSerializeInteger}";}
+};
+
+class FBytesGetInt : public BaseFunction {
+    class FBytesGetInt2 : public BaseFunction {
+        Ptr x1;
+    public:
+        FBytesGetInt2(const Ptr & _x1) : x1(_x1) {}
+    protected:
+        Ob::Ptr applyX(const Ptr &x) {
+            SpecType * spv = x1->asSpecType();
+            if(spv == 0) throw 0;
+            ByteArray * ba = spv->asByteArray();
+            if(ba == 0) throw 0;
+            spv = x->asSpecType();
+            if(spv == 0) return Ob::anil;
+            Integer * i = spv->asInteger();
+            if(i == 0) throw 0;
+            return new Integer(ba->get<int>(i));
+        }
+    public:
+        string toString() const {return "{FBytesGetFloat2}";}
+    };
+protected:
+    Ob::Ptr applyX(const Ptr &x) {return new FBytesGetInt2(x);}
+public:
+    string toString() const {return "{FBytesGetInt}";}
+};
+
+class FBytesGetFloat : public BaseFunction {
+    class FBytesGetFloat2 : public BaseFunction {
+        Ptr x1;
+    public:
+        FBytesGetFloat2(const Ptr & _x1) : x1(_x1) {}
+    protected:
+        Ob::Ptr applyX(const Ptr &x) {
+            SpecType * spv = x1->asSpecType();
+            if(spv == 0) throw 0;
+            ByteArray * ba = spv->asByteArray();
+            if(ba == 0) throw 0;
+            spv = x->asSpecType();
+            if(spv == 0) return Ob::anil;
+            Integer * i = spv->asInteger();
+            if(i == 0) throw 0;
+            return new Float(ba->get<float>(i));
+        }
+    public:
+        string toString() const {return "{FBytesGetFloat2}";}
+    };
+protected:
+    Ob::Ptr applyX(const Ptr &x) {return new FBytesGetFloat2(x);}
+public:
+    string toString() const {return "{FBytesGetFloat}";}
 };
 
 class ByteArrayFunctions
@@ -173,6 +228,8 @@ public:
     static const Ob::Ptr fbytesmid;
     static const Ob::Ptr fserint;
     static const Ob::Ptr fserfloat;
+    static const Ob::Ptr fdeserint;
+    static const Ob::Ptr fdeserfloat;
 };
 
 #endif // BYTEARRAY_H
