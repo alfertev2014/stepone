@@ -426,6 +426,7 @@ public:
 class Integer;
 class Float;
 class Vector;
+class ByteArray;
 
 class SpecType : public Const {
 public:
@@ -439,6 +440,8 @@ public:
     virtual Float * asFloat() {return 0;}
     virtual bool isVector() const {return false;}
     virtual Vector * asVector() {return 0;}
+    virtual bool isByteArray() const {return false;}
+    virtual ByteArray * asByteArray() {return 0;}
 
     string toString() const {return "{SpecType}";}
 };

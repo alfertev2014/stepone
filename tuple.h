@@ -46,14 +46,24 @@ protected:
     Ob::Ptr applyX(const Ptr &x) {
         SpecType * stx = x->asSpecType();
         if(stx == 0) return Ob::anil;
-        Integer * i = stx->asInteger();
-        return i == 0 ? Ob::anil : Ob::at;
+        Vector * v = stx->asVector();
+        return v == 0 ? Ob::anil : Ob::at;
     }
-
 public:
     string toString() const {return "{FVectorP}";}
 };
 
+class FVectorLength : public BaseFunction {
+protected:
+    Ob::Ptr applyX(const Ptr &x) {
+        SpecType * stx = x->asSpecType();
+        if(stx == 0) return Ob::anil;
+        Vector * v = stx->asVector();
+        return new Integer(v->getSize());
+    }
+public:
+    string toString() const {return "{FVectorP}";}
+};
 
 class FMakeVector : public BaseFunction {
     class FMakeVectorN : public BaseFunction {
@@ -116,11 +126,14 @@ class FConcatVector : public BaseFunction {
         Ptr v;
     public:
         FConcatVector2(const Ptr & _v) : v(_v) {}
+
+        string toString() const {return "FConcatVector2";}
     protected:
         Ptr applyX(const Ptr &x) {
             SpecType * spv = v->asSpecType();
             if(spv == 0) throw 0;
             Vector * vec1 = spv->asVector();
+            if(vec1 == 0) throw 0;
             SpecType * sp = x->asSpecType();
             if(sp == 0) throw 0;
             Vector * vec = sp->asVector();
@@ -139,6 +152,7 @@ class VectorFunctions
 public:
     static const Ob::Ptr fvecp;
     static const Ob::Ptr fmkvec;
+    static const Ob::Ptr fveclen;
     static const Ob::Ptr fvecel;
     static const Ob::Ptr fveccat;
 };

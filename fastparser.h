@@ -76,6 +76,7 @@ class FastParser {
 
     static const Ob::Ptr avecp;
     static const Ob::Ptr amkvec;
+    static const Ob::Ptr aveclen;
     static const Ob::Ptr avecel;
     static const Ob::Ptr aveccat;
 
@@ -146,6 +147,7 @@ class FastParser {
 
         symbolTable.insert(pair<string, Ob::Ptr>("vec?", avecp));
         symbolTable.insert(pair<string, Ob::Ptr>("mkvec", amkvec));
+        symbolTable.insert(pair<string, Ob::Ptr>("vec-len", aveclen));
         symbolTable.insert(pair<string, Ob::Ptr>("vec-get", avecel));
         symbolTable.insert(pair<string, Ob::Ptr>("vec-cat", aveccat));
     }
