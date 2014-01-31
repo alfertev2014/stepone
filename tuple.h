@@ -149,6 +149,7 @@ public:
 
 class VectorFunctions
 {
+    VectorFunctions(){}
 public:
     static const Ob::Ptr fvecp;
     static const Ob::Ptr fmkvec;
