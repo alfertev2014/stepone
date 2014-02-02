@@ -49,6 +49,13 @@ public:
     string toString() const {return "FEq";}
 };
 
+class FGetType : public BaseFunction {
+protected:
+    Ptr applyX(const Ptr &x) {return x->getTypeId();}
+public:
+    string toString() const {return "FGetType";}
+};
+
 class FContextGet : public BaseFunction {
     class FContextGet2 : public BaseFunction {
         Ob::Ptr x1;
@@ -109,6 +116,7 @@ public:
     static const Ob::Ptr fcdr;
     static const Ob::Ptr fcons;
     static const Ob::Ptr feq;
+    static const Ob::Ptr fgettype;
     static const Ob::Ptr fctxget;
     static const Ob::Ptr fctxpush;
 };

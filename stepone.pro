@@ -28,7 +28,8 @@ HEADERS += \
     stepone.h \
     test.h \
     repl.h \
-    bytearray.h
+    bytearray.h \
+    funcstemp.h
 
 OTHER_FILES += \
     test.txt \

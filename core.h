@@ -131,14 +131,14 @@ public:
     virtual Ptr getTypeId() const = 0;
 
     template <class T>
-    T * as() {return TypeInfo<T>::getType() == getTypeId() ? this : 0;}
+    T * as() {return TypeInfo<T>::type_id == getTypeId() ? this : 0;}
 
     template <class T>
-    bool * is() const {return TypeInfo<T>::getType() == getTypeId();}
+    bool * is() const {return TypeInfo<T>::type_id == getTypeId();}
 
     template <class T>
     T * cast() {
-        if(TypeInfo<T>::getType() == getTypeId())
+        if(TypeInfo<T>::type_id == getTypeId())
             return this;
         throw 0;
     }
@@ -150,17 +150,13 @@ public:
 
 template <class T>
 class TypeInfo {
-private:
-    static Ob::Ptr type_id;
 public:
-    static Ob::Ptr getType() {return type_id;}
-
-    static string getTypeString() {return T::getTypeString();}
+    static const Ob::Ptr type_id;
 };
 
 class Pair : public Ob {
 public:
-    Ptr getTypeId() const {return TypeInfo<Pair>::getType();}
+    Ptr getTypeId() const {return TypeInfo<Pair>::type_id;}
     static string getTypeString() {return "Pair";}
     string typeToString() const {return getTypeString();}
 private:
@@ -209,7 +205,7 @@ public:
 
 class Context : public Ob {
 public:
-    Ptr getTypeId() const {return TypeInfo<Context>::getType();}
+    Ptr getTypeId() const {return TypeInfo<Context>::type_id;}
     static string getTypeString() {return "Context";}
     string typeToString() const {return getTypeString();}
 private:
@@ -259,7 +255,7 @@ public:
 
 class Lazy : public Ob {
 public:
-    Ptr getTypeId() const {return TypeInfo<Lazy>::getType();}
+    Ptr getTypeId() const {return TypeInfo<Lazy>::type_id;}
     static string getTypeString() {return "Lazy";}
     string typeToString() const {return getTypeString();}
 private:
@@ -306,7 +302,7 @@ public:
 
 class Label : public Ob {
 public:
-    Ptr getTypeId() const {return TypeInfo<Label>::getType();}
+    Ptr getTypeId() const {return TypeInfo<Label>::type_id;}
     static string getTypeString() {return "Label";}
     string typeToString() const {return getTypeString();}
 private:
@@ -335,7 +331,7 @@ public:
 
 class Symbol : public Atom {
 public:
-    Ptr getTypeId() const {return TypeInfo<Symbol>::getType();}
+    Ptr getTypeId() const {return TypeInfo<Symbol>::type_id;}
     static string getTypeString() {return "Symbol";}
     string typeToString() const {return getTypeString();}
 public:
@@ -382,7 +378,9 @@ public:
 
 class Evaluator : public Macro {
 public:
-    Ptr getTypeId() const {return TypeInfo<Evaluator>::getType();}
+    Ptr getTypeId() const {return TypeInfo<Evaluator>::type_id;}
+    static string getTypeString() {return "Evaluator";}
+    string typeToString() const {return getTypeString();}
 private:
     Ptr a;
 public:
@@ -407,7 +405,9 @@ public:
 
 class UserMacro : public Macro {
 public:
-    Ptr getTypeId() const {return TypeInfo<UserMacro>::getType();}
+    Ptr getTypeId() const {return TypeInfo<UserMacro>::type_id;}
+    static string getTypeString() {return "UserMacro";}
+    string typeToString() const {return getTypeString();}
 private:
     Ptr sa;
     Ptr sp;
@@ -467,7 +467,9 @@ public:
 
 class Closure : public Function {
 public:
-    Ptr getTypeId() const {return TypeInfo<Closure>::getType();}
+    Ptr getTypeId() const {return TypeInfo<Closure>::type_id;}
+    static string getTypeString() {return "Closure";}
+    string typeToString() const {return getTypeString();}
 private:
     Ob::Ptr x;
     Ob::Ptr e;

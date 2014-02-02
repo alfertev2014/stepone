@@ -1,7 +1,7 @@
 #include "core.h"
 
 template <class T>
-const Ob::Ptr TypeInfo(new Symbol);
+const Ob::Ptr TypeInfo::type_id(new Symbol);
 
 bool operator ==(const Ob * const ob, const Ob::Ptr & p) {return ob == p.ob;}
 

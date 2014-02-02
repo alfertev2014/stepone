@@ -59,6 +59,13 @@ public:
     string toString() const {return "FMacroP";}
 };
 
+class FEvaluatorP : public BaseFunction {
+protected:
+    Ob::Ptr applyX(const Ptr &x) {return x->isEvaluator() ? Ob::at : Ob::anil;}
+public:
+    string toString() const {return "FEvaluatorP";}
+};
+
 class FBaseMacroP : public BaseFunction {
 protected:
     Ob::Ptr applyX(const Ptr &x) {return x->isBaseMacro() ? Ob::at : Ob::anil;}
@@ -113,6 +120,7 @@ public:
     static const Ob::Ptr fsymbolp;
     static const Ob::Ptr fconstp;
     static const Ob::Ptr fmacrop;
+    static const Ob::Ptr fevalp;
     static const Ob::Ptr fbasemacrop;
     static const Ob::Ptr fusermacrop;
     static const Ob::Ptr ffunctionp;

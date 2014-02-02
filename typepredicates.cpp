@@ -8,6 +8,7 @@ const Ob::Ptr BaseTypePredicates::fatomp(new FAtomP);
 const Ob::Ptr BaseTypePredicates::fsymbolp(new FSymbolP);
 const Ob::Ptr BaseTypePredicates::fconstp(new FConstP);
 const Ob::Ptr BaseTypePredicates::fmacrop(new FMacroP);
+const Ob::Ptr BaseTypePredicates::fevalp(new FEvalP);
 const Ob::Ptr BaseTypePredicates::fbasemacrop(new FBaseMacroP);
 const Ob::Ptr BaseTypePredicates::fusermacrop(new FUserMacroP);
 const Ob::Ptr BaseTypePredicates::ffunctionp(new FFunctionP);
