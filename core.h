@@ -28,6 +28,8 @@ class BaseFunction;
 class Closure;
 class SpecType;
 
+template <class T>
+class TypeInfo;
 
 class Ob {
     int refcount;
@@ -126,11 +128,42 @@ public:
     virtual bool isSpecType() const {return false;}
     virtual SpecType * asSpecType() {return 0;}
 
+    virtual Ptr getTypeId() const = 0;
+
+    template <class T>
+    T * as() {return TypeInfo<T>::getType() == getTypeId() ? this : 0;}
+
+    template <class T>
+    bool * is() const {return TypeInfo<T>::getType() == getTypeId();}
+
+    template <class T>
+    T * cast() {
+        if(TypeInfo<T>::getType() == getTypeId())
+            return this;
+        throw 0;
+    }
+
     // Методы для отладки
     virtual string toString() const {return "{ob}";}
+    virtual string typeToString() const {return "Ob";}
+};
+
+template <class T>
+class TypeInfo {
+private:
+    static Ob::Ptr type_id;
+public:
+    static Ob::Ptr getType() {return type_id;}
+
+    static string getTypeString() {return T::getTypeString();}
 };
 
 class Pair : public Ob {
+public:
+    Ptr getTypeId() const {return TypeInfo<Pair>::getType();}
+    static string getTypeString() {return "Pair";}
+    string typeToString() const {return getTypeString();}
+private:
     Ptr pcar;
     Ptr pcdr;
 public:
@@ -175,6 +208,11 @@ public:
 };
 
 class Context : public Ob {
+public:
+    Ptr getTypeId() const {return TypeInfo<Context>::getType();}
+    static string getTypeString() {return "Context";}
+    string typeToString() const {return getTypeString();}
+private:
     Ptr s;
     Ptr e;
     Ptr next;
@@ -220,6 +258,11 @@ public:
 };
 
 class Lazy : public Ob {
+public:
+    Ptr getTypeId() const {return TypeInfo<Lazy>::getType();}
+    static string getTypeString() {return "Lazy";}
+    string typeToString() const {return getTypeString();}
+private:
     Ptr e;
     Ptr a;
     bool ready;
@@ -262,6 +305,11 @@ public:
 };
 
 class Label : public Ob {
+public:
+    Ptr getTypeId() const {return TypeInfo<Label>::getType();}
+    static string getTypeString() {return "Label";}
+    string typeToString() const {return getTypeString();}
+private:
     Ptr f;
     Ptr e;
     Ptr a;
@@ -286,6 +334,10 @@ public:
 
 
 class Symbol : public Atom {
+public:
+    Ptr getTypeId() const {return TypeInfo<Symbol>::getType();}
+    static string getTypeString() {return "Symbol";}
+    string typeToString() const {return getTypeString();}
 public:
     Ptr eval(const Ptr & a) {return a->assoc(this);}
 
@@ -329,6 +381,9 @@ public:
 };
 
 class Evaluator : public Macro {
+public:
+    Ptr getTypeId() const {return TypeInfo<Evaluator>::getType();}
+private:
     Ptr a;
 public:
     static const Ptr eempty;
@@ -351,6 +406,9 @@ public:
 };
 
 class UserMacro : public Macro {
+public:
+    Ptr getTypeId() const {return TypeInfo<UserMacro>::getType();}
+private:
     Ptr sa;
     Ptr sp;
     Ptr e;
@@ -408,6 +466,9 @@ public:
 
 
 class Closure : public Function {
+public:
+    Ptr getTypeId() const {return TypeInfo<Closure>::getType();}
+private:
     Ob::Ptr x;
     Ob::Ptr e;
     Ob::Ptr a;
@@ -423,25 +484,11 @@ public:
     string toString() const {return "{\\ " + x->toString() + " . " + e->toString() + " | " + a->toString() + "}";}
 };
 
-class Integer;
-class Float;
-class Vector;
-class ByteArray;
-
 class SpecType : public Const {
 public:
     virtual ~SpecType() {}
     bool isSpecType() const {return true;}
     SpecType * asSpecType() {return this;}
-
-    virtual bool isInteger() const {return false;}
-    virtual Integer * asInteger() {return 0;}
-    virtual bool isFloat() const {return false;}
-    virtual Float * asFloat() {return 0;}
-    virtual bool isVector() const {return false;}
-    virtual Vector * asVector() {return 0;}
-    virtual bool isByteArray() const {return false;}
-    virtual ByteArray * asByteArray() {return 0;}
 
     string toString() const {return "{SpecType}";}
 };

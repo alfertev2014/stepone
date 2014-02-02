@@ -1,5 +1,8 @@
 #include "core.h"
 
+template <class T>
+const Ob::Ptr TypeInfo(new Symbol);
+
 bool operator ==(const Ob * const ob, const Ob::Ptr & p) {return ob == p.ob;}
 
 const Ob::Ptr Ob::anil(new Symbol);
