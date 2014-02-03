@@ -1,106 +1,98 @@
 #ifndef TYPESTEMP_H
 #define TYPESTEMP_H
 
-//#include "core.h"
+#include "core.h"
+#include <sstream>
 
-//template <class T>
-//string valueToString(T x)
-//{
-//    return "fuck!";
-//}
+template <class T>
+string valueToString(T x) {
+    stringstream ss;
+    ss << x;
+    return ss.str();
+}
 
-//template <class T>
-//string typeToString() {return "fuck!";}
+template <typename T>
+string cppTypeToString() {return "cppType";}
 
-////template<>
-////string typeToString<int>() {return "i";}
+template <> inline string cppTypeToString<int>() {return "int";}
+template <> inline string cppTypeToString<float>() {return "float";}
+template <> inline string cppTypeToString<char>() {return "char";}
 
-////template<>
-////string typeToString<float>() {return "f";}
+template <class T>
+class SpecTypeTemp : public SpecType {
+public:
+    Ptr getTypeId() const {return TypeInfo<SpecTypeTemp<T> >::type_id;}
+    static string getTypeString() {return "SpecType{" + cppTypeToString<T>() + "}";}
+    string typeToString() const {return getTypeString();}
+private:
+    T t;
+public:
+    SpecTypeTemp(const T & _t) : t(_t) {}
+    T getValue() const {return t;}
+    string toString() const {return "[" + cppTypeToString<T>() + ": " + valueToString(t) + "]";}
+};
 
-////template<>
-////string typeToString<double>() {return "d";}
+template <class T1, class T2>
+class FSpecTypeCast : public BaseFunction {
+public:
+    Ptr getTypeId() const {return TypeInfo<FSpecTypeCast>::type_id;}
+    static string getTypeString() {return "FSpecTypeCast";}
+    string typeToString() const {return getTypeString();}
+protected:
+    Ptr applyX(const Ptr &x) {
+        return new SpecTypeTemp<T2>(x->cast<SpecTypeTemp<T1> >()->getValue());
+    }
+public:
+    string toString() const {return "FSpecTypeCast{" + cppTypeToString<T1>() + " -> " + cppTypeToString<T2>() + "}";}
+};
 
-////template<>
-////string typeToString<char>() {return "c";}
+template <class T>
+class FBitNot : public BaseFunction {
+public:
+    Ptr getTypeId() const {return TypeInfo<FBitNot>::type_id;}
+    static string getTypeString() {return "FBitNot";}
+    string typeToString() const {return getTypeString();}
+protected:
+    Ptr applyX(const Ptr &x) {
+        return new SpecTypeTemp<T>(~ x->cast<SpecTypeTemp<T> >()->getValue());
+    }
+public:
+    string toString() const {return "FBitNot{" + cppTypeToString<T>() + "}";}
+};
+
+template <class T>
+class FNeg : public BaseFunction {
+public:
+    Ptr getTypeId() const {return TypeInfo<FNeg>::type_id;}
+    static string getTypeString() {return "FNeg";}
+    string typeToString() const {return getTypeString();}
+protected:
+    Ptr applyX(const Ptr &x) {
+        return new SpecTypeTemp<T>(- x->cast<SpecTypeTemp<T> >()->getValue());
+    }
+public:
+    string toString() const {return "FMinus{" + cppTypeToString<T>() + "}";}
+};
 
 
-//template <class T>
-//class SpecTypeTemp : public SpecType
-//{
-//    T t;
-//public:
+template <typename T, typename CppBinOp>
+class SpecTypeBinOp {
+public:
+    static Ob::Ptr op(const Ob::Ptr & x1, const Ob::Ptr & x2) {
+        return new SpecTypeTemp<T>(CppBinOp::op(x1->cast<SpecTypeTemp<T> >()->getValue(), x2->cast<SpecTypeTemp<T> >()->getValue()));
+    }
 
-//    SpecTypeTemp(const T & _t) : t(_t) {}
+    static string toString() {return "SpecTypeBinOp{" + CppBinOp::toString() + "}";}
+};
 
-//    T getValue() const {return t;}
+template <typename T, typename CppCmpOp>
+class SpecTypeCmpOp {
+public:
+    static Ob::Ptr op(const Ob::Ptr & x1, const Ob::Ptr & x2) {
+        return CppCmpOp::op(x1->cast<SpecTypeTemp<T> >()->getValue(), x2->cast<SpecTypeTemp<T> >()->getValue()) ? Ob::at : Ob::anil;
+    }
 
-//    string toString() const
-//    {
-//        return "{" + typeToString<T>() + ": " + valueToString(t) + "}";
-//    }
-//};
-
-
-//template <class T>
-//class FSpecTypeP : public Operation
-//{
-//protected:
-//    Ob::Ptr applyX(const Ptr &x)
-//    {
-//        SpecType * stx = x->asSpecType();
-//        return stx == 0 || !stx->hasType(SpecTypeTemp<T>::type_id) ? Ob::anil : Ob::at;
-//    }
-
-//public:
-//    string toString() const {return "FSpecTypeP{" + typeToString<T>() + "}";}
-//};
-
-//template <class T1, class T2>
-//class FSpecTypeCast : public Operation
-//{
-//protected:
-//    Ptr applyX(const Ptr &x)
-//    {
-//        SpecType * stx = x->asSpecType();
-//        if(stx == 0) throw 0;
-//        return new SpecTypeTemp<T2>(stx->cast<SpecTypeTemp<T1> >()->getValue());
-//    }
-
-//public:
-//    string toString() const
-//    {return "FSpecTypeCast{" + typeToString<T1>() + ", " + typeToString<T2>() + "}";}
-//};
-
-//template <class T, class BinOp>
-//class FBinaryOp : public Operation
-//{
-//    class FBinaryOp2 : public Operation
-//    {
-//        T t1;
-//    public:
-//        FBinaryOp2(T _t1) : t1(_t1) {}
-//    protected:
-//        Ptr applyX(const Ptr &x)
-//        {
-//            SpecType * stx = x->asSpecType();
-//            if(stx == 0) throw 0;
-//            return new SpecTypeTemp<T>(BinOp::op(t1, stx->cast<SpecTypeTemp<T> >()->getValue()));
-//        }
-//    public:
-//        string toString() const
-//        {return "FBinaryOp2{" + typeToString<T>() + ": " + valueToString(t1) + BinOp::toString() + "}";}
-//    };
-//protected:
-//    Ptr applyX(const Ptr &x)
-//    {
-//        SpecType * stx = x->asSpecType();
-//        if(stx == 0) throw 0;
-//        return new FBinaryOp2(stx->cast<SpecTypeTemp<T> >()->getValue());
-//    }
-
-//public:
-//    string toString() const {return "FBinaryOp{" + typeToString<T>() + BinOp::toString() + "}";}
-//};
+    static string toString() {return "SpecTypeCmpOp{" + CppCmpOp::toString() + "}";}
+};
 
 #endif // TYPESTEMP_H

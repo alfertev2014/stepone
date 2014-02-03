@@ -7,6 +7,7 @@ const Ob::Ptr FastParser::aeq(new Symbol);
 const Ob::Ptr FastParser::actxget(new Symbol);
 const Ob::Ptr FastParser::actxpush(new Symbol);
 const Ob::Ptr FastParser::aemptyctx(new Symbol);
+const Ob::Ptr FastParser::agettype(new Symbol);
 
 const Ob::Ptr FastParser::apairp(new Symbol);
 const Ob::Ptr FastParser::alazyp(new Symbol);
@@ -23,12 +24,17 @@ const Ob::Ptr FastParser::abasefunctionp(new Symbol);
 const Ob::Ptr FastParser::aclosurep(new Symbol);
 const Ob::Ptr FastParser::aspectypep(new Symbol);
 
+const Ob::Ptr FastParser::aintNeg(new Symbol);
 const Ob::Ptr FastParser::aintPlus(new Symbol);
 const Ob::Ptr FastParser::aintMinus(new Symbol);
 const Ob::Ptr FastParser::aintProduct(new Symbol);
 const Ob::Ptr FastParser::aintDivision(new Symbol);
 const Ob::Ptr FastParser::aintMod(new Symbol);
 const Ob::Ptr FastParser::aintp(new Symbol);
+const Ob::Ptr FastParser::abitnot(new Symbol);
+const Ob::Ptr FastParser::abitand(new Symbol);
+const Ob::Ptr FastParser::abitor(new Symbol);
+const Ob::Ptr FastParser::abitxor(new Symbol);
 const Ob::Ptr FastParser::aintEql(new Symbol);
 const Ob::Ptr FastParser::aintNE(new Symbol);
 const Ob::Ptr FastParser::aintGT(new Symbol);
@@ -36,6 +42,7 @@ const Ob::Ptr FastParser::aintLT(new Symbol);
 const Ob::Ptr FastParser::aintGE(new Symbol);
 const Ob::Ptr FastParser::aintLE(new Symbol);
 
+const Ob::Ptr FastParser::afloatNeg(new Symbol);
 const Ob::Ptr FastParser::afloatPlus(new Symbol);
 const Ob::Ptr FastParser::afloatMinus(new Symbol);
 const Ob::Ptr FastParser::afloatProduct(new Symbol);

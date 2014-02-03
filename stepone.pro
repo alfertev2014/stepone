@@ -9,7 +9,8 @@ SOURCES += main.cpp \
     basefunc.cpp \
     basemacro.cpp \
     typepredicates.cpp \
-    core.cpp
+    core.cpp \
+    bytearray.cpp
 
 HEADERS += \
     typestemp.h \
@@ -28,7 +29,8 @@ HEADERS += \
     stepone.h \
     test.h \
     repl.h \
-    bytearray.h
+    bytearray.h \
+    funcstemp.h
 
 OTHER_FILES += \
     test.txt \

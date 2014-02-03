@@ -5,6 +5,8 @@
 
 class MQuote : public BaseMacro {
 public:
+    Ptr getTypeId() const {return TypeInfo<MQuote>::type_id;}
+public:
     Ob::Ptr apply(const Ptr &p, const Ptr &a) {
         return p;
     }
@@ -13,6 +15,8 @@ public:
 };
 
 class MIf : public BaseMacro {
+public:
+    Ptr getTypeId() const {return TypeInfo<MIf>::type_id;}
 public:
     Ob::Ptr apply(const Ptr &p, const Ptr &a) {
         if(p->car()->eval(a) == Ob::anil)
@@ -26,6 +30,8 @@ public:
 
 class MLambda : public BaseMacro {
 public:
+    Ptr getTypeId() const {return TypeInfo<MLambda>::type_id;}
+public:
     Ob::Ptr apply(const Ptr &p, const Ptr &a) {
         return new Closure(p->car(), p->cdr(), a);
     }
@@ -34,6 +40,8 @@ public:
 };
 
 class MLet : public BaseMacro {
+public:
+    Ptr getTypeId() const {return TypeInfo<MLet>::type_id;}
 public:
     Ob::Ptr apply(const Ptr &p, const Ptr &a) {
         Ob::Ptr val = p->cdr();
@@ -45,6 +53,8 @@ public:
 
 class MLazy : public BaseMacro {
 public:
+    Ptr getTypeId() const {return TypeInfo<MLazy>::type_id;}
+public:
     Ob::Ptr apply(const Ptr &p, const Ptr &a) {
         return new Lazy(p, a);
     }
@@ -53,6 +63,8 @@ public:
 };
 
 class MUnlazy : public BaseMacro {
+public:
+    Ptr getTypeId() const {return TypeInfo<MUnlazy>::type_id;}
 public:
     Ob::Ptr apply(const Ptr &p, const Ptr &a) {
         return p->eval(a)->unlazy();
@@ -63,6 +75,8 @@ public:
 
 class MLabel : public BaseMacro {
 public:
+    Ptr getTypeId() const {return TypeInfo<MLabel>::type_id;}
+public:
     Ob::Ptr apply(const Ptr &p, const Ptr &a) {
         return new Label(p->car(), p->cdr(), a);
     }
@@ -71,6 +85,8 @@ public:
 };
 
 class MMacro : public BaseMacro {
+public:
+    Ptr getTypeId() const {return TypeInfo<MMacro>::type_id;}
 public:
     Ob::Ptr apply(const Ptr &p, const Ptr &a) {
         Ob::Ptr p1 = p->cdr();
@@ -82,6 +98,8 @@ public:
 
 class MEval : public BaseMacro {
 public:
+    Ptr getTypeId() const {return TypeInfo<MEval>::type_id;}
+public:
     Ob::Ptr apply(const Ptr &p, const Ptr &a) {
         return p->eval(a)->eval(a);
     }
@@ -90,6 +108,8 @@ public:
 };
 
 class MGenSymbol : public BaseMacro {
+public:
+    Ptr getTypeId() const {return TypeInfo<MGenSymbol>::type_id;}
 public:
     Ob::Ptr apply(const Ptr &p, const Ptr &a) {
         return new Symbol;

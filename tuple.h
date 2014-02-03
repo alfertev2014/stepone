@@ -2,9 +2,15 @@
 #define TUPLE_H
 
 #include "core.h"
-#include "numbers.h"
+#include "funcstemp.h"
+#include "typestemp.h"
 
 class Vector : public SpecType {
+public:
+    Ptr getTypeId() const {return TypeInfo<Vector>::type_id;}
+    static string getTypeString() {return "Vector";}
+    string typeToString() const {return getTypeString();}
+private:
     int n;
     Ob::Ptr * arr;
 public:
@@ -33,122 +39,71 @@ public:
         return res + "]";
     }
 
-    bool isVector() const {return true;}
-    Vector * asVector() {return this;}
-
-    friend class FMakeVector;
-    friend class FVectorEl;
-    friend class FConcatVector;
-};
-
-class FVectorP : public BaseFunction {
-protected:
-    Ob::Ptr applyX(const Ptr &x) {
-        SpecType * stx = x->asSpecType();
-        if(stx == 0) return Ob::anil;
-        Vector * v = stx->asVector();
-        return v == 0 ? Ob::anil : Ob::at;
-    }
-public:
-    string toString() const {return "{FVectorP}";}
+    friend class MakeVectorNaryOp;
+    friend class VectorElBinOp;
 };
 
 class FVectorLength : public BaseFunction {
-protected:
-    Ob::Ptr applyX(const Ptr &x) {
-        SpecType * stx = x->asSpecType();
-        if(stx == 0) return Ob::anil;
-        Vector * v = stx->asVector();
-        return new Integer(v->getSize());
-    }
 public:
-    string toString() const {return "{FVectorP}";}
+    Ptr getTypeId() const {return TypeInfo<FVectorLength>::type_id;}
+    static string getTypeString() {return "FVectorLength";}
+    string typeToString() const {return getTypeString();}
+protected:
+    Ob::Ptr applyX(const Ptr &x) {return new SpecTypeTemp<int>(x->cast<Vector>()->getSize());}
+public:
+    string toString() const {return "FVectorLength{}";}
 };
 
-class FMakeVector : public BaseFunction {
-    class FMakeVectorN : public BaseFunction {
-        Ptr v;
-        Ptr * parr;
-        Ptr * narr;
-    public:
-        FMakeVectorN(const Ptr & _v, Ptr * _parr, Ptr * _narr)
-            :v(_v), parr(_parr), narr(_narr) {}
 
-        string toString() const {return "FMakeVectorN";}
-    protected:
-        Ptr applyX(const Ptr &x) {
-            *parr = x;
-            ++parr;
-            return parr != narr ? new FMakeVectorN(v, parr, narr) : v;
-        }
-    };
+template <class NaryOp>
+class FMakeNaryOp : public BaseFunction {
+public:
+    Ptr getTypeId() const {return TypeInfo<FMakeNaryOp<NaryOp> >::type_id;}
+    static string getTypeString() {return "FMakeNaryOp{" + NaryOp::toString() + "}";}
+    string typeToString() const {return getTypeString();}
+public:
+    string toString() const {return "FMakeNaryOp{" + NaryOp::toString() + "}";}
 protected:
     Ptr applyX(const Ptr &x) {
-        SpecType * stx = x->asSpecType();
-        if(stx == 0) throw 0;
-        Integer * i = stx->asInteger();
-        int n = i->getInteger();
-        Vector * v = new Vector(n);
-        return new FMakeVectorN(v, v->arr, v->arr + n);
+        int n = x->cast<SpecTypeTemp<int> >()->getValue();
+        return new FNaryOp<NaryOp>(n, n, new Pair(x, Ob::anil));
     }
-public:
-    string toString() const {return "FMakeVector";}
 };
 
-class FVectorEl : public BaseFunction {
-    class FVectorElF : public BaseFunction {
-        Ptr v;
-    public:
-        FVectorElF(const Ptr & _v) :v(_v) {}
-
-        string toString() const {return "FVectorElF";}
-    protected:
-        Ptr applyX(const Ptr &x) {
-            SpecType * spv = v->asSpecType();
-            if(spv == 0) throw 0;
-            Vector * vec = spv->asVector();
-            if(vec == 0) throw 0;
-            SpecType * sp = x->asSpecType();
-            if(sp == 0) throw 0;
-            Integer * i = sp->asInteger();
-            if(i == 0) throw 0;
-            return vec->arr[i->getInteger()];
+class MakeVectorNaryOp {
+public:
+    static Ob::Ptr op(int n, const Ob::Ptr &args) {
+        Vector * v = new Vector(n);
+        Ob::Ptr p = args;
+        for(int i = n - 1; i >= 0; --i) {
+            v->arr[i] = p->car();
+            p = p->cdr();
         }
-    };
-protected:
-    Ptr applyX(const Ptr &x) {return new FVectorElF(x);}
-public:
-    string toString() const {return "FVectorEl";}
+        return v;
+    }
+
+    static string toString() {return "MakeVectorNaryOp";}
 };
 
-class FConcatVector : public BaseFunction {
-    class FConcatVector2 : public BaseFunction {
-        Ptr v;
-    public:
-        FConcatVector2(const Ptr & _v) : v(_v) {}
-
-        string toString() const {return "FConcatVector2";}
-    protected:
-        Ptr applyX(const Ptr &x) {
-            SpecType * spv = v->asSpecType();
-            if(spv == 0) throw 0;
-            Vector * vec1 = spv->asVector();
-            if(vec1 == 0) throw 0;
-            SpecType * sp = x->asSpecType();
-            if(sp == 0) throw 0;
-            Vector * vec = sp->asVector();
-            if(vec == 0) throw 0;
-            return vec1->concat(vec);
-        }
-    };
-protected:
-    Ptr applyX(const Ptr &x) {return new FConcatVector2(x);}
+class VectorElBinOp {
 public:
-    string toString() const {return "FConcatVector";}
+    static Ob::Ptr op(const Ob::Ptr &x1, const Ob::Ptr &x2) {
+        return x1->cast<Vector>()->arr[x2->cast<SpecTypeTemp<int> >()->getValue()];
+    }
+
+    static string toString() {return "VectorElBinOp";}
 };
 
-class VectorFunctions
-{
+class VectorConcatBinOp {
+public:
+    static Ob::Ptr op(const Ob::Ptr &x1, const Ob::Ptr &x2) {
+        return x1->cast<Vector>()->concat(x2->cast<Vector>());
+    }
+
+    static string toString() {return "VectorConcatBinOp";}
+};
+
+class VectorFunctions {
     VectorFunctions(){}
 public:
     static const Ob::Ptr fvecp;
