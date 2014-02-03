@@ -6,7 +6,9 @@
 template <class T>
 class FTypeP : public BaseFunction {
 public:
-    Ptr getTypeId() const {return TypeInfo<FTypeP<T> >::type_id;}
+    Ptr getTypeId() const {return TypeInfo<FTypeP>::type_id;}
+    static string getTypeString() {return "FTypeP";}
+    string typeToString() const {return getTypeString();}
 protected:
     Ob::Ptr applyX(const Ptr &x) {return x->is<T>() ? Ob::anil : Ob::at;}
 public:
@@ -15,7 +17,17 @@ public:
 
 template <class BinOp>
 class FBinaryOp : public BaseFunction {
+public:
+    Ptr getTypeId() const {return TypeInfo<FBinaryOp>::type_id;}
+    static string getTypeString() {return "FBinaryOp";}
+    string typeToString() const {return getTypeString();}
+private:
     class FBinaryOp2 : public BaseFunction {
+    public:
+        Ptr getTypeId() const {return TypeInfo<FBinaryOp2>::type_id;}
+        static string getTypeString() {return "FBinaryOp2";}
+        string typeToString() const {return getTypeString();}
+    private:
         Ptr x1;
     public:
         FBinaryOp2(const Ptr & _x1) : x1(_x1) {}
@@ -32,8 +44,23 @@ public:
 
 template <class TerOp>
 class FTernaryOp : public BaseFunction {
+public:
+    Ptr getTypeId() const {return TypeInfo<FTernaryOp>::type_id;}
+    static string getTypeString() {return "FTernaryOp";}
+    string typeToString() const {return getTypeString();}
+private:
     class FTernaryOp2 : public BaseFunction {
+    public:
+        Ptr getTypeId() const {return TypeInfo<FTernaryOp2>::type_id;}
+        static string getTypeString() {return "FTernaryOp2";}
+        string typeToString() const {return getTypeString();}
+    private:
         class FTernaryOp3 : public BaseFunction {
+        public:
+            Ptr getTypeId() const {return TypeInfo<FTernaryOp3>::type_id;}
+            static string getTypeString() {return "FTernaryOp3";}
+            string typeToString() const {return getTypeString();}
+        private:
             Ptr x1;
             Ptr x2;
         public:
@@ -47,7 +74,7 @@ class FTernaryOp : public BaseFunction {
     public:
         FTernaryOp2(const Ptr & _x1) : x1(_x1) {}
     protected:
-        Ptr applyX(const Ptr &x) {return new FTernaryOp2(x1, x);}
+        Ptr applyX(const Ptr &x) {return new FTernaryOp3(x1, x);}
     public:
         string toString() const {return "FTernaryOp2{" + TerOp::toString() + " " + x1->toString() + "}";}
     };

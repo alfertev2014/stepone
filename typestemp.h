@@ -29,13 +29,46 @@ public:
 
 template <class T1, class T2>
 class FSpecTypeCast : public BaseFunction {
+public:
+    Ptr getTypeId() const {return TypeInfo<FSpecTypeCast>::type_id;}
+    static string getTypeString() {return "FSpecTypeCast";}
+    string typeToString() const {return getTypeString();}
 protected:
     Ptr applyX(const Ptr &x) {
         return new SpecTypeTemp<T2>(x->cast<SpecTypeTemp<T1> >()->getValue());
     }
 public:
-    string toString() const {return "FSpecTypeCast{" + cppTypeToString<T1>() + ", " + cppTypeToString<T>() + "}";}
+    string toString() const {return "FSpecTypeCast{" + cppTypeToString<T1>() + " -> " + cppTypeToString<T2>() + "}";}
 };
+
+template <class T>
+class FBitNot : public BaseFunction {
+public:
+    Ptr getTypeId() const {return TypeInfo<FBitNot>::type_id;}
+    static string getTypeString() {return "FBitNot";}
+    string typeToString() const {return getTypeString();}
+protected:
+    Ptr applyX(const Ptr &x) {
+        return new SpecTypeTemp<T>(~ x->cast<SpecTypeTemp<T> >()->getValue());
+    }
+public:
+    string toString() const {return "FBitNot{" + cppTypeToString<T>() + "}";}
+};
+
+template <class T>
+class FNeg : public BaseFunction {
+public:
+    Ptr getTypeId() const {return TypeInfo<FNeg>::type_id;}
+    static string getTypeString() {return "FNeg";}
+    string typeToString() const {return getTypeString();}
+protected:
+    Ptr applyX(const Ptr &x) {
+        return new SpecTypeTemp<T>(- x->cast<SpecTypeTemp<T> >()->getValue());
+    }
+public:
+    string toString() const {return "FMinus{" + cppTypeToString<T>() + "}";}
+};
+
 
 template <typename T, typename CppBinOp>
 class SpecTypeBinOp {
@@ -54,7 +87,7 @@ public:
         return CppCmpOp::op(x1->cast<SpecTypeTemp<T> >()->getValue(), x2->cast<SpecTypeTemp<T> >()->getValue()) ? Ob::at : Ob::anil;
     }
 
-    static string toString() {return "SpecTypeCmpOp{" +  + CppCmpOp::toString() + "}";}
+    static string toString() {return "SpecTypeCmpOp{" + CppCmpOp::toString() + "}";}
 };
 
 

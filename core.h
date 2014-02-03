@@ -131,15 +131,15 @@ public:
     virtual Ptr getTypeId() const = 0;
 
     template <class T>
-    T * as() {return TypeInfo<T>::type_id == getTypeId() ? this : 0;}
+    T * as() {return TypeInfo<T>::type_id == getTypeId() ? dynamic_cast<T*>(this) : 0;}
 
     template <class T>
-    bool * is() const {return TypeInfo<T>::type_id == getTypeId();}
+    bool is() const {return TypeInfo<T>::type_id == getTypeId();}
 
     template <class T>
     T * cast() {
         if(TypeInfo<T>::type_id == getTypeId())
-            return this;
+            return dynamic_cast<T*>(this);
         throw 0;
     }
 
@@ -494,5 +494,8 @@ public:
 
     string toString() const {return "{SpecType}";}
 };
+
+template <class T>
+const Ob::Ptr TypeInfo<T>::type_id(new Symbol);
 
 #endif // CORE_H

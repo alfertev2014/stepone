@@ -6,6 +6,11 @@
 #include "typestemp.h"
 
 class Vector : public SpecType {
+public:
+    Ptr getTypeId() const {return TypeInfo<Vector>::type_id;}
+    static string getTypeString() {return "Vector";}
+    string typeToString() const {return getTypeString();}
+private:
     int n;
     Ob::Ptr * arr;
 public:
@@ -35,11 +40,14 @@ public:
     }
 
     friend class FMakeVector;
-    friend class FVectorEl;
-    friend class FConcatVector;
+    friend class VectorElBinOp;
 };
 
 class FVectorLength : public BaseFunction {
+public:
+    Ptr getTypeId() const {return TypeInfo<FVectorLength>::type_id;}
+    static string getTypeString() {return "FVectorLength";}
+    string typeToString() const {return getTypeString();}
 protected:
     Ob::Ptr applyX(const Ptr &x) {return new SpecTypeTemp<int>(x->cast<Vector>()->getSize());}
 public:
@@ -48,7 +56,17 @@ public:
 
 /// Переделааать!!!
 class FMakeVector : public BaseFunction {
+public:
+    Ptr getTypeId() const {return TypeInfo<FMakeVector>::type_id;}
+    static string getTypeString() {return "FMakeVector";}
+    string typeToString() const {return getTypeString();}
+private:
     class FMakeVectorN : public BaseFunction {
+    public:
+        Ptr getTypeId() const {return TypeInfo<FMakeVectorN>::type_id;}
+        static string getTypeString() {return "FMakeVectorN";}
+        string typeToString() const {return getTypeString();}
+    private:
         Ptr v;
         Ptr * parr;
         Ptr * narr;
@@ -92,8 +110,7 @@ public:
     static string toString() {return "VectorConcatBinOp";}
 };
 
-class VectorFunctions
-{
+class VectorFunctions {
     VectorFunctions(){}
 public:
     static const Ob::Ptr fvecp;

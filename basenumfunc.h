@@ -3,16 +3,22 @@
 
 #include "core.h"
 
-class BaseNumFunc
-{
+class BaseNumFunc {
     BaseNumFunc(){}
 public:
+    static const Ob::Ptr fintNeg;
     static const Ob::Ptr fintPlus;
     static const Ob::Ptr fintMinus;
     static const Ob::Ptr fintProduct;
     static const Ob::Ptr fintDivision;
     static const Ob::Ptr fintMod;
     static const Ob::Ptr fintp;
+
+    static const Ob::Ptr fbitand;
+    static const Ob::Ptr fbitor;
+    static const Ob::Ptr fbitxor;
+    static const Ob::Ptr fbitnot;
+
     static const Ob::Ptr fintEql;
     static const Ob::Ptr fintNE;
     static const Ob::Ptr fintGT;
@@ -20,6 +26,7 @@ public:
     static const Ob::Ptr fintGE;
     static const Ob::Ptr fintLE;
 
+    static const Ob::Ptr ffloatNeg;
     static const Ob::Ptr ffloatPlus;
     static const Ob::Ptr ffloatMinus;
     static const Ob::Ptr ffloatProduct;

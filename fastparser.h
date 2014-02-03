@@ -30,6 +30,7 @@ class FastParser {
     static const Ob::Ptr actxget;
     static const Ob::Ptr actxpush;
     static const Ob::Ptr aemptyctx;
+    static const Ob::Ptr agettype;
 
     static const Ob::Ptr apairp;
     static const Ob::Ptr alazyp;
@@ -46,12 +47,17 @@ class FastParser {
     static const Ob::Ptr aclosurep;
     static const Ob::Ptr aspectypep;
 
+    static const Ob::Ptr aintNeg;
     static const Ob::Ptr aintPlus;
     static const Ob::Ptr aintMinus;
     static const Ob::Ptr aintProduct;
     static const Ob::Ptr aintDivision;
     static const Ob::Ptr aintMod;
     static const Ob::Ptr aintp;
+    static const Ob::Ptr abitnot;
+    static const Ob::Ptr abitand;
+    static const Ob::Ptr abitor;
+    static const Ob::Ptr abitxor;
     static const Ob::Ptr aintEql;
     static const Ob::Ptr aintNE;
     static const Ob::Ptr aintGT;
@@ -59,6 +65,7 @@ class FastParser {
     static const Ob::Ptr aintGE;
     static const Ob::Ptr aintLE;
 
+    static const Ob::Ptr afloatNeg;
     static const Ob::Ptr afloatPlus;
     static const Ob::Ptr afloatMinus;
     static const Ob::Ptr afloatProduct;
@@ -101,6 +108,7 @@ class FastParser {
         symbolTable.insert(pair<string, Ob::Ptr>("ctx-get", actxget));
         symbolTable.insert(pair<string, Ob::Ptr>("ctx-push", actxpush));
         symbolTable.insert(pair<string, Ob::Ptr>("empty-ctx", aemptyctx));
+        symbolTable.insert(pair<string, Ob::Ptr>("get-type", agettype));
 
         symbolTable.insert(pair<string, Ob::Ptr>("pair?", apairp));
         symbolTable.insert(pair<string, Ob::Ptr>("lazy?", alazyp));
@@ -117,12 +125,17 @@ class FastParser {
         symbolTable.insert(pair<string, Ob::Ptr>("closure?", aclosurep));
         symbolTable.insert(pair<string, Ob::Ptr>("stectype?", aspectypep));
 
+        symbolTable.insert(pair<string, Ob::Ptr>("-i", aintNeg));
         symbolTable.insert(pair<string, Ob::Ptr>("i+", aintPlus));
         symbolTable.insert(pair<string, Ob::Ptr>("i-", aintMinus));
         symbolTable.insert(pair<string, Ob::Ptr>("i*", aintProduct));
         symbolTable.insert(pair<string, Ob::Ptr>("i/", aintDivision));
         symbolTable.insert(pair<string, Ob::Ptr>("i%", aintMod));
         symbolTable.insert(pair<string, Ob::Ptr>("i?", aintp));
+        symbolTable.insert(pair<string, Ob::Ptr>("bit-not", abitnot));
+        symbolTable.insert(pair<string, Ob::Ptr>("bit-and", abitand));
+        symbolTable.insert(pair<string, Ob::Ptr>("bit-or", abitor));
+        symbolTable.insert(pair<string, Ob::Ptr>("bit-xor", abitxor));
         symbolTable.insert(pair<string, Ob::Ptr>("i=", aintEql));
         symbolTable.insert(pair<string, Ob::Ptr>("i!=", aintNE));
         symbolTable.insert(pair<string, Ob::Ptr>("i<", aintLT));
@@ -130,6 +143,7 @@ class FastParser {
         symbolTable.insert(pair<string, Ob::Ptr>("i<=", aintLE));
         symbolTable.insert(pair<string, Ob::Ptr>("i>=", aintGE));
 
+        symbolTable.insert(pair<string, Ob::Ptr>("-f", afloatNeg));
         symbolTable.insert(pair<string, Ob::Ptr>("f+", afloatPlus));
         symbolTable.insert(pair<string, Ob::Ptr>("f-", afloatMinus));
         symbolTable.insert(pair<string, Ob::Ptr>("f*", afloatProduct));
@@ -175,6 +189,7 @@ public:
         a = new Context(actxget, BaseFunctions::fctxget, a);
         a = new Context(actxpush, BaseFunctions::fctxpush, a);
         a = new Context(aemptyctx, Evaluator::eempty, a);
+        a = new Context(agettype, BaseFunctions::fgettype, a);
 
         a = new Context(apairp, BaseTypePredicates::fpairp, a);
         a = new Context(alazyp, BaseTypePredicates::flazyp, a);
@@ -191,12 +206,17 @@ public:
         a = new Context(aclosurep, BaseTypePredicates::fclosurep, a);
         a = new Context(aspectypep, BaseTypePredicates::fspectypep, a);
 
+        a = new Context(aintNeg, BaseNumFunc::fintNeg, a);
         a = new Context(aintPlus, BaseNumFunc::fintPlus, a);
         a = new Context(aintMinus, BaseNumFunc::fintMinus, a);
         a = new Context(aintProduct, BaseNumFunc::fintProduct, a);
         a = new Context(aintDivision, BaseNumFunc::fintDivision, a);
         a = new Context(aintMod, BaseNumFunc::fintMod, a);
         a = new Context(aintp, BaseNumFunc::fintp, a);
+        a = new Context(abitnot, BaseNumFunc::fbitnot, a);
+        a = new Context(abitand, BaseNumFunc::fbitand, a);
+        a = new Context(abitor, BaseNumFunc::fbitor, a);
+        a = new Context(abitxor, BaseNumFunc::fbitxor, a);
         a = new Context(aintEql, BaseNumFunc::fintEql, a);
         a = new Context(aintNE, BaseNumFunc::fintNE, a);
         a = new Context(aintLT, BaseNumFunc::fintLT, a);
@@ -204,6 +224,7 @@ public:
         a = new Context(aintLE, BaseNumFunc::fintLE, a);
         a = new Context(aintGE, BaseNumFunc::fintGE, a);
 
+        a = new Context(afloatNeg, BaseNumFunc::ffloatNeg, a);
         a = new Context(afloatPlus, BaseNumFunc::ffloatPlus, a);
         a = new Context(afloatMinus, BaseNumFunc::ffloatMinus, a);
         a = new Context(afloatProduct, BaseNumFunc::ffloatProduct, a);
@@ -275,12 +296,12 @@ private:
             ts << "{label}";
         else if(p->isSpecType()) {
             SpecType * spt = p->asSpecType();
-            if(spt->isInteger())
-                ts << spt->asInteger()->getInteger();
-            else if(spt->isFloat())
-                ts << spt->asFloat()->getFloat();
-            else if(spt->isVector()) {
-                Vector * v = spt->asVector();
+            if(spt->is<SpecTypeTemp<int> >())
+                ts << spt->as<SpecTypeTemp<int> >()->getValue();
+            else if(spt->is<SpecTypeTemp<float> >())
+                ts << spt->as<SpecTypeTemp<float> >()->getValue();
+            else if(spt->is<Vector>()) {
+                Vector * v = spt->as<Vector>();
                 int n = v->getSize();
                 if(n == 0)
                     ts << "[]";
@@ -439,7 +460,7 @@ private:
             istringstream ss(number);
             int i;
             if(ss >> i)
-                return parseRes(new Integer(i), sii, true);
+                return parseRes(new SpecTypeTemp<int>(i), sii, true);
             else
                 DBG("int is not int");
         } else {
@@ -452,7 +473,7 @@ private:
             float f;
             istringstream ss(number);
             if(ss >> f)
-                return parseRes(new Float(f), sii, true);
+                return parseRes(new SpecTypeTemp<float>(f), sii, true);
         }
         return parseRes(Ob::anil, si, false);
     }

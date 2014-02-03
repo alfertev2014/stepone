@@ -6,101 +6,100 @@
 using namespace std;
 
 template <class T>
-class PlusBinOp
-{
+class PlusBinOp {
 public:
     inline static T op(T x1, T x2) {return x1 + x2;}
-
     static string toString() {return "+";}
 };
 
 template <class T>
-class MinusBinOp
-{
+class MinusBinOp {
 public:
     inline static T op(T x1, T x2) {return x1 - x2;}
-
     static string toString() {return "-";}
 };
 
 template <class T>
-class ProductBinOp
-{
+class ProductBinOp {
 public:
     inline static T op(T x1, T x2) {return x1 * x2;}
-
     static string toString() {return "*";}
 };
 
 template <class T>
-class DivisionBinOp
-{
+class DivisionBinOp {
 public:
     inline static T op(T x1, T x2) {return x1 / x2;}
-
     static string toString() {return "/";}
 };
 
 template <class T>
-class ModBinOp
-{
+class ModBinOp {
 public:
     inline static T op(T x1, T x2) {return x1 % x2;}
-
     static string toString() {return "%";}
 };
 
 template <class T>
-class EqlCmpOp
-{
+class BitAndBinOp {
+public:
+    inline static T op(T x1, T x2) {return x1 & x2;}
+    static string toString() {return "bit-and";}
+};
+
+template <class T>
+class BitOrBinOp {
+public:
+    inline static T op(T x1, T x2) {return x1 | x2;}
+    static string toString() {return "bit-or";}
+};
+
+template <class T>
+class BitXorBinOp {
+public:
+    inline static T op(T x1, T x2) {return x1 ^ x2;}
+    static string toString() {return "bit-xor";}
+};
+
+template <class T>
+class EqlCmpOp {
 public:
     inline static bool op(T x1, T x2) {return x1 == x2;}
-
     static string toString() {return "=";}
 };
 
 template <class T>
-class NECmpOp
-{
+class NECmpOp {
 public:
     inline static bool op(T x1, T x2) {return x1 != x2;}
-
     static string toString() {return "!=";}
 };
 
 template <class T>
-class LTCmpOp
-{
+class LTCmpOp {
 public:
     inline static bool op(T x1, T x2) {return x1 < x2;}
-
     static string toString() {return "<";}
 };
 
 template <class T>
-class GTCmpOp
-{
+class GTCmpOp {
 public:
     inline static bool op(T x1, T x2) {return x1 > x2;}
-
     static string toString() {return ">";}
 };
 
 template <class T>
-class LECmpOp
-{
+class LECmpOp {
 public:
     inline static bool op(T x1, T x2) {return x1 <= x2;}
-
     static string toString() {return "<=";}
 };
 
 template <class T>
-class GECmpOp
-{
+class GECmpOp {
 public:
     inline static bool op(T x1, T x2) {return x1 >= x2;}
-
     static string toString() {return ">=";}
 };
 
