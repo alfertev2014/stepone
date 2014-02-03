@@ -2,10 +2,15 @@
 #define BYTEARRAY_H
 
 #include "core.h"
-#include "numbers.h"
+#include "typestemp.h"
 #include <sstream>
 
 class ByteArray : public SpecType {
+public:
+    Ptr getTypeId() const {return TypeInfo<ByteArray>::type_id;}
+    static string getTypeString() {return "ByteArray";}
+    string typeToString() const {return getTypeString();}
+private:
     int n;
     char * arr;
 public:
@@ -33,9 +38,6 @@ public:
         return ss.str();
     }
 
-    bool isByteArray() const {return true;}
-    ByteArray * asByteArray() {return this;}
-
     template <class T>
     static ByteArray * from(T f) {
         ByteArray * res = new ByteArray(sizeof(T));
@@ -50,177 +52,61 @@ public:
         return res;
     }
 
-    ByteArray * sub(int i1, int i2) {
+    ByteArray * mid(int i1, int i2) {
         int n = i2 - i1;
         ByteArray * res = new ByteArray(n);
         for(int i = 0; i < n; ++i)
-            res->arr[i] = s[i1 + i];
+            res->arr[i] = arr[i1 + i];
         return res;
     }
 
     template <class T>
     T get(int i) {
         if(i < 0 || i >= n) throw 0;
-        return *((T*)arr[i]);
+        return *((T*)(arr + i));
     }
 };
 
-class FByteArrayP : public BaseFunction {
+class ConcatByteArrayBinOp {
+public:
+    static Ob::Ptr op(const Ob::Ptr &x1, const Ob::Ptr &x2) {
+        return x1->cast<ByteArray>()->concat(x2->cast<ByteArray>());
+    }
+    static string toString() {return "FConcatByteArray";}
+};
+
+class MidByteArrayTerOp {
+public:
+    static Ob::Ptr op(const Ob::Ptr &x1, const Ob::Ptr &x2, const Ob::Ptr &x3) {
+        return x1->cast<ByteArray>()->mid(x2->cast<SpecTypeTemp<int> >()->getValue(), x3->cast<SpecTypeTemp<int> >()->getValue());
+    }
+    static string toString() {return "MidByteArrayTerOp";}
+};
+
+template <class T>
+class FSerialize : public BaseFunction {
+public:
+    Ptr getTypeId() const {return TypeInfo<FSerialize<T> >::type_id;}
+    static string getTypeString() {return "FSerialize{" + cppTypeToString<T>() + "}";}
+    string typeToString() const {return getTypeString();}
 protected:
     Ob::Ptr applyX(const Ptr &x) {
-        SpecType * stx = x->asSpecType();
-        if(stx == 0) return Ob::anil;
-        ByteArray * ba = stx->asByteArray();
-        return ba == 0 ? Ob::anil : Ob::at;
+        return ByteArray::from<T>(x->cast<SpecTypeTemp<T> >()->getValue());
     }
 public:
-    string toString() const {return "{FByteArrayP}";}
+    string toString() const {return "FSerialize{" + cppTypeToString<T>() + "}";}
 };
 
-class FConcatByteArray : public BaseFunction {
-    class FConcatByteArray2 : public BaseFunction {
-        Ptr x1;
-    public:
-        FConcatByteArray2(const Ptr & _v) : x1(_v) {}
-    protected:
-        Ptr applyX(const Ptr &x) {
-            SpecType * spv = x1->asSpecType();
-            if(spv == 0) throw 0;
-            ByteArray * ba1 = spv->asByteArray();
-            if(ba1 == 0) throw 0;
-            spv = x->asSpecType();
-            if(spv == 0) throw 0;
-            ByteArray * ba = spv->asByteArray();
-            if(ba == 0) throw 0;
-            return ba1->concat(ba);
-        }
-    public:
-        string toString() const {return "FConcatByteArray2";}
-    };
-protected:
-    Ptr applyX(const Ptr &x) {return new FConcatByteArray2(x);}
+template <class T>
+class ByteArrayGetBinOp {
 public:
-    string toString() const {return "FConcatByteArray";}
-};
-
-class FByteArrayMid : public BaseFunction {
-    class FByteArrayMid2 : public BaseFunction {
-        Ptr x1;
-        class FByteArrayMid3 : public BaseFunction {
-            Ptr x1;
-            Ptr x2;
-        protected:
-            Ptr applyX(const Ptr &x) {
-                SpecType * spv = x1->asSpecType();
-                if(spv == 0) throw 0;
-                ByteArray * ba = spv->asByteArray();
-                if(ba == 0) throw 0;
-                spv = x2->asSpecType();
-                if(spv == 0) throw 0;
-                Integer * i1 = spv->asInteger();
-                if(i1 == 0) throw 0;
-                spv = x->asSpecType();
-                if(spv == 0) throw 0;
-                Integer * i2 = spv->asInteger();
-                if(i2 == 0) throw 0;
-                return ByteArray::sub(i1, i2);
-            }
-        public:
-            FSubByteArray2(const Ptr & _x1, const Ptr & _x2) :x1(_x1), x2(_x2) {}
-            string toString() const {return "FByteArrayMid3";}
-        };
-    protected:
-        Ptr applyX(const Ptr &x) {return new FByteArrayMid3(x1, x);}
-    public:
-        FByteArrayMid2(const Ptr & _x1) :x1(_x1){}
-        string toString() const {return "FByteArrayMid2";}
-    };
-protected:
-    Ptr applyX(const Ptr &x) {return new FByteArrayMid2();}
-public:
-    string toString() const {return "FByteArrayMid";}
-};
-
-class FSerializeInteger : public BaseFunction {
-protected:
-    Ob::Ptr applyX(const Ptr &x) {
-        SpecType * stx = x->asSpecType();
-        if(stx == 0) throw 0;
-        Integer * i = stx->asInteger();
-        if(i == 0) throw 0;
-        return ByteArray::from<int>(i->getInteger());
+    static Ob::Ptr op(const Ob::Ptr &x1, const Ob::Ptr &x2) {
+        return new SpecTypeTemp<int>(x1->cast<ByteArray>()->get<T>(x2->cast<SpecTypeTemp<int> >()->getValue()));
     }
-public:
-    string toString() const {return "{FSerializeInteger}";}
+    static string toString() {return "ByteArrayGetBinOp{" + cppTypeToString<T>() + "}";}
 };
 
-class FSerializeFloat : public BaseFunction {
-protected:
-    Ob::Ptr applyX(const Ptr &x) {
-        SpecType * stx = x->asSpecType();
-        if(stx == 0) throw 0;
-        Float * f = stx->asFloat();
-        if(f == 0) throw 0;
-        return ByteArray::from<float>(f->getFloat());
-    }
-public:
-    string toString() const {return "{FSerializeInteger}";}
-};
-
-class FBytesGetInt : public BaseFunction {
-    class FBytesGetInt2 : public BaseFunction {
-        Ptr x1;
-    public:
-        FBytesGetInt2(const Ptr & _x1) : x1(_x1) {}
-    protected:
-        Ob::Ptr applyX(const Ptr &x) {
-            SpecType * spv = x1->asSpecType();
-            if(spv == 0) throw 0;
-            ByteArray * ba = spv->asByteArray();
-            if(ba == 0) throw 0;
-            spv = x->asSpecType();
-            if(spv == 0) return Ob::anil;
-            Integer * i = spv->asInteger();
-            if(i == 0) throw 0;
-            return new Integer(ba->get<int>(i));
-        }
-    public:
-        string toString() const {return "{FBytesGetFloat2}";}
-    };
-protected:
-    Ob::Ptr applyX(const Ptr &x) {return new FBytesGetInt2(x);}
-public:
-    string toString() const {return "{FBytesGetInt}";}
-};
-
-class FBytesGetFloat : public BaseFunction {
-    class FBytesGetFloat2 : public BaseFunction {
-        Ptr x1;
-    public:
-        FBytesGetFloat2(const Ptr & _x1) : x1(_x1) {}
-    protected:
-        Ob::Ptr applyX(const Ptr &x) {
-            SpecType * spv = x1->asSpecType();
-            if(spv == 0) throw 0;
-            ByteArray * ba = spv->asByteArray();
-            if(ba == 0) throw 0;
-            spv = x->asSpecType();
-            if(spv == 0) return Ob::anil;
-            Integer * i = spv->asInteger();
-            if(i == 0) throw 0;
-            return new Float(ba->get<float>(i));
-        }
-    public:
-        string toString() const {return "{FBytesGetFloat2}";}
-    };
-protected:
-    Ob::Ptr applyX(const Ptr &x) {return new FBytesGetFloat2(x);}
-public:
-    string toString() const {return "{FBytesGetFloat}";}
-};
-
-class ByteArrayFunctions
-{
+class ByteArrayFunctions {
     ByteArrayFunctions(){}
 public:
     static const Ob::Ptr fbytesp;
@@ -228,8 +114,8 @@ public:
     static const Ob::Ptr fbytesmid;
     static const Ob::Ptr fserint;
     static const Ob::Ptr fserfloat;
-    static const Ob::Ptr fdeserint;
-    static const Ob::Ptr fdeserfloat;
+    static const Ob::Ptr fgetint;
+    static const Ob::Ptr fgetfloat;
 };
 
 #endif // BYTEARRAY_H

@@ -9,7 +9,8 @@ SOURCES += main.cpp \
     basefunc.cpp \
     basemacro.cpp \
     typepredicates.cpp \
-    core.cpp
+    core.cpp \
+    bytearray.cpp
 
 HEADERS += \
     typestemp.h \
