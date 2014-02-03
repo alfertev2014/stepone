@@ -20,6 +20,7 @@ class Symbol;
 class Const;
 
 class Macro;
+class Evaluator;
 class BaseMacro;
 class UserMacro;
 class Function;
@@ -27,6 +28,8 @@ class BaseFunction;
 class Closure;
 class SpecType;
 
+template <class T>
+class TypeInfo;
 
 class Ob {
     int refcount;
@@ -73,6 +76,7 @@ public: // static
     static const Ptr alabel;
     static const Ptr amacro;
     static const Ptr aeval;
+    static const Ptr agensym;
 
 public:
     Ob() : refcount(0) {}
@@ -108,6 +112,8 @@ public:
 
     virtual bool isMacro() const {return false;}
     virtual Macro * asMacro() {return 0;}
+    virtual bool isEvaluator() const {return false;}
+    virtual Evaluator * asEvaluator() {return 0;}
     virtual bool isBaseMacro() const {return false;}
     virtual BaseMacro * asBaseMacro() {return 0;}
     virtual bool isUserMacro() const {return false;}
@@ -122,11 +128,38 @@ public:
     virtual bool isSpecType() const {return false;}
     virtual SpecType * asSpecType() {return 0;}
 
+    virtual Ptr getTypeId() const = 0;
+
+    template <class T>
+    T * as() {return TypeInfo<T>::type_id == getTypeId() ? dynamic_cast<T*>(this) : 0;}
+
+    template <class T>
+    bool is() const {return TypeInfo<T>::type_id == getTypeId();}
+
+    template <class T>
+    T * cast() {
+        if(TypeInfo<T>::type_id == getTypeId())
+            return dynamic_cast<T*>(this);
+        throw 0;
+    }
+
     // Методы для отладки
     virtual string toString() const {return "{ob}";}
+    virtual string typeToString() const {return "Ob";}
+};
+
+template <class T>
+class TypeInfo {
+public:
+    static const Ob::Ptr type_id;
 };
 
 class Pair : public Ob {
+public:
+    Ptr getTypeId() const {return TypeInfo<Pair>::type_id;}
+    static string getTypeString() {return "Pair";}
+    string typeToString() const {return getTypeString();}
+private:
     Ptr pcar;
     Ptr pcdr;
 public:
@@ -171,6 +204,11 @@ public:
 };
 
 class Context : public Ob {
+public:
+    Ptr getTypeId() const {return TypeInfo<Context>::type_id;}
+    static string getTypeString() {return "Context";}
+    string typeToString() const {return getTypeString();}
+private:
     Ptr s;
     Ptr e;
     Ptr next;
@@ -216,6 +254,11 @@ public:
 };
 
 class Lazy : public Ob {
+public:
+    Ptr getTypeId() const {return TypeInfo<Lazy>::type_id;}
+    static string getTypeString() {return "Lazy";}
+    string typeToString() const {return getTypeString();}
+private:
     Ptr e;
     Ptr a;
     bool ready;
@@ -258,6 +301,11 @@ public:
 };
 
 class Label : public Ob {
+public:
+    Ptr getTypeId() const {return TypeInfo<Label>::type_id;}
+    static string getTypeString() {return "Label";}
+    string typeToString() const {return getTypeString();}
+private:
     Ptr f;
     Ptr e;
     Ptr a;
@@ -282,6 +330,10 @@ public:
 
 
 class Symbol : public Atom {
+public:
+    Ptr getTypeId() const {return TypeInfo<Symbol>::type_id;}
+    static string getTypeString() {return "Symbol";}
+    string typeToString() const {return getTypeString();}
 public:
     Ptr eval(const Ptr & a) {return a->assoc(this);}
 
@@ -324,6 +376,26 @@ public:
     Macro * asMacro() {return this;}
 };
 
+class Evaluator : public Macro {
+public:
+    Ptr getTypeId() const {return TypeInfo<Evaluator>::type_id;}
+    static string getTypeString() {return "Evaluator";}
+    string typeToString() const {return getTypeString();}
+private:
+    Ptr a;
+public:
+    static const Ptr eempty;
+
+    Evaluator(Ptr _a) : a(_a) {}
+
+    Ptr getContext() const {return a;}
+
+    Ptr apply(const Ptr &p, const Ptr &a) {return p->eval(a)->eval(this->a);}
+
+    bool isEvaluator() const {return true;}
+    Evaluator * asEvaluator() {return this;}
+};
+
 class BaseMacro : public Macro {
 public:
     virtual ~BaseMacro(){}
@@ -332,6 +404,11 @@ public:
 };
 
 class UserMacro : public Macro {
+public:
+    Ptr getTypeId() const {return TypeInfo<UserMacro>::type_id;}
+    static string getTypeString() {return "UserMacro";}
+    string typeToString() const {return getTypeString();}
+private:
     Ptr sa;
     Ptr sp;
     Ptr e;
@@ -343,7 +420,7 @@ public:
     virtual ~UserMacro(){}
 
     Ptr apply(const Ptr &p, const Ptr &a) {
-        return e->eval(new Context(sp, p, new Context(sa, a, this->a)));
+        return e->eval(new Context(sp, p, new Context(sa, new Evaluator(a), this->a)));
     }
 
     bool isUserMacro() const {return true;}
@@ -389,6 +466,11 @@ public:
 
 
 class Closure : public Function {
+public:
+    Ptr getTypeId() const {return TypeInfo<Closure>::type_id;}
+    static string getTypeString() {return "Closure";}
+    string typeToString() const {return getTypeString();}
+private:
     Ob::Ptr x;
     Ob::Ptr e;
     Ob::Ptr a;
@@ -404,21 +486,16 @@ public:
     string toString() const {return "{\\ " + x->toString() + " . " + e->toString() + " | " + a->toString() + "}";}
 };
 
-class Integer;
-class Float;
-
 class SpecType : public Const {
 public:
     virtual ~SpecType() {}
     bool isSpecType() const {return true;}
     SpecType * asSpecType() {return this;}
 
-    virtual bool isInteger() const {return false;}
-    virtual Integer * asInteger() {return 0;}
-    virtual bool isFloat() const {return false;}
-    virtual Float * asFloat() {return 0;}
-
     string toString() const {return "{SpecType}";}
 };
+
+template <class T>
+const Ob::Ptr TypeInfo<T>::type_id(new Symbol);
 
 #endif // CORE_H

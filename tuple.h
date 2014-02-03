@@ -1,159 +1,116 @@
-//#ifndef TUPLE_H
-//#define TUPLE_H
+#ifndef TUPLE_H
+#define TUPLE_H
 
-//#include "core.h"
-//#include "typestemp.h"
+#include "core.h"
+#include "funcstemp.h"
+#include "typestemp.h"
 
-//class Vector
-//{
-//    int n;
-//    Ob::Ptr * arr;
-//public:
+class Vector : public SpecType {
+public:
+    Ptr getTypeId() const {return TypeInfo<Vector>::type_id;}
+    static string getTypeString() {return "Vector";}
+    string typeToString() const {return getTypeString();}
+private:
+    int n;
+    Ob::Ptr * arr;
+public:
+    Vector(int _n): n(_n) {arr = new Ob::Ptr[n];}
+    ~Vector() {delete [] arr;}
 
-//    Vector(int _n): n(_n)
-//    {
-//        arr = new Ob::Ptr[n];
-//    }
+    int getSize() const {return n;}
 
-//    ~Vector()
-//    {
-//        delete [] arr;
-//    }
+    Ob::Ptr getElement(int i) {return arr[i];}
 
-//    int getSize() const {return n;}
+    Vector * concat(Vector * v) const {
+        int nres = n + v->n;
+        Vector * res = new Vector(nres);
+        for(int i = 0; i < n; ++i)
+            res->arr[i] = arr[i];
+        for(int i = 0; i < v->n; ++i)
+            res->arr[n + i] = v->arr[i];
+        return res;
+    }
 
-//    Vector concat(const Vector & v) const
-//    {
-//        int nres = n + v.n;
-//        Vector res(nres);
-//        for(int i = 0; i < n; ++i)
-//            res.arr[i] = arr[i];
-//        for(int i = 0; i < v.n; ++i)
-//            res.arr[n + i] = v.arr[i];
-//        return res;
-//    }
+    string toString() const {
+        if(n <= 0) return "[]";
+        string res("[" + arr[0]->toString());
+        for(int i = 1; i < n; ++i)
+            res += ", " + arr[i]->toString();
+        return res + "]";
+    }
 
-//    string toString() const
-//    {
-//        if(n <= 0) return "[]";
-//        string res("[" + arr[0]->toString());
-//        for(int i = 1; i < n; ++i)
-//        {
-//            res += ", " + arr[i]->toString();
-//        }
-//        return res + "]";
-//    }
+    friend class MakeVectorNaryOp;
+    friend class VectorElBinOp;
+};
 
-//    friend class FMakeVector;
-//    friend class FVectorEl;
-//    friend class FConcatVector;
-//};
+class FVectorLength : public BaseFunction {
+public:
+    Ptr getTypeId() const {return TypeInfo<FVectorLength>::type_id;}
+    static string getTypeString() {return "FVectorLength";}
+    string typeToString() const {return getTypeString();}
+protected:
+    Ob::Ptr applyX(const Ptr &x) {return new SpecTypeTemp<int>(x->cast<Vector>()->getSize());}
+public:
+    string toString() const {return "FVectorLength{}";}
+};
 
 
-//class FMakeVector : public Operation
-//{
-//    class FMakeVectorN : public Operation
-//    {
-//        Ptr v;
-//        Ptr * parr;
-//        Ptr * narr;
-//    public:
-//        FMakeVectorN(const Ptr & _v, Ptr * _parr, Ptr * _narr)
-//            :v(_v), parr(_parr), narr(_narr) {}
+template <class NaryOp>
+class FMakeNaryOp : public BaseFunction {
+public:
+    Ptr getTypeId() const {return TypeInfo<FMakeNaryOp<NaryOp> >::type_id;}
+    static string getTypeString() {return "FMakeNaryOp{" + NaryOp::toString() + "}";}
+    string typeToString() const {return getTypeString();}
+public:
+    string toString() const {return "FMakeNaryOp{" + NaryOp::toString() + "}";}
+protected:
+    Ptr applyX(const Ptr &x) {
+        int n = x->cast<SpecTypeTemp<int> >()->getValue();
+        return new FNaryOp<NaryOp>(n, n, new Pair(x, Ob::anil));
+    }
+};
 
-//        string toString() const {return "FMakeVectorN";}
-//    protected:
-//        Ptr applyX(const Ptr &x)
-//        {
-//            *parr = x;
-//            ++parr;
-//            return parr != narr ? new FMakeVectorN(v, parr, narr) : v;
-//        }
-//    };
+class MakeVectorNaryOp {
+public:
+    static Ob::Ptr op(int n, const Ob::Ptr &args) {
+        Vector * v = new Vector(n);
+        Ob::Ptr p = args;
+        for(int i = n - 1; i >= 0; --i) {
+            v->arr[i] = p->car();
+            p = p->cdr();
+        }
+        return v;
+    }
 
-//protected:
-//    Ptr applyX(const Ptr &x)
-//    {
-//        SpecType * sp = x->asSpecType();
-//        if(sp == 0) throw 0;
-//        int n = sp->cast<SpecTypeTemp<int> >()->getValue();
-//        Vector * v = new Vector(n);
-//        return new FMakeVectorN(v, v->arr, v->arr + n);
-//    }
-//public:
-//    string toString() const {return "FMakeVector";}
-//};
+    static string toString() {return "MakeVectorNaryOp";}
+};
 
-//class FVectorEl : public Operation
-//{
-//    class FVectorElF : public Operation
-//    {
-//        Ptr v;
-//        Ptr * arr;
-//    public:
-//        FVectorElF(const Ptr & _v, Ptr * _arr) :v(_v), arr(_arr){}
+class VectorElBinOp {
+public:
+    static Ob::Ptr op(const Ob::Ptr &x1, const Ob::Ptr &x2) {
+        return x1->cast<Vector>()->arr[x2->cast<SpecTypeTemp<int> >()->getValue()];
+    }
 
-//        string toString() const {return "FVectorElF";}
-//    protected:
-//        Ptr applyX(const Ptr &x)
-//        {
-//            SpecType * sp = x->asSpecType();
-//            if(sp == 0) throw 0;
-//            int i = sp->cast<SpecTypeTemp<int> >()->getValue();
-//            return arr[i];
-//        }
-//    };
+    static string toString() {return "VectorElBinOp";}
+};
 
-//protected:
-//    Ptr applyX(const Ptr &x)
-//    {
-//        SpecType * spv = x->asSpecType();
-//        if(spv == 0) throw 0;
-//        Vector * vec = spv->cast<Vector>();
-//        return new FVectorElF(x, vec->arr);
-//    }
-//public:
-//    string toString() const {return "FVectorEl";}
-//};
+class VectorConcatBinOp {
+public:
+    static Ob::Ptr op(const Ob::Ptr &x1, const Ob::Ptr &x2) {
+        return x1->cast<Vector>()->concat(x2->cast<Vector>());
+    }
 
-//class FConcatVector : public Operation
-//{
-//    class FConcatVector2 : public Operation
-//    {
-//        Ptr v;
-//    public:
-//        FConcatVector2(const Ptr & _v) : v(_v) {}
-//    protected:
-//        Ptr applyX(const Ptr &x)
-//        {
-//            SpecType * sp = x->asSpecType();
-//            if(sp == 0) throw 0;
-//            Vector * vec = sp->cast<Vector>();
-//            if(vec == 0) throw 0;
-//            return v->asSpecType()->cast<Vector>()->concat(*vec);
-//        }
-//    };
+    static string toString() {return "VectorConcatBinOp";}
+};
 
-//protected:
-//    Ptr applyX(const Ptr &x)
-//    {
-//        SpecType * sp = x->asSpecType();
-//        if(spv == 0) throw 0;
-//        Vector * v = sp->cast<Vector>();
-//        if(v == 0) throw 0;
-//        return new FConcatVector2(x);
-//    }
-//public:
-//    string toString() const {return "FConcatVector";}
-//};
+class VectorFunctions {
+    VectorFunctions(){}
+public:
+    static const Ob::Ptr fvecp;
+    static const Ob::Ptr fmkvec;
+    static const Ob::Ptr fveclen;
+    static const Ob::Ptr fvecel;
+    static const Ob::Ptr fveccat;
+};
 
-//class VectorFunc
-//{
-//public:
-//    static const Ob::Ptr fvecp;
-//    static const Ob::Ptr fmkvec;
-//    static const Ob::Ptr fvecel;
-//    static const Ob::Ptr fveccat;
-//};
-
-//#endif // TUPLE_H
+#endif // TUPLE_H
