@@ -54,7 +54,7 @@ public:
     static string toString() {return "ctx-get";}
 };
 
-class ContextPushBinOp {
+class ContextPushTerOp {
 public:
     static Ob::Ptr op(const Ob::Ptr &x1, const Ob::Ptr &x2, const Ob::Ptr &x3) {return new Evaluator(new Context(x2, x3, x1->cast<Evaluator>()->getContext()));}
     static string toString() {return "ctx-push";}

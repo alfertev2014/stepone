@@ -6,8 +6,8 @@
 template <class T>
 class FTypeP : public BaseFunction {
 public:
-    Ptr getTypeId() const {return TypeInfo<FTypeP>::type_id;}
-    static string getTypeString() {return "FTypeP";}
+    Ptr getTypeId() const {return TypeInfo<FTypeP<T> >::type_id;}
+    static string getTypeString() {return "FTypeP{" + T::getTypeString() + "}";}
     string typeToString() const {return getTypeString();}
 protected:
     Ob::Ptr applyX(const Ptr &x) {return x->is<T>() ? Ob::anil : Ob::at;}
@@ -18,14 +18,14 @@ public:
 template <class BinOp>
 class FBinaryOp : public BaseFunction {
 public:
-    Ptr getTypeId() const {return TypeInfo<FBinaryOp>::type_id;}
-    static string getTypeString() {return "FBinaryOp";}
+    Ptr getTypeId() const {return TypeInfo<FBinaryOp<BinOp> >::type_id;}
+    static string getTypeString() {return "FBinaryOp{" + BinOp::toString() + "}";}
     string typeToString() const {return getTypeString();}
 private:
     class FBinaryOp2 : public BaseFunction {
     public:
         Ptr getTypeId() const {return TypeInfo<FBinaryOp2>::type_id;}
-        static string getTypeString() {return "FBinaryOp2";}
+        static string getTypeString() {return "FBinaryOp2{" + BinOp::toString() + "}";}
         string typeToString() const {return getTypeString();}
     private:
         Ptr x1;
@@ -34,7 +34,7 @@ private:
     protected:
         Ptr applyX(const Ptr &x) {return BinOp::op(x1, x);}
     public:
-        string toString() const {return "FBinaryOp2{" + x1->toString() + " " + BinOp::toString() + "}";}
+        string toString() const {return "FBinaryOp2{" + BinOp::toString() + " " + x1->toString() + "}";}
     };
 protected:
     Ptr applyX(const Ptr &x) {return new FBinaryOp2(x);}
@@ -45,20 +45,20 @@ public:
 template <class TerOp>
 class FTernaryOp : public BaseFunction {
 public:
-    Ptr getTypeId() const {return TypeInfo<FTernaryOp>::type_id;}
-    static string getTypeString() {return "FTernaryOp";}
+    Ptr getTypeId() const {return TypeInfo<FTernaryOp<TerOp> >::type_id;}
+    static string getTypeString() {return "FTernaryOp{" + TerOp::toString() + "}";}
     string typeToString() const {return getTypeString();}
 private:
     class FTernaryOp2 : public BaseFunction {
     public:
         Ptr getTypeId() const {return TypeInfo<FTernaryOp2>::type_id;}
-        static string getTypeString() {return "FTernaryOp2";}
+        static string getTypeString() {return "FTernaryOp2{" + TerOp::toString() + "}";}
         string typeToString() const {return getTypeString();}
     private:
         class FTernaryOp3 : public BaseFunction {
         public:
             Ptr getTypeId() const {return TypeInfo<FTernaryOp3>::type_id;}
-            static string getTypeString() {return "FTernaryOp3";}
+            static string getTypeString() {return "FTernaryOp3{" + TerOp::toString() + "}";}
             string typeToString() const {return getTypeString();}
         private:
             Ptr x1;
@@ -84,5 +84,24 @@ public:
     string toString() const {return "FTernaryOp{" + TerOp::toString() + "}";}
 };
 
+template <class NaryOp>
+class FNaryOp : public BaseFunction {
+public:
+    Ptr getTypeId() const {return TypeInfo<FNaryOp<NaryOp> >::type_id;}
+    static string getTypeString() {return "FNaryOp{" + NaryOp::toString() + "}";}
+    string typeToString() const {return getTypeString();}
+private:
+    int i;
+    int n;
+    Ptr args;
+public:
+    FNaryOp(int _i, int _n, const Ptr & _args) :i(_i), n(_n), args(_args) {}
+    string toString() const {return "FNaryOp{" + NaryOp::toString() + "}";}
+protected:
+    Ptr applyX(const Ptr &x) {
+        if(i <= 1) return NaryOp::op(n, new Pair(x, args));
+        return new FNaryOp<NaryOp>(i - 1, n, new Pair(x, args));
+    }
+};
 
 #endif // FUNCSTEMP_H

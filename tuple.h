@@ -39,7 +39,7 @@ public:
         return res + "]";
     }
 
-    friend class FMakeVector;
+    friend class MakeVectorNaryOp;
     friend class VectorElBinOp;
 };
 
@@ -51,45 +51,22 @@ public:
 protected:
     Ob::Ptr applyX(const Ptr &x) {return new SpecTypeTemp<int>(x->cast<Vector>()->getSize());}
 public:
-    string toString() const {return "FVectorP{}";}
+    string toString() const {return "FVectorLength{}";}
 };
 
-/// Переделааать!!!
-class FMakeVector : public BaseFunction {
+class MakeVectorNaryOp {
 public:
-    Ptr getTypeId() const {return TypeInfo<FMakeVector>::type_id;}
-    static string getTypeString() {return "FMakeVector";}
-    string typeToString() const {return getTypeString();}
-private:
-    class FMakeVectorN : public BaseFunction {
-    public:
-        Ptr getTypeId() const {return TypeInfo<FMakeVectorN>::type_id;}
-        static string getTypeString() {return "FMakeVectorN";}
-        string typeToString() const {return getTypeString();}
-    private:
-        Ptr v;
-        Ptr * parr;
-        Ptr * narr;
-    public:
-        FMakeVectorN(const Ptr & _v, Ptr * _parr, Ptr * _narr)
-            :v(_v), parr(_parr), narr(_narr) {}
-
-        string toString() const {return "FMakeVectorN{}";}
-    protected:
-        Ptr applyX(const Ptr &x) {
-            *parr = x;
-            ++parr;
-            return parr != narr ? new FMakeVectorN(v, parr, narr) : v;
-        }
-    };
-protected:
-    Ptr applyX(const Ptr &x) {
-        int n = x->cast<SpecTypeTemp<int> >()->getValue();
+    static Ob::Ptr op(int n, const Ob::Ptr &args) {
         Vector * v = new Vector(n);
-        return new FMakeVectorN(v, v->arr, v->arr + n);
+        Ob::Ptr p = args;
+        for(int i = n - 1; i >= 0; --i) {
+            v->arr[i] = p->car();
+            p = p->cdr();
+        }
+        return v;
     }
-public:
-    string toString() const {return "FMakeVector{}";}
+
+    static string toString() {return "MakeVectorNaryOp";}
 };
 
 class VectorElBinOp {

@@ -2,9 +2,14 @@
 #define TYPESTEMP_H
 
 #include "core.h"
+#include <sstream>
 
 template <class T>
-string valueToString(T x) {return "value";}
+string valueToString(T x) {
+    stringstream ss;
+    ss << x;
+    return ss.str();
+}
 
 template <typename T>
 string cppTypeToString() {return "cppType";}
@@ -90,5 +95,19 @@ public:
     static string toString() {return "SpecTypeCmpOp{" + CppCmpOp::toString() + "}";}
 };
 
+template <class NaryOp>
+class FMakeNaryOp : public BaseFunction {
+public:
+    Ptr getTypeId() const {return TypeInfo<FMakeNaryOp<NaryOp> >::type_id;}
+    static string getTypeString() {return "FMakeNaryOp{" + NaryOp::toString() + "}";}
+    string typeToString() const {return getTypeString();}
+public:
+    string toString() const {return "FMakeNaryOp{" + NaryOp::toString() + "}";}
+protected:
+    Ptr applyX(const Ptr &x) {
+        int n = x->cast<SpecTypeTemp<int> >()->getValue();
+        return new FNaryOp<NaryOp>(n, n, new Pair(x, Ob::anil));
+    }
+};
 
 #endif // TYPESTEMP_H
