@@ -62,7 +62,7 @@ public:
 
     template <class T>
     T get(int i) {
-        if(i < 0 || i >= n) throw 0;
+        if(i < 0 || i >= n) { DBG("Error get from bytearray");  throw 0;}
         return *((T*)(arr + i));
     }
 };

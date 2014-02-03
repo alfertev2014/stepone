@@ -1,4 +1,49 @@
 (>- id (\ x x)
- >- add2 (\ x i+ x 2)
+ >- nil ()
+ >- nil? (\ x eq x ())
+ >- not nil?
+ >- and (\ x \ y 
+        ? (nil? x) nil . y)
+ >- or (\ x \ y 
+        ? (nil? x) y . x)
+ >- list-map (@ map \ f \ list 
+        ? (nil? list) nil
+        cons (f (car list)) (map f (cdr list)))
+ >- list-foldr (
+        >- foldr (@ foldr \ f \ x \ list 
+            ? (nil? list) x
+            f (car list) (foldr f x (cdr list)))
+        \ f \ list
+            ? (nil? list) nil
+            foldr f (car list) (cdr list))
+ >- list-foldl (
+        >- foldl (@ foldl \ f \ x \ list 
+            ? (nil? list) x
+            foldl f (f x (car list)) (cdr list))
+        \ f \ list
+            ? (nil? list) nil
+            foldl f (car list) (cdr list))
+ >- list-len (@ len \ list
+        ? (atom? list)
+            0 
+            i+ 1 (len (cdr list)))
+ >- list-append (@ append \ l1 \ l2
+        ? (nil? l1) l2
+        cons (car l1) (append (cdr l1) l2))
+ >- list-reverse (@ reverse \ list
+        ? (nil? list) nil
+        append (reverse (cdr list)) (cons (car list) nil))
+ 
+ >- listi+ (list-foldr i+)
+ >- listi* (list-foldr i*)
+ >- listi- (list-foldl i-)
+ >- listi/ (list-foldl i/)
+ 
+ >- listineg (list-map -i)
+ 
+ >- ~ (% a p a a p)
+ 
+ >- list-eval (list-map (\ x ~ . x))
+
     (% a p . a)
 )

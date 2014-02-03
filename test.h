@@ -21,6 +21,7 @@ class TestFastParser {
         }
     }
 public:
+    TestFastParser(const FastParser & _fp) :fp(_fp){}
 
     void test_base_macro() {
         test_eq("()", "()", SDBG());
@@ -55,15 +56,21 @@ public:
         int i = 0;
         while(getline(testfile, s)) {
             i++;
+            bool exc = false;
             if(!s.empty() && s[0] != ';') {
                 cout << "line " << i << ": >>  " << s << endl;
+                try {
                 res = fp.evalToString(s);
+                } catch (int e) {
+                    exc = true;
+                    res = ";fail";
+                }
                 cout << res << endl;
             } else continue;
             if(getline(testfile, s)) {
-                if(s != res) {
-                    cout << "FAIL: _______________________  FAIL!!!!!!!1" << endl;
-                    cout << "must be: " << res << endl << endl;
+                if(s != res && !exc) {
+                    cout << " * * * * ** ** ** *** *** **** !!! FAIL !!! **** *** *** ** ** ** * * * * " << endl;
+                    cout << "must be: " << s << endl << endl;
                 }
                 i++;
             }

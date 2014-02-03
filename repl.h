@@ -8,6 +8,7 @@
 using namespace std;
 
 #include "fastparser.h"
+#include "test.h"
 
 class REPL {
 public:
@@ -19,13 +20,13 @@ public:
 
         string libfilename = "../stepone/initlib.txt";
         //getline(cin, libfilename);
-        ifstream f(libfilename.c_str());
+        ifstream initlibfile(libfilename.c_str());
 
-        if(f.is_open()) {
+        if(initlibfile.is_open()) {
             cout << "initlib has opened" << endl;
             string s;
             string lib;
-            while(getline(f, s)) {
+            while(getline(initlibfile, s)) {
                 lib += s;
                 lib += ' ';
             }
@@ -33,6 +34,9 @@ public:
             fp.loadInitLibrary(lib);
             cout << "initlib has loaded" << endl;
         }
+
+        TestFastParser tfp(fp);
+        tfp.test_all();
 
         while(true) {
             cout << "~> ";
