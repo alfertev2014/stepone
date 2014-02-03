@@ -31,6 +31,18 @@ public:
         return res;
     }
 
+    Vector * mid(int i1, int i2) {
+        if(i1 < 0 || i2 >= n) {
+            DBG("vector index out of range");
+            throw 0;
+        }
+        int nres = i2 - i1;
+        Vector * res = new Vector(nres);
+        for(int i = 0; i < nres; ++i)
+            res->arr[i] = arr[i1 + i];
+        return res;
+    }
+
     string toString() const {
         if(n <= 0) return "[]";
         string res("[" + arr[0]->toString());
@@ -103,12 +115,22 @@ public:
     static string toString() {return "VectorConcatBinOp";}
 };
 
+class VectorMidTerOp {
+public:
+    static Ob::Ptr op(const Ob::Ptr &x1, const Ob::Ptr &x2, const Ob::Ptr &x3) {
+        return x1->cast<Vector>()->mid(x2->cast<SpecTypeTemp<int> >()->getValue(), x3->cast<SpecTypeTemp<int> >()->getValue());
+    }
+
+    static string toString() {return "VectorMidTerOp";}
+};
+
 class VectorFunctions {
     VectorFunctions(){}
 public:
     static const Ob::Ptr fvecp;
     static const Ob::Ptr fmkvec;
     static const Ob::Ptr fveclen;
+    static const Ob::Ptr fvecmid;
     static const Ob::Ptr fvecel;
     static const Ob::Ptr fveccat;
 };

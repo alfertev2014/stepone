@@ -84,6 +84,7 @@ class FastParser {
     static const Ob::Ptr avecp;
     static const Ob::Ptr amkvec;
     static const Ob::Ptr aveclen;
+    static const Ob::Ptr avecmid;
     static const Ob::Ptr avecel;
     static const Ob::Ptr aveccat;
 
@@ -162,6 +163,7 @@ class FastParser {
         symbolTable.insert(pair<string, Ob::Ptr>("vec?", avecp));
         symbolTable.insert(pair<string, Ob::Ptr>("mkvec", amkvec));
         symbolTable.insert(pair<string, Ob::Ptr>("vec-len", aveclen));
+        symbolTable.insert(pair<string, Ob::Ptr>("vec-mid", avecmid));
         symbolTable.insert(pair<string, Ob::Ptr>("vec-el", avecel));
         symbolTable.insert(pair<string, Ob::Ptr>("vec-cat", aveccat));
     }
@@ -243,6 +245,7 @@ public:
         a = new Context(avecp, VectorFunctions::fvecp, a);
         a = new Context(amkvec, VectorFunctions::fmkvec, a);
         a = new Context(avecel, VectorFunctions::fvecel, a);
+        a = new Context(avecmid, VectorFunctions::fvecmid, a);
         a = new Context(aveclen, VectorFunctions::fveclen, a);
         a = new Context(aveccat, VectorFunctions::fveccat, a);
 

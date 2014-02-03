@@ -61,5 +61,6 @@ const Ob::Ptr FastParser::aint2float(new Symbol);
 const Ob::Ptr FastParser::avecp(new Symbol);
 const Ob::Ptr FastParser::amkvec(new Symbol);
 const Ob::Ptr FastParser::aveclen(new Symbol);
+const Ob::Ptr FastParser::avecmid(new Symbol);
 const Ob::Ptr FastParser::avecel(new Symbol);
 const Ob::Ptr FastParser::aveccat(new Symbol);
