@@ -98,7 +98,7 @@ a
 (i+ (i* 3 4) (i* 5 6))
 42
 
-(i== 2 2)
+(i= 2 2)
 t
 
 ; "Два не может быть больше двух!"
@@ -110,10 +110,10 @@ t
 (mkvec 3 1 2 3)
 [1, 2, 3]
 
-(vec-el 4 (mkvec 6 1 2 3 4 5 6))
+(vec-get (mkvec 6 1 2 3 4 5 6) 4)
 5
 
-(vec-cat (mkvec 6 1 2 3 4 5 6) (mvec 3 3 2 1))
+(vec-cat (mkvec 6 1 2 3 4 5 6) (mkvec 3 3 2 1))
 [1, 2, 3, 4, 5, 6, 3, 2, 1]
 
 (vec-mid (mkvec 6 1 2 3 4 5 6) 2 4)
@@ -122,7 +122,7 @@ t
 (vec-len (mkvec 6 1 2 3 4 5 6))
 6
 
-(>- v1 (mkvec 6 1 2 3 4 5 6) >- v2 (mvec 3 3 2 1) i== (i+ (vec-len v1) (vec-len v2)) (vec-len (vec-cat v1 v2)))
+(>- v1 (mkvec 6 1 2 3 4 5 6) >- v2 (mkvec 3 3 2 1) i= (i+ (vec-len v1) (vec-len v2)) (vec-len (vec-cat v1 v2)))
 t
 
 (>- vbegin (mkvec 4 1 2) vbegin 3 4)
@@ -168,3 +168,6 @@ t
 
 (listi- (' 6 5 4 3 2 1))
 -9
+
+(list-map (\ x cons x nil) (' a b c d))
+((a) (b) (c) (d))

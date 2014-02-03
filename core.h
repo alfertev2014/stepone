@@ -88,7 +88,7 @@ public:
     virtual Ptr eval(const Ptr & a) {throw 0;}
     virtual Ptr apply(const Ptr & p, const Ptr & a) {
         if(p == Ob::anil) return this;
-        throw 0;
+        DBG("apply of not applyable"); throw 0;
     }
     virtual Ptr unlazy() {return this;}
     virtual Ptr assoc(const Ptr & s) const {DBG("throw assoc "); throw 0;}
@@ -140,7 +140,7 @@ public:
     T * cast() {
         if(TypeInfo<T>::type_id == getTypeId())
             return dynamic_cast<T*>(this);
-        throw 0;
+        DBG("error cast"); throw 0;
     }
 
     // Методы для отладки
@@ -175,8 +175,7 @@ public:
     Ptr eval(const Ptr & a) {return pcar->eval(a)->apply(pcdr, a);}
 
     string toString() const {
-        if(this == pcar || this == pcdr)
-            throw 0;
+        if(this == pcar || this == pcdr) {  DBG("car==cdr"); throw 0;}
         string res = "(" + pcar->toString();
         Ptr p = pcdr;
         int k = 4;

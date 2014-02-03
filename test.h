@@ -21,6 +21,7 @@ class TestFastParser {
         }
     }
 public:
+    TestFastParser(const FastParser & _fp) :fp(_fp){}
 
     void test_base_macro() {
         test_eq("()", "()", SDBG());

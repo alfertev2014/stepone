@@ -5,10 +5,10 @@
  >- and (\ x \ y 
         ? (nil? x) nil . y)
  >- or (\ x \ y 
-        ? (nil? x) y . nil)
- >- list-map (@ map \ list \ f
+        ? (nil? x) y . x)
+ >- list-map (@ map \ f \ list 
         ? (nil? list) nil
-        cons (f (car list)) (map (cdr list) f))
+        cons (f (car list)) (map f (cdr list)))
  >- list-foldr (
         >- foldr (@ foldr \ f \ x \ list 
             ? (nil? list) x
@@ -17,12 +17,12 @@
             ? (nil? list) nil
             foldr f (car list) (cdr list))
  >- list-foldl (
-        >- foldr (@ foldr \ f \ x \ list 
+        >- foldl (@ foldl \ f \ x \ list 
             ? (nil? list) x
             foldl f (f x (car list)) (cdr list))
         \ f \ list
             ? (nil? list) nil
-            foldr f (car list) (cdr list))
+            foldl f (car list) (cdr list))
  >- list-len (@ len \ list
         ? (atom? list)
             0 
@@ -36,8 +36,8 @@
  
  >- listi+ (list-foldr i+)
  >- listi* (list-foldr i*)
- >- listi- (list-foldr i-)
- >- listi/ (list-foldr i/)
+ >- listi- (list-foldl i-)
+ >- listi/ (list-foldl i/)
  
  >- listineg (list-map -i)
  
