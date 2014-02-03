@@ -162,7 +162,7 @@ class FastParser {
         symbolTable.insert(pair<string, Ob::Ptr>("vec?", avecp));
         symbolTable.insert(pair<string, Ob::Ptr>("mkvec", amkvec));
         symbolTable.insert(pair<string, Ob::Ptr>("vec-len", aveclen));
-        symbolTable.insert(pair<string, Ob::Ptr>("vec-get", avecel));
+        symbolTable.insert(pair<string, Ob::Ptr>("vec-el", avecel));
         symbolTable.insert(pair<string, Ob::Ptr>("vec-cat", aveccat));
     }
 
@@ -243,6 +243,7 @@ public:
         a = new Context(avecp, VectorFunctions::fvecp, a);
         a = new Context(amkvec, VectorFunctions::fmkvec, a);
         a = new Context(avecel, VectorFunctions::fvecel, a);
+        a = new Context(aveclen, VectorFunctions::fveclen, a);
         a = new Context(aveccat, VectorFunctions::fveccat, a);
 
         initTable();
@@ -254,11 +255,11 @@ public:
         return pr.success ? pr.e : Ob::anil;
     }
 
-    Ob::Ptr parseEval(string _s) {return parse(_s)->eval(a);}
+    Ob::Ptr parseEval(string _s) {return parse(_s)->eval(a)->unlazy();}
 
     string evalToString(string _s) {
         stringstream ss;
-        print(ss, parse(_s)->eval(a));
+        print(ss, parseEval(_s));
         return ss.str();
     }
 

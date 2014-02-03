@@ -78,7 +78,7 @@ public:
     Ptr getTypeId() const {return TypeInfo<MLabel>::type_id;}
 public:
     Ob::Ptr apply(const Ptr &p, const Ptr &a) {
-        return new Label(p->car(), p->cdr(), a);
+        return Label::loop(p->car(), p->cdr(), a);
     }
 
     string toString() const {return "{MLabel}";}

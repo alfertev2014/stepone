@@ -311,9 +311,13 @@ private:
     Ptr a;
 
     Ptr ev() {return e->eval(new Context(f, this, a));}
-public:
+
     Label(const Ptr & _f, const Ptr & _e, const Ptr & _a)
         : f(_f), e(_e), a(_a) {}
+public:
+    static Ptr loop(const Ptr & _f, const Ptr & _e, const Ptr & _a) {
+        return (new Label(_f, _e, _a))->ev();
+    }
 
     Ptr car() {return ev()->car();}
     Ptr cdr() {return ev()->cdr();}
