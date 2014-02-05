@@ -30,7 +30,7 @@ public:
                 lib += s;
                 lib += ' ';
             }
-            cout << "initlib:" << endl << lib << endl;
+            //cout << "initlib:" << endl << lib << endl;
             fp.loadInitLibrary(lib);
             cout << "initlib has loaded" << endl;
         }
@@ -39,7 +39,7 @@ public:
         tfp.test_all();
 
         while(true) {
-            cout << "~> ";
+            cout << "alz> ";
             string s;
             getline(cin, s);
             if(s == ":exit") break;

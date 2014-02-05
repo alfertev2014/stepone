@@ -68,12 +68,25 @@ public:
     }
 };
 
+class FByteArrayLength : public BaseFunction {
+public:
+    Ptr getTypeId() const {return TypeInfo<FByteArrayLength>::type_id;}
+    static string getTypeString() {return "FByteArrayLength";}
+    string typeToString() const {return getTypeString();}
+protected:
+    Ob::Ptr applyX(const Ptr &x) {
+        return new SpecTypeTemp<int>(x->cast<ByteArray>()->getSize());
+    }
+public:
+    string toString() const {return "FByteArrayLength{}";}
+};
+
 class ConcatByteArrayBinOp {
 public:
     static Ob::Ptr op(const Ob::Ptr &x1, const Ob::Ptr &x2) {
         return x1->cast<ByteArray>()->concat(x2->cast<ByteArray>());
     }
-    static string toString() {return "FConcatByteArray";}
+    static string toString() {return "ConcatByteArrayBinOp";}
 };
 
 class MidByteArrayTerOp {
@@ -134,6 +147,7 @@ class ByteArrayFunctions {
     ByteArrayFunctions(){}
 public:
     static const Ob::Ptr fbytesp;
+    static const Ob::Ptr fbyteslen;
     static const Ob::Ptr fbytescat;
     static const Ob::Ptr fbytesmid;
     static const Ob::Ptr fserint;

@@ -101,6 +101,23 @@ class FastParser {
     static const Ob::Ptr avecel;
     static const Ob::Ptr aveccat;
 
+    static const Ob::Ptr abytesp;
+    static const Ob::Ptr abyteslen;
+    static const Ob::Ptr abytescat;
+    static const Ob::Ptr abytesmid;
+    static const Ob::Ptr aserint;
+    static const Ob::Ptr aserfloat;
+    static const Ob::Ptr aserbyte;
+    static const Ob::Ptr aser2bytes;
+    static const Ob::Ptr aser4bytes;
+    static const Ob::Ptr aser8bytes;
+    static const Ob::Ptr agetint;
+    static const Ob::Ptr agetfloat;
+    static const Ob::Ptr agetbyte;
+    static const Ob::Ptr aget2bytes;
+    static const Ob::Ptr aget4bytes;
+    static const Ob::Ptr aget8bytes;
+
     void initTable() {
         symbolTable.clear();
         symbolTable.insert(pair<string, Ob::Ptr>("t", Ob::at));
@@ -189,6 +206,23 @@ class FastParser {
         symbolTable.insert(pair<string, Ob::Ptr>("vec-mid", avecmid));
         symbolTable.insert(pair<string, Ob::Ptr>("vec-el", avecel));
         symbolTable.insert(pair<string, Ob::Ptr>("vec-cat", aveccat));
+
+        symbolTable.insert(pair<string, Ob::Ptr>("b?", abytesp));
+        symbolTable.insert(pair<string, Ob::Ptr>("b-len", abyteslen));
+        symbolTable.insert(pair<string, Ob::Ptr>("b-cat", abytescat));
+        symbolTable.insert(pair<string, Ob::Ptr>("b-mid", abytesmid));
+        symbolTable.insert(pair<string, Ob::Ptr>("i2b", aserint));
+        symbolTable.insert(pair<string, Ob::Ptr>("f2b", aserfloat));
+        symbolTable.insert(pair<string, Ob::Ptr>("u1-2b", aserbyte));
+        symbolTable.insert(pair<string, Ob::Ptr>("u2-2b", aser2bytes));
+        symbolTable.insert(pair<string, Ob::Ptr>("u4-2b", aser4bytes));
+        symbolTable.insert(pair<string, Ob::Ptr>("u8-2b", aser8bytes));
+        symbolTable.insert(pair<string, Ob::Ptr>("b-geti", agetint));
+        symbolTable.insert(pair<string, Ob::Ptr>("b-getf", agetfloat));
+        symbolTable.insert(pair<string, Ob::Ptr>("b-getu1", agetbyte));
+        symbolTable.insert(pair<string, Ob::Ptr>("b-getu2", aget2bytes));
+        symbolTable.insert(pair<string, Ob::Ptr>("b-getu4", aget4bytes));
+        symbolTable.insert(pair<string, Ob::Ptr>("b-getu8", aget8bytes));
     }
 
 public:
@@ -282,6 +316,23 @@ public:
         a = new Context(aveclen, VectorFunctions::fveclen, a);
         a = new Context(aveccat, VectorFunctions::fveccat, a);
 
+        a = new Context(abytesp, ByteArrayFunctions::fbytesp, a);
+        a = new Context(abyteslen, ByteArrayFunctions::fbyteslen, a);
+        a = new Context(abytescat, ByteArrayFunctions::fbytescat, a);
+        a = new Context(abytesmid, ByteArrayFunctions::fbytesmid, a);
+        a = new Context(aserint, ByteArrayFunctions::fserint, a);
+        a = new Context(aserfloat, ByteArrayFunctions::fserfloat, a);
+        a = new Context(aserbyte, ByteArrayFunctions::fserbyte, a);
+        a = new Context(aser2bytes, ByteArrayFunctions::fser2bytes, a);
+        a = new Context(aser4bytes, ByteArrayFunctions::fser4bytes, a);
+        a = new Context(aser8bytes, ByteArrayFunctions::fser8bytes, a);
+        a = new Context(agetint, ByteArrayFunctions::fgetint, a);
+        a = new Context(agetfloat, ByteArrayFunctions::fgetfloat, a);
+        a = new Context(agetbyte, ByteArrayFunctions::fgetbyte, a);
+        a = new Context(aget2bytes, ByteArrayFunctions::fget2bytes, a);
+        a = new Context(aget4bytes, ByteArrayFunctions::fget4bytes, a);
+        a = new Context(aget8bytes, ByteArrayFunctions::fget8bytes, a);
+
         initTable();
     }
 
@@ -373,9 +424,9 @@ private:
     ostream & printList(ostream & ts, Pair * pr) {
         printOb(ts, pr->car());
         Ob::Ptr pcdr = pr->cdr();
-        Symbol * sym = pcdr->asSymbol();
-        if(sym != 0) {
-            if(sym != Ob::anil->asSymbol()) {
+        Atom * atom = pcdr->asAtom();
+        if(atom != 0) {
+            if(atom != Ob::anil->asAtom()) {
                 ts << " . ";
                 printOb(ts, pcdr);
             }
