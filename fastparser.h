@@ -447,8 +447,7 @@ private:
         return parseRes(e, sii, true);
     }
 
-    parseRes parseNumber(string::const_iterator si)
-    {
+    parseRes parseNumber(string::const_iterator si) {
         string number("");
         string::const_iterator sii = si;
         if(sii == s.end() || !isdigit(*sii) && *sii != '-' || isspace(*sii) || (nosymbol.find(*sii) != string::npos)) {
@@ -465,8 +464,9 @@ private:
             int i;
             if(ss >> i)
                 return parseRes(new SpecTypeTemp<int>(i), sii, true);
-            else
+            else {
                 DBG("int is not int");
+            }
         } else {
             number.push_back(*sii);
             ++sii;
@@ -478,6 +478,9 @@ private:
             istringstream ss(number);
             if(ss >> f)
                 return parseRes(new SpecTypeTemp<float>(f), sii, true);
+            else {
+                DBG("float is not float");
+            }
         }
         return parseRes(Ob::anil, si, false);
     }

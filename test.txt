@@ -148,7 +148,7 @@ t
 t
 
 (eq (get-type (cur-ctx)) (get-type (cur-ctx)))
-
+t
 
 ; Работа с эвалуаторами
 
@@ -187,10 +187,10 @@ t
 (eq (get-type 2) (get-type 2.0))
 ()
 
-(eq (get-type 2.0) (get-type (i2f 2))
+(eq (get-type 2.0) (get-type (i2f 2)))
 t
 
-(eq (get-type 2) (get-type (f2i 2.0))
+(eq (get-type 2) (get-type (f2i 2.0)))
 t
 
 ;Проверка начальной библиотеки
@@ -206,4 +206,3 @@ t
 
 (list-map (\ x cons x nil) (' a b c d))
 ((a) (b) (c) (d))
-
