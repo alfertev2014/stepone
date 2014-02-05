@@ -62,6 +62,20 @@ public:
 };
 
 template <class T>
+class BitSHLBinOp {
+public:
+    inline static T op(T x1, T x2) {return x1 << x2;}
+    static string toString() {return "bit-shl";}
+};
+
+template <class T>
+class BitSHRBinOp {
+public:
+    inline static T op(T x1, T x2) {return x1 >> x2;}
+    static string toString() {return "bit-shr";}
+};
+
+template <class T>
 class EqlCmpOp {
 public:
     inline static bool op(T x1, T x2) {return x1 == x2;}

@@ -14,10 +14,13 @@ public:
     static const Ob::Ptr fintMod;
     static const Ob::Ptr fintp;
 
-    static const Ob::Ptr fbitand;
-    static const Ob::Ptr fbitor;
-    static const Ob::Ptr fbitxor;
-    static const Ob::Ptr fbitnot;
+    static const Ob::Ptr fintand;
+    static const Ob::Ptr fintor;
+    static const Ob::Ptr fintxor;
+    static const Ob::Ptr fintnot;
+
+    static const Ob::Ptr fintshl;
+    static const Ob::Ptr fintshr;
 
     static const Ob::Ptr fintEql;
     static const Ob::Ptr fintNE;
@@ -25,6 +28,15 @@ public:
     static const Ob::Ptr fintLT;
     static const Ob::Ptr fintGE;
     static const Ob::Ptr fintLE;
+
+    static const Ob::Ptr flongp;
+    static const Ob::Ptr flongand;
+    static const Ob::Ptr flongor;
+    static const Ob::Ptr flongxor;
+    static const Ob::Ptr flongnot;
+
+    static const Ob::Ptr flongshl;
+    static const Ob::Ptr flongshr;
 
     static const Ob::Ptr ffloatNeg;
     static const Ob::Ptr ffloatPlus;
@@ -38,6 +50,9 @@ public:
     static const Ob::Ptr ffloatLT;
     static const Ob::Ptr ffloatGE;
     static const Ob::Ptr ffloatLE;
+
+    static const Ob::Ptr flong2int;
+    static const Ob::Ptr fint2long;
 
     static const Ob::Ptr ffloat2int;
     static const Ob::Ptr fint2float;

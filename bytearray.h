@@ -5,6 +5,7 @@
 #include "typestemp.h"
 #include <sstream>
 
+
 class ByteArray : public SpecType {
 public:
     Ptr getTypeId() const {return TypeInfo<ByteArray>::type_id;}
@@ -62,7 +63,7 @@ public:
 
     template <class T>
     T get(int i) {
-        if(i < 0 || i >= n) { DBG("Error get from bytearray");  throw 0;}
+        if(i < 0 || i + sizeof(T) > n) { DBG("Error get from bytearray");  throw 0;}
         return *((T*)(arr + i));
     }
 };
@@ -98,12 +99,35 @@ public:
 };
 
 template <class T>
+class FSerializeBytes : public BaseFunction {
+public:
+    Ptr getTypeId() const {return TypeInfo<FSerialize<T> >::type_id;}
+    static string getTypeString() {return "FSerialize{" + cppTypeToString<T>() + "}";}
+    string typeToString() const {return getTypeString();}
+protected:
+    Ob::Ptr applyX(const Ptr &x) {
+        return ByteArray::from<T>(T(x->cast<SpecTypeTemp<long long> >()->getValue()));
+    }
+public:
+    string toString() const {return "FSerialize{" + cppTypeToString<T>() + "}";}
+};
+
+template <class T>
 class ByteArrayGetBinOp {
 public:
     static Ob::Ptr op(const Ob::Ptr &x1, const Ob::Ptr &x2) {
-        return new SpecTypeTemp<int>(x1->cast<ByteArray>()->get<T>(x2->cast<SpecTypeTemp<int> >()->getValue()));
+        return new SpecTypeTemp<T>(x1->cast<ByteArray>()->get<T>(x2->cast<SpecTypeTemp<int> >()->getValue()));
     }
     static string toString() {return "ByteArrayGetBinOp{" + cppTypeToString<T>() + "}";}
+};
+
+template <class T>
+class ByteArrayGetBytesBinOp {
+public:
+    static Ob::Ptr op(const Ob::Ptr &x1, const Ob::Ptr &x2) {
+        return new SpecTypeTemp<long long>(x1->cast<ByteArray>()->get<T>(x2->cast<SpecTypeTemp<int> >()->getValue()));
+    }
+    static string toString() {return "ByteArrayGetBytesBinOp{" + cppTypeToString<T>() + "}";}
 };
 
 class ByteArrayFunctions {
@@ -114,8 +138,16 @@ public:
     static const Ob::Ptr fbytesmid;
     static const Ob::Ptr fserint;
     static const Ob::Ptr fserfloat;
+    static const Ob::Ptr fserbyte;
+    static const Ob::Ptr fser2bytes;
+    static const Ob::Ptr fser4bytes;
+    static const Ob::Ptr fser8bytes;
     static const Ob::Ptr fgetint;
     static const Ob::Ptr fgetfloat;
+    static const Ob::Ptr fgetbyte;
+    static const Ob::Ptr fget2bytes;
+    static const Ob::Ptr fget4bytes;
+    static const Ob::Ptr fget8bytes;
 };
 
 #endif // BYTEARRAY_H

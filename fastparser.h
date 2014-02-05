@@ -54,16 +54,26 @@ class FastParser {
     static const Ob::Ptr aintDivision;
     static const Ob::Ptr aintMod;
     static const Ob::Ptr aintp;
-    static const Ob::Ptr abitnot;
-    static const Ob::Ptr abitand;
-    static const Ob::Ptr abitor;
-    static const Ob::Ptr abitxor;
+    static const Ob::Ptr aintnot;
+    static const Ob::Ptr aintand;
+    static const Ob::Ptr aintor;
+    static const Ob::Ptr aintxor;
+    static const Ob::Ptr aintshl;
+    static const Ob::Ptr aintshr;
     static const Ob::Ptr aintEql;
     static const Ob::Ptr aintNE;
     static const Ob::Ptr aintGT;
     static const Ob::Ptr aintLT;
     static const Ob::Ptr aintGE;
     static const Ob::Ptr aintLE;
+
+    static const Ob::Ptr alongp;
+    static const Ob::Ptr alongnot;
+    static const Ob::Ptr alongand;
+    static const Ob::Ptr alongor;
+    static const Ob::Ptr alongxor;
+    static const Ob::Ptr alongshl;
+    static const Ob::Ptr alongshr;
 
     static const Ob::Ptr afloatNeg;
     static const Ob::Ptr afloatPlus;
@@ -77,6 +87,9 @@ class FastParser {
     static const Ob::Ptr afloatLT;
     static const Ob::Ptr afloatGE;
     static const Ob::Ptr afloatLE;
+
+    static const Ob::Ptr along2int;
+    static const Ob::Ptr aint2long;
 
     static const Ob::Ptr afloat2int;
     static const Ob::Ptr aint2float;
@@ -133,16 +146,26 @@ class FastParser {
         symbolTable.insert(pair<string, Ob::Ptr>("i/", aintDivision));
         symbolTable.insert(pair<string, Ob::Ptr>("i%", aintMod));
         symbolTable.insert(pair<string, Ob::Ptr>("i?", aintp));
-        symbolTable.insert(pair<string, Ob::Ptr>("bit-not", abitnot));
-        symbolTable.insert(pair<string, Ob::Ptr>("bit-and", abitand));
-        symbolTable.insert(pair<string, Ob::Ptr>("bit-or", abitor));
-        symbolTable.insert(pair<string, Ob::Ptr>("bit-xor", abitxor));
+        symbolTable.insert(pair<string, Ob::Ptr>("inot", aintnot));
+        symbolTable.insert(pair<string, Ob::Ptr>("iand", aintand));
+        symbolTable.insert(pair<string, Ob::Ptr>("ior", aintor));
+        symbolTable.insert(pair<string, Ob::Ptr>("ixor", aintxor));
+        symbolTable.insert(pair<string, Ob::Ptr>("ishl", aintshl));
+        symbolTable.insert(pair<string, Ob::Ptr>("ishr", aintshr));
         symbolTable.insert(pair<string, Ob::Ptr>("i=", aintEql));
         symbolTable.insert(pair<string, Ob::Ptr>("i!=", aintNE));
         symbolTable.insert(pair<string, Ob::Ptr>("i<", aintLT));
         symbolTable.insert(pair<string, Ob::Ptr>("i>", aintGT));
         symbolTable.insert(pair<string, Ob::Ptr>("i<=", aintLE));
         symbolTable.insert(pair<string, Ob::Ptr>("i>=", aintGE));
+
+        symbolTable.insert(pair<string, Ob::Ptr>("u?", alongp));
+        symbolTable.insert(pair<string, Ob::Ptr>("unot", alongnot));
+        symbolTable.insert(pair<string, Ob::Ptr>("uand", alongand));
+        symbolTable.insert(pair<string, Ob::Ptr>("uor", alongor));
+        symbolTable.insert(pair<string, Ob::Ptr>("uxor", alongxor));
+        symbolTable.insert(pair<string, Ob::Ptr>("ushl", alongshl));
+        symbolTable.insert(pair<string, Ob::Ptr>("ushr", alongshr));
 
         symbolTable.insert(pair<string, Ob::Ptr>("-f", afloatNeg));
         symbolTable.insert(pair<string, Ob::Ptr>("f+", afloatPlus));
@@ -215,16 +238,26 @@ public:
         a = new Context(aintDivision, BaseNumFunc::fintDivision, a);
         a = new Context(aintMod, BaseNumFunc::fintMod, a);
         a = new Context(aintp, BaseNumFunc::fintp, a);
-        a = new Context(abitnot, BaseNumFunc::fbitnot, a);
-        a = new Context(abitand, BaseNumFunc::fbitand, a);
-        a = new Context(abitor, BaseNumFunc::fbitor, a);
-        a = new Context(abitxor, BaseNumFunc::fbitxor, a);
+        a = new Context(aintnot, BaseNumFunc::fintnot, a);
+        a = new Context(aintand, BaseNumFunc::fintand, a);
+        a = new Context(aintor, BaseNumFunc::fintor, a);
+        a = new Context(aintxor, BaseNumFunc::fintxor, a);
+        a = new Context(aintshl, BaseNumFunc::fintshl, a);
+        a = new Context(aintshr, BaseNumFunc::fintshr, a);
         a = new Context(aintEql, BaseNumFunc::fintEql, a);
         a = new Context(aintNE, BaseNumFunc::fintNE, a);
         a = new Context(aintLT, BaseNumFunc::fintLT, a);
         a = new Context(aintGT, BaseNumFunc::fintGT, a);
         a = new Context(aintLE, BaseNumFunc::fintLE, a);
         a = new Context(aintGE, BaseNumFunc::fintGE, a);
+
+        a = new Context(alongp, BaseNumFunc::flongp, a);
+        a = new Context(alongnot, BaseNumFunc::flongnot, a);
+        a = new Context(alongand, BaseNumFunc::flongand, a);
+        a = new Context(alongor, BaseNumFunc::flongor, a);
+        a = new Context(alongxor, BaseNumFunc::flongxor, a);
+        a = new Context(alongshl, BaseNumFunc::flongshl, a);
+        a = new Context(alongshr, BaseNumFunc::flongshr, a);
 
         a = new Context(afloatNeg, BaseNumFunc::ffloatNeg, a);
         a = new Context(afloatPlus, BaseNumFunc::ffloatPlus, a);
