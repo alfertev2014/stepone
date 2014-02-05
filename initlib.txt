@@ -41,9 +41,11 @@
  
  >- listineg (list-map -i)
  
- >- ~ (% a p a a p)
+ >- ~ (% a p a a . p)
+
+ >- cur-ctx (% a p . a)
  
  >- list-eval (list-map (\ x ~ . x))
 
-    (% a p . a)
+    cur-ctx
 )
