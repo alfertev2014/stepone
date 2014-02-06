@@ -31,6 +31,8 @@ class SpecType;
 template <class T>
 class TypeInfo;
 
+class SemanticError {};
+
 class Ob {
     int refcount;
 
@@ -40,7 +42,7 @@ public: // static
     public:
         Ptr() : ob(Ob::anil.ob) {if(ob != 0) ob->refcount++;}
         Ptr(Ob * _ob) : ob(_ob) {if(ob != 0) ob->refcount++;}
-        Ptr(const Ob::Ptr & _ob) : ob(_ob.ob) {if(ob != 0) ob->refcount++; else {DBG("ob == 0"); throw 0;}}
+        Ptr(const Ob::Ptr & _ob) : ob(_ob.ob) {if(ob != 0) ob->refcount++; else {DBG("ob == 0"); throw SemanticError();}}
         ~Ptr() {if(ob == 0) return; ob->refcount--; if(ob->refcount == 0) delete ob;}
 
         bool operator == (const Ptr & p) const {return p.ob == ob;}
@@ -75,6 +77,7 @@ public: // static
     static const Ptr aunlazy;
     static const Ptr alabel;
     static const Ptr amacro;
+    static const Ptr atry;
     static const Ptr aeval;
     static const Ptr agensym;
 
@@ -82,16 +85,16 @@ public:
     Ob() : refcount(0) {}
     virtual ~Ob() {}
 
-    virtual Ptr car() {DBG("throw car "); throw 0;}
-    virtual Ptr cdr() {DBG("throw cdr "); throw 0;}
+    virtual Ptr car() {DBG("throw car "); throw SemanticError();}
+    virtual Ptr cdr() {DBG("throw cdr "); throw SemanticError();}
 
-    virtual Ptr eval(const Ptr & a) {throw 0;}
+    virtual Ptr eval(const Ptr & a) {throw SemanticError();}
     virtual Ptr apply(const Ptr & p, const Ptr & a) {
         if(p == Ob::anil) return this;
-        DBG("apply of not applyable"); throw 0;
+        DBG("apply of not applyable"); throw SemanticError();
     }
     virtual Ptr unlazy() {return this;}
-    virtual Ptr assoc(const Ptr & s) const {DBG("throw assoc "); throw 0;}
+    virtual Ptr assoc(const Ptr & s) const {DBG("throw assoc "); throw SemanticError();}
 
     //Методы для определения типа
     virtual bool isAtom() const {return false;}
@@ -140,7 +143,7 @@ public:
     T * cast() {
         if(TypeInfo<T>::type_id == getTypeId())
             return dynamic_cast<T*>(this);
-        DBG("error cast"); throw 0;
+        DBG("error cast"); throw SemanticError();
     }
 
     // Методы для отладки
@@ -175,7 +178,7 @@ public:
     Ptr eval(const Ptr & a) {return pcar->eval(a)->apply(pcdr, a);}
 
     string toString() const {
-        if(this == pcar || this == pcdr) {  DBG("car==cdr"); throw 0;}
+        if(this == pcar || this == pcdr) {  DBG("car==cdr"); throw SemanticError();}
         string res = "(" + pcar->toString();
         Ptr p = pcdr;
         int k = 4;
@@ -229,7 +232,7 @@ public:
             p = p->next->asContext();
         }
         DBG("Unknown symbol");
-        throw 0;
+        throw SemanticError();
     }
 
     virtual bool isContext() const {return true;}
@@ -354,6 +357,7 @@ public:
         else if(this == Ob::aunlazy) return "$";
         else if(this == Ob::alabel) return "@";
         else if(this == Ob::aif) return "?";
+        else if(this == Ob::atry) return "|";
         else {
             stringstream ss;
             ss << "s" << (void *)this;

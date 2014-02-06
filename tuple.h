@@ -34,7 +34,7 @@ public:
     Vector * mid(int i1, int i2) {
         if(i1 < 0 || i2 >= n) {
             DBG("vector index out of range");
-            throw 0;
+            throw SemanticError();
         }
         int nres = i2 - i1;
         Vector * res = new Vector(nres);

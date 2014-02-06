@@ -8,5 +8,7 @@ const Ob::Ptr BaseMacroses::mlazy(new MLazy());
 const Ob::Ptr BaseMacroses::munlazy(new MUnlazy());
 const Ob::Ptr BaseMacroses::mlabel(new MLabel());
 const Ob::Ptr BaseMacroses::mmacro(new MMacro());
+const Ob::Ptr BaseMacroses::mtry(new MTry());
+const Ob::Ptr BaseMacroses::mbot(new MBot());
 const Ob::Ptr BaseMacroses::meval(new MEval());
 const Ob::Ptr BaseMacroses::mgensym(new MGenSymbol());

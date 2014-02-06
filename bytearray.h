@@ -65,7 +65,7 @@ public:
 
     template <class T>
     T get(int i) {
-        if(i < 0 || i + sizeof(T) > n) { DBG("Error get from bytearray");  throw 0;}
+        if(i < 0 || i + sizeof(T) > n) { DBG("Error get from bytearray");  throw SemanticError();}
         return *((T*)(arr + i));
     }
 };

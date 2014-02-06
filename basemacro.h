@@ -96,6 +96,32 @@ public:
     string toString() const {return "{MMacro}";}
 };
 
+class MTry : public BaseMacro {
+public:
+    Ptr getTypeId() const {return TypeInfo<MTry>::type_id;}
+public:
+    Ob::Ptr apply(const Ptr &p, const Ptr &a) {
+        try {
+            return p->car()->eval(a);
+        } catch(SemanticError e) {
+            return p->cdr()->eval(a);
+        }
+    }
+
+    string toString() const {return "{MTry}";}
+};
+
+class MBot : public BaseMacro {
+public:
+    Ptr getTypeId() const {return TypeInfo<MBot>::type_id;}
+public:
+    Ob::Ptr apply(const Ptr &p, const Ptr &a) {
+        throw SemanticError();
+    }
+
+    string toString() const {return "{MBot}";}
+};
+
 class MEval : public BaseMacro {
 public:
     Ptr getTypeId() const {return TypeInfo<MEval>::type_id;}
@@ -129,6 +155,8 @@ public:
     static const Ob::Ptr munlazy;
     static const Ob::Ptr mlabel;
     static const Ob::Ptr mmacro;
+    static const Ob::Ptr mtry;
+    static const Ob::Ptr mbot;
     static const Ob::Ptr meval;
     static const Ob::Ptr mgensym;
 };

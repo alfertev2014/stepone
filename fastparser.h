@@ -143,6 +143,8 @@ class FastParser {
 
         pushInContext("^", BaseMacroses::mgensym);
         pushInContext("~", BaseMacroses::meval);
+        pushInContext("_", BaseMacroses::mbot);
+        pushInContext("|", BaseMacroses::mtry);
         pushInContext("$", BaseMacroses::munlazy);
         pushInContext("#", BaseMacroses::mlazy);
         pushInContext("%", BaseMacroses::mmacro);

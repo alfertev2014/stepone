@@ -17,7 +17,7 @@ class TestFastParser {
     void test_eq(string e, string res, string mes) {
         if(fp.evalToString(e) != res) {
             cout << mes << endl;
-            throw 0;
+            throw SemanticError();
         }
     }
 public:
