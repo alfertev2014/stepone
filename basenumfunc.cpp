@@ -60,3 +60,25 @@ const Ob::Ptr BaseNumFunc::flong2int(new FSpecTypeCast<long long, int>);
 
 const Ob::Ptr BaseNumFunc::ffloat2int(new FSpecTypeCast<float, int>);
 const Ob::Ptr BaseNumFunc::fint2float(new FSpecTypeCast<int, float>);
+
+const Ob::Ptr BaseNumFunc::fchar2int(new FSpecTypeCast<char, long long>);
+const Ob::Ptr BaseNumFunc::fint2char(new FSpecTypeCast<long long, char>);
+
+const Ob::Ptr BaseNumFunc::fchar2long(new FSpecTypeCast<char, int>);
+const Ob::Ptr BaseNumFunc::flong2char(new FSpecTypeCast<int, char>);
+
+const Ob::Ptr BaseNumFunc::fcharp(new FTypeP<SpecTypeTemp<char> >);
+const Ob::Ptr BaseNumFunc::fcharand(new FBinaryOp<SpecTypeBinOp<char, BitAndBinOp<char> > >);
+const Ob::Ptr BaseNumFunc::fcharor(new FBinaryOp<SpecTypeBinOp<char, BitOrBinOp<char> > >);
+const Ob::Ptr BaseNumFunc::fcharxor(new FBinaryOp<SpecTypeBinOp<char, BitXorBinOp<char> > >);
+const Ob::Ptr BaseNumFunc::fcharnot(new FBitNot<char>);
+
+const Ob::Ptr BaseNumFunc::fcharshl(new FBinaryOp<SpecTypeBinOp<char, BitSHLBinOp<char> > >);
+const Ob::Ptr BaseNumFunc::fcharshr(new FBinaryOp<SpecTypeBinOp<char, BitSHRBinOp<char> > >);
+
+const Ob::Ptr BaseNumFunc::fcharEql(new FBinaryOp<SpecTypeCmpOp<char, EqlCmpOp<char> > >);
+const Ob::Ptr BaseNumFunc::fcharNE(new FBinaryOp<SpecTypeCmpOp<char, NECmpOp<char> > >);
+const Ob::Ptr BaseNumFunc::fcharGT(new FBinaryOp<SpecTypeCmpOp<char, LTCmpOp<char> > >);
+const Ob::Ptr BaseNumFunc::fcharLT(new FBinaryOp<SpecTypeCmpOp<char, GTCmpOp<char> > >);
+const Ob::Ptr BaseNumFunc::fcharGE(new FBinaryOp<SpecTypeCmpOp<char, LECmpOp<char> > >);
+const Ob::Ptr BaseNumFunc::fcharLE(new FBinaryOp<SpecTypeCmpOp<char, GECmpOp<char> > >);

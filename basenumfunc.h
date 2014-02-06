@@ -63,5 +63,28 @@ public:
 
     static const Ob::Ptr ffloat2int;
     static const Ob::Ptr fint2float;
+
+    static const Ob::Ptr fchar2int;
+    static const Ob::Ptr fint2char;
+
+    static const Ob::Ptr fchar2long;
+    static const Ob::Ptr flong2char;
+
+    static const Ob::Ptr fcharp;
+    static const Ob::Ptr fcharand;
+    static const Ob::Ptr fcharor;
+    static const Ob::Ptr fcharxor;
+    static const Ob::Ptr fcharnot;
+
+    static const Ob::Ptr fcharshl;
+    static const Ob::Ptr fcharshr;
+
+    static const Ob::Ptr fcharEql;
+    static const Ob::Ptr fcharNE;
+    static const Ob::Ptr fcharGT;
+    static const Ob::Ptr fcharLT;
+    static const Ob::Ptr fcharGE;
+    static const Ob::Ptr fcharLE;
+
 };
 #endif // BASETYPES_H

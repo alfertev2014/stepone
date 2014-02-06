@@ -67,6 +67,20 @@ class FastParser {
         pushInContext("u<=", BaseNumFunc::flongLE);
         pushInContext("u>=", BaseNumFunc::flongGE);
 
+        pushInContext("c?", BaseNumFunc::fcharp);
+        pushInContext("c-not", BaseNumFunc::fcharnot);
+        pushInContext("c-and", BaseNumFunc::fcharand);
+        pushInContext("c-or", BaseNumFunc::fcharor);
+        pushInContext("c-xor", BaseNumFunc::fcharxor);
+        pushInContext("c-shl", BaseNumFunc::fcharshl);
+        pushInContext("c-shr", BaseNumFunc::fcharshr);
+        pushInContext("c=", BaseNumFunc::fcharEql);
+        pushInContext("c!=", BaseNumFunc::fcharNE);
+        pushInContext("c<", BaseNumFunc::fcharLT);
+        pushInContext("c>", BaseNumFunc::fcharGT);
+        pushInContext("c<=", BaseNumFunc::fcharLE);
+        pushInContext("c>=", BaseNumFunc::fcharGE);
+
         pushInContext("-f", BaseNumFunc::ffloatNeg);
         pushInContext("f+", BaseNumFunc::ffloatPlus);
         pushInContext("f-", BaseNumFunc::ffloatMinus);
@@ -84,6 +98,10 @@ class FastParser {
         pushInContext("i2u", BaseNumFunc::fint2long);
         pushInContext("f2i", BaseNumFunc::ffloat2int);
         pushInContext("i2f", BaseNumFunc::fint2float);
+        pushInContext("c2i", BaseNumFunc::fchar2int);
+        pushInContext("i2c", BaseNumFunc::fint2char);
+        pushInContext("c2u", BaseNumFunc::fchar2long);
+        pushInContext("u2c", BaseNumFunc::flong2char);
 
         pushInContext("vec?", VectorFunctions::fvecp);
         pushInContext("mkvec", VectorFunctions::fmkvec);
@@ -98,12 +116,14 @@ class FastParser {
         pushInContext("b-mid", ByteArrayFunctions::fbytesmid);
         pushInContext("i2b", ByteArrayFunctions::fserint);
         pushInContext("f2b", ByteArrayFunctions::fserfloat);
+        pushInContext("c2b", ByteArrayFunctions::fserchar);
         pushInContext("u1-2b", ByteArrayFunctions::fserbyte);
         pushInContext("u2-2b", ByteArrayFunctions::fser2bytes);
         pushInContext("u4-2b", ByteArrayFunctions::fser4bytes);
         pushInContext("u8-2b", ByteArrayFunctions::fser8bytes);
         pushInContext("b-geti", ByteArrayFunctions::fgetint);
         pushInContext("b-getf", ByteArrayFunctions::fgetfloat);
+        pushInContext("b-getc", ByteArrayFunctions::fgetchar);
         pushInContext("b-getu1", ByteArrayFunctions::fgetbyte);
         pushInContext("b-getu2", ByteArrayFunctions::fget2bytes);
         pushInContext("b-getu4", ByteArrayFunctions::fget4bytes);
@@ -111,6 +131,7 @@ class FastParser {
 
         pushInContext("sz-i", new SpecTypeTemp<int>(sizeof(int)));
         pushInContext("sz-f", new SpecTypeTemp<int>(sizeof(float)));
+        pushInContext("sz-c", new SpecTypeTemp<int>(sizeof(char)));
         pushInContext("sz-u", new SpecTypeTemp<int>(sizeof(long long)));
 
         pushInContext("pair?", BaseTypePredicates::fpairp);
@@ -212,7 +233,11 @@ private:
                 ts << spt->as<SpecTypeTemp<int> >()->getValue();
             else if(spt->is<SpecTypeTemp<float> >())
                 ts << spt->as<SpecTypeTemp<float> >()->getValue();
-            else if(spt->is<Vector>()) {
+            else if(spt->is<SpecTypeTemp<char> >()) {
+                char c = spt->as<SpecTypeTemp<char> >()->getValue();
+                if(c == '\"') ts << "&\"\"";
+                else ts << "&\"" << c << "\"";
+            } else if(spt->is<Vector>()) {
                 Vector * v = spt->as<Vector>();
                 int n = v->getSize();
                 if(n == 0)
@@ -331,15 +356,36 @@ private:
         if(pr.success) return pr;
         pr = parseString(si);
         if(pr.success) return pr;
+        pr = parseChar(si);
+        if(pr.success) return pr;
         pr = parseSymbol(si);
         return pr.success ? pr : parseRes(Ob::anil, si, false);
     }
 
-    parseRes parseString(string::const_iterator si) {
-        if(si == s.end() || *si != '\"')
-            return parseRes(Ob::anil, si, false);
+    parseRes parseChar(string::const_iterator si) {
         string::const_iterator sii = si;
-        ++sii;
+        if(sii == s.end() || *sii != '&')
+            return parseRes(Ob::anil, si, false);
+        else
+            ++sii;
+        if(sii == s.end() || *sii != '\"')
+            return parseRes(Ob::anil, si, false);
+        else
+            ++sii;
+        string chars;
+        for( ; sii != s.end() && *sii != '\"'; ++sii)
+            chars.push_back(*sii);
+        if(sii != s.end())
+            ++sii;
+        return parseRes(new SpecTypeTemp<char>(chars.size() > 0 ? chars[0] : '\"'), sii, true);
+    }
+
+    parseRes parseString(string::const_iterator si) {
+        string::const_iterator sii = si;
+        if(sii == s.end() || *sii != '\"')
+            return parseRes(Ob::anil, si, false);
+        else
+            ++sii;
         string chars;
         for( ; sii != s.end() && *sii != '\"'; ++sii)
             chars.push_back(*sii);

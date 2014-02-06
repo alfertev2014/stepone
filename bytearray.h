@@ -154,12 +154,14 @@ public:
     static const Ob::Ptr fbytesmid;
     static const Ob::Ptr fserint;
     static const Ob::Ptr fserfloat;
+    static const Ob::Ptr fserchar;
     static const Ob::Ptr fserbyte;
     static const Ob::Ptr fser2bytes;
     static const Ob::Ptr fser4bytes;
     static const Ob::Ptr fser8bytes;
     static const Ob::Ptr fgetint;
     static const Ob::Ptr fgetfloat;
+    static const Ob::Ptr fgetchar;
     static const Ob::Ptr fgetbyte;
     static const Ob::Ptr fget2bytes;
     static const Ob::Ptr fget4bytes;
