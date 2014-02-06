@@ -35,6 +35,13 @@ public:
     static const Ob::Ptr flongxor;
     static const Ob::Ptr flongnot;
 
+    static const Ob::Ptr flongEql;
+    static const Ob::Ptr flongNE;
+    static const Ob::Ptr flongGT;
+    static const Ob::Ptr flongLT;
+    static const Ob::Ptr flongGE;
+    static const Ob::Ptr flongLE;
+
     static const Ob::Ptr flongshl;
     static const Ob::Ptr flongshr;
 

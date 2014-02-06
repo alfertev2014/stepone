@@ -35,6 +35,12 @@ const Ob::Ptr BaseNumFunc::flongnot(new FBitNot<long long>);
 const Ob::Ptr BaseNumFunc::flongshl(new FBinaryOp<SpecTypeBinOp<long long, BitSHLBinOp<long long> > >);
 const Ob::Ptr BaseNumFunc::flongshr(new FBinaryOp<SpecTypeBinOp<long long, BitSHRBinOp<long long> > >);
 
+const Ob::Ptr BaseNumFunc::flongEql(new FBinaryOp<SpecTypeCmpOp<long long, EqlCmpOp<long long> > >);
+const Ob::Ptr BaseNumFunc::flongNE(new FBinaryOp<SpecTypeCmpOp<long long, NECmpOp<long long> > >);
+const Ob::Ptr BaseNumFunc::flongGT(new FBinaryOp<SpecTypeCmpOp<long long, LTCmpOp<long long> > >);
+const Ob::Ptr BaseNumFunc::flongLT(new FBinaryOp<SpecTypeCmpOp<long long, GTCmpOp<long long> > >);
+const Ob::Ptr BaseNumFunc::flongGE(new FBinaryOp<SpecTypeCmpOp<long long, LECmpOp<long long> > >);
+const Ob::Ptr BaseNumFunc::flongLE(new FBinaryOp<SpecTypeCmpOp<long long, GECmpOp<long long> > >);
 
 const Ob::Ptr BaseNumFunc::ffloatNeg(new FNeg<float>);
 const Ob::Ptr BaseNumFunc::ffloatPlus(new FBinaryOp<SpecTypeBinOp<float, PlusBinOp<float> > >);
