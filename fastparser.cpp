@@ -94,3 +94,7 @@ const Ob::Ptr FastParser::agetbyte(new Symbol);
 const Ob::Ptr FastParser::aget2bytes(new Symbol);
 const Ob::Ptr FastParser::aget4bytes(new Symbol);
 const Ob::Ptr FastParser::aget8bytes(new Symbol);
+
+const Ob::Ptr FastParser::asizeofi(new Symbol);
+const Ob::Ptr FastParser::asizeoff(new Symbol);
+const Ob::Ptr FastParser::asizeofu(new Symbol);

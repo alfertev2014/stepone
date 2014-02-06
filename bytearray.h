@@ -15,12 +15,14 @@ private:
     int n;
     char * arr;
 public:
-    ByteArray(int _n): n(_n) {arr = new char[n];}
+    explicit ByteArray(int _n): n(_n) {arr = new char[n];}
     ~ByteArray() {delete [] arr;}
 
     int getSize() const {return n;}
 
-    char getElement(int i) {return arr[i];}
+    char getElement(int i) const {return arr[i];}
+
+    const char * getData() const {return arr;}
 
     ByteArray * concat(ByteArray * ba) const {
         int nres = n + ba->n;

@@ -118,6 +118,10 @@ class FastParser {
     static const Ob::Ptr aget4bytes;
     static const Ob::Ptr aget8bytes;
 
+    static const Ob::Ptr asizeofi;
+    static const Ob::Ptr asizeoff;
+    static const Ob::Ptr asizeofu;
+
     void initTable() {
         symbolTable.clear();
         symbolTable.insert(pair<string, Ob::Ptr>("t", Ob::at));
@@ -223,6 +227,10 @@ class FastParser {
         symbolTable.insert(pair<string, Ob::Ptr>("b-getu2", aget2bytes));
         symbolTable.insert(pair<string, Ob::Ptr>("b-getu4", aget4bytes));
         symbolTable.insert(pair<string, Ob::Ptr>("b-getu8", aget8bytes));
+
+        symbolTable.insert(pair<string, Ob::Ptr>("size-of-i", asizeofi));
+        symbolTable.insert(pair<string, Ob::Ptr>("size-of-f", asizeoff));
+        symbolTable.insert(pair<string, Ob::Ptr>("size-of-u", asizeofu));
     }
 
 public:
@@ -264,6 +272,10 @@ public:
         a = new Context(abasefunctionp, BaseTypePredicates::fbasefunctionp, a);
         a = new Context(aclosurep, BaseTypePredicates::fclosurep, a);
         a = new Context(aspectypep, BaseTypePredicates::fspectypep, a);
+
+        a = new Context(asizeofi, new SpecTypeTemp<int>(sizeof(int)), a);
+        a = new Context(asizeoff, new SpecTypeTemp<int>(sizeof(float)), a);
+        a = new Context(asizeofu, new SpecTypeTemp<int>(sizeof(long long)), a);
 
         a = new Context(aintNeg, BaseNumFunc::fintNeg, a);
         a = new Context(aintPlus, BaseNumFunc::fintPlus, a);
@@ -402,6 +414,11 @@ private:
                     }
                     ts << "]";
                 }
+            } else if(spt->is<ByteArray>()) {
+                ByteArray * ba = spt->as<ByteArray>();
+                ts << "\"";
+                ts.write(ba->getData(), ba->getSize());
+                ts << "\"";
             } else
                 ts << "{SpecType}";
         }
@@ -500,8 +517,23 @@ private:
     parseRes parseAtom(string::const_iterator si) {
         parseRes pr = parseNumber(si);
         if(pr.success) return pr;
+        pr = parseString(si);
+        if(pr.success) return pr;
         pr = parseSymbol(si);
         return pr.success ? pr : parseRes(Ob::anil, si, false);
+    }
+
+    parseRes parseString(string::const_iterator si) {
+        if(si == s.end() || *si != '\"')
+            return parseRes(Ob::anil, si, false);
+        string::const_iterator sii = si;
+        ++sii;
+        string chars;
+        for( ; sii != s.end() && *sii != '\"'; ++sii)
+            chars.push_back(*sii);
+        if(sii != s.end())
+            ++sii;
+        return parseRes(ByteArray::fromChars(chars.size(), chars.c_str()), sii, true);
     }
 
     parseRes parseSymbol(string::const_iterator si) {
