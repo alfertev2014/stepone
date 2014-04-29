@@ -37,4 +37,8 @@ ehthumbs.db
 Thumbs.db
 
 *~
+*.config
+*.creator*
+*.files
+*.includes
 *.pro.user
