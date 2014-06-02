@@ -23,7 +23,7 @@ public:
         ifstream initlibfile(libfilename.c_str());
 
         if(initlibfile.is_open()) {
-            cout << "initlib has opened" << endl;
+            cout << "initlib was opened" << endl;
             string s;
             string lib;
             while(getline(initlibfile, s)) {
@@ -32,7 +32,7 @@ public:
             }
             //cout << "initlib:" << endl << lib << endl;
             fp.loadInitLibrary(lib);
-            cout << "initlib has loaded" << endl;
+            cout << "initlib was loaded" << endl;
         }
 
         TestFastParser tfp(fp);

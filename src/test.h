@@ -23,27 +23,9 @@ class TestFastParser {
 public:
     TestFastParser(const FastParser & _fp) :fp(_fp){}
 
-    void test_base_macro() {
-        test_eq("()", "()", SDBG());
-        test_eq("(\' . a)", "a", SDBG());
-        test_eq("(\' a)", "(a)", SDBG());
-        test_eq("(\' a b c)", "(a b c)", SDBG());
-        test_eq("(? (\' . t) (\' . a) \' . b)", "a", SDBG());
-        test_eq("(? () (\' . a) \' . b)", "b", SDBG());
-        test_eq("((\\ x x) (\' . y))", "y", SDBG());
-        test_eq("(>- x (\' . y) . x)", "y", SDBG());
-    }
-
-    void test_base_func() {
-        test_eq("(car (\' a))", "a", SDBG());
-        test_eq("(cdr (\' a))", "()", SDBG());
-        test_eq("(cons (\' . a) (\' . b))", "(a . b)", SDBG());
-        test_eq("(cons (\' a) (\' b))", "((a) b)", SDBG());
-    }
-
     void test_all() {
         test_from_file();
-        cout << "all tests is done!" << endl << endl;
+        cout << "all tests has done!" << endl << endl;
     }
 
     void test_from_file() {
