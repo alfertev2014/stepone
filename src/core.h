@@ -26,7 +26,7 @@ class UserMacro;
 class Function;
 class BaseFunction;
 class Closure;
-class SpecType;
+class Value;
 
 template <class T>
 class TypeInfo;
@@ -128,8 +128,8 @@ public:
     virtual BaseFunction * asBaseFunction() {return 0;}
     virtual bool isClosure() const {return false;}
     virtual Closure * asClosure() {return 0;}
-    virtual bool isSpecType() const {return false;}
-    virtual SpecType * asSpecType() {return 0;}
+    virtual bool isValue() const {return false;}
+    virtual Value * asValue() {return 0;}
 
     virtual Ptr getTypeId() const = 0;
 
@@ -493,13 +493,13 @@ public:
     string toString() const {return "{\\ " + x->toString() + " . " + e->toString() + " | " + a->toString() + "}";}
 };
 
-class SpecType : public Const {
+class Value : public Const {
 public:
-    virtual ~SpecType() {}
-    bool isSpecType() const {return true;}
-    SpecType * asSpecType() {return this;}
+    virtual ~Value() {}
+    bool isValue() const {return true;}
+    Value * asValue() {return this;}
 
-    string toString() const {return "{SpecType}";}
+    string toString() const {return "{Value}";}
 };
 
 template <class T>

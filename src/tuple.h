@@ -2,10 +2,10 @@
 #define TUPLE_H
 
 #include "core.h"
-#include "funcstemp.h"
-#include "typestemp.h"
+#include "operations.h"
+#include "typetemplates.h"
 
-class Vector : public SpecType {
+class Vector : public Value {
 public:
     Ptr getTypeId() const {return TypeInfo<Vector>::type_id;}
     static string getTypeString() {return "Vector";}
@@ -61,7 +61,7 @@ public:
     static string getTypeString() {return "FVectorLength";}
     string typeToString() const {return getTypeString();}
 protected:
-    Ob::Ptr applyX(const Ptr &x) {return new SpecTypeTemp<int>(x->cast<Vector>()->getSize());}
+    Ob::Ptr applyX(const Ptr &x) {return new ValueType<int>(x->cast<Vector>()->getSize());}
 public:
     string toString() const {return "FVectorLength{}";}
 };
@@ -77,7 +77,7 @@ public:
     string toString() const {return "FMakeNaryOp{" + NaryOp::toString() + "}";}
 protected:
     Ptr applyX(const Ptr &x) {
-        int n = x->cast<SpecTypeTemp<int> >()->getValue();
+		int n = x->cast<ValueType<int> >()->getValue();
         return new FNaryOp<NaryOp>(n, n, new Pair(x, Ob::anil));
     }
 };
@@ -100,7 +100,7 @@ public:
 class VectorElBinOp {
 public:
     static Ob::Ptr op(const Ob::Ptr &x1, const Ob::Ptr &x2) {
-        return x1->cast<Vector>()->arr[x2->cast<SpecTypeTemp<int> >()->getValue()];
+		return x1->cast<Vector>()->arr[x2->cast<ValueType<int> >()->getValue()];
     }
 
     static string toString() {return "VectorElBinOp";}
@@ -118,7 +118,7 @@ public:
 class VectorMidTerOp {
 public:
     static Ob::Ptr op(const Ob::Ptr &x1, const Ob::Ptr &x2, const Ob::Ptr &x3) {
-        return x1->cast<Vector>()->mid(x2->cast<SpecTypeTemp<int> >()->getValue(), x3->cast<SpecTypeTemp<int> >()->getValue());
+		return x1->cast<Vector>()->mid(x2->cast<ValueType<int> >()->getValue(), x3->cast<ValueType<int> >()->getValue());
     }
 
     static string toString() {return "VectorMidTerOp";}

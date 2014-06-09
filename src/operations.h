@@ -15,6 +15,18 @@ public:
     string toString() const {return "FTypeP{" + T::getTypeString() + "}";}
 };
 
+template <class UnOp>
+class FUnaryOp : public BaseFunction {
+public:
+    Ptr getTypeId() const {return TypeInfo<FUnaryOp<UnOp> >::type_id;}
+    static string getTypeString() {return "FUnaryOp{" + UnOp::toString() + "}";}
+    string typeToString() const {return getTypeString();}
+protected:
+    Ptr applyX(const Ptr &x) {return UnOp::op(x);}
+public:
+    string toString() const {return "FUnaryOp{" + UnOp::toString() + "}";}
+};
+
 template <class BinOp>
 class FBinaryOp : public BaseFunction {
 public:

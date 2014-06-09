@@ -6,6 +6,20 @@
 using namespace std;
 
 template <class T>
+class MinusUnOp {
+public:
+    inline static T op(T x) {return -x;}
+    static string toString() {return "-.";}
+};
+
+template <class T>
+class BitNotUnOp {
+public:
+    inline static T op(T x) {return ~x;}
+    static string toString() {return "~";}
+};
+
+template <class T>
 class PlusBinOp {
 public:
     inline static T op(T x1, T x2) {return x1 + x2;}

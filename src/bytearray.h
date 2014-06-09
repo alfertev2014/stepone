@@ -2,11 +2,11 @@
 #define BYTEARRAY_H
 
 #include "core.h"
-#include "typestemp.h"
+#include "typetemplates.h"
 #include <sstream>
 
 
-class ByteArray : public SpecType {
+class ByteArray : public Value {
 public:
     Ptr getTypeId() const {return TypeInfo<ByteArray>::type_id;}
     static string getTypeString() {return "ByteArray";}
@@ -77,7 +77,7 @@ public:
     string typeToString() const {return getTypeString();}
 protected:
     Ob::Ptr applyX(const Ptr &x) {
-        return new SpecTypeTemp<int>(x->cast<ByteArray>()->getSize());
+        return new ValueType<int>(x->cast<ByteArray>()->getSize());
     }
 public:
     string toString() const {return "FByteArrayLength{}";}
@@ -94,7 +94,7 @@ public:
 class MidByteArrayTerOp {
 public:
     static Ob::Ptr op(const Ob::Ptr &x1, const Ob::Ptr &x2, const Ob::Ptr &x3) {
-        return x1->cast<ByteArray>()->mid(x2->cast<SpecTypeTemp<int> >()->getValue(), x3->cast<SpecTypeTemp<int> >()->getValue());
+		return x1->cast<ByteArray>()->mid(x2->cast<ValueType<int> >()->getValue(), x3->cast<ValueType<int> >()->getValue());
     }
     static string toString() {return "MidByteArrayTerOp";}
 };
@@ -107,7 +107,7 @@ public:
     string typeToString() const {return getTypeString();}
 protected:
     Ob::Ptr applyX(const Ptr &x) {
-        return ByteArray::from<T>(x->cast<SpecTypeTemp<T> >()->getValue());
+		return ByteArray::from<T>(x->cast<ValueType<T> >()->getValue());
     }
 public:
     string toString() const {return "FSerialize{" + cppTypeToString<T>() + "}";}
@@ -121,7 +121,7 @@ public:
     string typeToString() const {return getTypeString();}
 protected:
     Ob::Ptr applyX(const Ptr &x) {
-        return ByteArray::from<T>(T(x->cast<SpecTypeTemp<long long> >()->getValue()));
+		return ByteArray::from<T>(T(x->cast<ValueType<long long> >()->getValue()));
     }
 public:
     string toString() const {return "FSerialize{" + cppTypeToString<T>() + "}";}
@@ -131,7 +131,7 @@ template <class T>
 class ByteArrayGetBinOp {
 public:
     static Ob::Ptr op(const Ob::Ptr &x1, const Ob::Ptr &x2) {
-        return new SpecTypeTemp<T>(x1->cast<ByteArray>()->get<T>(x2->cast<SpecTypeTemp<int> >()->getValue()));
+		return new ValueType<T>(x1->cast<ByteArray>()->get<T>(x2->cast<ValueType<int> >()->getValue()));
     }
     static string toString() {return "ByteArrayGetBinOp{" + cppTypeToString<T>() + "}";}
 };
@@ -140,7 +140,7 @@ template <class T>
 class ByteArrayGetBytesBinOp {
 public:
     static Ob::Ptr op(const Ob::Ptr &x1, const Ob::Ptr &x2) {
-        return new SpecTypeTemp<long long>(x1->cast<ByteArray>()->get<T>(x2->cast<SpecTypeTemp<int> >()->getValue()));
+		return new ValueType<long long>(x1->cast<ByteArray>()->get<T>(x2->cast<ValueType<int> >()->getValue()));
     }
     static string toString() {return "ByteArrayGetBytesBinOp{" + cppTypeToString<T>() + "}";}
 };

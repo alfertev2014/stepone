@@ -129,10 +129,10 @@ class FastParser {
         pushInContext("b-getu4", ByteArrayFunctions::fget4bytes);
         pushInContext("b-getu8", ByteArrayFunctions::fget8bytes);
 
-        pushInContext("sz-i", new SpecTypeTemp<int>(sizeof(int)));
-        pushInContext("sz-f", new SpecTypeTemp<int>(sizeof(float)));
-        pushInContext("sz-c", new SpecTypeTemp<int>(sizeof(char)));
-        pushInContext("sz-u", new SpecTypeTemp<int>(sizeof(long long)));
+        pushInContext("sz-i", new ValueType<int>(sizeof(int)));
+        pushInContext("sz-f", new ValueType<int>(sizeof(float)));
+        pushInContext("sz-c", new ValueType<int>(sizeof(char)));
+        pushInContext("sz-u", new ValueType<int>(sizeof(long long)));
 
         pushInContext("pair?", BaseTypePredicates::fpairp);
         pushInContext("lazy?", BaseTypePredicates::flazyp);
@@ -227,14 +227,14 @@ private:
             ts << "{lazy}";
         else if(p->isLabel())
             ts << "{label}";
-        else if(p->isSpecType()) {
-            SpecType * spt = p->asSpecType();
-            if(spt->is<SpecTypeTemp<int> >())
-                ts << spt->as<SpecTypeTemp<int> >()->getValue();
-            else if(spt->is<SpecTypeTemp<float> >())
-                ts << spt->as<SpecTypeTemp<float> >()->getValue();
-            else if(spt->is<SpecTypeTemp<char> >()) {
-                char c = spt->as<SpecTypeTemp<char> >()->getValue();
+        else if(p->isValue()) {
+            Value * spt = p->asValue();
+			if(spt->is<ValueType<int> >())
+				ts << spt->as<ValueType<int> >()->getValue();
+			else if(spt->is<ValueType<float> >())
+				ts << spt->as<ValueType<float> >()->getValue();
+			else if(spt->is<ValueType<char> >()) {
+				char c = spt->as<ValueType<char> >()->getValue();
                 if(c == '\"') ts << "&\"\"";
                 else ts << "&\"" << c << "\"";
             } else if(spt->is<Vector>()) {
@@ -377,7 +377,7 @@ private:
             chars.push_back(*sii);
         if(sii != s.end())
             ++sii;
-        return parseRes(new SpecTypeTemp<char>(chars.size() > 0 ? chars[0] : '\"'), sii, true);
+        return parseRes(new ValueType<char>(chars.size() > 0 ? chars[0] : '\"'), sii, true);
     }
 
     parseRes parseString(string::const_iterator si) {
@@ -437,7 +437,7 @@ private:
             istringstream ss(number);
             int i;
             if(ss >> i)
-                return parseRes(new SpecTypeTemp<int>(i), sii, true);
+                return parseRes(new ValueType<int>(i), sii, true);
             else {
                 DBG("int is not int");
             }
@@ -451,7 +451,7 @@ private:
             float f;
             istringstream ss(number);
             if(ss >> f)
-                return parseRes(new SpecTypeTemp<float>(f), sii, true);
+                return parseRes(new ValueType<float>(f), sii, true);
             else {
                 DBG("float is not float");
             }

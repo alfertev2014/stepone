@@ -163,7 +163,7 @@ public:
     static string getTypeString() {return "FSpecTypeP";}
     string typeToString() const {return getTypeString();}
 protected:
-    Ob::Ptr applyX(const Ptr &x) {return x->isSpecType() ? Ob::at : Ob::anil;}
+    Ob::Ptr applyX(const Ptr &x) {return x->isValue() ? Ob::at : Ob::anil;}
 public:
     string toString() const {return "FSpecTypeP";}
 };

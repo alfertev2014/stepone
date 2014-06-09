@@ -18,7 +18,7 @@ public:
         //cout << "Please, load the initial library" << endl;
         FastParser fp;
 
-        string libfilename = "../stepone/initlib.txt";
+        string libfilename = "../other/initlib.txt"; // hardcoded!!!
         //getline(cin, libfilename);
         ifstream initlibfile(libfilename.c_str());
 
@@ -42,7 +42,7 @@ public:
             cout << "alz> ";
             string s;
             getline(cin, s);
-            if(s == ":exit") break;
+            if(s == ":quit") break;
             fp.print(cout, fp.parseEval(s));
             cout << endl;
         }

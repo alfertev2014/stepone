@@ -29,7 +29,7 @@ public:
     }
 
     void test_from_file() {
-        string fname("../stepone/test.txt");
+        string fname("../other/test.txt"); // hardcoded!!!
         ifstream testfile(fname.c_str());
         if(!testfile.is_open())
             cout << "Couldn\'t open " << fname << endl;

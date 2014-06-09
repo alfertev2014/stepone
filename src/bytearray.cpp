@@ -1,5 +1,5 @@
 #include "bytearray.h"
-#include "funcstemp.h"
+#include "operations.h"
 
 const Ob::Ptr ByteArrayFunctions::fbytesp(new FTypeP<ByteArray>);
 const Ob::Ptr ByteArrayFunctions::fbyteslen(new FByteArrayLength);
