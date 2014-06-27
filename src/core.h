@@ -65,6 +65,8 @@ public: // static
         }
 
         Ob * operator -> () const {return ob;}
+
+        Ob * getPointer() { return ob;}
     };
 
     static const Ptr anil;
@@ -308,30 +310,36 @@ public:
     static string getTypeString() {return "Label";}
     string typeToString() const {return getTypeString();}
 private:
-    Ptr f;
-    Ptr e;
-    Ptr a;
+    Ob * v;
 
-    Ptr ev() {return e->eval(new Context(f, this, a));}
-
-    Label(const Ptr & _f, const Ptr & _e, const Ptr & _a)
-        : f(_f), e(_e), a(_a) {}
-public:
-    static Ptr loop(const Ptr & _f, const Ptr & _e, const Ptr & _a) {
-        return (new Label(_f, _e, _a))->ev();
+    Label() {
+        DBG("Label created");
     }
 
-    Ptr car() {return ev()->car();}
-    Ptr cdr() {return ev()->cdr();}
+    ~Label() {
+        DBG("Label destroyed");
+    }
 
-    Ptr eval(const Ptr &a) {return ev()->eval(a);}
-    Ptr apply(const Ptr &p, const Ptr &a) {return p == Ob::anil ? this : ev()->apply(p, a);}
-    Ptr unlazy() {return ev()->unlazy();}
+public:
+    static Ptr loop(const Ptr & f, const Ptr & e, const Ptr & a) {
+        Label * l = new Label();
+        Ptr lbl = l;
+        Ptr res = e->eval(new Context(f, lbl, a));
+        l->v = res.getPointer();
+        return res;
+    }
+
+    Ptr car() {return v->car();}
+    Ptr cdr() {return v->cdr();}
+
+    Ptr eval(const Ptr &a) {return v->eval(a);}
+    Ptr apply(const Ptr &p, const Ptr &a) {return p == Ob::anil ? this : v->apply(p, a);}
+    Ptr unlazy() {return v->unlazy();}
 
     bool isLabel() const {return true;}
     Label * asLabel() {return this;}
 
-    string toString() const {return "{@ " + f->toString()+ " " + e->toString() + " | " + a->toString() + "}";}
+    string toString() const {return "{@ " + v->toString() + "}";}
 };
 
 
