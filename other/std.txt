@@ -1,0 +1,92 @@
+
+
+>- nil ()
+
+>- nil? (eq ())
+
+>- not nil?
+
+>- and (\ x \ y (? x y nil))
+
+>- or (\ x \ y (? x x y))
+
+>- xor (\ x \ y (? x (nil? y) y))
+
+
+
+>- op-i-f (\iop \fop \ x \ y
+	? (i? x)
+		(? (i? y) (iop x y)
+		 ? (f? y) (fop (i2f x) y)
+		_)
+	? (f? x)
+		(? (f? y) (fop x y)
+		 ? (i? y) (fop x (i2f y))
+		_)
+	_)
+
+>- + (op-i-f i+ f+)
+
+>- - (op-i-f i- f-)
+
+>- * (op-i-f i* f*)
+
+>- / (op-i-f i/ f/)
+
+
+>- list-map (@ map \ f \ list
+	? (nil? list) nil
+	cons (f (car list)) (map f (cdr list)))
+
+>- list-foldr (@ foldr \ f \ x \ list
+	? (nil? list) x
+	f (car list) (foldr f (carl list) (cdr list)))
+
+>- list-foldl (@ foldl \ f \ x \ list
+	? (nil? list) x
+	foldl f (f x (car list)) (cdr list))
+
+>- list-len (@ len \ list
+	? (atom? list) 0
+	i+ 1 (len (cdr list)))
+
+>- list-append (@ append \ l1 \ l2
+	? (nil? l1) l2
+	cons (car l1) (append (cdr l1) l2))
+
+>- list-reverse (@ reverse \ list
+	? (nil? list) nil
+	append (reverse (cdr list)) (cons (car list) nil))
+
+>- list-find-first (@ find \ list \ p
+	? (atom? list) list
+	? (p list) list
+	find (cdr list) p)
+
+>- list-find-first-car (\ list \ p list-find-first list (\ x p (car x)))
+
+>- list-filter-car (@ filter \ list \ p
+	>- finded (list-find-first list (\ x p (car x)))
+	? (atom? finded) finded
+	cons (car finded) (filter (cdr finded) p))
+
+>- list-get-n (@ get \ list \ n
+	? (i< n 0) _
+	? (atom? list) _
+	? (i= n 0) (car list)
+	get (cdr list) (i- n 1))
+
+>- list-get-n-cdr (@ get \ list \ n
+	? (i< n 0) _
+	? (atom? list) _
+	? (i= n 0) (cdr list)
+	get (cdr list) (i- n 1))
+
+>- list-slice (@ slice \ list \ begin \ end
+	? (or (i< begin 0) (or (i< end 0) (i>= begin end))) _
+	? (atom? list) _
+	? (i= begin end) nil
+	cons (car list) (slice (cdr list) (i+ begin 1) end))
+
+>- list-remove-one (@ remove \ list \ p
+	? (function? p)
