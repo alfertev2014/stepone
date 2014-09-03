@@ -1,5 +1,4 @@
-#ifndef TUPLE_H
-#define TUPLE_H
+#pragma once
 
 #include "core.h"
 #include "operations.h"
@@ -77,7 +76,7 @@ public:
     string toString() const {return "FMakeNaryOp{" + NaryOp::toString() + "}";}
 protected:
     Ptr applyX(const Ptr &x) {
-		int n = x->cast<ValueType<int> >()->getValue();
+        int n = x->cast<ValueType<int> >()->getValue();
         return new FNaryOp<NaryOp>(n, n, new Pair(x, Ob::anil));
     }
 };
@@ -100,7 +99,7 @@ public:
 class VectorElBinOp {
 public:
     static Ob::Ptr op(const Ob::Ptr &x1, const Ob::Ptr &x2) {
-		return x1->cast<Vector>()->arr[x2->cast<ValueType<int> >()->getValue()];
+        return x1->cast<Vector>()->arr[x2->cast<ValueType<int> >()->getValue()];
     }
 
     static string toString() {return "VectorElBinOp";}
@@ -118,7 +117,7 @@ public:
 class VectorMidTerOp {
 public:
     static Ob::Ptr op(const Ob::Ptr &x1, const Ob::Ptr &x2, const Ob::Ptr &x3) {
-		return x1->cast<Vector>()->mid(x2->cast<ValueType<int> >()->getValue(), x3->cast<ValueType<int> >()->getValue());
+        return x1->cast<Vector>()->mid(x2->cast<ValueType<int> >()->getValue(), x3->cast<ValueType<int> >()->getValue());
     }
 
     static string toString() {return "VectorMidTerOp";}
@@ -134,5 +133,3 @@ public:
     static const Ob::Ptr fvecel;
     static const Ob::Ptr fveccat;
 };
-
-#endif // TUPLE_H

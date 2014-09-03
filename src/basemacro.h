@@ -1,5 +1,4 @@
-#ifndef BASEMACRO_H
-#define BASEMACRO_H
+#pragma once
 
 #include "core.h"
 
@@ -160,6 +159,3 @@ public:
     static const Ob::Ptr meval;
     static const Ob::Ptr mgensym;
 };
-
-
-#endif // BASEMACRO_H

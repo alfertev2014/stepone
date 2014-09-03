@@ -1,5 +1,4 @@
-#ifndef FUNCSTEMP_H
-#define FUNCSTEMP_H
+#pragma once
 
 #include "core.h"
 
@@ -115,5 +114,3 @@ protected:
         return new FNaryOp<NaryOp>(i - 1, n, new Pair(x, args));
     }
 };
-
-#endif // FUNCSTEMP_H

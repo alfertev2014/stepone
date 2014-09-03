@@ -1,5 +1,4 @@
-#ifndef BASETYPES_H
-#define BASETYPES_H
+#pragma once
 
 #include "core.h"
 
@@ -87,4 +86,3 @@ public:
     static const Ob::Ptr fcharLE;
 
 };
-#endif // BASETYPES_H

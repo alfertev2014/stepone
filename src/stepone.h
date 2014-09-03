@@ -1,5 +1,4 @@
-#ifndef STEPONE_H
-#define STEPONE_H
+#pragma once
 
 #include "core.h"
 #include "basemacro.h"
@@ -9,5 +8,3 @@
 #include "basenumfunc.h"
 #include "tuple.h"
 #include "bytearray.h"
-
-#endif // STEPONE_H

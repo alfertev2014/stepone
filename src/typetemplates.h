@@ -1,5 +1,4 @@
-#ifndef TYPESTEMP_H
-#define TYPESTEMP_H
+#pragma once
 
 #include "core.h"
 #include <sstream>
@@ -22,7 +21,7 @@ template <class T>
 class ValueType : public Value {
 public:
     Ptr getTypeId() const {return TypeInfo<ValueType<T> >::type_id;}
-	static string getTypeString() {return "ValueType{" + cppTypeToString<T>() + "}";}
+    static string getTypeString() {return "ValueType{" + cppTypeToString<T>() + "}";}
     string typeToString() const {return getTypeString();}
 private:
     T t;
@@ -60,7 +59,7 @@ template <typename T, typename CppBinOp>
 class ValueTypeBinOp {
 public:
     static Ob::Ptr op(const Ob::Ptr & x1, const Ob::Ptr & x2) {
-		return new ValueType<T>(CppBinOp::op(x1->cast<ValueType<T> >()->getValue(), x2->cast<ValueType<T> >()->getValue()));
+        return new ValueType<T>(CppBinOp::op(x1->cast<ValueType<T> >()->getValue(), x2->cast<ValueType<T> >()->getValue()));
     }
 
     static string toString() {return "ValueTypeBinOp{" + CppBinOp::toString() + "}";}
@@ -70,10 +69,8 @@ template <typename T, typename CppCmpOp>
 class ValueTypeCmpOp {
 public:
     static Ob::Ptr op(const Ob::Ptr & x1, const Ob::Ptr & x2) {
-		return CppCmpOp::op(x1->cast<ValueType<T> >()->getValue(), x2->cast<ValueType<T> >()->getValue()) ? Ob::at : Ob::anil;
+        return CppCmpOp::op(x1->cast<ValueType<T> >()->getValue(), x2->cast<ValueType<T> >()->getValue()) ? Ob::at : Ob::anil;
     }
 
     static string toString() {return "ValueTypeCmpOp{" + CppCmpOp::toString() + "}";}
 };
-
-#endif // TYPESTEMP_H

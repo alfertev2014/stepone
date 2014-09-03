@@ -1,5 +1,4 @@
-#ifndef CORE_H
-#define CORE_H
+#pragma once
 
 #include "dbg.h"
 
@@ -482,5 +481,3 @@ public:
 
 template <class T>
 const Ob::Ptr TypeInfo<T>::type_id(new Symbol);
-
-#endif // CORE_H

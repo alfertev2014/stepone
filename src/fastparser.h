@@ -1,5 +1,4 @@
-#ifndef FASTPARSER_H
-#define FASTPARSER_H
+#pragma once
 
 #include "dbg.h"
 
@@ -475,5 +474,3 @@ private:
         return lexRes(si, true);
     }
 };
-
-#endif // FASTPARSER_H

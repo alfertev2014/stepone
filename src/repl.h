@@ -1,5 +1,4 @@
-#ifndef REPL_H
-#define REPL_H
+#pragma once
 
 #include <iostream>
 #include <string>
@@ -49,5 +48,3 @@ public:
         return 0;
     }
 };
-
-#endif // REPL_H

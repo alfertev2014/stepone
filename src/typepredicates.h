@@ -1,5 +1,4 @@
-#ifndef TYPEPREDICATES_H
-#define TYPEPREDICATES_H
+#pragma once
 
 #include "core.h"
 
@@ -188,6 +187,3 @@ public:
     static const Ob::Ptr fclosurep;
     static const Ob::Ptr fspectypep;
 };
-
-
-#endif // TYPEPREDICATES_H

@@ -1,5 +1,4 @@
-#ifndef NUMFUNCTEMP_H
-#define NUMFUNCTEMP_H
+#pragma once
 
 #include <string>
 
@@ -130,5 +129,3 @@ public:
     inline static bool op(T x1, T x2) {return x1 >= x2;}
     static string toString() {return ">=";}
 };
-
-#endif // NUMFUNCTEMP_H

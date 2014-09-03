@@ -1,5 +1,4 @@
-#ifndef BASEFUNC_H
-#define BASEFUNC_H
+#pragma once
 
 #include "core.h"
 
@@ -71,5 +70,3 @@ public:
     static const Ob::Ptr fctxget;
     static const Ob::Ptr fctxpush;
 };
-
-#endif // BASEFUNC_H

@@ -1,5 +1,4 @@
-#ifndef TEST_H
-#define TEST_H
+#pragma once
 
 #include "dbg.h"
 #include <string>
@@ -59,5 +58,3 @@ public:
         }
     }
 };
-
-#endif // TEST_H
