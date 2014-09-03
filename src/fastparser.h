@@ -199,7 +199,7 @@ public:
 
     void loadInitLibrary(string lib) {
         Ob::Ptr res = parseEval(lib);
-        if(res->isEvaluator()) {
+        if(res->asEvaluator()) {
             a = res->asEvaluator()->getContext();
             cout << "initlib has loaded successfully" << endl;
         } else {
@@ -212,29 +212,29 @@ private:
         Symbol * sym = p->asSymbol();
         if(sym != 0)
             return printSymbol(ts, sym);
-        if(p->isPair()) {
+        if(p->asPair()) {
             ts << "(";
             return printList(ts, p->asPair());
         }
-        if(p->isFunction()) {
+        if(p->asFunction()) {
             Function * f = p->asFunction();
-            if(f->isBaseFunction())
+            if(f->asBaseFunction())
                 ts << f->toString();
             else
                 ts << "{closure}";
         }
-        else if(p->isLazy())
+        else if(p->asLazy())
             ts << "{lazy}";
-        else if(p->isLabel())
+        else if(p->asLabel())
             ts << "{label}";
-        else if(p->isValue()) {
+        else if(p->asValue()) {
             Value * spt = p->asValue();
-			if(spt->is<ValueType<int> >())
-				ts << spt->as<ValueType<int> >()->getValue();
-			else if(spt->is<ValueType<float> >())
-				ts << spt->as<ValueType<float> >()->getValue();
-			else if(spt->is<ValueType<char> >()) {
-				char c = spt->as<ValueType<char> >()->getValue();
+            if(spt->is<ValueType<int> >())
+                ts << spt->as<ValueType<int> >()->getValue();
+            else if(spt->is<ValueType<float> >())
+                ts << spt->as<ValueType<float> >()->getValue();
+            else if(spt->is<ValueType<char> >()) {
+                char c = spt->as<ValueType<char> >()->getValue();
                 if(c == '\"') ts << "&\"\"";
                 else ts << "&\"" << c << "\"";
             } else if(spt->is<Vector>()) {

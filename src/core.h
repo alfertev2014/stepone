@@ -99,38 +99,23 @@ public:
     virtual Ptr assoc(const Ptr & s) const {DBG("throw assoc "); throw SemanticError();}
 
     //Методы для определения типа
-    virtual bool isAtom() const {return false;}
     virtual Atom * asAtom() {return 0;}
-    virtual bool isLazy() const {return false;}
     virtual Lazy * asLazy() {return 0;}
-    virtual bool isPair() const {return false;}
     virtual Pair * asPair() {return 0;}
-    virtual bool isLabel() const {return false;}
     virtual Label * asLabel() {return 0;}
-    virtual bool isContext() const {return false;}
     virtual Context * asContext() {return 0;}
 
-    virtual bool isSymbol() const {return false;}
-    virtual bool isConst() const {return false;}
     virtual Symbol * asSymbol() {return 0;}
     virtual Const * asConst() {return 0;}
 
-    virtual bool isMacro() const {return false;}
     virtual Macro * asMacro() {return 0;}
-    virtual bool isEvaluator() const {return false;}
     virtual Evaluator * asEvaluator() {return 0;}
-    virtual bool isBaseMacro() const {return false;}
     virtual BaseMacro * asBaseMacro() {return 0;}
-    virtual bool isUserMacro() const {return false;}
     virtual UserMacro * asUserMacro() {return 0;}
 
-    virtual bool isFunction() const {return false;}
     virtual Function * asFunction() {return 0;}
-    virtual bool isBaseFunction() const {return false;}
     virtual BaseFunction * asBaseFunction() {return 0;}
-    virtual bool isClosure() const {return false;}
     virtual Closure * asClosure() {return 0;}
-    virtual bool isValue() const {return false;}
     virtual Value * asValue() {return 0;}
 
     virtual Ptr getTypeId() const = 0;
@@ -171,7 +156,6 @@ public:
     Pair(const Ptr & _pcar, const Ptr & _pcdr)
         : pcar(_pcar), pcdr(_pcdr) {}
 
-    bool isPair() const {return true;}
     Pair * asPair() {return this;}
 
     Ptr car() {return pcar;}
@@ -184,7 +168,7 @@ public:
         string res = "(" + pcar->toString();
         Ptr p = pcdr;
         int k = 4;
-        while(p->isPair()) {
+        while(p->asPair()) {
             if(k <= 0) {
                 res += " ...";
                 return res + ")";
@@ -203,7 +187,6 @@ class Atom : public Ob {
 public:
     virtual ~Atom() {}
 
-    bool isAtom() const {return true;}
     Atom * asAtom() {return this;}
 };
 
@@ -237,7 +220,6 @@ public:
         throw SemanticError();
     }
 
-    virtual bool isContext() const {return true;}
     virtual Context * asContext() {return this;}
 
     string toString() const {
@@ -291,7 +273,6 @@ public:
     Ptr car() {evw(); return e->car();}
     Ptr cdr() {evw(); return e->cdr();}
 
-    bool isLazy() const {return true;}
     Lazy * asLazy() {return this;}
 
     Ptr eval(const Ptr &a) {evw(); return e->eval(a);}
@@ -336,7 +317,6 @@ public:
     Ptr apply(const Ptr &p, const Ptr &a) {return p == Ob::anil ? this : v->apply(p, a);}
     Ptr unlazy() {return v->unlazy();}
 
-    bool isLabel() const {return true;}
     Label * asLabel() {return this;}
 
     string toString() const {return "{@ " + v->toString() + "}";}
@@ -351,7 +331,6 @@ public:
 public:
     Ptr eval(const Ptr & a) {return a->assoc(this);}
 
-    bool isSymbol() const {return true;}
     Symbol * asSymbol() {return this;}
 
     string toString() const {
@@ -377,7 +356,6 @@ public:
 class Const : public Atom {
 public:
     virtual ~Const() {}
-    bool isConst() const {return true;}
     Const * asConst() {return this;}
 
     Ob::Ptr eval(const Ptr &a) {return this;}
@@ -387,7 +365,6 @@ public:
 class Macro : public Const {
 public:
     virtual ~Macro() {}
-    bool isMacro() const {return true;}
     Macro * asMacro() {return this;}
 };
 
@@ -407,14 +384,12 @@ public:
 
     Ptr apply(const Ptr &p, const Ptr &a) {return p->eval(a)->eval(this->a);}
 
-    bool isEvaluator() const {return true;}
     Evaluator * asEvaluator() {return this;}
 };
 
 class BaseMacro : public Macro {
 public:
     virtual ~BaseMacro(){}
-    bool isBaseMacro() const {return true;}
     BaseMacro * asBaseMacro() {return this;}
 };
 
@@ -438,7 +413,6 @@ public:
         return e->eval(new Context(sp, p, new Context(sa, new Evaluator(a), this->a)));
     }
 
-    bool isUserMacro() const {return true;}
     UserMacro * asUserMacro() {return this;}
 
     string toString() const {return "{% " + sa->toString() + ", " + sp->toString() + " . " + e->toString() + " | " + a->toString() + "}";}
@@ -449,7 +423,6 @@ protected:
     virtual Ob::Ptr applyX(const Ob::Ptr & x) = 0;
 public:
     virtual ~Function() {}
-    bool isFunction() const {return true;}
     Function * asFunction() {return this;}
 
     Ptr apply(const Ptr &p, const Ptr &a) {
@@ -473,7 +446,6 @@ public:
 class BaseFunction : public Function {
 public:
     virtual ~BaseFunction() {}
-    virtual bool isBaseFunction() const {return true;}
     virtual BaseFunction * asBaseFunction() {return this;}
 
     string toString() const {return "{BaseFunction}";}
@@ -495,7 +467,6 @@ public:
     Closure(const Ob::Ptr & _x, const Ob::Ptr & _e, const Ob::Ptr & _a)
         : x(_x), e(_e), a(_a) {}
 
-    bool isClosure() const {return true;}
     Closure * asClosure() {return this;}
 
     string toString() const {return "{\\ " + x->toString() + " . " + e->toString() + " | " + a->toString() + "}";}
@@ -504,7 +475,6 @@ public:
 class Value : public Const {
 public:
     virtual ~Value() {}
-    bool isValue() const {return true;}
     Value * asValue() {return this;}
 
     string toString() const {return "{Value}";}
