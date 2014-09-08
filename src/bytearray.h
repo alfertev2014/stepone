@@ -115,15 +115,15 @@ public:
 template <class T>
 class FSerializeBytes : public BaseFunction {
 public:
-    Ptr getTypeId() const {return TypeInfo<FSerialize<T> >::type_id;}
-    static string getTypeString() {return "FSerialize{" + cppTypeToString<T>() + "}";}
+    Ptr getTypeId() const {return TypeInfo<FSerializeBytes<T> >::type_id;}
+    static string getTypeString() {return "FSerializeBytes{" + cppTypeToString<T>() + "}";}
     string typeToString() const {return getTypeString();}
 protected:
     Ob::Ptr applyX(const Ptr &x) {
         return ByteArray::from<T>(T(x->cast<ValueType<long long> >()->getValue()));
     }
 public:
-    string toString() const {return "FSerialize{" + cppTypeToString<T>() + "}";}
+    string toString() const {return "FSerializeBytes{" + cppTypeToString<T>() + "}";}
 };
 
 template <class T>
