@@ -69,16 +69,16 @@ public:
     }
 };
 
-class FByteArrayLength : public BaseFunction {
+class FByteArrayLength : public BaseMacro {
 public:
     Ptr getTypeId() const {return TypeInfo<FByteArrayLength>::type_id;}
     static string getTypeString() {return "FByteArrayLength";}
     string typeToString() const {return getTypeString();}
-protected:
-    Ob::Ptr applyX(const Ptr &x) {
-        return new ValueType<int>(x->cast<ByteArray>()->getSize());
+
+    Ptr apply(const Ptr &p, const Ptr &a) {
+        return new ValueType<int>(p->eval(a)->cast<ByteArray>()->getSize());
     }
-public:
+
     string toString() const {return "FByteArrayLength{}";}
 };
 
@@ -99,30 +99,30 @@ public:
 };
 
 template <class T>
-class FSerialize : public BaseFunction {
+class FSerialize : public BaseMacro {
 public:
     Ptr getTypeId() const {return TypeInfo<FSerialize<T> >::type_id;}
     static string getTypeString() {return "FSerialize{" + cppTypeToString<T>() + "}";}
     string typeToString() const {return getTypeString();}
-protected:
-    Ob::Ptr applyX(const Ptr &x) {
-        return ByteArray::from<T>(x->cast<ValueType<T> >()->getValue());
+
+    Ptr apply(const Ptr &p, const Ptr &a) {
+        return ByteArray::from<T>(p->eval(a)->cast<ValueType<T> >()->getValue());
     }
-public:
+
     string toString() const {return "FSerialize{" + cppTypeToString<T>() + "}";}
 };
 
 template <class T>
-class FSerializeBytes : public BaseFunction {
+class FSerializeBytes : public BaseMacro {
 public:
     Ptr getTypeId() const {return TypeInfo<FSerializeBytes<T> >::type_id;}
     static string getTypeString() {return "FSerializeBytes{" + cppTypeToString<T>() + "}";}
     string typeToString() const {return getTypeString();}
-protected:
-    Ob::Ptr applyX(const Ptr &x) {
-        return ByteArray::from<T>(T(x->cast<ValueType<long long> >()->getValue()));
+
+    Ptr apply(const Ptr &p, const Ptr &a) {
+        return ByteArray::from<T>(T(p->eval(a)->cast<ValueType<long long> >()->getValue()));
     }
-public:
+
     string toString() const {return "FSerializeBytes{" + cppTypeToString<T>() + "}";}
 };
 

@@ -2,25 +2,25 @@
 
 #include "core.h"
 
-class FCar : public BaseFunction {
+class FCar : public BaseMacro {
 public:
     Ptr getTypeId() const {return TypeInfo<FCar>::type_id;}
     static string getTypeString() {return "FCar";}
     string typeToString() const {return getTypeString();}
-protected:
-    Ob::Ptr applyX(const Ptr &x) {return x->car();}
-public:
+
+    Ob::Ptr apply(const Ptr &p, const Ptr &a) {return p->eval(a)->car();}
+
     string toString() const {return "FCar{}";}
 };
 
-class FCdr : public BaseFunction {
+class FCdr : public BaseMacro {
 public:
     Ptr getTypeId() const {return TypeInfo<FCdr>::type_id;}
     static string getTypeString() {return "FCdr";}
     string typeToString() const {return getTypeString();}
-protected:
-    Ob::Ptr applyX(const Ptr &x) {return x->cdr();}
-public:
+
+    Ob::Ptr apply(const Ptr &p, const Ptr &a) {return p->eval(a)->cdr();}
+
     string toString() const {return "FCdr{}";}
 };
 
@@ -36,14 +36,14 @@ public:
     static string toString() {return "eq";}
 };
 
-class FGetType : public BaseFunction {
+class FGetType : public BaseMacro {
 public:
     Ptr getTypeId() const {return TypeInfo<FGetType>::type_id;}
     static string getTypeString() {return "FGetType";}
     string typeToString() const {return getTypeString();}
-protected:
-    Ptr applyX(const Ptr &x) {return x->getTypeId();}
-public:
+
+    Ptr apply(const Ptr &p, const Ptr &a) {return p->eval(a)->getTypeId();}
+
     string toString() const {return "FGetType{}";}
 };
 

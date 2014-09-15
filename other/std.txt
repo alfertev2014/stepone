@@ -1,4 +1,11 @@
 
+>- ' (% p . p)
+
+>- \ (~ a % lambda
+	% p apply ((ctx-push a (car lambda) a car p) cdr lambda) cdr p
+	)
+
+>- eval (~ a % p a a . p)
 
 >- nil ()
 
@@ -14,7 +21,7 @@
 
 
 
->- op-i-f (\iop \fop \ x \ y
+>- op-i-f (\ iop \ fop \ x \ y
 	? (i? x)
 		(? (i? y) (iop x y)
 		 ? (f? y) (fop (i2f x) y)

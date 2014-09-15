@@ -2,15 +2,15 @@
 
 #include "core.h"
 
-class MQuote : public BaseMacro {
+class MApply : public BaseMacro {
 public:
-    Ptr getTypeId() const {return TypeInfo<MQuote>::type_id;}
+    Ptr getTypeId() const {return TypeInfo<MApply>::type_id;}
 public:
     Ob::Ptr apply(const Ptr &p, const Ptr &a) {
-        return p;
+        return p->car()->eval(a)->apply(p->cdr(), a);
     }
 
-    string toString() const {return "{MQuote}";}
+    string toString() const {return "{MApply}";}
 };
 
 class MIf : public BaseMacro {
@@ -25,17 +25,6 @@ public:
     }
 
     string toString() const {return "{MIf}";}
-};
-
-class MLambda : public BaseMacro {
-public:
-    Ptr getTypeId() const {return TypeInfo<MLambda>::type_id;}
-public:
-    Ob::Ptr apply(const Ptr &p, const Ptr &a) {
-        return new Closure(p->car(), p->cdr(), a);
-    }
-
-    string toString() const {return "{MLambda}";}
 };
 
 class MLet : public BaseMacro {
@@ -88,11 +77,21 @@ public:
     Ptr getTypeId() const {return TypeInfo<MMacro>::type_id;}
 public:
     Ob::Ptr apply(const Ptr &p, const Ptr &a) {
-        Ob::Ptr p1 = p->cdr();
-        return new UserMacro(p->car(), p1->car(), p1->cdr(), a);
+        return new MacroClosure(p->car(), p->cdr(), a);
     }
 
     string toString() const {return "{MMacro}";}
+};
+
+class MCurrentContext : public BaseMacro {
+public:
+    Ptr getTypeId() const {return TypeInfo<MCurrentContext>::type_id;}
+public:
+    Ob::Ptr apply(const Ptr &p, const Ptr &a) {
+        return new CurrentContext(p->car(), p->cdr(), a);
+    }
+
+    string toString() const {return "{MCurrentContext}";}
 };
 
 class MTry : public BaseMacro {
@@ -121,17 +120,6 @@ public:
     string toString() const {return "{MBot}";}
 };
 
-class MEval : public BaseMacro {
-public:
-    Ptr getTypeId() const {return TypeInfo<MEval>::type_id;}
-public:
-    Ob::Ptr apply(const Ptr &p, const Ptr &a) {
-        return p->eval(a)->eval(a);
-    }
-
-    string toString() const {return "{MEval}";}
-};
-
 class MGenSymbol : public BaseMacro {
 public:
     Ptr getTypeId() const {return TypeInfo<MGenSymbol>::type_id;}
@@ -146,16 +134,15 @@ public:
 class BaseMacroses {
     BaseMacroses(){}
 public:
+    static const Ob::Ptr mapply;
     static const Ob::Ptr mif;
-    static const Ob::Ptr mquote;
-    static const Ob::Ptr mlambda;
     static const Ob::Ptr mlet;
     static const Ob::Ptr mlazy;
     static const Ob::Ptr munlazy;
     static const Ob::Ptr mlabel;
     static const Ob::Ptr mmacro;
+    static const Ob::Ptr mcurctx;
     static const Ob::Ptr mtry;
     static const Ob::Ptr mbot;
-    static const Ob::Ptr meval;
     static const Ob::Ptr mgensym;
 };

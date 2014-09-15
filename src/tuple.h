@@ -50,50 +50,40 @@ public:
         return res + "]";
     }
 
-    friend class MakeVectorNaryOp;
+    friend class FMakeVector;
     friend class VectorElBinOp;
 };
 
-class FVectorLength : public BaseFunction {
+class FVectorLength : public BaseMacro {
 public:
     Ptr getTypeId() const {return TypeInfo<FVectorLength>::type_id;}
     static string getTypeString() {return "FVectorLength";}
     string typeToString() const {return getTypeString();}
-protected:
-    Ob::Ptr applyX(const Ptr &x) {return new ValueType<int>(x->cast<Vector>()->getSize());}
-public:
+
+    Ptr applyX(const Ptr &p, const Ptr &a) {return new ValueType<int>(p->eval(a)->cast<Vector>()->getSize());}
+
     string toString() const {return "FVectorLength{}";}
 };
 
 
-template <class NaryOp>
-class FMakeNaryOp : public BaseFunction {
+class FMakeVector : public BaseMacro {
 public:
-    Ptr getTypeId() const {return TypeInfo<FMakeNaryOp<NaryOp> >::type_id;}
-    static string getTypeString() {return "FMakeNaryOp{" + NaryOp::toString() + "}";}
+    Ptr getTypeId() const {return TypeInfo<FMakeVector>::type_id;}
+    static string getTypeString() {return "FMakeVector";}
     string typeToString() const {return getTypeString();}
-public:
-    string toString() const {return "FMakeNaryOp{" + NaryOp::toString() + "}";}
-protected:
-    Ptr applyX(const Ptr &x) {
-        int n = x->cast<ValueType<int> >()->getValue();
-        return new FNaryOp<NaryOp>(n, n, new Pair(x, Ob::anil));
-    }
-};
 
-class MakeVectorNaryOp {
-public:
-    static Ob::Ptr op(int n, const Ob::Ptr &args) {
+    Ptr apply(const Ptr &p, const Ptr &a) {
+        int n = p->car()->eval(a)->cast<ValueType<int> >()->getValue();
         Vector * v = new Vector(n);
-        Ob::Ptr p = args;
-        for(int i = n - 1; i >= 0; --i) {
-            v->arr[i] = p->car();
-            p = p->cdr();
+        Ob::Ptr args = p->cdr();
+        for(int i = 0; i < n; ++i) {
+            v->arr[i] = args->car()->eval(a);
+            args = args->cdr();
         }
         return v;
     }
 
-    static string toString() {return "MakeVectorNaryOp";}
+    string toString() const {return "FMakeVector{}";}
 };
 
 class VectorElBinOp {

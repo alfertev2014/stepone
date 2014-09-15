@@ -143,9 +143,6 @@ class FastParser {
         pushInContext("macro?", BaseTypePredicates::fmacrop);
         pushInContext("basemacro?", BaseTypePredicates::fbasemacrop);
         pushInContext("usermacro?", BaseTypePredicates::fusermacrop);
-        pushInContext("function?", BaseTypePredicates::ffunctionp);
-        pushInContext("basefunction?", BaseTypePredicates::fbasefunctionp);
-        pushInContext("closure?", BaseTypePredicates::fclosurep);
         pushInContext("stectype?", BaseTypePredicates::fspectypep);
 
         pushInContext("ctx-get", BaseFunctions::fctxget);
@@ -162,15 +159,14 @@ class FastParser {
         a = new Context(Ob::at, Ob::at, a);
 
         pushInContext("^", BaseMacroses::mgensym);
-        pushInContext("~", BaseMacroses::meval);
+        pushInContext("~", BaseMacroses::mcurctx);
         pushInContext("_", BaseMacroses::mbot);
         pushInContext("|", BaseMacroses::mtry);
         pushInContext("$", BaseMacroses::munlazy);
         pushInContext("#", BaseMacroses::mlazy);
         pushInContext("%", BaseMacroses::mmacro);
-        pushInContext("\'", BaseMacroses::mquote);
+        pushInContext("`", BaseMacroses::mapply);
         pushInContext("@", BaseMacroses::mlabel);
-        pushInContext("\\", BaseMacroses::mlambda);
         pushInContext("?", BaseMacroses::mif);
         pushInContext(">-", BaseMacroses::mlet);
     }
@@ -215,14 +211,7 @@ private:
             ts << "(";
             return printList(ts, p->asPair());
         }
-        if(p->asFunction()) {
-            Function * f = p->asFunction();
-            if(f->asBaseFunction())
-                ts << f->toString();
-            else
-                ts << "{closure}";
-        }
-        else if(p->asLazy())
+        if(p->asLazy())
             ts << "{lazy}";
         else if(p->asLabel())
             ts << "{label}";

@@ -32,16 +32,16 @@ public:
 };
 
 template <class T1, class T2>
-class FValueTypeCast : public BaseFunction {
+class FValueTypeCast : public BaseMacro {
 public:
     Ptr getTypeId() const {return TypeInfo<FValueTypeCast>::type_id;}
     static string getTypeString() {return "FValueTypeCast";}
     string typeToString() const {return getTypeString();}
-protected:
-    Ptr applyX(const Ptr &x) {
-        return new ValueType<T2>(x->cast<ValueType<T1> >()->getValue());
+
+    Ptr apply(const Ptr &p, const Ptr &a) {
+        return new ValueType<T2>(p->eval(a)->cast<ValueType<T1> >()->getValue());
     }
-public:
+
     string toString() const {return "FValueTypeCast{" + cppTypeToString<T1>() + " -> " + cppTypeToString<T2>() + "}";}
 };
 

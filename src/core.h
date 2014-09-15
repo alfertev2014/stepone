@@ -21,10 +21,8 @@ class Const;
 class Macro;
 class Evaluator;
 class BaseMacro;
-class UserMacro;
-class Function;
-class BaseFunction;
-class Closure;
+class MacroClosure;
+class CurrentContext;
 class Value;
 
 template <class T>
@@ -110,11 +108,8 @@ public:
     virtual Macro * asMacro() {return 0;}
     virtual Evaluator * asEvaluator() {return 0;}
     virtual BaseMacro * asBaseMacro() {return 0;}
-    virtual UserMacro * asUserMacro() {return 0;}
-
-    virtual Function * asFunction() {return 0;}
-    virtual BaseFunction * asBaseFunction() {return 0;}
-    virtual Closure * asClosure() {return 0;}
+    virtual MacroClosure * asMacroClosure() {return 0;}
+    virtual CurrentContext * asCurrentContext() {return 0;}
     virtual Value * asValue() {return 0;}
 
     virtual Ptr getTypeId() const = 0;
@@ -392,83 +387,50 @@ public:
     BaseMacro * asBaseMacro() {return this;}
 };
 
-class UserMacro : public Macro {
+class MacroClosure : public Macro {
 public:
-    Ptr getTypeId() const {return TypeInfo<UserMacro>::type_id;}
-    static string getTypeString() {return "UserMacro";}
+    Ptr getTypeId() const {return TypeInfo<MacroClosure>::type_id;}
+    static string getTypeString() {return "MacroClosure";}
     string typeToString() const {return getTypeString();}
 private:
-    Ptr sa;
     Ptr sp;
     Ptr e;
     Ptr a;
 public:
-    UserMacro(const Ptr & _sa, const Ptr & _sp, const Ptr & _e, const Ptr & _a)
-        : sa(_sa), sp(_sp), e(_e), a(_a) {}
+    MacroClosure(const Ptr & _sp, const Ptr & _e, const Ptr & _a)
+        : sp(_sp), e(_e), a(_a) {}
 
-    virtual ~UserMacro(){}
-
-    Ptr apply(const Ptr &p, const Ptr &a) {
-        return e->eval(new Context(sp, p, new Context(sa, new Evaluator(a), this->a)));
-    }
-
-    UserMacro * asUserMacro() {return this;}
-
-    string toString() const {return "{% " + sa->toString() + ", " + sp->toString() + " . " + e->toString() + " | " + a->toString() + "}";}
-};
-
-class Function : public Macro {
-protected:
-    virtual Ob::Ptr applyX(const Ob::Ptr & x) = 0;
-public:
-    virtual ~Function() {}
-    Function * asFunction() {return this;}
+    virtual ~MacroClosure(){}
 
     Ptr apply(const Ptr &p, const Ptr &a) {
-        if(p == Ob::anil) return this;
-        Ptr e = applyX(p->car()->eval(a));
-        Ob::Ptr p1 = p->cdr();
-        while(!(p1 == Ob::anil)) {
-            Function * f = e->asFunction();
-            if(f == 0) {
-                return e->apply(p1, a);
-            } else {
-                e = f->applyX(p1->car()->eval(a));
-                p1 = p1->cdr();
-            }
-        }
-        return e;
+        return e->eval(new Context(sp, p, this->a));
     }
+
+    MacroClosure * asMacroClosure() {return this;}
+
+    string toString() const {return "{% " + sp->toString() + " . " + e->toString() + " | " + a->toString() + "}";}
 };
 
-
-class BaseFunction : public Function {
+class CurrentContext : public Macro {
 public:
-    virtual ~BaseFunction() {}
-    virtual BaseFunction * asBaseFunction() {return this;}
-
-    string toString() const {return "{BaseFunction}";}
-};
-
-
-class Closure : public Function {
-public:
-    Ptr getTypeId() const {return TypeInfo<Closure>::type_id;}
-    static string getTypeString() {return "Closure";}
+    Ptr getTypeId() const {return TypeInfo<CurrentContext>::type_id;}
+    static string getTypeString() {return "CurrentContext";}
     string typeToString() const {return getTypeString();}
 private:
-    Ob::Ptr x;
-    Ob::Ptr e;
-    Ob::Ptr a;
-protected:
-    Ob::Ptr applyX(const Ptr &x) {return e->eval(new Context(this->x, x, a));}
+    Ptr sa;
+    Ptr a;
+    Ptr e;
 public:
-    Closure(const Ob::Ptr & _x, const Ob::Ptr & _e, const Ob::Ptr & _a)
-        : x(_x), e(_e), a(_a) {}
+    CurrentContext(const Ptr & _sa, const Ptr & _e, const Ptr & _a)
+        : sa(_sa), e(_e), a(_a) {}
 
-    Closure * asClosure() {return this;}
+    Ptr apply(const Ptr &p, const Ptr &a) {
+        return e->eval(new Context(sa, new Evaluator(a), this->a))->apply(p, this->a);
+    }
 
-    string toString() const {return "{\\ " + x->toString() + " . " + e->toString() + " | " + a->toString() + "}";}
+    CurrentContext * asCurrentContext() {return this;}
+
+    string toString() const {return "{% " + sa->toString() + " . " + e->toString() + " | " + a->toString() + "}";}
 };
 
 class Value : public Const {
