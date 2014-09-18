@@ -2,24 +2,141 @@
 >- ' (% p . p)
 
 >- \ (~ a % lambda
-	% p apply ((ctx-push a (car lambda) a car p) cdr lambda) cdr p
-	)
+	% p ` ((ctx-push a (mcar . lambda) a mcar . p) mcdr . lambda) mcdr . p)
 
 >- eval (~ a % p a a . p)
 
+>- all-basemacro ('
+	(-i . m-i)
+	(i+ . mi+)
+	(i- . mi-)
+	(i* . mi*)
+	(i/ . mi/)
+	(i% . mi%)
+	(i? . mi?)
+	(i-not . mi-not)
+	(i-and . mi-and)
+	(i-or . mi-or)
+	(i-xor . mi-xor)
+	(i-shl . mi-shl)
+	(i-shr . mi-shr)
+	(i= . mi=)
+	(i!= . mi!=)
+	(i< . mi<)
+	(i> . mi>)
+	(i<= . mi<=)
+	(i>= . mi>=)
+
+	(u? . mu?)
+	(u-not . mu-not)
+	(u-and . mu-and)
+	(u-or . mu-or)
+	(u-xor . mu-xor)
+	(u-shl . mu-shl)
+	(u-shr . mu-shr)
+
+	(u= . mu=)
+	(u!= . mu!=)
+	(u< . mu<)
+	(u> . mu>)
+	(u<= . mu<=)
+	(u>= . mu>=)
+
+	(c? . mc?)
+	(c-not . mc-not)
+	(c-and . mc-and)
+	(c-or . mc-or)
+	(c-xor . mc-xor)
+	(c-shl . mc-shl)
+	(c-shr . mc-shr)
+	(c= . mc=)
+	(c!= . mc!=)
+	(c< . mc<)
+	(c> . mc>)
+	(c<= . mc<=)
+	(c>= . mc>=)
+
+	(-f . m-f)
+	(f+ . mf+)
+	(f- . mf-)
+	(f* . mf*)
+	(f/ . mf/)
+	(f? . mf?)
+	(f= . mf=)
+	(f!= . mf!=)
+	(f< . mf<)
+	(f> . mf>)
+	(f<= . mf<=)
+	(f>= . mf>=)
+
+	(u2i . mu2i)
+	(i2u . mi2u)
+	(f2i . mf2i)
+	(i2f . mi2f)
+	(c2i . mc2i)
+	(i2c . mi2c)
+	(c2u . mc2u)
+	(u2c . mu2c)
+
+	(vec? . mvec?)
+	(mkvec . mmkvec)
+	(vec-len . mvec-len)
+	(vecmid . mvecmid)
+	(vec-el . mvec-el)
+	(vec-cat . mvec-cat)
+
+	(b? . mb?)
+	(b-len . mb-len)
+	(b-cat . mb-cat)
+	(bmid . mbmid)
+	(i2b . mi2b)
+	(f2b . mf2b)
+	(c2b . mc2b)
+	(u1-2b . mu1-2b)
+	(u2-2b . mu2-2b)
+	(u4-2b . mu4-2b)
+	(u8-2b . mu8-2b)
+	(b-geti . mb-geti)
+	(b-getf . mb-getf)
+	(b-getc . mb-getc)
+	(b-getu1 . mb-getu1)
+	(b-getu2 . mb-getu2)
+	(b-getu4 . mb-getu4)
+	(b-getu8 . mb-getu8)
+
+	(sz-i . msz-i)
+	(sz-f . msz-f)
+	(sz-c . msz-c)
+	(sz-u . msz-u)
+
+	(pair? . mpair?)
+	(lazy? . mlazy?)
+	(label? . mlabel?)
+	(context? . mcontext?)
+	(atom? . matom?)
+	(symbol? . msymbol?)
+	(const? . mconst?)
+	(macro? . mmacro?)
+	(basemacro? . mbasemacro?)
+	(usermacro? . musermacro?)
+	(stectype? . mstectype?)
+
+	(ctx-get . mctx-get)
+	(ctx-push . mctx-push)
+	(empty-ctx . mempty-ctx)
+	(get-type . mget-type)
+	(cons . mcons)
+	(car . mcar)
+	(cdr . mcdr)
+	(eq . meq)
+	)
+
 >- nil ()
-
 >- nil? (eq ())
-
 >- not nil?
-
->- and (\ x \ y (? x y nil))
-
->- or (\ x \ y (? x x y))
-
->- xor (\ x \ y (? x (nil? y) y))
-
-
+>- and (\ x \ y (? x y . nil))
+>- or (\ x \ y (? x x . y))
+>- xor (\ x \ y (? x (nil? y) . y))
 
 >- op-i-f (\ iop \ fop \ x \ y
 	? (i? x)
@@ -33,11 +150,8 @@
 	_)
 
 >- + (op-i-f i+ f+)
-
 >- - (op-i-f i- f-)
-
 >- * (op-i-f i* f*)
-
 >- / (op-i-f i/ f/)
 
 
