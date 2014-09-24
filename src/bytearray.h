@@ -2,6 +2,8 @@
 
 #include "core.h"
 #include "typetemplates.h"
+
+#include <cstring>
 #include <sstream>
 
 
@@ -14,9 +16,7 @@ private:
     char * buffer;
     int length;
 
-    explicit ByteArray(int _n): length(_n) {
-        if(length < 0)
-            length = 0;
+    explicit ByteArray(int _n): length(_n < 0 ? 0 : _n) {
         buffer = new char[length];
     }
 
@@ -43,13 +43,29 @@ public:
         return res;
     }
 
+    int cmp(ByteArray *ba) {
+        return length > ba->length ? 1 :
+               length < ba->length ? -1 :
+               memcmp(buffer, ba->buffer, length);
+    }
+
+    int ncmp(ByteArray *ba, int n) {
+        return memcmp(buffer, ba->buffer, n);
+    }
+
+    int findChar(int begin, int ch) {
+        if(begin < 0) begin = 0;
+        if(begin >= length)
+            return -1;
+        char * res = (char *)memchr(buffer + begin, ch, length);
+        return res ? res - buffer : -1;
+    }
+
     ByteArray * concat(ByteArray * ba) const {
         int nres = length + ba->length;
         ByteArray * res = new ByteArray(nres);
-        for(int i = 0; i < length; ++i)
-            res->buffer[i] = buffer[i];
-        for(int i = 0; i < ba->length; ++i)
-            res->buffer[length + i] = ba->buffer[i];
+        memcpy(res->buffer, buffer, length);
+        memcpy(res->buffer + length, ba->buffer, ba->length);
         return res;
     }
 
@@ -60,18 +76,22 @@ public:
         return res;
     }
 
-    static ByteArray * fromChars(int n, const char * s) {
-        ByteArray * res = new ByteArray(n);
-        for(int i = 0; i < n; ++i)
-            res->buffer[i] = s[i];
+    static ByteArray * fromChars(int size, const char * chars) {
+        ByteArray * res = new ByteArray(size);
+        memcpy(res->buffer, chars, size);
         return res;
     }
 
     ByteArray * mid(int begin, int end) {
+        if(begin > length)
+            begin = length;
+        if(end > length)
+            end = length;
         int n = end - begin;
+        if(n < 0)
+            n = 0;
         ByteArray * res = new ByteArray(n);
-        for(int i = 0; i < n; ++i)
-            res->buffer[i] = buffer[begin + i];
+        memcpy(res->buffer, buffer + begin, n);
         return res;
     }
 
@@ -98,13 +118,13 @@ public:
         : array(_array), beginPtr(_array->buffer), length(_array->length) {}
 
     ByteArraySlice(ByteArray * _array, int _begin, int _length)
-        : array(_array), beginPtr(_array->buffer + _begin), length(_length) {}
+        : array(_array), beginPtr(_array->buffer + _begin), length(_length < 0 ? 0 : _length) {}
 
     ByteArraySlice(const Ptr &_array, char * _begin, int _length)
-        : array(_array), beginPtr(_begin), length(_length) {}
+        : array(_array), beginPtr(_begin), length(_length < 0 ? 0 : _length) {}
 
     ByteArraySlice(char * _begin, int _length)
-        : array(Ptr()), beginPtr(_begin), length(_length) {}
+        : array(Ptr()), beginPtr(_begin), length(_length < 0 ? 0 : _length) {}
 
     int getSize() const {return length;}
 
@@ -126,28 +146,57 @@ public:
         return res;
     }
 
+    int cmp(ByteArray *ba) {
+        return length > ba->length ? 1 :
+               length < ba->length ? -1 :
+               memcmp(beginPtr, ba->buffer, length);
+    }
+
+    int ncmp(ByteArray *ba, int n) {
+        return memcmp(beginPtr, ba->buffer, n);
+    }
+
+    int cmp(ByteArraySlice *bas) {
+        return length > bas->length ? 1 :
+               length < bas->length ? -1 :
+               memcmp(beginPtr, bas->beginPtr, length);
+    }
+
+    int ncmp(ByteArraySlice *bas, int n) {
+        return memcmp(beginPtr, bas->beginPtr, n);
+    }
+
     ByteArraySlice * concat(ByteArraySlice * bas) const {
         int nres = length + bas->length;
         if(bas->beginPtr == beginPtr + length)
             return new ByteArraySlice(array, beginPtr, nres);
         ByteArray * res = new ByteArray(nres);
-        for(int i = 0; i < length; ++i)
-            res->buffer[i] = beginPtr[i];
-        for(int i = 0; i < bas->length; ++i)
-            res->buffer[length + i] = bas->beginPtr[i];
+        memcpy(res->buffer, beginPtr, length);
+        memcpy(res->buffer + length, bas->beginPtr, bas->length);
         return new ByteArraySlice(res);
     }
 
     ByteArray * mid(int begin, int end) {
+        if(begin > length)
+            begin = length;
+        if(end > length)
+            end = length;
         int n = end - begin;
+        if(n < 0)
+            n = 0;
         ByteArray * res = new ByteArray(n);
-        for(int i = 0; i < n; ++i)
-            res->buffer[i] = beginPtr[begin + i];
+        memcpy(res->buffer, beginPtr + begin, n);
         return res;
     }
 
     ByteArraySlice * midSlice(int begin, int end) {
+        if(begin > length)
+            begin = length;
+        if(end > length)
+            end = length;
         int n = end - begin;
+        if(n < 0)
+            n = 0;
         return new ByteArraySlice(array, beginPtr + begin, n);
     }
 
@@ -215,6 +264,37 @@ public:
     string toString() const {return "FByteArraySliceCopy{}";}
 };
 
+class CompareByteArrayBinOp {
+public:
+    static Ob::Ptr op(const Ob::Ptr &x1, const Ob::Ptr &x2) {
+        return new ValueType<int>(x1->cast<ByteArray>()->cmp(x2->cast<ByteArray>()));
+    }
+    static string toString() {return "CompareByteArrayBinOp";}
+};
+
+class CompareByteArraySliceBinOp {
+public:
+    static Ob::Ptr op(const Ob::Ptr &x1, const Ob::Ptr &x2) {
+        return new ValueType<int>(x1->cast<ByteArraySlice>()->cmp(x2->cast<ByteArraySlice>()));
+    }
+    static string toString() {return "CompareByteArraySliceBinOp";}
+};
+
+class NCompareByteArrayTerOp {
+public:
+    static Ob::Ptr op(const Ob::Ptr &x1, const Ob::Ptr &x2, const Ob::Ptr &x3) {
+        return new ValueType<int>(x1->cast<ByteArray>()->ncmp(x2->cast<ByteArray>(), x3->cast<ValueType<int> >()->getValue()));
+    }
+    static string toString() {return "NCompareByteArrayTerOp";}
+};
+
+class NCompareByteArraySliceTerOp {
+public:
+    static Ob::Ptr op(const Ob::Ptr &x1, const Ob::Ptr &x2, const Ob::Ptr &x3) {
+        return new ValueType<int>(x1->cast<ByteArraySlice>()->ncmp(x2->cast<ByteArraySlice>(), x3->cast<ValueType<int> >()->getValue()));
+    }
+    static string toString() {return "NCompareByteArraySliceTerOp";}
+};
 
 
 class ConcatByteArrayBinOp {
@@ -290,12 +370,16 @@ public:
     static const Ob::Ptr fbslicep;
     static const Ob::Ptr fbarraylen;
     static const Ob::Ptr fbslicelen;
+    static const Ob::Ptr fbarraycopy;
+    static const Ob::Ptr fbslicecopy;
+    static const Ob::Ptr fbarraycmp;
+    static const Ob::Ptr fbslicecmp;
+    static const Ob::Ptr fbarrayncmp;
+    static const Ob::Ptr fbslicencmp;
     static const Ob::Ptr fbarraycat;
     static const Ob::Ptr fbslicecat;
     static const Ob::Ptr fbarraymid;
     static const Ob::Ptr fbslicemid;
-    static const Ob::Ptr fbarraycopy;
-    static const Ob::Ptr fbslicecopy;
 
     static const Ob::Ptr fserint;
     static const Ob::Ptr fserfloat;
