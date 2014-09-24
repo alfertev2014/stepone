@@ -28,6 +28,7 @@ private:
 public:
     ValueType(const T & _t) : t(_t) {}
     T getValue() const {return t;}
+    char *getValuePointer() {return reinterpret_cast<char *>(&t);}
     string toString() const {return "[" + cppTypeToString<T>() + ": " + valueToString(t) + "]";}
 };
 

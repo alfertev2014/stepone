@@ -109,24 +109,16 @@ class FastParser {
         pushInContext("vec-el", VectorFunctions::fvecel);
         pushInContext("vec-cat", VectorFunctions::fveccat);
 
-        pushInContext("b?", ByteArrayFunctions::fbytesp);
-        pushInContext("b-len", ByteArrayFunctions::fbyteslen);
-        pushInContext("b-cat", ByteArrayFunctions::fbytescat);
-        pushInContext("b-mid", ByteArrayFunctions::fbytesmid);
+        pushInContext("b?", ByteArrayFunctions::fbarrayp);
+        pushInContext("b-len", ByteArrayFunctions::fbarraylen);
+        pushInContext("b-cat", ByteArrayFunctions::fbarraycat);
+        pushInContext("b-mid", ByteArrayFunctions::fbarraymid);
         pushInContext("i2b", ByteArrayFunctions::fserint);
         pushInContext("f2b", ByteArrayFunctions::fserfloat);
         pushInContext("c2b", ByteArrayFunctions::fserchar);
-        pushInContext("u1-2b", ByteArrayFunctions::fserbyte);
-        pushInContext("u2-2b", ByteArrayFunctions::fser2bytes);
-        pushInContext("u4-2b", ByteArrayFunctions::fser4bytes);
-        pushInContext("u8-2b", ByteArrayFunctions::fser8bytes);
         pushInContext("b-geti", ByteArrayFunctions::fgetint);
         pushInContext("b-getf", ByteArrayFunctions::fgetfloat);
         pushInContext("b-getc", ByteArrayFunctions::fgetchar);
-        pushInContext("b-getu1", ByteArrayFunctions::fgetbyte);
-        pushInContext("b-getu2", ByteArrayFunctions::fget2bytes);
-        pushInContext("b-getu4", ByteArrayFunctions::fget4bytes);
-        pushInContext("b-getu8", ByteArrayFunctions::fget8bytes);
 
         pushInContext("sz-i", new ValueType<int>(sizeof(int)));
         pushInContext("sz-f", new ValueType<int>(sizeof(float)));
