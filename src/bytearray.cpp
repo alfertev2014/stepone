@@ -11,6 +11,10 @@ const Ob::Ptr ByteArrayFunctions::fbarraycmp(new FBinaryOp<CompareByteArrayBinOp
 const Ob::Ptr ByteArrayFunctions::fbslicecmp(new FBinaryOp<CompareByteArraySliceBinOp>);
 const Ob::Ptr ByteArrayFunctions::fbarrayncmp(new FTernaryOp<NCompareByteArrayTerOp>);
 const Ob::Ptr ByteArrayFunctions::fbslicencmp(new FTernaryOp<NCompareByteArraySliceTerOp>);
+const Ob::Ptr ByteArrayFunctions::fbarrayfindch(new FBinaryOp<FindCharByteArrayBinOp>);
+const Ob::Ptr ByteArrayFunctions::fbslicefindch(new FBinaryOp<FindCharByteArraySliceBinOp>);
+const Ob::Ptr ByteArrayFunctions::fbarrayfind(new FBinaryOp<FindCharsByteArrayBinOp>);
+const Ob::Ptr ByteArrayFunctions::fbslicefind(new FBinaryOp<FindCharsByteArraySliceBinOp>);
 const Ob::Ptr ByteArrayFunctions::fbarraycat(new FBinaryOp<ConcatByteArrayBinOp>);
 const Ob::Ptr ByteArrayFunctions::fbslicecat(new FBinaryOp<ConcatByteArraySliceBinOp>);
 const Ob::Ptr ByteArrayFunctions::fbarraymid(new FTernaryOp<MidByteArrayTerOp>);

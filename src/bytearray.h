@@ -53,12 +53,22 @@ public:
         return memcmp(buffer, ba->buffer, n);
     }
 
-    int findChar(int begin, int ch) {
-        if(begin < 0) begin = 0;
-        if(begin >= length)
-            return -1;
-        char * res = (char *)memchr(buffer + begin, ch, length);
+    int findChar(int ch) {
+        char * res = (char *)memchr(buffer, ch, length);
         return res ? res - buffer : -1;
+    }
+
+    int findSubarray(ByteArray *ba) {
+        char * pend = buffer + length;
+        char * needleEnd = ba->buffer + ba->length;
+        for(char *p = buffer, *needle = ba->buffer; p != pend; ++p, ++needle) {
+            if(*p != *needle) {
+                needle = ba->buffer;
+            }
+            if(needle == needleEnd)
+                return p - buffer - ba->length;
+        }
+        return -1;
     }
 
     ByteArray * concat(ByteArray * ba) const {
@@ -164,6 +174,24 @@ public:
 
     int ncmp(ByteArraySlice *bas, int n) {
         return memcmp(beginPtr, bas->beginPtr, n);
+    }
+
+    int findChar(int ch) {
+        char * res = (char *)memchr(beginPtr, ch, length);
+        return res ? res - beginPtr : -1;
+    }
+
+    int findSubarray(ByteArraySlice *bas) {
+        char * pend = beginPtr + length;
+        char * needleEnd = bas->beginPtr + bas->length;
+        for(char *p = beginPtr, *needle = bas->beginPtr; p != pend; ++p, ++needle) {
+            if(*p != *needle) {
+                needle = bas->beginPtr;
+            }
+            if(needle == needleEnd)
+                return p - beginPtr - bas->length;
+        }
+        return -1;
     }
 
     ByteArraySlice * concat(ByteArraySlice * bas) const {
@@ -296,6 +324,37 @@ public:
     static string toString() {return "NCompareByteArraySliceTerOp";}
 };
 
+class FindCharByteArrayBinOp {
+public:
+    static Ob::Ptr op(const Ob::Ptr &x1, const Ob::Ptr &x2) {
+        return new ValueType<int>(x1->cast<ByteArray>()->findChar(x2->cast<ValueType<char> >()->getValue()));
+    }
+    static string toString() {return "FindCharByteArrayBinOp";}
+};
+
+class FindCharByteArraySliceBinOp {
+public:
+    static Ob::Ptr op(const Ob::Ptr &x1, const Ob::Ptr &x2) {
+        return new ValueType<int>(x1->cast<ByteArraySlice>()->findChar(x2->cast<ValueType<char> >()->getValue()));
+    }
+    static string toString() {return "FindCharByteArraySliceBinOp";}
+};
+
+class FindCharsByteArrayBinOp {
+public:
+    static Ob::Ptr op(const Ob::Ptr &x1, const Ob::Ptr &x2) {
+        return new ValueType<int>(x1->cast<ByteArray>()->findSubarray(x2->cast<ByteArray>()));
+    }
+    static string toString() {return "FindCharsByteArrayBinOp";}
+};
+
+class FindCharsByteArraySliceBinOp {
+public:
+    static Ob::Ptr op(const Ob::Ptr &x1, const Ob::Ptr &x2) {
+        return new ValueType<int>(x1->cast<ByteArraySlice>()->findSubarray(x2->cast<ByteArraySlice>()));
+    }
+    static string toString() {return "FindCharsByteArraySliceBinOp";}
+};
 
 class ConcatByteArrayBinOp {
 public:
@@ -376,6 +435,10 @@ public:
     static const Ob::Ptr fbslicecmp;
     static const Ob::Ptr fbarrayncmp;
     static const Ob::Ptr fbslicencmp;
+    static const Ob::Ptr fbarrayfindch;
+    static const Ob::Ptr fbslicefindch;
+    static const Ob::Ptr fbarrayfind;
+    static const Ob::Ptr fbslicefind;
     static const Ob::Ptr fbarraycat;
     static const Ob::Ptr fbslicecat;
     static const Ob::Ptr fbarraymid;
