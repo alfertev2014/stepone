@@ -1,7 +1,7 @@
 #include "basenumfunc.h"
 #include "cppoperators.h"
 #include "operations.h"
-#include "typetemplates.h"
+#include "valuetype.h"
 
 const Ob::Ptr BaseNumFunc::fintNeg(new FUnaryOp<ValueTypeUnOp<int, MinusUnOp<int> > >);
 const Ob::Ptr BaseNumFunc::fintPlus(new FBinaryOp<ValueTypeBinOp<int, PlusBinOp<int> > >);

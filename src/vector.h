@@ -2,7 +2,7 @@
 
 #include "core.h"
 #include "operations.h"
-#include "typetemplates.h"
+#include "valuetype.h"
 
 class Vector : public Value {
 public:

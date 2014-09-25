@@ -3,65 +3,53 @@
 #include "core.h"
 #include "valuetype.h"
 
-#include <cstring>
-#include <sstream>
-
-
-class ByteArray : public Value {
-public:
-    Ptr getTypeId() const {return TypeInfo<ByteArray>::type_id;}
-    static string getTypeString() {return "ByteArray";}
-    string typeToString() const {return getTypeString();}
+template <class T>
+class Sequence : public Value {
 private:
-    char * buffer;
+    T * buffer;
     int length;
 
-    explicit ByteArray(int _n): length(_n < 0 ? 0 : _n) {
-        buffer = new char[length];
+    explicit Sequence(int _n): length(_n < 0 ? 0 : _n) {
+        buffer = new T[length];
     }
 
 public:
-    ~ByteArray() {delete [] buffer;}
+    ~Sequence() {delete [] buffer;}
 
     int getSize() const {return length;}
 
-    char getElement(int i) const {return buffer[i];}
+    const T * getData() const {return buffer;}
 
-    const char * getData() const {return buffer;}
-
-    string toString() const {
-        if(length <= 0) return "bytes[]";
-        stringstream ss;
-        ss << "bytes[" << length << "]";
-        return ss.str();
-    }
-
-    ByteArray * copy() {
-        ByteArray * res = new ByteArray(length);
+    Sequence * copy() {
+        Sequence * res = new Sequence(length);
         for(int i = 0; i < length; ++i)
             res->buffer[i] = buffer[i];
         return res;
     }
 
-    int cmp(ByteArray *ba) {
+    int cmp(Sequence *ba) {
         return length > ba->length ? 1 :
                length < ba->length ? -1 :
                memcmp(buffer, ba->buffer, length);
     }
 
-    int ncmp(ByteArray *ba, int n) {
+    int ncmp(Sequence *ba, int n) {
         return memcmp(buffer, ba->buffer, n);
     }
 
-    int findChar(int ch) {
-        char * res = (char *)memchr(buffer, ch, length);
-        return res ? res - buffer : -1;
+    int findChar(const T &ch) {
+        T * end = buffer + length;
+        for(T * p = buffer; p != end; ++p) {
+            if(*p == T)
+                return p - buffer;
+        }
+        return -1;
     }
 
-    int findSubarray(ByteArray *ba) {
-        char * pend = buffer + length;
-        char * needleEnd = ba->buffer + ba->length;
-        for(char *p = buffer, *needle = ba->buffer; p != pend; ++p, ++needle) {
+    int findSubarray(Sequence *ba) {
+        T * pend = buffer + length;
+        T * needleEnd = ba->buffer + ba->length;
+        for(T *p = buffer, *needle = ba->buffer; p != pend; ++p, ++needle) {
             if(*p != *needle) {
                 needle = ba->buffer;
             }
@@ -71,28 +59,30 @@ public:
         return -1;
     }
 
-    ByteArray * concat(ByteArray * ba) const {
+    Sequence * concat(Sequence * ba) const {
         int nres = length + ba->length;
-        ByteArray * res = new ByteArray(nres);
-        memcpy(res->buffer, buffer, length);
-        memcpy(res->buffer + length, ba->buffer, ba->length);
+        Sequence * res = new Sequence(nres);
+        for(int i = 0; i < length; ++i)
+            res->buffer[i] = buffer[i];
+        for(int i = 0; i < ba->length; ++i)
+            res->buffer[length + i] = ba->buffer[i];
         return res;
     }
 
-    template <class T>
-    static ByteArray * from(T f) {
-        ByteArray * res = new ByteArray(sizeof(T));
-        *(reinterpret_cast<T*>(res->buffer)) = f;
+    template <class F>
+    static Sequence * from(F f) {
+        Sequence * res = new Sequence(sizeof(F));
+        *(reinterpret_cast<F*>(res->buffer)) = f;
         return res;
     }
 
-    static ByteArray * fromChars(int size, const char * chars) {
-        ByteArray * res = new ByteArray(size);
+    static Sequence * fromChars(int size, const T * chars) {
+        Sequence * res = new Sequence(size);
         memcpy(res->buffer, chars, size);
         return res;
     }
 
-    ByteArray * mid(int begin, int end) {
+    Sequence * mid(int begin, int end) {
         if(begin > length)
             begin = length;
         if(end > length)
@@ -100,79 +90,67 @@ public:
         int n = end - begin;
         if(n < 0)
             n = 0;
-        ByteArray * res = new ByteArray(n);
-        memcpy(res->buffer, buffer + begin, n);
+        Sequence * res = new Sequence(n);
+        for(int i = 0; i < n; ++i)
+            res->buffer[i] = buffer[begin + i];
         return res;
     }
 
-    template <class T>
-    T get(int i) {
-        if(i < 0 || i + sizeof(T) > length) { DBG("Error get from bytearray");  throw SemanticError();}
-        return *(reinterpret_cast<T*>(buffer + i));
+    T &get(int i) {
+        if(i < 0 || i >= length) { DBG("Error get from bytearray");  throw SemanticError();}
+        return buffer + i;
     }
 
-    friend class ByteArraySlice;
+    friend class SequenceSlice;
 };
 
-class ByteArraySlice : public Value {
-public:
-    Ptr getTypeId() const {return TypeInfo<ByteArraySlice>::type_id;}
-    static string getTypeString() {return "ByteArraySlice";}
-    string typeToString() const {return getTypeString();}
+template <class T>
+class SequenceSlice : public Value {
 private:
     Ptr array;
-    char * beginPtr;
+    T * beginPtr;
     int length;
 public:
-    explicit ByteArraySlice(ByteArray * _array)
+    explicit SequenceSlice(Sequence * _array)
         : array(_array), beginPtr(_array->buffer), length(_array->length) {}
 
-    ByteArraySlice(ByteArray * _array, int _begin, int _length)
+    SequenceSlice(Sequence * _array, int _begin, int _length)
         : array(_array), beginPtr(_array->buffer + _begin), length(_length < 0 ? 0 : _length) {}
 
-    ByteArraySlice(const Ptr &_array, char * _begin, int _length)
+    SequenceSlice(const Ptr &_array, T * _begin, int _length)
         : array(_array), beginPtr(_begin), length(_length < 0 ? 0 : _length) {}
 
-    ByteArraySlice(char * _begin, int _length)
+    SequenceSlice(T * _begin, int _length)
         : array(Ptr()), beginPtr(_begin), length(_length < 0 ? 0 : _length) {}
 
     int getSize() const {return length;}
 
-    char getElement(int i) const {return beginPtr[i];}
+    const T * getData() const {return beginPtr;}
 
-    const char * getData() const {return beginPtr;}
-
-    string toString() const {
-        if(length <= 0) return "byteslice[]";
-        stringstream ss;
-        ss << "byteslice[" << length << "]";
-        return ss.str();
-    }
-
-    ByteArray * copy() {
-        ByteArray * res = new ByteArray(length);
+    Sequence * copy() {
+        Sequence * res = new Sequence(length);
         for(int i = 0; i < length; ++i)
             res->buffer[i] = beginPtr[i];
         return res;
     }
 
-    int cmp(ByteArray *ba) {
+    int cmp(Sequence *ba) {
         return length > ba->length ? 1 :
                length < ba->length ? -1 :
                memcmp(beginPtr, ba->buffer, length);
     }
 
-    int ncmp(ByteArray *ba, int n) {
+    int ncmp(Sequence *ba, int n) {
         return memcmp(beginPtr, ba->buffer, n);
     }
 
-    int cmp(ByteArraySlice *bas) {
+    int cmp(SequenceSlice *bas) {
         return length > bas->length ? 1 :
                length < bas->length ? -1 :
                memcmp(beginPtr, bas->beginPtr, length);
     }
 
-    int ncmp(ByteArraySlice *bas, int n) {
+    int ncmp(SequenceSlice *bas, int n) {
         return memcmp(beginPtr, bas->beginPtr, n);
     }
 
@@ -181,7 +159,7 @@ public:
         return res ? res - beginPtr : -1;
     }
 
-    int findSubarray(ByteArraySlice *bas) {
+    int findSubarray(SequenceSlice *bas) {
         char * pend = beginPtr + length;
         char * needleEnd = bas->beginPtr + bas->length;
         for(char *p = beginPtr, *needle = bas->beginPtr; p != pend; ++p, ++needle) {
@@ -194,17 +172,17 @@ public:
         return -1;
     }
 
-    ByteArraySlice * concat(ByteArraySlice * bas) const {
+    SequenceSlice * concat(SequenceSlice * bas) const {
         int nres = length + bas->length;
         if(bas->beginPtr == beginPtr + length)
-            return new ByteArraySlice(array, beginPtr, nres);
-        ByteArray * res = new ByteArray(nres);
+            return new SequenceSlice(array, beginPtr, nres);
+        Sequence * res = new Sequence(nres);
         memcpy(res->buffer, beginPtr, length);
         memcpy(res->buffer + length, bas->beginPtr, bas->length);
-        return new ByteArraySlice(res);
+        return new SequenceSlice(res);
     }
 
-    ByteArray * mid(int begin, int end) {
+    Sequence * mid(int begin, int end) {
         if(begin > length)
             begin = length;
         if(end > length)
@@ -212,12 +190,13 @@ public:
         int n = end - begin;
         if(n < 0)
             n = 0;
-        ByteArray * res = new ByteArray(n);
-        memcpy(res->buffer, beginPtr + begin, n);
+        Sequence * res = new Sequence(n);
+        for(int i = 0; i < n; ++i)
+            res->buffer[i] = beginPtr[begin + i];
         return res;
     }
 
-    ByteArraySlice * midSlice(int begin, int end) {
+    SequenceSlice * midSlice(int begin, int end) {
         if(begin > length)
             begin = length;
         if(end > length)
@@ -225,18 +204,12 @@ public:
         int n = end - begin;
         if(n < 0)
             n = 0;
-        return new ByteArraySlice(array, beginPtr + begin, n);
+        return new SequenceSlice(array, beginPtr + begin, n);
     }
 
-    template <class T>
-    static ByteArraySlice * fromValue(ValueType<T> *f) {
-        return new ByteArraySlice(f, f->getValuePointer(), sizeof(T));
-    }
-
-    template <class T>
-    T get(int i) {
-        if(i < 0 || i + sizeof(T) > length) { DBG("Error get from bytearrayslice");  throw SemanticError();}
-        return *((T*)(beginPtr + i));
+    T &get(int i) {
+        if(i < 0 || i >= length) { DBG("Error get from bytearrayslice");  throw SemanticError();}
+        return beginPtr + i;
     }
 };
 
@@ -396,7 +369,7 @@ public:
     string typeToString() const {return getTypeString();}
 
     Ptr apply(const Ptr &p, const Ptr &a) {
-        return ByteArraySlice::fromValue<T>(p->eval(a)->cast<ValueType<T> >());
+        return SequenceSlice::fromValue<T>(p->eval(a)->cast<ValueType<T> >());
     }
 
     string toString() const {return "FSerialize{" + cppTypeToString<T>() + "}";}
