@@ -42,7 +42,7 @@ public:
                 cout << "line " << i << ": >>  " << s << endl;
                 try {
                 res = fp.evalToString(s);
-                } catch (int e) {
+                } catch (const SemanticError &e) {
                     exc = true;
                     res = ";fail";
                 }

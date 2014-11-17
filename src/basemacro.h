@@ -2,6 +2,17 @@
 
 #include "core.h"
 
+class MQuote : public BaseMacro {
+public:
+    Ptr getTypeId() const {return TypeInfo<MQuote>::type_id;}
+public:
+    Ob::Ptr apply(const Ptr &p, const Ptr &a) {
+        return p;
+    }
+
+    string toString() const {return "{MQuote}";}
+};
+
 class MApply : public BaseMacro {
 public:
     Ptr getTypeId() const {return TypeInfo<MApply>::type_id;}
@@ -72,6 +83,17 @@ public:
     string toString() const {return "{MLabel}";}
 };
 
+class MLambda : public BaseMacro {
+public:
+    Ptr getTypeId() const {return TypeInfo<MLambda>::type_id;}
+public:
+    Ob::Ptr apply(const Ptr &p, const Ptr &a) {
+        return new Closure(p->car(), p->cdr(), a);
+    }
+
+    string toString() const {return "{MLambda}";}
+};
+
 class MMacro : public BaseMacro {
 public:
     Ptr getTypeId() const {return TypeInfo<MMacro>::type_id;}
@@ -131,18 +153,32 @@ public:
     string toString() const {return "{MGenSymbol}";}
 };
 
+class MGetType : public BaseMacro {
+public:
+    Ptr getTypeId() const {return TypeInfo<MGetType>::type_id;}
+public:
+    Ob::Ptr apply(const Ptr &p, const Ptr &a) {
+        return p->eval(a)->getTypeId();
+    }
+
+    string toString() const {return "{MGetType}";}
+};
+
 class BaseMacroses {
     BaseMacroses(){}
 public:
+    static const Ob::Ptr mquote;
     static const Ob::Ptr mapply;
     static const Ob::Ptr mif;
     static const Ob::Ptr mlet;
     static const Ob::Ptr mlazy;
     static const Ob::Ptr munlazy;
     static const Ob::Ptr mlabel;
+    static const Ob::Ptr mlambda;
     static const Ob::Ptr mmacro;
     static const Ob::Ptr mcurctx;
     static const Ob::Ptr mtry;
     static const Ob::Ptr mbot;
     static const Ob::Ptr mgensym;
+    static const Ob::Ptr mgettype;
 };

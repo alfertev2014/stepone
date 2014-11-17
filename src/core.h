@@ -21,6 +21,7 @@ class Const;
 class Macro;
 class Evaluator;
 class BaseMacro;
+class Closure;
 class MacroClosure;
 class CurrentContext;
 class Value;
@@ -108,6 +109,7 @@ public:
     virtual Macro * asMacro() {return 0;}
     virtual Evaluator * asEvaluator() {return 0;}
     virtual BaseMacro * asBaseMacro() {return 0;}
+    virtual Closure * asClosure() {return 0;}
     virtual MacroClosure * asMacroClosure() {return 0;}
     virtual CurrentContext * asCurrentContext() {return 0;}
     virtual Value * asValue() {return 0;}
@@ -387,6 +389,30 @@ public:
     BaseMacro * asBaseMacro() {return this;}
 };
 
+class Closure : public Macro {
+public:
+    Ptr getTypeId() const {return TypeInfo<Closure>::type_id;}
+    static string getTypeString() {return "Closure";}
+    string typeToString() const {return getTypeString();}
+private:
+    Ptr sp;
+    Ptr e;
+    Ptr a;
+public:
+    Closure(const Ptr & _sp, const Ptr & _e, const Ptr & _a)
+        : sp(_sp), e(_e), a(_a) {}
+
+    Ptr apply(const Ptr &p, const Ptr &a) {
+        if(p == Ob::anil)
+            return this;
+        return e->eval(new Context(sp, p->car()->eval(a), this->a))->apply(p->cdr(), a);
+    }
+
+    Closure * asClosure() {return this;}
+
+    string toString() const {return "{\\ " + sp->toString() + " . " + e->toString() + " | " + a->toString() + "}";}
+};
+
 class MacroClosure : public Macro {
 public:
     Ptr getTypeId() const {return TypeInfo<MacroClosure>::type_id;}
@@ -399,8 +425,6 @@ private:
 public:
     MacroClosure(const Ptr & _sp, const Ptr & _e, const Ptr & _a)
         : sp(_sp), e(_e), a(_a) {}
-
-    virtual ~MacroClosure(){}
 
     Ptr apply(const Ptr &p, const Ptr &a) {
         return e->eval(new Context(sp, p, this->a));
@@ -418,8 +442,8 @@ public:
     string typeToString() const {return getTypeString();}
 private:
     Ptr sa;
-    Ptr a;
     Ptr e;
+    Ptr a;
 public:
     CurrentContext(const Ptr & _sa, const Ptr & _e, const Ptr & _a)
         : sa(_sa), e(_e), a(_a) {}

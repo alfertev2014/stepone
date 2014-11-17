@@ -17,6 +17,7 @@ public:
         //cout << "Please, load the initial library" << endl;
         FastParser fp;
 
+        /*
         string libfilename = "../other/initlib.txt"; // hardcoded!!!
         //getline(cin, libfilename);
         ifstream initlibfile(libfilename.c_str());
@@ -32,7 +33,7 @@ public:
             //cout << "initlib:" << endl << lib << endl;
             fp.loadInitLibrary(lib);
             cout << "initlib was loaded" << endl;
-        }
+        }*/
 
         TestFastParser tfp(fp);
         tfp.test_all();

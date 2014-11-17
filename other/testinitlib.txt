@@ -1,0 +1,13 @@
+;Проверка начальной библиотеки
+
+(list-eval (' (nil? ()) (nil? 1) (and () ()) (and () t) (and t ()) (and t t) (or () ()) (or t ()) (or () t) (or t t)))
+(t () () () () t () t t t)
+
+(listi+ (' 1 2 3 4 5 6))
+21
+
+(listi- (' 6 5 4 3 2 1))
+-9
+
+(list-map (\ x cons x nil) (' a b c d))
+((a) (b) (c) (d))

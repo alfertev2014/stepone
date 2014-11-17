@@ -60,7 +60,7 @@ public:
     static string getTypeString() {return "FVectorLength";}
     string typeToString() const {return getTypeString();}
 
-    Ptr applyX(const Ptr &p, const Ptr &a) {return new ValueType<int>(p->eval(a)->cast<Vector>()->getSize());}
+    Ptr apply(const Ptr &p, const Ptr &a) {return new ValueType<int>(p->eval(a)->cast<Vector>()->getSize());}
 
     string toString() const {return "FVectorLength{}";}
 };
