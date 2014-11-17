@@ -111,8 +111,14 @@ class FastParser {
 
         pushInContext("b?", ByteArrayFunctions::fbarrayp);
         pushInContext("b-len", ByteArrayFunctions::fbarraylen);
+        pushInContext("b-clone", ByteArrayFunctions::fbarrayclone);
+        pushInContext("b-cmp", ByteArrayFunctions::fbarraycmp);
+        pushInContext("b-ncmp", ByteArrayFunctions::fbarrayncmp);
+        pushInContext("b-findch", ByteArrayFunctions::fbarrayfindch);
+        pushInContext("b-find", ByteArrayFunctions::fbarrayfind);
         pushInContext("b-cat", ByteArrayFunctions::fbarraycat);
         pushInContext("b-mid", ByteArrayFunctions::fbarraymid);
+        pushInContext("b-slice", ByteArrayFunctions::fbarrayslice);
         pushInContext("i2b", ByteArrayFunctions::fserint);
         pushInContext("f2b", ByteArrayFunctions::fserfloat);
         pushInContext("c2b", ByteArrayFunctions::fserchar);

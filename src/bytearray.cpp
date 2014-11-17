@@ -2,23 +2,15 @@
 #include "operations.h"
 
 const Ob::Ptr ByteArrayFunctions::fbarrayp(new FTypeP<ByteArray>);
-const Ob::Ptr ByteArrayFunctions::fbslicep(new FTypeP<ByteArraySlice>);
 const Ob::Ptr ByteArrayFunctions::fbarraylen(new FByteArrayLength);
-const Ob::Ptr ByteArrayFunctions::fbslicelen(new FByteArraySliceLength);
-const Ob::Ptr ByteArrayFunctions::fbarraycopy(new FByteArrayCopy);
-const Ob::Ptr ByteArrayFunctions::fbslicecopy(new FByteArraySliceCopy);
+const Ob::Ptr ByteArrayFunctions::fbarrayclone(new FByteArrayClone);
 const Ob::Ptr ByteArrayFunctions::fbarraycmp(new FBinaryOp<CompareByteArrayBinOp>);
-const Ob::Ptr ByteArrayFunctions::fbslicecmp(new FBinaryOp<CompareByteArraySliceBinOp>);
 const Ob::Ptr ByteArrayFunctions::fbarrayncmp(new FTernaryOp<NCompareByteArrayTerOp>);
-const Ob::Ptr ByteArrayFunctions::fbslicencmp(new FTernaryOp<NCompareByteArraySliceTerOp>);
 const Ob::Ptr ByteArrayFunctions::fbarrayfindch(new FBinaryOp<FindCharByteArrayBinOp>);
-const Ob::Ptr ByteArrayFunctions::fbslicefindch(new FBinaryOp<FindCharByteArraySliceBinOp>);
 const Ob::Ptr ByteArrayFunctions::fbarrayfind(new FBinaryOp<FindCharsByteArrayBinOp>);
-const Ob::Ptr ByteArrayFunctions::fbslicefind(new FBinaryOp<FindCharsByteArraySliceBinOp>);
 const Ob::Ptr ByteArrayFunctions::fbarraycat(new FBinaryOp<ConcatByteArrayBinOp>);
-const Ob::Ptr ByteArrayFunctions::fbslicecat(new FBinaryOp<ConcatByteArraySliceBinOp>);
 const Ob::Ptr ByteArrayFunctions::fbarraymid(new FTernaryOp<MidByteArrayTerOp>);
-const Ob::Ptr ByteArrayFunctions::fbslicemid(new FTernaryOp<MidByteArraySliceTerOp>);
+const Ob::Ptr ByteArrayFunctions::fbarrayslice(new FTernaryOp<SliceByteArrayTerOp>);
 
 
 const Ob::Ptr ByteArrayFunctions::fserint(new FSerialize<int>);
