@@ -201,5 +201,61 @@ t
 "[f[f[f[f[f[f["
 "[f[f[f[f[f[f["
 
-(b-cat "asdf" "ghjk")
+(b-cat "asdf" . "ghjk")
 "asdfghjk"
+
+(b-len . "sdfghjkl")
+8
+
+(b-mid "sdfjhkl" 3 . 6)
+"jhk"
+
+(b-slice "sdfjhkl" 3 . 6)
+"jhk"
+
+; Проверка символов
+
+&" "
+&" "
+
+&""
+&""
+
+(c= &"g" . &"g")
+t
+
+(c= &"g" . &"f")
+()
+
+(c!= &"g" . &"g")
+()
+
+(c!= &"g" . &"f")
+t
+
+; Поиск в строках
+
+(b-findch "sdfghjkl" . &"s")
+0
+
+(b-findch "sdfghfjkl" . &"f")
+2
+
+(b-findch "sdfghjkl" . &"l")
+7
+
+(b-findch "sdfghjkl" . &"b")
+-1
+
+(b-find "asdfghjk" . "asdf")
+0
+
+(b-find "asdfghjk" . "dfgh")
+2
+
+(b-find "asdfghjk" . "hjk")
+5
+
+(b-find "asdfghjk" . "asf")
+-1
+

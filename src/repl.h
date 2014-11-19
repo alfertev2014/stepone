@@ -35,8 +35,8 @@ public:
             cout << "initlib was loaded" << endl;
         }*/
 
-        TestFastParser tfp(fp);
-        tfp.test_all();
+        TestEngine tfp(fp);
+        tfp.test_from_file("../other/test.txt"); // hardcoded!!!
 
         while(true) {
             cout << "alz> ";

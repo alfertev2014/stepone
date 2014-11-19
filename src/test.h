@@ -9,29 +9,20 @@
 
 using namespace std;
 
-class TestFastParser {
+class TestEngine {
     FastParser fp;
-
-
-    void test_eq(string e, string res, string mes) {
-        if(fp.evalToString(e) != res) {
-            cout << mes << endl;
-            throw SemanticError();
-        }
-    }
 public:
-    TestFastParser(const FastParser & _fp) :fp(_fp){}
+    TestEngine(const FastParser & _fp) :fp(_fp){}
 
-    void test_all() {
-        test_from_file();
-        cout << "all tests has done!" << endl << endl;
-    }
-
-    void test_from_file() {
-        string fname("../other/test.txt"); // hardcoded!!!
+    void test_from_file(const string &fname) {
+        cout << "_______________________________________________________________________________________________" << endl;
+        cout << "===============================================================================================" << endl;
+        cout << "Open test file " << fname << endl;
         ifstream testfile(fname.c_str());
-        if(!testfile.is_open())
-            cout << "Couldn\'t open " << fname << endl;
+        if(!testfile.is_open()) {
+            cout << "Can\'t open " << fname << endl;
+            return;
+        }
         string s;
         string res;
         int i = 0;
@@ -56,5 +47,7 @@ public:
                 i++;
             }
         }
+        cout << "All tests in file " << fname << " done" << endl;
+        cout << "===============================================================================================" << endl << endl;
     }
 };

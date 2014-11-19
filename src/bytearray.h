@@ -34,7 +34,10 @@ public:
     ByteArray(char * _begin, int _length)
         : array(Ptr()), buffer(_begin), length(_length < 0 ? 0 : _length) {}
 
-    ~ByteArray() {delete [] buffer;}
+    ~ByteArray() {
+        if(array == Ob::anil)
+            delete [] buffer;
+    }
 
     int getSize() const {return length;}
 
@@ -74,12 +77,22 @@ public:
     int findSubarray(ByteArray *ba) {
         char * pend = buffer + length;
         char * needleEnd = ba->buffer + ba->length;
-        for(char *p = buffer, *needle = ba->buffer; p != pend; ++p, ++needle) {
-            if(*p != *needle) {
-                needle = ba->buffer;
-            }
+        char *p = buffer, *needle = ba->buffer;
+        while(true) {
             if(needle == needleEnd)
                 return p - buffer - ba->length;
+            if(p == pend)
+                return -1;
+            if(*p != *needle) {
+                needle = ba->buffer;
+                while(*p != *needle) {
+                    if(p == pend)
+                        return -1;
+                    ++p;
+                }
+            }
+            ++needle;
+            ++p;
         }
         return -1;
     }
