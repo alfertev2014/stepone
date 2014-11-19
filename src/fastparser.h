@@ -109,6 +109,13 @@ class FastParser {
         pushInContext("vec-el", VectorFunctions::fvecel);
         pushInContext("vec-cat", VectorFunctions::fveccat);
 
+        pushInContext("input?", IOFunctions::finputp);
+        pushInContext("output?", IOFunctions::foutputp);
+        pushInContext("open-in", IOFunctions::fopenin);
+        pushInContext("open-out", IOFunctions::fopenout);
+        pushInContext("read", IOFunctions::fread);
+        pushInContext("write", IOFunctions::fwrite);
+
         pushInContext("b?", ByteArrayFunctions::fbarrayp);
         pushInContext("b-len", ByteArrayFunctions::fbarraylen);
         pushInContext("b-clone", ByteArrayFunctions::fbarrayclone);

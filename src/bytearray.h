@@ -17,11 +17,12 @@ private:
     char * buffer;
     int length;
 
+
+public:
     explicit ByteArray(int _n): length(_n < 0 ? 0 : _n) {
         buffer = new char[length];
     }
 
-public:
     explicit ByteArray(ByteArray * _array)
         : array(_array), buffer(_array->buffer), length(_array->length) {}
 
@@ -32,7 +33,7 @@ public:
         : array(_array), buffer(_begin), length(_length < 0 ? 0 : _length) {}
 
     ByteArray(char * _begin, int _length)
-        : array(Ptr()), buffer(_begin), length(_length < 0 ? 0 : _length) {}
+        : array(Ob::at), buffer(_begin), length(_length < 0 ? 0 : _length) {}
 
     ~ByteArray() {
         if(array == Ob::anil)
@@ -43,7 +44,7 @@ public:
 
     char getElement(int i) const {return buffer[i];}
 
-    const char * getData() const {return buffer;}
+    char * getData() const {return buffer;}
 
     string toString() const {
         if(length <= 0) return "bytes[]";
