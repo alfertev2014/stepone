@@ -119,6 +119,18 @@ t
 (i> 2 . 2)
 ()
 
+(i< -1 . 54)
+t
+
+(i> 54455 . 234)
+t
+
+(i< 544543 . 334)
+()
+
+(i> 434 . 54343)
+()
+
 ; Проверка операций с векторами
 
 (mkvec 3 1 2 3)
@@ -258,6 +270,53 @@ t
 
 (b-find "asdfghjk" . "asf")
 -1
+
+; Сравнение строк
+
+(b-cmp "12345678" . "12345678")
+0
+
+(i< (b-cmp "a" . "b") . 0)
+t
+
+(i> (b-cmp "bbbbb". "aaaaa") . 0)
+t
+
+(i< (b-cmp "asdf". "asdfg") . 0)
+t
+
+(i> (b-cmp "asdfg" . "asdf") . 0)
+t
+
+(i> (b-cmp "asvf" . "asdfg") . 0)
+t
+
+(i< (b-cmp "asdfg" . "asvf") . 0)
+t
+
+(i< (b-cmp "" . "sdfgjk") . 0)
+t
+
+(i> (b-cmp "asdffgf" . "") . 0)
+t
+
+(b-cmp "" . "")
+0
+
+(b-ncmp "asdfghjk" "asdfghjk" . 6)
+0
+
+(b-ncmp "asdfghtk" "asdfghjk" . 6)
+0
+
+(i> (b-ncmp "axdfghjk" "asdfghjk" . 6) . 0)
+t
+
+(i< (b-ncmp "aadfghjk" "asdfghjk" . 6) . 0)
+t
+
+(b-ncmp "" "" . 0)
+0
 
 ; Проверка чтения файлов
 

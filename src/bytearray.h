@@ -61,9 +61,11 @@ public:
     }
 
     int cmp(ByteArray *ba) {
-        return length > ba->length ? 1 :
-               length < ba->length ? -1 :
-               memcmp(buffer, ba->buffer, length);
+        int len = min(length, ba->length);
+        int res = memcmp(buffer, ba->buffer, len);
+        if(res == 0)
+            return len < ba->length ? -1 : len < length ? 1 : 0;
+        return res;
     }
 
     int ncmp(ByteArray *ba, int n) {

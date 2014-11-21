@@ -21,10 +21,10 @@ const Ob::Ptr BaseNumFunc::fintshr(new FBinaryOp<ValueTypeBinOp<int, BitSHRBinOp
 
 const Ob::Ptr BaseNumFunc::fintEql(new FBinaryOp<ValueTypeCmpOp<int, EqlCmpOp<int> > >);
 const Ob::Ptr BaseNumFunc::fintNE(new FBinaryOp<ValueTypeCmpOp<int, NECmpOp<int> > >);
-const Ob::Ptr BaseNumFunc::fintGT(new FBinaryOp<ValueTypeCmpOp<int, LTCmpOp<int> > >);
-const Ob::Ptr BaseNumFunc::fintLT(new FBinaryOp<ValueTypeCmpOp<int, GTCmpOp<int> > >);
-const Ob::Ptr BaseNumFunc::fintGE(new FBinaryOp<ValueTypeCmpOp<int, LECmpOp<int> > >);
-const Ob::Ptr BaseNumFunc::fintLE(new FBinaryOp<ValueTypeCmpOp<int, GECmpOp<int> > >);
+const Ob::Ptr BaseNumFunc::fintGT(new FBinaryOp<ValueTypeCmpOp<int, GTCmpOp<int> > >);
+const Ob::Ptr BaseNumFunc::fintLT(new FBinaryOp<ValueTypeCmpOp<int, LTCmpOp<int> > >);
+const Ob::Ptr BaseNumFunc::fintGE(new FBinaryOp<ValueTypeCmpOp<int, GECmpOp<int> > >);
+const Ob::Ptr BaseNumFunc::fintLE(new FBinaryOp<ValueTypeCmpOp<int, LECmpOp<int> > >);
 
 const Ob::Ptr BaseNumFunc::flongp(new FTypeP<ValueType<long long> >);
 const Ob::Ptr BaseNumFunc::flongand(new FBinaryOp<ValueTypeBinOp<long long, BitAndBinOp<long long> > >);
@@ -78,7 +78,7 @@ const Ob::Ptr BaseNumFunc::fcharshr(new FBinaryOp<ValueTypeBinOp<char, BitSHRBin
 
 const Ob::Ptr BaseNumFunc::fcharEql(new FBinaryOp<ValueTypeCmpOp<char, EqlCmpOp<char> > >);
 const Ob::Ptr BaseNumFunc::fcharNE(new FBinaryOp<ValueTypeCmpOp<char, NECmpOp<char> > >);
-const Ob::Ptr BaseNumFunc::fcharGT(new FBinaryOp<ValueTypeCmpOp<char, LTCmpOp<char> > >);
-const Ob::Ptr BaseNumFunc::fcharLT(new FBinaryOp<ValueTypeCmpOp<char, GTCmpOp<char> > >);
-const Ob::Ptr BaseNumFunc::fcharGE(new FBinaryOp<ValueTypeCmpOp<char, LECmpOp<char> > >);
-const Ob::Ptr BaseNumFunc::fcharLE(new FBinaryOp<ValueTypeCmpOp<char, GECmpOp<char> > >);
+const Ob::Ptr BaseNumFunc::fcharGT(new FBinaryOp<ValueTypeCmpOp<char, GTCmpOp<char> > >);
+const Ob::Ptr BaseNumFunc::fcharLT(new FBinaryOp<ValueTypeCmpOp<char, LTCmpOp<char> > >);
+const Ob::Ptr BaseNumFunc::fcharGE(new FBinaryOp<ValueTypeCmpOp<char, GECmpOp<char> > >);
+const Ob::Ptr BaseNumFunc::fcharLE(new FBinaryOp<ValueTypeCmpOp<char, LECmpOp<char> > >);
