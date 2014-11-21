@@ -28,7 +28,7 @@ public:
 private:
     ofstream stream;
 public:
-    OutputDescriptor(const char * fname) : stream(fname) {
+    OutputDescriptor(const char * fname) : stream(fname, ios_base::app) {
         if(!stream.is_open())
             throw SemanticError();
     }

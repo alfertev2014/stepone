@@ -259,3 +259,7 @@ t
 (b-find "asdfghjk" . "asf")
 -1
 
+; Проверка чтения файлов
+
+(>- in (open-in . "../other/testfile.txt") read in . 26)
+"testfile for testing file "
