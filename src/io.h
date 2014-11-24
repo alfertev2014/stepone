@@ -5,73 +5,94 @@
 #include "operations.h"
 #include "fstream"
 
-class InputDescriptor : public Value {
+class IOStreamDescriptor : public Value {
 public:
-    const TypeInfoBase * getTypeInfo() const {return &TypeInfo<InputDescriptor>::instance;}
-    static string getTypeString() {return "InputDescriptor";}
+    const TypeInfoBase * getTypeInfo() const {return &TypeInfo<IOStreamDescriptor>::instance;}
+    static string getTypeString() {return "IOStreamDescriptor";}
 private:
     ifstream stream;
 public:
-    InputDescriptor(const char * fname) : stream(fname) {
-        if(!stream.is_open())
-            throw SemanticError();
-    }
-    ifstream &getStream() {return stream;}
+    virtual iostream &getStream() {throw SemanticError();}
+    virtual istream &getInputStream() {throw SemanticError();}
+    virtual ostream &getOutputStream() {throw SemanticError();}
 };
 
-class OutputDescriptor : public Value {
+class StdIn : public IOStreamDescriptor {
 public:
-    const TypeInfoBase * getTypeInfo() const {return &TypeInfo<OutputDescriptor>::instance;}
-    static string getTypeString() {return "OutputDescriptor";}
-private:
-    ofstream stream;
+    istream &getInputStream() {return cin;}
+};
+
+class StdOut : public IOStreamDescriptor {
 public:
-    OutputDescriptor(const char * fname) : stream(fname, ios_base::app) {
+    ostream &getOutputStream() {return cout;}
+};
+
+class StdErr : public IOStreamDescriptor {
+public:
+    ostream &getOutputStream() {return cerr;}
+};
+
+class FileDescriptor : public IOStreamDescriptor {
+protected:
+    fstream stream;
+public:
+    FileDescriptor(const char * fname, ios_base::openmode mode) : stream(fname, mode) {
         if(!stream.is_open())
             throw SemanticError();
     }
-    ofstream &getStream() {return stream;}
+    iostream &getStream() {return stream;}
+    void close() {stream.close();}
+};
+
+class FileInputDescriptor : public FileDescriptor {
+public:
+    FileInputDescriptor(const char * fname) : FileDescriptor(fname, ios_base::in) {}
+    istream &getInputStream() {return stream;}
+};
+
+class FileOutputDescriptor : public FileDescriptor {
+public:
+    FileOutputDescriptor(const char * fname) : FileDescriptor(fname, ios_base::out | ios_base::app) {}
+    ostream &getOutputStream() {return stream;}
 };
 
 class InputOpenUnOp {
 public:
     static Ob::Ptr op(const Ob::Ptr &x) {
-        ByteArray * ba = x->cast<ByteArray>();
-        return new InputDescriptor(ba->getData());
+        return new FileInputDescriptor(x->cast<ByteArray>()->getData());
     }
-    static string toString() {return "InputOpenUnOp";}
+    static string toString() {return "open-in";}
 };
 
 class OutputOpenUnOp {
 public:
     static Ob::Ptr op(const Ob::Ptr &x) {
-        ByteArray * ba = x->cast<ByteArray>();
-        return new OutputDescriptor(ba->getData());
+        return new FileOutputDescriptor(x->cast<ByteArray>()->getData());
     }
-    static string toString() {return "OutputOpenUnOp";}
+    static string toString() {return "open-out";}
 };
 
 class ReadBinOp {
 public:
     static Ob::Ptr op(const Ob::Ptr &x1, const Ob::Ptr &x2) {
-        InputDescriptor *in = x1->cast<InputDescriptor>();
+        istream &in = x1->cast<IOStreamDescriptor>()->getInputStream();
         int size = x2->cast<ValueType<int> >()->getValue();
         ByteArray *res = new ByteArray(size);
-        in->getStream().read(res->getData(), size);
+        in.read(res->getData(), size);
         return res;
     }
-    static string toString() {return "ReadBinOp";}
+    static string toString() {return "read";}
 };
 
 class WriteBinOp {
 public:
     static Ob::Ptr op(const Ob::Ptr &x1, const Ob::Ptr &x2) {
-        OutputDescriptor *out = x1->cast<OutputDescriptor>();
+        ostream &out = x1->cast<IOStreamDescriptor>()->getOutputStream();
         ByteArray * ba = x2->cast<ByteArray>();
-        out->getStream().write(ba->getData(), ba->getSize());
+        out.write(ba->getData(), ba->getSize());
         return new ValueType<int>(ba->getSize());
     }
-    static string toString() {return "WriteBinOp";}
+    static string toString() {return "write";}
 };
 
 

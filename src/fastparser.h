@@ -117,6 +117,9 @@ class FastParser {
         pushInContext("open-out", IOFunctions::fopenout);
         pushInContext("read", IOFunctions::fread);
         pushInContext("write", IOFunctions::fwrite);
+        pushInContext("stdin", new StdIn());
+        pushInContext("stdout", new StdOut());
+        pushInContext("stderr", new StdErr());
 
         pushInContext("b?", ByteArrayFunctions::fbarrayp);
         pushInContext("b-len", ByteArrayFunctions::fbarraylen);
