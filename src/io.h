@@ -7,9 +7,8 @@
 
 class InputDescriptor : public Value {
 public:
-    Ptr getTypeId() const {return TypeInfo<InputDescriptor>::type_id;}
+    const TypeInfoBase * getTypeInfo() const {return &TypeInfo<InputDescriptor>::instance;}
     static string getTypeString() {return "InputDescriptor";}
-    string typeToString() const {return getTypeString();}
 private:
     ifstream stream;
 public:
@@ -22,9 +21,8 @@ public:
 
 class OutputDescriptor : public Value {
 public:
-    Ptr getTypeId() const {return TypeInfo<OutputDescriptor>::type_id;}
+    const TypeInfoBase * getTypeInfo() const {return &TypeInfo<OutputDescriptor>::instance;}
     static string getTypeString() {return "OutputDescriptor";}
-    string typeToString() const {return getTypeString();}
 private:
     ofstream stream;
 public:

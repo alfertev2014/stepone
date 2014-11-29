@@ -9,14 +9,12 @@
 
 class ByteArray : public Value {
 public:
-    Ptr getTypeId() const {return TypeInfo<ByteArray>::type_id;}
+    const TypeInfoBase * getTypeInfo() const {return &TypeInfo<ByteArray>::instance;}
     static string getTypeString() {return "ByteArray";}
-    string typeToString() const {return getTypeString();}
 private:
     Ptr array;
     char * buffer;
     int length;
-
 
 public:
     explicit ByteArray(int _n): length(_n < 0 ? 0 : _n) {
@@ -153,30 +151,20 @@ public:
 };
 
 
-class FByteArrayLength : public BaseMacro {
+class ByteArrayLengthUnOp {
 public:
-    Ptr getTypeId() const {return TypeInfo<FByteArrayLength>::type_id;}
-    static string getTypeString() {return "FByteArrayLength";}
-    string typeToString() const {return getTypeString();}
-
-    Ptr apply(const Ptr &p, const Ptr &a) {
-        return new ValueType<int>(p->eval(a)->cast<ByteArray>()->getSize());
+    static Ob::Ptr op(const Ob::Ptr &x) {
+        return new ValueType<int>(x->cast<ByteArray>()->getSize());
     }
-
-    string toString() const {return "FByteArrayLength{}";}
+    static string toString() {return "b-length";}
 };
 
-class FByteArrayClone : public BaseMacro {
+class ByteArrayCloneUnOp {
 public:
-    Ptr getTypeId() const {return TypeInfo<FByteArrayClone>::type_id;}
-    static string getTypeString() {return "FByteArrayClone";}
-    string typeToString() const {return getTypeString();}
-
-    Ptr apply(const Ptr &p, const Ptr &a) {
-        return p->eval(a)->cast<ByteArray>()->clone();
+    static Ob::Ptr op(const Ob::Ptr &x) {
+        return x->cast<ByteArray>()->clone();
     }
-
-    string toString() const {return "FByteArrayCopy{}";}
+    static string toString() {return "b-clone";}
 };
 
 class CompareByteArrayBinOp {
@@ -184,7 +172,7 @@ public:
     static Ob::Ptr op(const Ob::Ptr &x1, const Ob::Ptr &x2) {
         return new ValueType<int>(x1->cast<ByteArray>()->cmp(x2->cast<ByteArray>()));
     }
-    static string toString() {return "CompareByteArrayBinOp";}
+    static string toString() {return "b-cmp";}
 };
 
 class NCompareByteArrayTerOp {
@@ -192,7 +180,7 @@ public:
     static Ob::Ptr op(const Ob::Ptr &x1, const Ob::Ptr &x2, const Ob::Ptr &x3) {
         return new ValueType<int>(x1->cast<ByteArray>()->ncmp(x2->cast<ByteArray>(), x3->cast<ValueType<int> >()->getValue()));
     }
-    static string toString() {return "NCompareByteArrayTerOp";}
+    static string toString() {return "b-ncmp";}
 };
 
 class FindCharByteArrayBinOp {
@@ -200,7 +188,7 @@ public:
     static Ob::Ptr op(const Ob::Ptr &x1, const Ob::Ptr &x2) {
         return new ValueType<int>(x1->cast<ByteArray>()->findChar(x2->cast<ValueType<char> >()->getValue()));
     }
-    static string toString() {return "FindCharByteArrayBinOp";}
+    static string toString() {return "b-findch";}
 };
 
 class FindCharsByteArrayBinOp {
@@ -208,7 +196,7 @@ public:
     static Ob::Ptr op(const Ob::Ptr &x1, const Ob::Ptr &x2) {
         return new ValueType<int>(x1->cast<ByteArray>()->findSubarray(x2->cast<ByteArray>()));
     }
-    static string toString() {return "FindCharsByteArrayBinOp";}
+    static string toString() {return "b-find";}
 };
 
 class ConcatByteArrayBinOp {
@@ -216,7 +204,7 @@ public:
     static Ob::Ptr op(const Ob::Ptr &x1, const Ob::Ptr &x2) {
         return x1->cast<ByteArray>()->concat(x2->cast<ByteArray>());
     }
-    static string toString() {return "ConcatByteArrayBinOp";}
+    static string toString() {return "b-cat";}
 };
 
 class MidByteArrayTerOp {
@@ -224,7 +212,7 @@ public:
     static Ob::Ptr op(const Ob::Ptr &x1, const Ob::Ptr &x2, const Ob::Ptr &x3) {
         return x1->cast<ByteArray>()->mid(x2->cast<ValueType<int> >()->getValue(), x3->cast<ValueType<int> >()->getValue());
     }
-    static string toString() {return "MidByteArrayTerOp";}
+    static string toString() {return "b-mid";}
 };
 
 class SliceByteArrayTerOp {
@@ -232,21 +220,16 @@ public:
     static Ob::Ptr op(const Ob::Ptr &x1, const Ob::Ptr &x2, const Ob::Ptr &x3) {
         return x1->cast<ByteArray>()->slice(x2->cast<ValueType<int> >()->getValue(), x3->cast<ValueType<int> >()->getValue());
     }
-    static string toString() {return "SliceByteArrayTerOp";}
+    static string toString() {return "b-slice";}
 };
 
 template <class T>
-class FSerialize : public BaseMacro {
+class SerializeUnOp {
 public:
-    Ptr getTypeId() const {return TypeInfo<FSerialize<T> >::type_id;}
-    static string getTypeString() {return "FSerialize{" + cppTypeToString<T>() + "}";}
-    string typeToString() const {return getTypeString();}
-
-    Ptr apply(const Ptr &p, const Ptr &a) {
-        return ByteArray::from<T>(p->eval(a)->cast<ValueType<T> >()->getValue());
+    static Ob::Ptr op(const Ob::Ptr &x) {
+        return ByteArray::from<T>(x->cast<ValueType<T> >()->getValue());
     }
-
-    string toString() const {return "FSerialize{" + cppTypeToString<T>() + "}";}
+    static string toString() {return "ser{" + cppTypeToString<T>() + "}";}
 };
 
 template <class T>
@@ -255,7 +238,7 @@ public:
     static Ob::Ptr op(const Ob::Ptr &x1, const Ob::Ptr &x2) {
         return new ValueType<T>(x1->cast<ByteArray>()->get<T>(x2->cast<ValueType<int> >()->getValue()));
     }
-    static string toString() {return "ByteArrayGetBinOp{" + cppTypeToString<T>() + "}";}
+    static string toString() {return "b-get{" + cppTypeToString<T>() + "}";}
 };
 
 

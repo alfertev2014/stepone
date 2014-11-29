@@ -13,4 +13,3 @@ const Ob::Ptr BaseMacroses::mcurctx(new MCurrentContext());
 const Ob::Ptr BaseMacroses::mtry(new MTry());
 const Ob::Ptr BaseMacroses::mbot(new MBot());
 const Ob::Ptr BaseMacroses::mgensym(new MGenSymbol());
-const Ob::Ptr BaseMacroses::mgettype(new MGetType());

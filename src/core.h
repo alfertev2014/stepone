@@ -8,6 +8,7 @@
 
 using namespace std;
 
+class Ob;
 
 class Pair;
 class Atom;
@@ -25,6 +26,8 @@ class Closure;
 class MacroClosure;
 class CurrentContext;
 class Value;
+
+class TypeInfoBase;
 
 template <class T>
 class TypeInfo;
@@ -114,37 +117,44 @@ public:
     virtual CurrentContext * asCurrentContext() {return 0;}
     virtual Value * asValue() {return 0;}
 
-    virtual Ptr getTypeId() const = 0;
+    virtual const TypeInfoBase * getTypeInfo() const = 0;
 
     template <class T>
-    T * as() {return TypeInfo<T>::type_id == getTypeId() ? dynamic_cast<T*>(this) : 0;}
+    T * as() {return &TypeInfo<T>::instance == getTypeInfo() ? dynamic_cast<T*>(this) : 0;}
 
     template <class T>
-    bool is() const {return TypeInfo<T>::type_id == getTypeId();}
+    bool is() const {return &TypeInfo<T>::instance == getTypeInfo();}
 
     template <class T>
     T * cast() {
-        if(TypeInfo<T>::type_id == getTypeId())
+        if(&TypeInfo<T>::instance == getTypeInfo())
             return dynamic_cast<T*>(this);
         DBG("error cast"); throw SemanticError();
     }
 
     // Методы для отладки
-    virtual string toString() const {return "{ob}";}
-    virtual string typeToString() const {return "Ob";}
+    string typeToString() const;
+    virtual string toString() const {return "{" + typeToString() + "}";}
+};
+
+class TypeInfoBase {
+public:
+    TypeInfoBase();
+    const Ob::Ptr type_id;
+    virtual string getTypeString() const = 0;
 };
 
 template <class T>
-class TypeInfo {
+class TypeInfo : public TypeInfoBase {
 public:
-    static const Ob::Ptr type_id;
+    static const TypeInfo<T> instance;
+    string getTypeString() const {return T::getTypeString();}
 };
 
 class Pair : public Ob {
 public:
-    Ptr getTypeId() const {return TypeInfo<Pair>::type_id;}
+    const TypeInfoBase * getTypeInfo() const {return &TypeInfo<Pair>::instance;}
     static string getTypeString() {return "Pair";}
-    string typeToString() const {return getTypeString();}
 private:
     Ptr pcar;
     Ptr pcdr;
@@ -188,9 +198,8 @@ public:
 
 class Context : public Ob {
 public:
-    Ptr getTypeId() const {return TypeInfo<Context>::type_id;}
+    const TypeInfoBase * getTypeInfo() const {return &TypeInfo<Context>::instance;}
     static string getTypeString() {return "Context";}
-    string typeToString() const {return getTypeString();}
 private:
     Ptr s;
     Ptr e;
@@ -237,9 +246,8 @@ public:
 
 class Lazy : public Ob {
 public:
-    Ptr getTypeId() const {return TypeInfo<Lazy>::type_id;}
+    const TypeInfoBase * getTypeInfo() const {return &TypeInfo<Lazy>::instance;}
     static string getTypeString() {return "Lazy";}
-    string typeToString() const {return getTypeString();}
 private:
     Ptr e;
     Ptr a;
@@ -283,9 +291,8 @@ public:
 
 class Label : public Ob {
 public:
-    Ptr getTypeId() const {return TypeInfo<Label>::type_id;}
+    const TypeInfoBase * getTypeInfo() const {return &TypeInfo<Label>::instance;}
     static string getTypeString() {return "Label";}
-    string typeToString() const {return getTypeString();}
 private:
     Ob * v;
 
@@ -321,9 +328,8 @@ public:
 
 class Symbol : public Atom {
 public:
-    Ptr getTypeId() const {return TypeInfo<Symbol>::type_id;}
+    const TypeInfoBase * getTypeInfo() const {return &TypeInfo<Symbol>::instance;}
     static string getTypeString() {return "Symbol";}
-    string typeToString() const {return getTypeString();}
 public:
     Ptr eval(const Ptr & a) {return a->assoc(this);}
 
@@ -366,9 +372,8 @@ public:
 
 class Evaluator : public Macro {
 public:
-    Ptr getTypeId() const {return TypeInfo<Evaluator>::type_id;}
+    const TypeInfoBase * getTypeInfo() const {return &TypeInfo<Evaluator>::instance;}
     static string getTypeString() {return "Evaluator";}
-    string typeToString() const {return getTypeString();}
 private:
     Ptr a;
 public:
@@ -391,9 +396,8 @@ public:
 
 class Closure : public Macro {
 public:
-    Ptr getTypeId() const {return TypeInfo<Closure>::type_id;}
+    const TypeInfoBase * getTypeInfo() const {return &TypeInfo<Closure>::instance;}
     static string getTypeString() {return "Closure";}
-    string typeToString() const {return getTypeString();}
 private:
     Ptr sp;
     Ptr e;
@@ -415,9 +419,8 @@ public:
 
 class MacroClosure : public Macro {
 public:
-    Ptr getTypeId() const {return TypeInfo<MacroClosure>::type_id;}
+    const TypeInfoBase * getTypeInfo() const {return &TypeInfo<MacroClosure>::instance;}
     static string getTypeString() {return "MacroClosure";}
-    string typeToString() const {return getTypeString();}
 private:
     Ptr sp;
     Ptr e;
@@ -437,9 +440,8 @@ public:
 
 class CurrentContext : public Macro {
 public:
-    Ptr getTypeId() const {return TypeInfo<CurrentContext>::type_id;}
+    const TypeInfoBase * getTypeInfo() const {return &TypeInfo<CurrentContext>::instance;}
     static string getTypeString() {return "CurrentContext";}
-    string typeToString() const {return getTypeString();}
 private:
     Ptr sa;
     Ptr e;
@@ -461,9 +463,7 @@ class Value : public Const {
 public:
     virtual ~Value() {}
     Value * asValue() {return this;}
-
-    string toString() const {return "{Value}";}
 };
 
 template <class T>
-const Ob::Ptr TypeInfo<T>::type_id(new Symbol);
+const TypeInfo<T> TypeInfo<T>::instance;

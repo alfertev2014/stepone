@@ -17,3 +17,9 @@ const Ob::Ptr Ob::aeval(new Symbol);
 const Ob::Ptr Ob::agensym(new Symbol);
 
 const Ob::Ptr Evaluator::eempty(new Evaluator(Ob::anil));
+
+
+string Ob::typeToString() const {return getTypeInfo()->getTypeString();}
+
+
+TypeInfoBase::TypeInfoBase() : type_id(new Symbol) {}

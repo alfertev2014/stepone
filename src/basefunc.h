@@ -2,26 +2,16 @@
 
 #include "core.h"
 
-class FCar : public BaseMacro {
+class CarUnOp {
 public:
-    Ptr getTypeId() const {return TypeInfo<FCar>::type_id;}
-    static string getTypeString() {return "FCar";}
-    string typeToString() const {return getTypeString();}
-
-    Ob::Ptr apply(const Ptr &p, const Ptr &a) {return p->eval(a)->car();}
-
-    string toString() const {return "FCar{}";}
+    static Ob::Ptr op(const Ob::Ptr &x) {return x->car();}
+    static string toString() {return "car";}
 };
 
-class FCdr : public BaseMacro {
+class CdrUnOp {
 public:
-    Ptr getTypeId() const {return TypeInfo<FCdr>::type_id;}
-    static string getTypeString() {return "FCdr";}
-    string typeToString() const {return getTypeString();}
-
-    Ob::Ptr apply(const Ptr &p, const Ptr &a) {return p->eval(a)->cdr();}
-
-    string toString() const {return "FCdr{}";}
+    static Ob::Ptr op(const Ob::Ptr &x) {return x->cdr();}
+    static string toString() {return "cdr";}
 };
 
 class ConsBinOp {
@@ -36,15 +26,10 @@ public:
     static string toString() {return "eq";}
 };
 
-class FGetType : public BaseMacro {
+class GetTypeUnOp {
 public:
-    Ptr getTypeId() const {return TypeInfo<FGetType>::type_id;}
-    static string getTypeString() {return "FGetType";}
-    string typeToString() const {return getTypeString();}
-
-    Ptr apply(const Ptr &p, const Ptr &a) {return p->eval(a)->getTypeId();}
-
-    string toString() const {return "FGetType{}";}
+    static Ob::Ptr op(const Ob::Ptr &x) {return x->getTypeInfo()->type_id;}
+    static string toString() {return "get-type";}
 };
 
 class ContextGetBinOp {

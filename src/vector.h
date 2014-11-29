@@ -1,14 +1,12 @@
 #pragma once
 
 #include "core.h"
-#include "operations.h"
 #include "valuetype.h"
 
 class Vector : public Value {
 public:
-    Ptr getTypeId() const {return TypeInfo<Vector>::type_id;}
+    const TypeInfoBase * getTypeInfo() const {return &TypeInfo<Vector>::instance;}
     static string getTypeString() {return "Vector";}
-    string typeToString() const {return getTypeString();}
 private:
     int n;
     Ob::Ptr * arr;
@@ -54,23 +52,16 @@ public:
     friend class VectorElBinOp;
 };
 
-class FVectorLength : public BaseMacro {
+class VectorLengthUnOp {
 public:
-    Ptr getTypeId() const {return TypeInfo<FVectorLength>::type_id;}
-    static string getTypeString() {return "FVectorLength";}
-    string typeToString() const {return getTypeString();}
-
-    Ptr apply(const Ptr &p, const Ptr &a) {return new ValueType<int>(p->eval(a)->cast<Vector>()->getSize());}
-
-    string toString() const {return "FVectorLength{}";}
+    static Ob::Ptr op(const Ob::Ptr &x) {return new ValueType<int>(x->cast<Vector>()->getSize());}
+    static string toString() {return "vec-len";}
 };
-
 
 class FMakeVector : public BaseMacro {
 public:
-    Ptr getTypeId() const {return TypeInfo<FMakeVector>::type_id;}
+    const TypeInfoBase * getTypeInfo() const {return &TypeInfo<FMakeVector>::instance;}
     static string getTypeString() {return "FMakeVector";}
-    string typeToString() const {return getTypeString();}
 
     Ptr apply(const Ptr &p, const Ptr &a) {
         int n = p->car()->eval(a)->cast<ValueType<int> >()->getValue();
@@ -82,8 +73,6 @@ public:
         }
         return v;
     }
-
-    string toString() const {return "FMakeVector{}";}
 };
 
 class VectorElBinOp {
@@ -91,7 +80,6 @@ public:
     static Ob::Ptr op(const Ob::Ptr &x1, const Ob::Ptr &x2) {
         return x1->cast<Vector>()->arr[x2->cast<ValueType<int> >()->getValue()];
     }
-
     static string toString() {return "VectorElBinOp";}
 };
 
@@ -100,7 +88,6 @@ public:
     static Ob::Ptr op(const Ob::Ptr &x1, const Ob::Ptr &x2) {
         return x1->cast<Vector>()->concat(x2->cast<Vector>());
     }
-
     static string toString() {return "VectorConcatBinOp";}
 };
 
@@ -109,7 +96,6 @@ public:
     static Ob::Ptr op(const Ob::Ptr &x1, const Ob::Ptr &x2, const Ob::Ptr &x3) {
         return x1->cast<Vector>()->mid(x2->cast<ValueType<int> >()->getValue(), x3->cast<ValueType<int> >()->getValue());
     }
-
     static string toString() {return "VectorMidTerOp";}
 };
 

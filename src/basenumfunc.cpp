@@ -55,17 +55,17 @@ const Ob::Ptr BaseNumFunc::ffloatLT(new FBinaryOp<ValueTypeCmpOp<float, LTCmpOp<
 const Ob::Ptr BaseNumFunc::ffloatGE(new FBinaryOp<ValueTypeCmpOp<float, GECmpOp<float> > >);
 const Ob::Ptr BaseNumFunc::ffloatLE(new FBinaryOp<ValueTypeCmpOp<float, LECmpOp<float> > >);
 
-const Ob::Ptr BaseNumFunc::fint2long(new FValueTypeCast<int, long long>);
-const Ob::Ptr BaseNumFunc::flong2int(new FValueTypeCast<long long, int>);
+const Ob::Ptr BaseNumFunc::fint2long(new FUnaryOp<ValueTypeCastUnOp<int, long long> >);
+const Ob::Ptr BaseNumFunc::flong2int(new FUnaryOp<ValueTypeCastUnOp<long long, int> >);
 
-const Ob::Ptr BaseNumFunc::ffloat2int(new FValueTypeCast<float, int>);
-const Ob::Ptr BaseNumFunc::fint2float(new FValueTypeCast<int, float>);
+const Ob::Ptr BaseNumFunc::ffloat2int(new FUnaryOp<ValueTypeCastUnOp<float, int> >);
+const Ob::Ptr BaseNumFunc::fint2float(new FUnaryOp<ValueTypeCastUnOp<int, float> >);
 
-const Ob::Ptr BaseNumFunc::fchar2int(new FValueTypeCast<char, long long>);
-const Ob::Ptr BaseNumFunc::fint2char(new FValueTypeCast<long long, char>);
+const Ob::Ptr BaseNumFunc::fchar2int(new FUnaryOp<ValueTypeCastUnOp<char, long long> >);
+const Ob::Ptr BaseNumFunc::fint2char(new FUnaryOp<ValueTypeCastUnOp<long long, char> >);
 
-const Ob::Ptr BaseNumFunc::fchar2long(new FValueTypeCast<char, int>);
-const Ob::Ptr BaseNumFunc::flong2char(new FValueTypeCast<int, char>);
+const Ob::Ptr BaseNumFunc::fchar2long(new FUnaryOp<ValueTypeCastUnOp<char, int> >);
+const Ob::Ptr BaseNumFunc::flong2char(new FUnaryOp<ValueTypeCastUnOp<int, char> >);
 
 const Ob::Ptr BaseNumFunc::fcharp(new FTypeP<ValueType<char> >);
 const Ob::Ptr BaseNumFunc::fcharand(new FBinaryOp<ValueTypeBinOp<char, BitAndBinOp<char> > >);

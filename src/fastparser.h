@@ -148,7 +148,7 @@ class FastParser {
         pushInContext("macro?", BaseTypePredicates::fmacrop);
         pushInContext("basemacro?", BaseTypePredicates::fbasemacrop);
         pushInContext("usermacro?", BaseTypePredicates::fusermacrop);
-        pushInContext("spectype?", BaseTypePredicates::fspectypep);
+        pushInContext("spectype?", BaseTypePredicates::fvaluep);
 
         pushInContext("ctx-get", BaseFunctions::fctxget);
         pushInContext("ctx-push", BaseFunctions::fctxpush);
@@ -163,7 +163,6 @@ class FastParser {
         symbolTable.insert(pair<string, Ob::Ptr>("t", Ob::at));
         a = new Context(Ob::at, Ob::at, a);
 
-        pushInContext("get-type", BaseMacroses::mgettype);
         pushInContext("^", BaseMacroses::mgensym);
         pushInContext("~", BaseMacroses::mcurctx);
         pushInContext("_", BaseMacroses::mbot);

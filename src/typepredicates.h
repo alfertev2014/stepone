@@ -2,136 +2,76 @@
 
 #include "core.h"
 
-class FPairP : public BaseMacro {
+class PairPUnOp {
 public:
-    Ptr getTypeId() const {return TypeInfo<FPairP>::type_id;}
-    static string getTypeString() {return "FPairP";}
-    string typeToString() const {return getTypeString();}
-
-    Ptr apply(const Ptr &p, const Ptr &a) {return p->eval(a)->asPair() ? Ob::at : Ob::anil;}
-
-    string toString() const {return "FPairP";}
+    static Ob::Ptr op(const Ob::Ptr &x) {return x->asPair() ? Ob::at : Ob::anil;}
+    static string toString() {return "pair?";}
 };
 
-class FLazyP : public BaseMacro {
+class LazyPUnOp {
 public:
-    Ptr getTypeId() const {return TypeInfo<FLazyP>::type_id;}
-    static string getTypeString() {return "FLazyP";}
-    string typeToString() const {return getTypeString();}
-
-    Ptr apply(const Ptr &p, const Ptr &a) {return p->eval(a)->asLazy() ? Ob::at : Ob::anil;}
-
-    string toString() const {return "FLazyP";}
+    static Ob::Ptr op(const Ob::Ptr &x) {return x->asLazy() ? Ob::at : Ob::anil;}
+    static string toString() {return "lazy?";}
 };
 
-class FLabelP : public BaseMacro {
+class LabelPUnOp {
 public:
-    Ptr getTypeId() const {return TypeInfo<FLabelP>::type_id;}
-    static string getTypeString() {return "FLabelP";}
-    string typeToString() const {return getTypeString();}
-
-    Ptr apply(const Ptr &p, const Ptr &a) {return p->eval(a)->asLabel() ? Ob::at : Ob::anil;}
-
-    string toString() const {return "FLabelP";}
+    static Ob::Ptr op(const Ob::Ptr &x) {return x->asLabel() ? Ob::at : Ob::anil;}
+    static string toString() {return "label?";}
 };
 
-class FContextP : public BaseMacro {
+class ContextPUnOp {
 public:
-    Ptr getTypeId() const {return TypeInfo<FContextP>::type_id;}
-    static string getTypeString() {return "FContextP";}
-    string typeToString() const {return getTypeString();}
-
-    Ptr apply(const Ptr &p, const Ptr &a) {return p->eval(a)->asContext() ? Ob::at : Ob::anil;}
-
-    string toString() const {return "FContextP";}
+    static Ob::Ptr op(const Ob::Ptr &x) {return x->asContext() ? Ob::at : Ob::anil;}
+    static string toString() {return "ctx?";}
 };
 
-class FAtomP : public BaseMacro {
+class AtomPUnOp {
 public:
-    Ptr getTypeId() const {return TypeInfo<FAtomP>::type_id;}
-    static string getTypeString() {return "FAtomP";}
-    string typeToString() const {return getTypeString();}
-
-    Ptr apply(const Ptr &p, const Ptr &a) {return p->eval(a)->asAtom() ? Ob::at : Ob::anil;}
-
-    string toString() const {return "FAtomP";}
+    static Ob::Ptr op(const Ob::Ptr &x) {return x->asAtom() ? Ob::at : Ob::anil;}
+    static string toString() {return "atom?";}
 };
 
-class FSymbolP : public BaseMacro {
+class SymbolPUnOp {
 public:
-    Ptr getTypeId() const {return TypeInfo<FSymbolP>::type_id;}
-    static string getTypeString() {return "FSymbolP";}
-    string typeToString() const {return getTypeString();}
-
-    Ptr apply(const Ptr &p, const Ptr &a) {return p->eval(a)->asSymbol() ? Ob::at : Ob::anil;}
-
-    string toString() const {return "FSymbolP";}
+    static Ob::Ptr op(const Ob::Ptr &x) {return x->asSymbol() ? Ob::at : Ob::anil;}
+    static string toString() {return "symbol?";}
 };
 
-class FConstP : public BaseMacro {
+class ConstPUnOp {
 public:
-    Ptr getTypeId() const {return TypeInfo<FConstP>::type_id;}
-    static string getTypeString() {return "FConstP";}
-    string typeToString() const {return getTypeString();}
-
-    Ptr apply(const Ptr &p, const Ptr &a) {return p->eval(a)->asConst() ? Ob::at : Ob::anil;}
-
-    string toString() const {return "FConstP";}
+    static Ob::Ptr op(const Ob::Ptr &x) {return x->asConst() ? Ob::at : Ob::anil;}
+    static string toString() {return "const?";}
 };
 
-class FMacroP : public BaseMacro {
+class MacroPUnOp {
 public:
-    Ptr getTypeId() const {return TypeInfo<FMacroP>::type_id;}
-    static string getTypeString() {return "FMacroP";}
-    string typeToString() const {return getTypeString();}
-
-    Ptr apply(const Ptr &p, const Ptr &a) {return p->eval(a)->asMacro() ? Ob::at : Ob::anil;}
-
-    string toString() const {return "FMacroP";}
+    static Ob::Ptr op(const Ob::Ptr &x) {return x->asMacro() ? Ob::at : Ob::anil;}
+    static string toString() {return "macro?";}
 };
 
-class FEvaluatorP : public BaseMacro {
+class EvaluatorPUnOp {
 public:
-    Ptr getTypeId() const {return TypeInfo<FEvaluatorP>::type_id;}
-    static string getTypeString() {return "FEvaluatorP";}
-    string typeToString() const {return getTypeString();}
-
-    Ptr apply(const Ptr &p, const Ptr &a) {return p->eval(a)->asEvaluator() ? Ob::at : Ob::anil;}
-
-    string toString() const {return "FEvaluatorP";}
+    static Ob::Ptr op(const Ob::Ptr &x) {return x->asEvaluator() ? Ob::at : Ob::anil;}
+    static string toString() {return "evaluator?";}
 };
 
-class FBaseMacroP : public BaseMacro {
+class BaseMacroPUnOp {
 public:
-    Ptr getTypeId() const {return TypeInfo<FBaseMacroP>::type_id;}
-    static string getTypeString() {return "FBaseMacroP";}
-    string typeToString() const {return getTypeString();}
-
-    Ptr apply(const Ptr &p, const Ptr &a) {return p->eval(a)->asBaseMacro() ? Ob::at : Ob::anil;}
-
-    string toString() const {return "FBaseMacroP";}
+    static Ob::Ptr op(const Ob::Ptr &x) {return x->asBaseMacro() ? Ob::at : Ob::anil;}
+    static string toString() {return "base-macro?";}
 };
 
-class FUserMacroP : public BaseMacro {
+class UserMacroPUnOp {
 public:
-    Ptr getTypeId() const {return TypeInfo<FUserMacroP>::type_id;}
-    static string getTypeString() {return "FUserMacroP";}
-    string typeToString() const {return getTypeString();}
-
-    Ptr apply(const Ptr &p, const Ptr &a) {return p->eval(a)->asMacroClosure() ? Ob::at : Ob::anil;}
-
-    string toString() const {return "FUserMacroP";}
+    static Ob::Ptr op(const Ob::Ptr &x) {return x->asMacroClosure() ? Ob::at : Ob::anil;}
+    static string toString() {return "user-macro?";}
 };
 
-class FSpecTypeP : public BaseMacro {
+class ValuePUnOp {
 public:
-    Ptr getTypeId() const {return TypeInfo<FSpecTypeP>::type_id;}
-    static string getTypeString() {return "FSpecTypeP";}
-    string typeToString() const {return getTypeString();}
-
-    Ptr apply(const Ptr &p, const Ptr &a) {return p->eval(a)->asValue() ? Ob::at : Ob::anil;}
-
-    string toString() const {return "FSpecTypeP";}
+    static Ob::Ptr op(const Ob::Ptr &x) {return x->asValue() ? Ob::at : Ob::anil;}
+    static string toString() {return "value?";}
 };
 
 
@@ -149,5 +89,5 @@ public:
     static const Ob::Ptr fevalp;
     static const Ob::Ptr fbasemacrop;
     static const Ob::Ptr fusermacrop;
-    static const Ob::Ptr fspectypep;
+    static const Ob::Ptr fvaluep;
 };
