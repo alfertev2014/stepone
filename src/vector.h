@@ -7,20 +7,33 @@ public:
     const TypeInfoBase * getTypeInfo() const {return &TypeInfo<Vector>::instance;}
     static string getTypeString() {return "Vector";}
 private:
+    Ptr origin;
     Ptr * array;
     int length;
 
-    Vector(int _length): length(_length) {
+    Vector(int _length): origin(Ob::anil), length(_length) {
         // array is not initialized
         // allocate memory, don't call constructor Ptr()
         array = reinterpret_cast<Ptr*>(new char[length * sizeof(Ptr)]);
     }
 public:
+    explicit Vector(Vector * _origin)
+        : origin(_origin), array(_origin->array), length(_origin->length) {}
+
+    Vector(Vector * _origin, int _begin, int _length)
+        : origin(_origin), array(_origin->array + _begin), length(_length < 0 ? 0 : _length) {}
+
+    Vector(const Ptr &_origin, Ptr * _begin, int _length)
+        : origin(_origin), array(_begin), length(_length < 0 ? 0 : _length) {}
+
+
     ~Vector() {
-        // manual call destructor ~Ptr()
-        for(int i = 0; i < length; ++i)
-            array[i].~Ptr();
-        delete [] reinterpret_cast<char*>(array);
+        if(origin == Ob::anil) {
+            // manual call destructor ~Ptr()
+            for(int i = 0; i < length; ++i)
+                array[i].~Ptr();
+            delete [] reinterpret_cast<char*>(array);
+        }
     }
 
     int getSize() const {return length;}
@@ -34,6 +47,13 @@ public:
             new (res->array + i) Ptr(p->car()->eval(a));
             p = p->cdr();
         }
+        return res;
+    }
+
+    Vector * clone() {
+        Vector * res = new Vector(length);
+        for(int i = 0; i < length; ++i)
+            new (res->array + i) Ptr(array[i]);
         return res;
     }
 
@@ -57,6 +77,14 @@ public:
         for(int i = 0; i < nres; ++i)
             new (res->array + i) Ptr(array[begin + i]);
         return res;
+    }
+
+    Vector * slice(int begin, int end) {
+        if(begin < 0 || end >= length) {
+            DBG("vector index out of range");
+            throw SemanticError();
+        }
+        return new Vector(this, begin, end - begin);
     }
 
     string toString() const {
@@ -93,7 +121,15 @@ public:
     static Ob::Ptr op(const Ob::Ptr &x1, const Ob::Ptr &x2) {
         return x1->cast<Vector>()->array[x2->cast<ValueType<int> >()->getValue()];
     }
-    static string toString() {return "VectorElBinOp";}
+    static string toString() {return "vec-el";}
+};
+
+class VectorCloneUnOp {
+public:
+    static Ob::Ptr op(const Ob::Ptr &x) {
+        return x->cast<Vector>()->clone();
+    }
+    static string toString() {return "vec-clone";}
 };
 
 class VectorConcatBinOp {
@@ -101,7 +137,7 @@ public:
     static Ob::Ptr op(const Ob::Ptr &x1, const Ob::Ptr &x2) {
         return x1->cast<Vector>()->concat(x2->cast<Vector>());
     }
-    static string toString() {return "VectorConcatBinOp";}
+    static string toString() {return "vec-cat";}
 };
 
 class VectorMidTerOp {
@@ -109,7 +145,15 @@ public:
     static Ob::Ptr op(const Ob::Ptr &x1, const Ob::Ptr &x2, const Ob::Ptr &x3) {
         return x1->cast<Vector>()->mid(x2->cast<ValueType<int> >()->getValue(), x3->cast<ValueType<int> >()->getValue());
     }
-    static string toString() {return "VectorMidTerOp";}
+    static string toString() {return "vec-mid";}
+};
+
+class VectorSliceTerOp {
+public:
+    static Ob::Ptr op(const Ob::Ptr &x1, const Ob::Ptr &x2, const Ob::Ptr &x3) {
+        return x1->cast<Vector>()->mid(x2->cast<ValueType<int> >()->getValue(), x3->cast<ValueType<int> >()->getValue());
+    }
+    static string toString() {return "vec-slice";}
 };
 
 class VectorFunctions {
@@ -117,8 +161,10 @@ class VectorFunctions {
 public:
     static const Ob::Ptr fvecp;
     static const Ob::Ptr fmkvec;
+    static const Ob::Ptr fvecclone;
     static const Ob::Ptr fveclen;
     static const Ob::Ptr fvecmid;
+    static const Ob::Ptr fvecslice;
     static const Ob::Ptr fvecel;
     static const Ob::Ptr fveccat;
 };

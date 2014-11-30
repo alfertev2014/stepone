@@ -104,8 +104,10 @@ class FastParser {
 
         pushInContext("vec?", VectorFunctions::fvecp);
         pushInContext("mkvec", VectorFunctions::fmkvec);
+        pushInContext("vec-clone", VectorFunctions::fvecclone);
         pushInContext("vec-len", VectorFunctions::fveclen);
         pushInContext("vec-mid", VectorFunctions::fvecmid);
+        pushInContext("vec-slice", VectorFunctions::fvecslice);
         pushInContext("vec-el", VectorFunctions::fvecel);
         pushInContext("vec-cat", VectorFunctions::fveccat);
 
