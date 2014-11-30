@@ -62,7 +62,7 @@ template <typename T, typename CppCmpOp>
 class ValueTypeCmpOp {
 public:
     static Ob::Ptr op(const Ob::Ptr & x1, const Ob::Ptr & x2) {
-        return CppCmpOp::op(x1->cast<ValueType<T> >()->getValue(), x2->cast<ValueType<T> >()->getValue()) ? Ob::at : Ob::anil;
+        return CppCmpOp::op(x1->cast<ValueType<T> >()->getValue(), x2->cast<ValueType<T> >()->getValue());
     }
     static string toString() {return "ValueTypeCmpOp{" + CppCmpOp::toString() + "}";}
 };

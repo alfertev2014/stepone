@@ -22,7 +22,7 @@ public:
 
 class EqBinOp {
 public:
-    static Ob::Ptr op(const Ob::Ptr &x1, const Ob::Ptr &x2) {return x1 == x2 ? Ob::at : Ob::anil;}
+    static Ob::Ptr op(const Ob::Ptr &x1, const Ob::Ptr &x2) {return x1 == x2;}
     static string toString() {return "eq";}
 };
 
