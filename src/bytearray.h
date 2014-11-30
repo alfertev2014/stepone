@@ -12,29 +12,28 @@ public:
     const TypeInfoBase * getTypeInfo() const {return &TypeInfo<ByteArray>::instance;}
     static string getTypeString() {return "ByteArray";}
 private:
-    Ptr array;
+    Ptr origin;
     char * buffer;
     int length;
-
 public:
     explicit ByteArray(int _n): length(_n < 0 ? 0 : _n) {
         buffer = new char[length];
     }
 
-    explicit ByteArray(ByteArray * _array)
-        : array(_array), buffer(_array->buffer), length(_array->length) {}
+    explicit ByteArray(ByteArray * _origin)
+        : origin(_origin), buffer(_origin->buffer), length(_origin->length) {}
 
-    ByteArray(ByteArray * _array, int _begin, int _length)
-        : array(_array), buffer(_array->buffer + _begin), length(_length < 0 ? 0 : _length) {}
+    ByteArray(ByteArray * _origin, int _begin, int _length)
+        : origin(_origin), buffer(_origin->buffer + _begin), length(_length < 0 ? 0 : _length) {}
 
-    ByteArray(const Ptr &_array, char * _begin, int _length)
-        : array(_array), buffer(_begin), length(_length < 0 ? 0 : _length) {}
+    ByteArray(const Ptr &_origin, char * _begin, int _length)
+        : origin(_origin), buffer(_begin), length(_length < 0 ? 0 : _length) {}
 
     ByteArray(char * _begin, int _length)
-        : array(Ob::at), buffer(_begin), length(_length < 0 ? 0 : _length) {}
+        : origin(Ob::at), buffer(_begin), length(_length < 0 ? 0 : _length) {}
 
     ~ByteArray() {
-        if(array == Ob::anil)
+        if(origin == Ob::anil)
             delete [] buffer;
     }
 
@@ -140,7 +139,7 @@ public:
         int n = end - begin;
         if(n < 0)
             n = 0;
-        return new ByteArray(array == Ob::anil ? this : array, buffer + begin, n);
+        return new ByteArray(origin == Ob::anil ? this : origin, buffer + begin, n);
     }
 
     template <class T>
