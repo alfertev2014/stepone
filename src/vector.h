@@ -1,6 +1,5 @@
 #pragma once
 
-#include "core.h"
 #include "valuetype.h"
 
 class Vector : public Value {
@@ -8,35 +7,55 @@ public:
     const TypeInfoBase * getTypeInfo() const {return &TypeInfo<Vector>::instance;}
     static string getTypeString() {return "Vector";}
 private:
-    Ob::Ptr * array;
+    Ptr * array;
     int length;
+
+    Vector(int _length): length(_length) {
+        // array is not initialized
+        // allocate memory, don't call constructor Ptr()
+        array = reinterpret_cast<Ptr*>(new char[length * sizeof(Ptr)]);
+    }
 public:
-    Vector(int _length): length(_length) {array = new Ob::Ptr[length];}
-    ~Vector() {delete [] array;}
+    ~Vector() {
+        // manual call destructor ~Ptr()
+        for(int i = 0; i < length; ++i)
+            array[i].~Ptr();
+        delete [] reinterpret_cast<char*>(array);
+    }
 
     int getSize() const {return length;}
 
-    Ob::Ptr getElement(int i) {return array[i];}
+    Ptr getElement(int i) {return array[i];}
+
+    static Vector * fromList(int n, const Ptr & list, const Ptr & a) {
+        Vector * res = new Vector(n);
+        Ptr p = list;
+        for(int i = 0; i < n; ++i) {
+            new (res->array + i) Ptr(p->car()->eval(a));
+            p = p->cdr();
+        }
+        return res;
+    }
 
     Vector * concat(Vector * v) const {
         int nres = length + v->length;
         Vector * res = new Vector(nres);
         for(int i = 0; i < length; ++i)
-            res->array[i] = array[i];
+            new (res->array + i) Ptr(array[i]);
         for(int i = 0; i < v->length; ++i)
-            res->array[length + i] = v->array[i];
+            new (res->array + length + i) Ptr(v->array[i]);
         return res;
     }
 
-    Vector * mid(int i1, int i2) {
-        if(i1 < 0 || i2 >= length) {
+    Vector * mid(int begin, int end) {
+        if(begin < 0 || end >= length) {
             DBG("vector index out of range");
             throw SemanticError();
         }
-        int nres = i2 - i1;
+        int nres = end - begin;
         Vector * res = new Vector(nres);
         for(int i = 0; i < nres; ++i)
-            res->array[i] = array[i1 + i];
+            new (res->array + i) Ptr(array[begin + i]);
         return res;
     }
 
@@ -65,13 +84,7 @@ public:
 
     Ptr apply(const Ptr &p, const Ptr &a) {
         int n = p->car()->eval(a)->cast<ValueType<int> >()->getValue();
-        Vector * v = new Vector(n);
-        Ob::Ptr args = p->cdr();
-        for(int i = 0; i < n; ++i) {
-            v->array[i] = args->car()->eval(a);
-            args = args->cdr();
-        }
-        return v;
+        return Vector::fromList(n, p->cdr(), a);
     }
 };
 
