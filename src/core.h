@@ -292,10 +292,10 @@ public:
     const TypeInfoBase * getTypeInfo() const {return &TypeInfo<Label>::instance;}
     static string getTypeString() {return "Label";}
 private:
-    const Ptr * a;
+    const Ptr * pa;
     Ob * v;
 
-    Label(Ob * _v, const Ptr * _a) : v(_v), a(_a) {
+    Label(Ob * _v, const Ptr * _a) : v(_v), pa(_a) {
         DBG("Label created");
     }
 
@@ -304,9 +304,8 @@ private:
     }
 
     Ptr ptr() {
-        if(a) {
-            a = 0;
-            return v->eval(*a);
+        if(pa) {
+            return v->eval(*pa);
         }
         return v;
     }
@@ -317,7 +316,7 @@ public:
         Ptr lbl = l;
         Ptr res = e->eval(new Context(f, lbl, a));
         l->v = res.getPointer();
-        l->a = 0;
+        l->pa = 0;
         return res;
     }
 
@@ -330,7 +329,7 @@ public:
 
     Label * asLabel() {return this;}
 
-    string toString() const {return "{@ " + (!a ? v->toString() : "") + "}";}
+    string toString() const {return "{@ " + (!pa ? v->toString() : "") + "}";}
 };
 
 

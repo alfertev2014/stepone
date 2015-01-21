@@ -15,7 +15,7 @@ public:
         cout << "StepOne REPL" << endl;
         cout << "------------" << endl;
         //cout << "Please, load the initial library" << endl;
-        FastParser fp;
+        FirstParser fp;
 
         /*
         string libfilename = "../other/initlib.txt"; // hardcoded!!!

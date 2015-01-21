@@ -10,9 +10,9 @@
 using namespace std;
 
 class TestEngine {
-    FastParser fp;
+    FirstParser fp;
 public:
-    TestEngine(const FastParser & _fp) :fp(_fp){}
+    TestEngine(const FirstParser & _fp) :fp(_fp){}
 
     void test_from_file(const string &fname) {
         cout << "_______________________________________________________________________________________________" << endl;

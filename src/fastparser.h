@@ -9,194 +9,196 @@
 
 using namespace std;
 
-class ParserIterator {
-    string::const_iterator si;
-};
-
-class FastParser {
-    map<string, Ob::Ptr> symbolTable;
-
+class FirstParser {
     string s;
 
     string nosymbol;
 
     Ob::Ptr a;
+    Ob::Ptr symbols;
 
-    void pushInContext(string s, const Ob::Ptr & v) {
+    void addInSymbols(const string & s, const Ob::Ptr & p) {
+        symbols = new Pair(new Pair(p, ByteArray::fromChars(s.size(), s.data())), symbols);
+    }
+
+    void addInContext(const string &s, const Ob::Ptr & v) {
         Ob::Ptr p = new Symbol();
-        symbolTable.insert(pair<string, Ob::Ptr>(s, p));
+        addInSymbols(s, p);
         a = new Context(p, v, a);
     }
 
     void initTable() {
-        symbolTable.clear();
+        symbols = Ob::anil;
+        a = Ob::anil;
 
-        pushInContext("-i", BaseNumFunc::fintNeg);
-        pushInContext("i+", BaseNumFunc::fintPlus);
-        pushInContext("i-", BaseNumFunc::fintMinus);
-        pushInContext("i*", BaseNumFunc::fintProduct);
-        pushInContext("i/", BaseNumFunc::fintDivision);
-        pushInContext("i%", BaseNumFunc::fintMod);
-        pushInContext("i?", BaseNumFunc::fintp);
-        pushInContext("i-not", BaseNumFunc::fintnot);
-        pushInContext("i-and", BaseNumFunc::fintand);
-        pushInContext("i-or", BaseNumFunc::fintor);
-        pushInContext("i-xor", BaseNumFunc::fintxor);
-        pushInContext("i-shl", BaseNumFunc::fintshl);
-        pushInContext("i-shr", BaseNumFunc::fintshr);
-        pushInContext("i=", BaseNumFunc::fintEql);
-        pushInContext("i!=", BaseNumFunc::fintNE);
-        pushInContext("i<", BaseNumFunc::fintLT);
-        pushInContext("i>", BaseNumFunc::fintGT);
-        pushInContext("i<=", BaseNumFunc::fintLE);
-        pushInContext("i>=", BaseNumFunc::fintGE);
+        addInContext("-i", BaseNumFunc::fintNeg);
+        addInContext("i+", BaseNumFunc::fintPlus);
+        addInContext("i-", BaseNumFunc::fintMinus);
+        addInContext("i*", BaseNumFunc::fintProduct);
+        addInContext("i/", BaseNumFunc::fintDivision);
+        addInContext("i%", BaseNumFunc::fintMod);
+        addInContext("i?", BaseNumFunc::fintp);
+        addInContext("i-not", BaseNumFunc::fintnot);
+        addInContext("i-and", BaseNumFunc::fintand);
+        addInContext("i-or", BaseNumFunc::fintor);
+        addInContext("i-xor", BaseNumFunc::fintxor);
+        addInContext("i-shl", BaseNumFunc::fintshl);
+        addInContext("i-shr", BaseNumFunc::fintshr);
+        addInContext("i=", BaseNumFunc::fintEql);
+        addInContext("i!=", BaseNumFunc::fintNE);
+        addInContext("i<", BaseNumFunc::fintLT);
+        addInContext("i>", BaseNumFunc::fintGT);
+        addInContext("i<=", BaseNumFunc::fintLE);
+        addInContext("i>=", BaseNumFunc::fintGE);
 
-        pushInContext("u?", BaseNumFunc::flongp);
-        pushInContext("u-not", BaseNumFunc::flongnot);
-        pushInContext("u-and", BaseNumFunc::flongand);
-        pushInContext("u-or", BaseNumFunc::flongor);
-        pushInContext("u-xor", BaseNumFunc::flongxor);
-        pushInContext("u-shl", BaseNumFunc::flongshl);
-        pushInContext("u-shr", BaseNumFunc::flongshr);
+        addInContext("u?", BaseNumFunc::flongp);
+        addInContext("u-not", BaseNumFunc::flongnot);
+        addInContext("u-and", BaseNumFunc::flongand);
+        addInContext("u-or", BaseNumFunc::flongor);
+        addInContext("u-xor", BaseNumFunc::flongxor);
+        addInContext("u-shl", BaseNumFunc::flongshl);
+        addInContext("u-shr", BaseNumFunc::flongshr);
 
-        pushInContext("u=", BaseNumFunc::flongEql);
-        pushInContext("u!=", BaseNumFunc::flongNE);
-        pushInContext("u<", BaseNumFunc::flongLT);
-        pushInContext("u>", BaseNumFunc::flongGT);
-        pushInContext("u<=", BaseNumFunc::flongLE);
-        pushInContext("u>=", BaseNumFunc::flongGE);
+        addInContext("u=", BaseNumFunc::flongEql);
+        addInContext("u!=", BaseNumFunc::flongNE);
+        addInContext("u<", BaseNumFunc::flongLT);
+        addInContext("u>", BaseNumFunc::flongGT);
+        addInContext("u<=", BaseNumFunc::flongLE);
+        addInContext("u>=", BaseNumFunc::flongGE);
 
-        pushInContext("c?", BaseNumFunc::fcharp);
-        pushInContext("c-not", BaseNumFunc::fcharnot);
-        pushInContext("c-and", BaseNumFunc::fcharand);
-        pushInContext("c-or", BaseNumFunc::fcharor);
-        pushInContext("c-xor", BaseNumFunc::fcharxor);
-        pushInContext("c-shl", BaseNumFunc::fcharshl);
-        pushInContext("c-shr", BaseNumFunc::fcharshr);
-        pushInContext("c=", BaseNumFunc::fcharEql);
-        pushInContext("c!=", BaseNumFunc::fcharNE);
-        pushInContext("c<", BaseNumFunc::fcharLT);
-        pushInContext("c>", BaseNumFunc::fcharGT);
-        pushInContext("c<=", BaseNumFunc::fcharLE);
-        pushInContext("c>=", BaseNumFunc::fcharGE);
+        addInContext("c?", BaseNumFunc::fcharp);
+        addInContext("c-not", BaseNumFunc::fcharnot);
+        addInContext("c-and", BaseNumFunc::fcharand);
+        addInContext("c-or", BaseNumFunc::fcharor);
+        addInContext("c-xor", BaseNumFunc::fcharxor);
+        addInContext("c-shl", BaseNumFunc::fcharshl);
+        addInContext("c-shr", BaseNumFunc::fcharshr);
+        addInContext("c=", BaseNumFunc::fcharEql);
+        addInContext("c!=", BaseNumFunc::fcharNE);
+        addInContext("c<", BaseNumFunc::fcharLT);
+        addInContext("c>", BaseNumFunc::fcharGT);
+        addInContext("c<=", BaseNumFunc::fcharLE);
+        addInContext("c>=", BaseNumFunc::fcharGE);
 
-        pushInContext("-f", BaseNumFunc::ffloatNeg);
-        pushInContext("f+", BaseNumFunc::ffloatPlus);
-        pushInContext("f-", BaseNumFunc::ffloatMinus);
-        pushInContext("f*", BaseNumFunc::ffloatProduct);
-        pushInContext("f/", BaseNumFunc::ffloatDivision);
-        pushInContext("f?", BaseNumFunc::ffloatp);
-        pushInContext("f=", BaseNumFunc::ffloatEql);
-        pushInContext("f!=", BaseNumFunc::ffloatNE);
-        pushInContext("f<", BaseNumFunc::ffloatLT);
-        pushInContext("f>", BaseNumFunc::ffloatGT);
-        pushInContext("f<=", BaseNumFunc::ffloatLE);
-        pushInContext("f>=", BaseNumFunc::ffloatGE);
+        addInContext("-f", BaseNumFunc::ffloatNeg);
+        addInContext("f+", BaseNumFunc::ffloatPlus);
+        addInContext("f-", BaseNumFunc::ffloatMinus);
+        addInContext("f*", BaseNumFunc::ffloatProduct);
+        addInContext("f/", BaseNumFunc::ffloatDivision);
+        addInContext("f?", BaseNumFunc::ffloatp);
+        addInContext("f=", BaseNumFunc::ffloatEql);
+        addInContext("f!=", BaseNumFunc::ffloatNE);
+        addInContext("f<", BaseNumFunc::ffloatLT);
+        addInContext("f>", BaseNumFunc::ffloatGT);
+        addInContext("f<=", BaseNumFunc::ffloatLE);
+        addInContext("f>=", BaseNumFunc::ffloatGE);
 
-        pushInContext("u2i", BaseNumFunc::flong2int);
-        pushInContext("i2u", BaseNumFunc::fint2long);
-        pushInContext("f2i", BaseNumFunc::ffloat2int);
-        pushInContext("i2f", BaseNumFunc::fint2float);
-        pushInContext("c2i", BaseNumFunc::fchar2int);
-        pushInContext("i2c", BaseNumFunc::fint2char);
-        pushInContext("c2u", BaseNumFunc::fchar2long);
-        pushInContext("u2c", BaseNumFunc::flong2char);
+        addInContext("u2i", BaseNumFunc::flong2int);
+        addInContext("i2u", BaseNumFunc::fint2long);
+        addInContext("f2i", BaseNumFunc::ffloat2int);
+        addInContext("i2f", BaseNumFunc::fint2float);
+        addInContext("c2i", BaseNumFunc::fchar2int);
+        addInContext("i2c", BaseNumFunc::fint2char);
+        addInContext("c2u", BaseNumFunc::fchar2long);
+        addInContext("u2c", BaseNumFunc::flong2char);
 
-        pushInContext("vec?", VectorFunctions::fvecp);
-        pushInContext("mkvec", VectorFunctions::fmkvec);
-        pushInContext("vec-clone", VectorFunctions::fvecclone);
-        pushInContext("vec-len", VectorFunctions::fveclen);
-        pushInContext("vec-mid", VectorFunctions::fvecmid);
-        pushInContext("vec-slice", VectorFunctions::fvecslice);
-        pushInContext("vec-el", VectorFunctions::fvecel);
-        pushInContext("vec-cat", VectorFunctions::fveccat);
+        addInContext("vec?", VectorFunctions::fvecp);
+        addInContext("mkvec", VectorFunctions::fmkvec);
+        addInContext("vec-clone", VectorFunctions::fvecclone);
+        addInContext("vec-len", VectorFunctions::fveclen);
+        addInContext("vec-mid", VectorFunctions::fvecmid);
+        addInContext("vec-slice", VectorFunctions::fvecslice);
+        addInContext("vec-el", VectorFunctions::fvecel);
+        addInContext("vec-cat", VectorFunctions::fveccat);
 
-        pushInContext("input?", IOFunctions::finputp);
-        pushInContext("output?", IOFunctions::foutputp);
-        pushInContext("open-in", IOFunctions::fopenin);
-        pushInContext("open-out", IOFunctions::fopenout);
-        pushInContext("read", IOFunctions::fread);
-        pushInContext("write", IOFunctions::fwrite);
-        pushInContext("stdin", new StdIn());
-        pushInContext("stdout", new StdOut());
-        pushInContext("stderr", new StdErr());
+        addInContext("input?", IOFunctions::finputp);
+        addInContext("output?", IOFunctions::foutputp);
+        addInContext("open-in", IOFunctions::fopenin);
+        addInContext("open-out", IOFunctions::fopenout);
+        addInContext("read", IOFunctions::fread);
+        addInContext("write", IOFunctions::fwrite);
+        addInContext("stdin", new StdIn());
+        addInContext("stdout", new StdOut());
+        addInContext("stderr", new StdErr());
 
-        pushInContext("b?", ByteArrayFunctions::fbarrayp);
-        pushInContext("b-len", ByteArrayFunctions::fbarraylen);
-        pushInContext("b-clone", ByteArrayFunctions::fbarrayclone);
-        pushInContext("b-cmp", ByteArrayFunctions::fbarraycmp);
-        pushInContext("b-ncmp", ByteArrayFunctions::fbarrayncmp);
-        pushInContext("b-findch", ByteArrayFunctions::fbarrayfindch);
-        pushInContext("b-find", ByteArrayFunctions::fbarrayfind);
-        pushInContext("b-cat", ByteArrayFunctions::fbarraycat);
-        pushInContext("b-mid", ByteArrayFunctions::fbarraymid);
-        pushInContext("b-slice", ByteArrayFunctions::fbarrayslice);
-        pushInContext("i2b", ByteArrayFunctions::fserint);
-        pushInContext("f2b", ByteArrayFunctions::fserfloat);
-        pushInContext("c2b", ByteArrayFunctions::fserchar);
-        pushInContext("b-geti", ByteArrayFunctions::fgetint);
-        pushInContext("b-getf", ByteArrayFunctions::fgetfloat);
-        pushInContext("b-getc", ByteArrayFunctions::fgetchar);
+        addInContext("b?", ByteArrayFunctions::fbarrayp);
+        addInContext("b-len", ByteArrayFunctions::fbarraylen);
+        addInContext("b-clone", ByteArrayFunctions::fbarrayclone);
+        addInContext("b-cmp", ByteArrayFunctions::fbarraycmp);
+        addInContext("b-ncmp", ByteArrayFunctions::fbarrayncmp);
+        addInContext("b-findch", ByteArrayFunctions::fbarrayfindch);
+        addInContext("b-find", ByteArrayFunctions::fbarrayfind);
+        addInContext("b-cat", ByteArrayFunctions::fbarraycat);
+        addInContext("b-mid", ByteArrayFunctions::fbarraymid);
+        addInContext("b-slice", ByteArrayFunctions::fbarrayslice);
+        addInContext("i2b", ByteArrayFunctions::fserint);
+        addInContext("f2b", ByteArrayFunctions::fserfloat);
+        addInContext("c2b", ByteArrayFunctions::fserchar);
+        addInContext("b-geti", ByteArrayFunctions::fgetint);
+        addInContext("b-getf", ByteArrayFunctions::fgetfloat);
+        addInContext("b-getc", ByteArrayFunctions::fgetchar);
 
-        pushInContext("sz-i", new ValueType<int>(sizeof(int)));
-        pushInContext("sz-f", new ValueType<int>(sizeof(float)));
-        pushInContext("sz-c", new ValueType<int>(sizeof(char)));
-        pushInContext("sz-u", new ValueType<int>(sizeof(long long)));
+        addInContext("sz-i", new ValueType<int>(sizeof(int)));
+        addInContext("sz-f", new ValueType<int>(sizeof(float)));
+        addInContext("sz-c", new ValueType<int>(sizeof(char)));
+        addInContext("sz-u", new ValueType<int>(sizeof(long long)));
 
-        pushInContext("pair?", BaseTypePredicates::fpairp);
-        pushInContext("lazy?", BaseTypePredicates::flazyp);
-        pushInContext("label?", BaseTypePredicates::flabelp);
-        pushInContext("context?", BaseTypePredicates::fcontextp);
-        pushInContext("atom?", BaseTypePredicates::fatomp);
-        pushInContext("symbol?", BaseTypePredicates::fsymbolp);
-        pushInContext("const?", BaseTypePredicates::fconstp);
-        pushInContext("macro?", BaseTypePredicates::fmacrop);
-        pushInContext("basemacro?", BaseTypePredicates::fbasemacrop);
-        pushInContext("usermacro?", BaseTypePredicates::fusermacrop);
-        pushInContext("spectype?", BaseTypePredicates::fvaluep);
+        addInContext("pair?", BaseTypePredicates::fpairp);
+        addInContext("lazy?", BaseTypePredicates::flazyp);
+        addInContext("label?", BaseTypePredicates::flabelp);
+        addInContext("context?", BaseTypePredicates::fcontextp);
+        addInContext("atom?", BaseTypePredicates::fatomp);
+        addInContext("symbol?", BaseTypePredicates::fsymbolp);
+        addInContext("const?", BaseTypePredicates::fconstp);
+        addInContext("macro?", BaseTypePredicates::fmacrop);
+        addInContext("basemacro?", BaseTypePredicates::fbasemacrop);
+        addInContext("usermacro?", BaseTypePredicates::fusermacrop);
+        addInContext("spectype?", BaseTypePredicates::fvaluep);
 
-        pushInContext("ctx-get", BaseFunctions::fctxget);
-        pushInContext("ctx-push", BaseFunctions::fctxpush);
-        pushInContext("empty-ctx", Evaluator::eempty);
-        pushInContext("get-type", BaseFunctions::fgettype);
-        pushInContext("cons", BaseFunctions::fcons);
-        pushInContext("car", BaseFunctions::fcar);
-        pushInContext("cdr", BaseFunctions::fcdr);
-        pushInContext("eq", BaseFunctions::feq);
+        addInContext("ctx-get", BaseFunctions::fctxget);
+        addInContext("ctx-push", BaseFunctions::fctxpush);
+        addInContext("empty-ctx", Evaluator::eempty);
+        addInContext("get-type", BaseFunctions::fgettype);
+        addInContext("cons", BaseFunctions::fcons);
+        addInContext("car", BaseFunctions::fcar);
+        addInContext("cdr", BaseFunctions::fcdr);
+        addInContext("eq", BaseFunctions::feq);
 
         a = new Context(Ob::anil, Ob::anil, a);
-        symbolTable.insert(pair<string, Ob::Ptr>("t", Ob::at));
+        addInSymbols("t", Ob::at);
         a = new Context(Ob::at, Ob::at, a);
 
-        pushInContext("^", BaseMacroses::mgensym);
-        pushInContext("~", BaseMacroses::mcurctx);
-        pushInContext("_", BaseMacroses::mbot);
-        pushInContext("|", BaseMacroses::mtry);
-        pushInContext("$", BaseMacroses::munlazy);
-        pushInContext("#", BaseMacroses::mlazy);
-        pushInContext("%", BaseMacroses::mmacro);
-        pushInContext("`", BaseMacroses::mapply);
-        pushInContext("@", BaseMacroses::mlabel);
-        pushInContext("?", BaseMacroses::mif);
-        pushInContext("\\", BaseMacroses::mlambda);
-        pushInContext(">-", BaseMacroses::mlet);
-        pushInContext("'", BaseMacroses::mquote);
+        addInContext("^", BaseMacroses::mgensym);
+        addInContext("~", BaseMacroses::mcurctx);
+        addInContext("_", BaseMacroses::mbot);
+        addInContext("|", BaseMacroses::mtry);
+        addInContext("$", BaseMacroses::munlazy);
+        addInContext("#", BaseMacroses::mlazy);
+        addInContext("%", BaseMacroses::mmacro);
+        addInContext("`", BaseMacroses::mapply);
+        addInContext("@", BaseMacroses::mlabel);
+        addInContext("?", BaseMacroses::mif);
+        addInContext("\\", BaseMacroses::mlambda);
+        addInContext(">-", BaseMacroses::mlet);
+        addInContext("'", BaseMacroses::mquote);
+
+        addInContext("symbols", symbols);
     }
 
 public:
-    FastParser() : s(""), nosymbol("(){}[].\""), a(Ob::anil) {
+    FirstParser() : nosymbol("(){}[].\""), a(Ob::anil) {
         initTable();
     }
 
-    Ob::Ptr parse(string _s) {
+    Ob::Ptr parse(const string & _s) {
         s = _s;
         parseRes pr = parseExpression(s.begin());
         return pr.success ? pr.e : Ob::anil;
     }
 
-    Ob::Ptr parseEval(string _s) {return parse(_s)->eval(a)->unlazy();}
+    Ob::Ptr parseEval(const string & _s) {return parse(_s)->eval(a)->unlazy();}
 
-    string evalToString(string _s) {
+    string evalToString(const string & _s) {
         stringstream ss;
         print(ss, parseEval(_s));
         return ss.str();
@@ -204,7 +206,7 @@ public:
 
     void print(ostream & ts, const Ob::Ptr & p) {printOb(ts, p);}
 
-    void loadInitLibrary(string lib) {
+    void loadInitLibrary(const string & lib) {
         Ob::Ptr res = parseEval(lib);
         if(res->asEvaluator()) {
             a = res->asEvaluator()->getContext();
@@ -266,9 +268,10 @@ private:
         if(sym == Ob::anil->asSymbol()) {
             return ts << "()";
         } else {
-            for(map<string, Ob::Ptr>::iterator it = symbolTable.begin(); it != symbolTable.end(); ++it) {
-                if(it->second == sym) {
-                    return ts << it->first;
+            for(Ob * p = symbols.getPointer(); p != Ob::anil.getPointer(); p = p->cdr().getPointer()) {
+                if(p->car()->car() == sym) {
+                    ByteArray * ba = p->car()->cdr()->as<ByteArray>();
+                    return ts.write(ba->getData(), ba->getSize());
                 }
             }
         }
@@ -395,7 +398,7 @@ private:
     }
 
     parseRes parseSymbol(string::const_iterator si) {
-        string symbol("");
+        string symbolString;
         string::const_iterator sii = si;
         if(sii == s.end() || isspace(*sii) || (nosymbol.find(*sii) != string::npos)) {
             DBG("symbol fail first char ") << "\"" << *sii << "\"" << endl;
@@ -404,21 +407,21 @@ private:
             else if((nosymbol.find(*sii) != string::npos)) DBG("nosym");
             return parseRes(Ob::anil, si, false);
         }
-        symbol.push_back(*sii);
+        symbolString.push_back(*sii);
         ++sii;
         while(sii != s.end() && !isspace(*sii) && (nosymbol.find(*sii) == string::npos)) {
-            symbol.push_back(*sii);
+            symbolString.push_back(*sii);
             ++sii;
         }
-        Ob::Ptr e(Ob::anil);
-        if(symbolTable.count(symbol) > 0) {
-            e = symbolTable[symbol];
-        } else {
-            Symbol * sym = new Symbol();
-            symbolTable.insert(pair<string, Ob::Ptr>(symbol, sym));
-            e = sym;
+        for(Ob * p = symbols.getPointer(); p != Ob::anil.getPointer(); p = p->cdr().getPointer()) {
+            ByteArray * ba = p->car()->cdr()->as<ByteArray>();
+            if(ba->getSize() == symbolString.size() &&
+                !memcmp(ba->getData(), symbolString.data(), symbolString.size()))
+                return parseRes(p->car()->car().getPointer(), sii, true);
         }
-        return parseRes(e, sii, true);
+        Symbol * sym = new Symbol();
+        symbols = new Pair(new Pair(sym, ByteArray::fromChars(symbolString.size(), symbolString.data())), symbols);
+        return parseRes(sym, sii, true);
     }
 
     parseRes parseNumber(string::const_iterator si) {
