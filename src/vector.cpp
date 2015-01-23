@@ -1,11 +1,19 @@
 #include "vector.h"
 #include "operations.h"
 
-const Ob::Ptr VectorFunctions::fvecp(new FTypeP<Vector>);
-const Ob::Ptr VectorFunctions::fmkvec(new FMakeVector);
-const Ob::Ptr VectorFunctions::fvecclone(new FUnaryOp<VectorCloneUnOp>);
-const Ob::Ptr VectorFunctions::fveclen(new FUnaryOp<VectorLengthUnOp>);
-const Ob::Ptr VectorFunctions::fvecmid(new FTernaryOp<VectorMidTerOp>);
-const Ob::Ptr VectorFunctions::fvecslice(new FTernaryOp<VectorSliceTerOp>);
-const Ob::Ptr VectorFunctions::fvecel(new FBinaryOp<VectorElBinOp>);
-const Ob::Ptr VectorFunctions::fveccat(new FBinaryOp<VectorConcatBinOp>);
+VectorFunctions::VectorFunctions() :
+    fvecp(new FTypeP<Vector>),
+    fmkvec(new FMakeVector),
+    fvecclone(new FUnaryOp<VectorCloneUnOp>),
+    fveclen(new FUnaryOp<VectorLengthUnOp>),
+    fvecmid(new FTernaryOp<VectorMidTerOp>),
+    fvecslice(new FTernaryOp<VectorSliceTerOp>),
+    fvecel(new FBinaryOp<VectorElBinOp>),
+    fveccat(new FBinaryOp<VectorConcatBinOp>)
+{}
+
+const VectorFunctions &VectorFunctions::inst()
+{
+    static const VectorFunctions instance;
+    return instance;
+}

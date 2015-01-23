@@ -3,86 +3,87 @@
 #include "core.h"
 
 class BaseNumFunc {
-    BaseNumFunc(){}
+    BaseNumFunc();
 public:
-    static const Ob::Ptr fintNeg;
-    static const Ob::Ptr fintPlus;
-    static const Ob::Ptr fintMinus;
-    static const Ob::Ptr fintProduct;
-    static const Ob::Ptr fintDivision;
-    static const Ob::Ptr fintMod;
-    static const Ob::Ptr fintp;
+    static const BaseNumFunc &inst();
 
-    static const Ob::Ptr fintand;
-    static const Ob::Ptr fintor;
-    static const Ob::Ptr fintxor;
-    static const Ob::Ptr fintnot;
+    const Ob::Ptr fintNeg;
+    const Ob::Ptr fintPlus;
+    const Ob::Ptr fintMinus;
+    const Ob::Ptr fintProduct;
+    const Ob::Ptr fintDivision;
+    const Ob::Ptr fintMod;
+    const Ob::Ptr fintp;
 
-    static const Ob::Ptr fintshl;
-    static const Ob::Ptr fintshr;
+    const Ob::Ptr fintand;
+    const Ob::Ptr fintor;
+    const Ob::Ptr fintxor;
+    const Ob::Ptr fintnot;
 
-    static const Ob::Ptr fintEql;
-    static const Ob::Ptr fintNE;
-    static const Ob::Ptr fintGT;
-    static const Ob::Ptr fintLT;
-    static const Ob::Ptr fintGE;
-    static const Ob::Ptr fintLE;
+    const Ob::Ptr fintshl;
+    const Ob::Ptr fintshr;
 
-    static const Ob::Ptr flongp;
-    static const Ob::Ptr flongand;
-    static const Ob::Ptr flongor;
-    static const Ob::Ptr flongxor;
-    static const Ob::Ptr flongnot;
+    const Ob::Ptr fintEql;
+    const Ob::Ptr fintNE;
+    const Ob::Ptr fintGT;
+    const Ob::Ptr fintLT;
+    const Ob::Ptr fintGE;
+    const Ob::Ptr fintLE;
 
-    static const Ob::Ptr flongEql;
-    static const Ob::Ptr flongNE;
-    static const Ob::Ptr flongGT;
-    static const Ob::Ptr flongLT;
-    static const Ob::Ptr flongGE;
-    static const Ob::Ptr flongLE;
+    const Ob::Ptr flongp;
+    const Ob::Ptr flongand;
+    const Ob::Ptr flongor;
+    const Ob::Ptr flongxor;
+    const Ob::Ptr flongnot;
 
-    static const Ob::Ptr flongshl;
-    static const Ob::Ptr flongshr;
+    const Ob::Ptr flongEql;
+    const Ob::Ptr flongNE;
+    const Ob::Ptr flongGT;
+    const Ob::Ptr flongLT;
+    const Ob::Ptr flongGE;
+    const Ob::Ptr flongLE;
 
-    static const Ob::Ptr ffloatNeg;
-    static const Ob::Ptr ffloatPlus;
-    static const Ob::Ptr ffloatMinus;
-    static const Ob::Ptr ffloatProduct;
-    static const Ob::Ptr ffloatDivision;
-    static const Ob::Ptr ffloatp;
-    static const Ob::Ptr ffloatEql;
-    static const Ob::Ptr ffloatNE;
-    static const Ob::Ptr ffloatGT;
-    static const Ob::Ptr ffloatLT;
-    static const Ob::Ptr ffloatGE;
-    static const Ob::Ptr ffloatLE;
+    const Ob::Ptr flongshl;
+    const Ob::Ptr flongshr;
 
-    static const Ob::Ptr flong2int;
-    static const Ob::Ptr fint2long;
+    const Ob::Ptr ffloatNeg;
+    const Ob::Ptr ffloatPlus;
+    const Ob::Ptr ffloatMinus;
+    const Ob::Ptr ffloatProduct;
+    const Ob::Ptr ffloatDivision;
+    const Ob::Ptr ffloatp;
+    const Ob::Ptr ffloatEql;
+    const Ob::Ptr ffloatNE;
+    const Ob::Ptr ffloatGT;
+    const Ob::Ptr ffloatLT;
+    const Ob::Ptr ffloatGE;
+    const Ob::Ptr ffloatLE;
 
-    static const Ob::Ptr ffloat2int;
-    static const Ob::Ptr fint2float;
+    const Ob::Ptr flong2int;
+    const Ob::Ptr fint2long;
 
-    static const Ob::Ptr fchar2int;
-    static const Ob::Ptr fint2char;
+    const Ob::Ptr ffloat2int;
+    const Ob::Ptr fint2float;
 
-    static const Ob::Ptr fchar2long;
-    static const Ob::Ptr flong2char;
+    const Ob::Ptr fchar2int;
+    const Ob::Ptr fint2char;
 
-    static const Ob::Ptr fcharp;
-    static const Ob::Ptr fcharand;
-    static const Ob::Ptr fcharor;
-    static const Ob::Ptr fcharxor;
-    static const Ob::Ptr fcharnot;
+    const Ob::Ptr fchar2long;
+    const Ob::Ptr flong2char;
 
-    static const Ob::Ptr fcharshl;
-    static const Ob::Ptr fcharshr;
+    const Ob::Ptr fcharp;
+    const Ob::Ptr fcharand;
+    const Ob::Ptr fcharor;
+    const Ob::Ptr fcharxor;
+    const Ob::Ptr fcharnot;
 
-    static const Ob::Ptr fcharEql;
-    static const Ob::Ptr fcharNE;
-    static const Ob::Ptr fcharGT;
-    static const Ob::Ptr fcharLT;
-    static const Ob::Ptr fcharGE;
-    static const Ob::Ptr fcharLE;
+    const Ob::Ptr fcharshl;
+    const Ob::Ptr fcharshr;
 
+    const Ob::Ptr fcharEql;
+    const Ob::Ptr fcharNE;
+    const Ob::Ptr fcharGT;
+    const Ob::Ptr fcharLT;
+    const Ob::Ptr fcharGE;
+    const Ob::Ptr fcharLE;
 };

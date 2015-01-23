@@ -157,14 +157,16 @@ public:
 };
 
 class VectorFunctions {
-    VectorFunctions(){}
+    VectorFunctions();
 public:
-    static const Ob::Ptr fvecp;
-    static const Ob::Ptr fmkvec;
-    static const Ob::Ptr fvecclone;
-    static const Ob::Ptr fveclen;
-    static const Ob::Ptr fvecmid;
-    static const Ob::Ptr fvecslice;
-    static const Ob::Ptr fvecel;
-    static const Ob::Ptr fveccat;
+    static const VectorFunctions &inst();
+
+    const Ob::Ptr fvecp;
+    const Ob::Ptr fmkvec;
+    const Ob::Ptr fvecclone;
+    const Ob::Ptr fveclen;
+    const Ob::Ptr fvecmid;
+    const Ob::Ptr fvecslice;
+    const Ob::Ptr fvecel;
+    const Ob::Ptr fveccat;
 };

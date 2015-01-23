@@ -1,15 +1,23 @@
 #include "basemacro.h"
 
-const Ob::Ptr BaseMacroses::mquote(new MQuote());
-const Ob::Ptr BaseMacroses::mapply(new MApply());
-const Ob::Ptr BaseMacroses::mif(new MIf());
-const Ob::Ptr BaseMacroses::mlet(new MLet());
-const Ob::Ptr BaseMacroses::mlazy(new MLazy());
-const Ob::Ptr BaseMacroses::munlazy(new MUnlazy());
-const Ob::Ptr BaseMacroses::mlabel(new MLabel());
-const Ob::Ptr BaseMacroses::mlambda(new MLambda());
-const Ob::Ptr BaseMacroses::mmacro(new MMacro());
-const Ob::Ptr BaseMacroses::mcurctx(new MCurrentContext());
-const Ob::Ptr BaseMacroses::mtry(new MTry());
-const Ob::Ptr BaseMacroses::mbot(new MBot());
-const Ob::Ptr BaseMacroses::mgensym(new MGenSymbol());
+BaseMacroses::BaseMacroses() :
+    mquote(new MQuote()),
+    mapply(new MApply()),
+    mif(new MIf()),
+    mlet(new MLet()),
+    mlazy(new MLazy()),
+    munlazy(new MUnlazy()),
+    mlabel(new MLabel()),
+    mlambda(new MLambda()),
+    mmacro(new MMacro()),
+    mcurctx(new MCurrentContext()),
+    mtry(new MTry()),
+    mbot(new MBot()),
+    mgensym(new MGenSymbol())
+{}
+
+const BaseMacroses &BaseMacroses::inst()
+{
+    static const BaseMacroses instance;
+    return instance;
+}

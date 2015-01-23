@@ -1,8 +1,20 @@
 #include "io.h"
 
-Ob::Ptr IOFunctions::finputp(new FTypeP<FileInputDescriptor>);
-Ob::Ptr IOFunctions::foutputp(new FTypeP<FileOutputDescriptor>);
-Ob::Ptr IOFunctions::fopenin(new FUnaryOp<InputOpenUnOp>);
-Ob::Ptr IOFunctions::fopenout(new FUnaryOp<OutputOpenUnOp>);
-Ob::Ptr IOFunctions::fread(new FBinaryOp<ReadBinOp>);
-Ob::Ptr IOFunctions::fwrite(new FBinaryOp<WriteBinOp>);
+IOFunctions::IOFunctions() :
+    finputp(new FTypeP<FileInputDescriptor>),
+    foutputp(new FTypeP<FileOutputDescriptor>),
+    fopenin(new FUnaryOp<InputOpenUnOp>),
+    fopenout(new FUnaryOp<OutputOpenUnOp>),
+    fread(new FBinaryOp<ReadBinOp>),
+    fwrite(new FBinaryOp<WriteBinOp>),
+
+    stdin(new StdIn()),
+    stdout(new StdOut()),
+    stderr(new StdErr())
+{}
+
+const IOFunctions &IOFunctions::inst()
+{
+    static const IOFunctions instance;
+    return instance;
+}

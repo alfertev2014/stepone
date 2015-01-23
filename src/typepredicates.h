@@ -76,18 +76,20 @@ public:
 
 
 class BaseTypePredicates {
-    BaseTypePredicates(){}
+    BaseTypePredicates();
 public:
-    static const Ob::Ptr fpairp;
-    static const Ob::Ptr flazyp;
-    static const Ob::Ptr flabelp;
-    static const Ob::Ptr fcontextp;
-    static const Ob::Ptr fatomp;
-    static const Ob::Ptr fsymbolp;
-    static const Ob::Ptr fconstp;
-    static const Ob::Ptr fmacrop;
-    static const Ob::Ptr fevalp;
-    static const Ob::Ptr fbasemacrop;
-    static const Ob::Ptr fusermacrop;
-    static const Ob::Ptr fvaluep;
+    static const BaseTypePredicates &inst();
+
+    const Ob::Ptr fpairp;
+    const Ob::Ptr flazyp;
+    const Ob::Ptr flabelp;
+    const Ob::Ptr fcontextp;
+    const Ob::Ptr fatomp;
+    const Ob::Ptr fsymbolp;
+    const Ob::Ptr fconstp;
+    const Ob::Ptr fmacrop;
+    const Ob::Ptr fevalp;
+    const Ob::Ptr fbasemacrop;
+    const Ob::Ptr fusermacrop;
+    const Ob::Ptr fvaluep;
 };

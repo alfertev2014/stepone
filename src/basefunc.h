@@ -45,13 +45,15 @@ public:
 };
 
 class BaseFunctions {
-    BaseFunctions(){}
+    BaseFunctions();
 public:
-    static const Ob::Ptr fcar;
-    static const Ob::Ptr fcdr;
-    static const Ob::Ptr fcons;
-    static const Ob::Ptr feq;
-    static const Ob::Ptr fgettype;
-    static const Ob::Ptr fctxget;
-    static const Ob::Ptr fctxpush;
+    static const BaseFunctions &inst();
+
+    const Ob::Ptr fcar;
+    const Ob::Ptr fcdr;
+    const Ob::Ptr fcons;
+    const Ob::Ptr feq;
+    const Ob::Ptr fgettype;
+    const Ob::Ptr fctxget;
+    const Ob::Ptr fctxpush;
 };

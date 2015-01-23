@@ -242,24 +242,26 @@ public:
 
 
 class ByteArrayFunctions {
-    ByteArrayFunctions(){}
+    ByteArrayFunctions();
 public:
-    static const Ob::Ptr fbarrayp;
-    static const Ob::Ptr fbarraylen;
-    static const Ob::Ptr fbarrayclone;
-    static const Ob::Ptr fbarraycmp;
-    static const Ob::Ptr fbarrayncmp;
-    static const Ob::Ptr fbarrayfindch;
-    static const Ob::Ptr fbarrayfind;
-    static const Ob::Ptr fbarraycat;
-    static const Ob::Ptr fbarraymid;
-    static const Ob::Ptr fbarrayslice;
+    static const ByteArrayFunctions &inst();
 
-    static const Ob::Ptr fserint;
-    static const Ob::Ptr fserfloat;
-    static const Ob::Ptr fserchar;
+    const Ob::Ptr fbarrayp;
+    const Ob::Ptr fbarraylen;
+    const Ob::Ptr fbarrayclone;
+    const Ob::Ptr fbarraycmp;
+    const Ob::Ptr fbarrayncmp;
+    const Ob::Ptr fbarrayfindch;
+    const Ob::Ptr fbarrayfind;
+    const Ob::Ptr fbarraycat;
+    const Ob::Ptr fbarraymid;
+    const Ob::Ptr fbarrayslice;
 
-    static const Ob::Ptr fgetint;
-    static const Ob::Ptr fgetfloat;
-    static const Ob::Ptr fgetchar;
+    const Ob::Ptr fserint;
+    const Ob::Ptr fserfloat;
+    const Ob::Ptr fserchar;
+
+    const Ob::Ptr fgetint;
+    const Ob::Ptr fgetfloat;
+    const Ob::Ptr fgetchar;
 };

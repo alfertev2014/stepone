@@ -97,11 +97,18 @@ public:
 
 
 class IOFunctions {
+    IOFunctions();
 public:
-    static Ob::Ptr finputp;
-    static Ob::Ptr foutputp;
-    static Ob::Ptr fopenin;
-    static Ob::Ptr fopenout;
-    static Ob::Ptr fread;
-    static Ob::Ptr fwrite;
+    static const IOFunctions &inst();
+
+    const Ob::Ptr finputp;
+    const Ob::Ptr foutputp;
+    const Ob::Ptr fopenin;
+    const Ob::Ptr fopenout;
+    const Ob::Ptr fread;
+    const Ob::Ptr fwrite;
+
+    const Ob::Ptr stdin;
+    const Ob::Ptr stdout;
+    const Ob::Ptr stderr;
 };

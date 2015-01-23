@@ -70,17 +70,6 @@ public: // static
 
     static const Ptr anil;
     static const Ptr at;
-    static const Ptr aif;
-    static const Ptr aquote;
-    static const Ptr alambda;
-    static const Ptr alet;
-    static const Ptr alazy;
-    static const Ptr aunlazy;
-    static const Ptr alabel;
-    static const Ptr amacro;
-    static const Ptr atry;
-    static const Ptr aeval;
-    static const Ptr agensym;
 
 public:
     Ob() : refcount(0) {}
@@ -345,15 +334,6 @@ public:
     string toString() const {
         if(this == Ob::anil) return "()";
         else if(this == Ob::at) return "t";
-        else if(this == Ob::alambda) return "\\";
-        else if(this == Ob::alet) return ">-";
-        else if(this == Ob::aquote) return "\'";
-        else if(this == Ob::aeval) return "~";
-        else if(this == Ob::alazy) return "#";
-        else if(this == Ob::aunlazy) return "$";
-        else if(this == Ob::alabel) return "@";
-        else if(this == Ob::aif) return "?";
-        else if(this == Ob::atry) return "|";
         else {
             stringstream ss;
             ss << "s" << (void *)this;
