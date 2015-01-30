@@ -46,7 +46,6 @@ public:
     const Ob::Ptr apairp;
     const Ob::Ptr alazyp;
     const Ob::Ptr alabelp;
-    const Ob::Ptr acontextp;
     const Ob::Ptr aatomp;
     const Ob::Ptr asymbolp;
     const Ob::Ptr aconstp;

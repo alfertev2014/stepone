@@ -40,7 +40,7 @@ public:
 
 class ContextPushTerOp {
 public:
-    static Ob::Ptr op(const Ob::Ptr &x1, const Ob::Ptr &x2, const Ob::Ptr &x3) {return new Evaluator(new Context(x2, x3, x1->cast<Evaluator>()->getContext()));}
+    static Ob::Ptr op(const Ob::Ptr &x1, const Ob::Ptr &x2, const Ob::Ptr &x3) {return new Evaluator(Context::make(x2, x3, x1->cast<Evaluator>()->getContext()));}
     static string toString() {return "ctx-push";}
 };
 

@@ -14,7 +14,6 @@ class Pair;
 class Atom;
 class Lazy;
 class Label;
-class Context;
 
 class Symbol;
 class Const;
@@ -91,7 +90,6 @@ public:
     virtual Lazy * asLazy() {return 0;}
     virtual Pair * asPair() {return 0;}
     virtual Label * asLabel() {return 0;}
-    virtual Context * asContext() {return 0;}
 
     virtual Symbol * asSymbol() {return 0;}
     virtual Const * asConst() {return 0;}
@@ -183,51 +181,11 @@ public:
     Atom * asAtom() {return this;}
 };
 
-class Context : public Ob {
+class Context {
+    Context(){}
 public:
-    const TypeInfoBase * getTypeInfo() const {return &TypeInfo<Context>::instance;}
-    static string getTypeString() {return "Context";}
-private:
-    Ptr s;
-    Ptr e;
-    Ptr next;
-public:
-    Context(const Ptr & _s, const Ptr & _e, const Ptr & _next) : s(_s), e(_e), next(_next) {}
-
-    Ptr getSymbol() const {return s;}
-    Ptr getValue() const {return e;}
-    Ptr getNext() const {return next;}
-
-    void setSymbol(const Ptr& _s) {s = _s;}
-    void setValue(const Ptr& _e) {e = _e;}
-
-    Ptr assoc(const Ptr & _s) const {
-        if(s == _s) return e;
-        Context * p = next->asContext();
-        while(p) {
-            if(p->s == _s) return p->e;
-            p = p->next->asContext();
-        }
-        DBG("Unknown symbol");
-        throw SemanticError();
-    }
-
-    virtual Context * asContext() {return this;}
-
-    string toString() const {
-        Context * ctx = next->asContext();
-        string res = s->toString() + " = " + e->toString();
-        int k = 4;
-        while(ctx != 0) {
-            if(k <= 0) {
-                res += " ...";
-                return res;
-            }
-            res += ", " + ctx->s->toString() + " = " + ctx->e->toString();
-            ctx = ctx->next->asContext();
-            k--;
-        }
-        return res;
+    static Ob::Ptr make(const Ob::Ptr & _s, const Ob::Ptr & _e, const Ob::Ptr & _next) {
+        return new Pair(new Pair(_s, _e), _next);
     }
 };
 
@@ -303,7 +261,7 @@ public:
     static Ptr loop(const Ptr & f, const Ptr & e, const Ptr & a) {
         Label * l = new Label(e.getPointer(), &a);
         Ptr lbl = l;
-        Ptr res = e->eval(new Context(f, lbl, a));
+        Ptr res = e->eval(Context::make(f, lbl, a));
         l->v = res.getPointer();
         l->pa = 0;
         return res;
@@ -327,7 +285,17 @@ public:
     const TypeInfoBase * getTypeInfo() const {return &TypeInfo<Symbol>::instance;}
     static string getTypeString() {return "Symbol";}
 public:
-    Ptr eval(const Ptr & a) {return a->assoc(this);}
+    Ptr eval(const Ptr & a) {
+        Ptr p = a;
+        while(!(p == anil)) {
+            Ptr pair = p->car();
+            if(pair->car().getPointer() == this)
+                return pair->cdr();
+            p = p->cdr();
+        }
+        DBG("Unknown symbol");
+        throw SemanticError();
+    }
 
     Symbol * asSymbol() {return this;}
 
@@ -396,7 +364,7 @@ public:
     Ptr apply(const Ptr &p, const Ptr &a) {
         if(p == Ob::anil)
             return this;
-        return e->eval(new Context(sp, p->car()->eval(a), this->a))->apply(p->cdr(), a);
+        return e->eval(Context::make(sp, p->car()->eval(a), this->a))->apply(p->cdr(), a);
     }
 
     Closure * asClosure() {return this;}
@@ -417,7 +385,7 @@ public:
         : sp(_sp), e(_e), a(_a) {}
 
     Ptr apply(const Ptr &p, const Ptr &a) {
-        return e->eval(new Context(sp, p, this->a));
+        return e->eval(Context::make(sp, p, this->a));
     }
 
     MacroClosure * asMacroClosure() {return this;}
@@ -438,7 +406,7 @@ public:
         : sa(_sa), e(_e), a(_a) {}
 
     Ptr apply(const Ptr &p, const Ptr &a) {
-        return e->eval(new Context(sa, new Evaluator(a), this->a))->apply(p, this->a);
+        return e->eval(Context::make(sa, new Evaluator(a), this->a))->apply(p, this->a);
     }
 
     CurrentContext * asCurrentContext() {return this;}

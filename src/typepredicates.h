@@ -20,12 +20,6 @@ public:
     static string toString() {return "label?";}
 };
 
-class ContextPUnOp {
-public:
-    static Ob::Ptr op(const Ob::Ptr &x) {return bool(x->asContext());}
-    static string toString() {return "ctx?";}
-};
-
 class AtomPUnOp {
 public:
     static Ob::Ptr op(const Ob::Ptr &x) {return bool(x->asAtom());}
@@ -83,7 +77,6 @@ public:
     const Ob::Ptr fpairp;
     const Ob::Ptr flazyp;
     const Ob::Ptr flabelp;
-    const Ob::Ptr fcontextp;
     const Ob::Ptr fatomp;
     const Ob::Ptr fsymbolp;
     const Ob::Ptr fconstp;

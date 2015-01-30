@@ -44,7 +44,7 @@ public:
 public:
     Ob::Ptr apply(const Ptr &p, const Ptr &a) {
         Ob::Ptr val = p->cdr();
-        return val->cdr()->eval(new Context(p->car(), val->car()->eval(a), a));
+        return val->cdr()->eval(Context::make(p->car(), val->car()->eval(a), a));
     }
 };
 

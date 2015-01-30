@@ -46,7 +46,6 @@ BaseTypePredSymbols::BaseTypePredSymbols() :
     apairp(new Symbol),
     alazyp(new Symbol),
     alabelp(new Symbol),
-    acontextp(new Symbol),
     aatomp(new Symbol),
     asymbolp(new Symbol),
     aconstp(new Symbol),

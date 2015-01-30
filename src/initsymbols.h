@@ -128,7 +128,6 @@ public:
         addInSymbols(symbols, "pair?", BaseTypePredSymbols::inst().apairp);
         addInSymbols(symbols, "lazy?", BaseTypePredSymbols::inst().alazyp);
         addInSymbols(symbols, "label?", BaseTypePredSymbols::inst().alabelp);
-        addInSymbols(symbols, "context?", BaseTypePredSymbols::inst().acontextp);
         addInSymbols(symbols, "atom?", BaseTypePredSymbols::inst().aatomp);
         addInSymbols(symbols, "symbol?", BaseTypePredSymbols::inst().asymbolp);
         addInSymbols(symbols, "const?", BaseTypePredSymbols::inst().aconstp);

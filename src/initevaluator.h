@@ -7,7 +7,7 @@ class BaseEvaluator {
     BaseEvaluator(){}
 
     static void addInContext(Ob::Ptr & a, const Ob::Ptr & p, const Ob::Ptr & v) {
-        a = new Context(p, v, a);
+        a = Context::make(p, v, a);
     }
 
 public:
@@ -128,7 +128,6 @@ public:
         addInContext(a, BaseTypePredSymbols::inst().apairp, BaseTypePredicates::inst().fpairp);
         addInContext(a, BaseTypePredSymbols::inst().alazyp, BaseTypePredicates::inst().flazyp);
         addInContext(a, BaseTypePredSymbols::inst().alabelp, BaseTypePredicates::inst().flabelp);
-        addInContext(a, BaseTypePredSymbols::inst().acontextp, BaseTypePredicates::inst().fcontextp);
         addInContext(a, BaseTypePredSymbols::inst().aatomp, BaseTypePredicates::inst().fatomp);
         addInContext(a, BaseTypePredSymbols::inst().asymbolp, BaseTypePredicates::inst().fsymbolp);
         addInContext(a, BaseTypePredSymbols::inst().aconstp, BaseTypePredicates::inst().fconstp);
