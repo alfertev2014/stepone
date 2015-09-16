@@ -36,11 +36,16 @@ class SemanticError {};
 class Ob {
     int refcount;
 
-public: // static
+public:
     class Ptr {
         Ob * ob;
         inline static void incRefCount(Ob * ob) {if(ob != 0) ob->refcount++; else {DBG("ob == 0"); throw SemanticError();}}
-        inline static void decRefCount(Ob * ob) {if(ob == 0) return; ob->refcount--; if(ob->refcount == 0) delete ob;}
+        inline static void decRefCount(Ob * ob) {
+            if(ob == 0) return;
+            ob->refcount--;
+            if(ob->refcount == 0)
+                delete ob;
+        }
     public:
         Ptr() : ob(Ob::anil.ob) {incRefCount(ob);}
         Ptr(Ob * _ob) : ob(_ob) {incRefCount(ob);}
@@ -70,7 +75,6 @@ public: // static
     static const Ptr anil;
     static const Ptr at;
 
-public:
     Ob() : refcount(0) {}
     virtual ~Ob() {}
 
