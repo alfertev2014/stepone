@@ -320,5 +320,5 @@ t
 
 ; Проверка чтения файлов
 
-(>- in (open-in . "../other/testfile.txt") read in . 26)
+(>- in (open-in . "./other/testfile.txt") read in . 26)
 "testfile for testing file "

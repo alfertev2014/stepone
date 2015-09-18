@@ -1,5 +1,14 @@
 #include "repl.h"
 
+#include <iostream>
+#include <string>
+#include <fstream>
+
+using namespace std;
+
+#include "fistparser.h"
+#include "test.h"
+
 int REPL::do_loop() {
     cout << "StepOne REPL" << endl;
     cout << "------------" << endl;
@@ -7,7 +16,7 @@ int REPL::do_loop() {
     FirstParser fp;
 
     /*
-        string libfilename = "../other/initlib.txt"; // hardcoded!!!
+        string libfilename = "./other/initlib.txt"; // hardcoded!!!
         //getline(cin, libfilename);
         ifstream initlibfile(libfilename.c_str());
 

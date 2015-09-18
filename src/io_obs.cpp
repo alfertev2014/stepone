@@ -1,4 +1,5 @@
-#include "io.h"
+#include "io_obs.h"
+#include "io_ops.h"
 
 IOFunctions::IOFunctions() :
     finputp(new FTypeP<FileInputDescriptor>),

@@ -1,5 +1,9 @@
 #include "initsymbols.h"
 
+#include "basesymbols.h"
+#include "bytearray.h"
+
+
 static inline void addInSymbols(Ob::Ptr & symbols, const string & s, const Ob::Ptr & p) {
     symbols = new Pair(new Pair(p, ByteArray::fromChars(s.size(), s.data())), symbols);
 }

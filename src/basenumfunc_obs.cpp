@@ -1,4 +1,4 @@
-#include "basenumfunc.h"
+#include "basenumfunc_obs.h"
 #include "cppoperators.h"
 #include "operations.h"
 #include "valuetype.h"

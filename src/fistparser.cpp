@@ -1,4 +1,11 @@
-#include "fastparser.h"
+#include "fistparser.h"
+
+#include "stepone_obs.h"
+#include "initsymbols.h"
+#include "initevaluator.h"
+
+#include "bytearray.h"
+#include "vector.h"
 
 struct parseRes {
     Ob::Ptr e;

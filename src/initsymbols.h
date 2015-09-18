@@ -1,7 +1,6 @@
 #pragma once
 
-#include "basesymbols.h"
-#include "bytearray.h"
+#include "core.h"
 
 class BaseSymbolTable {
     BaseSymbolTable(){}

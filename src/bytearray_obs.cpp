@@ -1,4 +1,5 @@
-#include "bytearray.h"
+#include "bytearray_ops.h"
+#include "bytearray_obs.h"
 #include "operations.h"
 
 ByteArrayFunctions::ByteArrayFunctions() :

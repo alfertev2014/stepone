@@ -1,8 +1,8 @@
 #pragma once
 
 #include "dbg.h"
-#include "initsymbols.h"
-#include "initevaluator.h"
+
+#include "core.h"
 
 using namespace std;
 

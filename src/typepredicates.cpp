@@ -1,4 +1,5 @@
 #include "typepredicates.h"
+#include "typepredicates_obs.h"
 #include "operations.h"
 
 BaseTypePredicates::BaseTypePredicates() :
