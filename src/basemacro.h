@@ -5,7 +5,6 @@
 class MQuote : public BaseMacro {
 public:
     const TypeInfoBase * getTypeInfo() const {return &TypeInfo<MQuote>::instance;}
-    static string getTypeString() {return "MQuote";}
 public:
     Ob::Ptr apply(const Ptr &p, const Ptr &a) {
         return p;
@@ -15,7 +14,6 @@ public:
 class MApply : public BaseMacro {
 public:
     const TypeInfoBase * getTypeInfo() const {return &TypeInfo<MApply>::instance;}
-    static string getTypeString() {return "MApply";}
 public:
     Ob::Ptr apply(const Ptr &p, const Ptr &a) {
         return p->car()->eval(a)->apply(p->cdr(), a);
@@ -25,7 +23,6 @@ public:
 class MIf : public BaseMacro {
 public:
     const TypeInfoBase * getTypeInfo() const {return &TypeInfo<MIf>::instance;}
-    static string getTypeString() {return "MIf";}
 public:
     Ob::Ptr apply(const Ptr &p, const Ptr &a) {
         if(p->car()->eval(a) == Ob::anil)
@@ -33,14 +30,11 @@ public:
         else
             return p->cdr()->car()->eval(a);
     }
-
-    string toString() const {return "{MIf}";}
 };
 
 class MLet : public BaseMacro {
 public:
     const TypeInfoBase * getTypeInfo() const {return &TypeInfo<MLet>::instance;}
-    static string getTypeString() {return "MLet";}
 public:
     Ob::Ptr apply(const Ptr &p, const Ptr &a) {
         Ob::Ptr val = p->cdr();
@@ -51,7 +45,6 @@ public:
 class MLazy : public BaseMacro {
 public:
     const TypeInfoBase * getTypeInfo() const {return &TypeInfo<MLazy>::instance;}
-    static string getTypeString() {return "MLazy";}
 public:
     Ob::Ptr apply(const Ptr &p, const Ptr &a) {
         return new Lazy(p, a);
@@ -61,7 +54,6 @@ public:
 class MUnlazy : public BaseMacro {
 public:
     const TypeInfoBase * getTypeInfo() const {return &TypeInfo<MUnlazy>::instance;}
-    static string getTypeString() {return "MUnlazy";}
 public:
     Ob::Ptr apply(const Ptr &p, const Ptr &a) {
         return p->eval(a)->unlazy();
@@ -71,7 +63,6 @@ public:
 class MLabel : public BaseMacro {
 public:
     const TypeInfoBase * getTypeInfo() const {return &TypeInfo<MLabel>::instance;}
-    static string getTypeString() {return "MLabel";}
 public:
     Ob::Ptr apply(const Ptr &p, const Ptr &a) {
         return Label::loop(p->car(), p->cdr(), a);
@@ -81,7 +72,6 @@ public:
 class MLambda : public BaseMacro {
 public:
     const TypeInfoBase * getTypeInfo() const {return &TypeInfo<MLambda>::instance;}
-    static string getTypeString() {return "MLambda";}
 public:
     Ob::Ptr apply(const Ptr &p, const Ptr &a) {
         return new Closure(p->car(), p->cdr(), a);
@@ -91,7 +81,6 @@ public:
 class MMacro : public BaseMacro {
 public:
     const TypeInfoBase * getTypeInfo() const {return &TypeInfo<MMacro>::instance;}
-    static string getTypeString() {return "MMacro";}
 public:
     Ob::Ptr apply(const Ptr &p, const Ptr &a) {
         return new MacroClosure(p->car(), p->cdr(), a);
@@ -101,7 +90,6 @@ public:
 class MCurrentContext : public BaseMacro {
 public:
     const TypeInfoBase * getTypeInfo() const {return &TypeInfo<MCurrentContext>::instance;}
-    static string getTypeString() {return "MCurrentContext";}
 public:
     Ob::Ptr apply(const Ptr &p, const Ptr &a) {
         return new CurrentContext(p->car(), p->cdr(), a);
@@ -111,7 +99,6 @@ public:
 class MTry : public BaseMacro {
 public:
     const TypeInfoBase * getTypeInfo() const {return &TypeInfo<MTry>::instance;}
-    static string getTypeString() {return "MTry";}
 public:
     Ob::Ptr apply(const Ptr &p, const Ptr &a) {
         try {
@@ -125,7 +112,6 @@ public:
 class MBot : public BaseMacro {
 public:
     const TypeInfoBase * getTypeInfo() const {return &TypeInfo<MBot>::instance;}
-    static string getTypeString() {return "MBot";}
 public:
     Ob::Ptr apply(const Ptr &p, const Ptr &a) {
         throw SemanticError();
@@ -135,7 +121,6 @@ public:
 class MGenSymbol : public BaseMacro {
 public:
     const TypeInfoBase * getTypeInfo() const {return &TypeInfo<MGenSymbol>::instance;}
-    static string getTypeString() {return "MGenSymbol";}
 public:
     Ob::Ptr apply(const Ptr &p, const Ptr &a) {
         return new Symbol;

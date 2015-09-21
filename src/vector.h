@@ -5,7 +5,6 @@
 class Vector : public Value {
 public:
     const TypeInfoBase * getTypeInfo() const {return &TypeInfo<Vector>::instance;}
-    static string getTypeString() {return "Vector";}
 private:
     Ptr origin;
     Ptr * array;
@@ -85,14 +84,6 @@ public:
             throw SemanticError();
         }
         return new Vector(this, begin, end - begin);
-    }
-
-    string toString() const {
-        if(length <= 0) return "[]";
-        string res("[" + array[0]->toString());
-        for(int i = 1; i < length; ++i)
-            res += ", " + array[i]->toString();
-        return res + "]";
     }
 
     friend class FMakeVector;

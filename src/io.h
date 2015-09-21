@@ -8,7 +8,6 @@
 class IOStreamDescriptor : public Value {
 public:
     const TypeInfoBase * getTypeInfo() const {return &TypeInfo<IOStreamDescriptor>::instance;}
-    static string getTypeString() {return "IOStreamDescriptor";}
 private:
     ifstream stream;
 public:

@@ -10,7 +10,6 @@
 class ByteArray : public Value {
 public:
     const TypeInfoBase * getTypeInfo() const {return &TypeInfo<ByteArray>::instance;}
-    static string getTypeString() {return "ByteArray";}
 private:
     Ptr origin;
     char * buffer;
@@ -42,13 +41,6 @@ public:
     char getElement(int i) const {return buffer[i];}
 
     char * getData() const {return buffer;}
-
-    string toString() const {
-        if(length <= 0) return "bytes[]";
-        stringstream ss;
-        ss << "bytes[" << length << "]";
-        return ss.str();
-    }
 
     ByteArray * clone() {
         ByteArray * res = new ByteArray(length);

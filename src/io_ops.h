@@ -7,7 +7,6 @@ public:
     static Ob::Ptr op(const Ob::Ptr &x) {
         return new FileInputDescriptor(x->cast<ByteArray>()->getData());
     }
-    static string toString() {return "open-in";}
 };
 
 class OutputOpenUnOp {
@@ -15,7 +14,6 @@ public:
     static Ob::Ptr op(const Ob::Ptr &x) {
         return new FileOutputDescriptor(x->cast<ByteArray>()->getData());
     }
-    static string toString() {return "open-out";}
 };
 
 class ReadBinOp {
@@ -27,7 +25,6 @@ public:
         in.read(res->getData(), size);
         return res;
     }
-    static string toString() {return "read";}
 };
 
 class WriteBinOp {
@@ -38,5 +35,4 @@ public:
         out.write(ba->getData(), ba->getSize());
         return new ValueType<int>(ba->getSize());
     }
-    static string toString() {return "write";}
 };

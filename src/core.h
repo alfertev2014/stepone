@@ -2,10 +2,6 @@
 
 #include "dbg.h"
 
-#include <string>
-#include <iostream>
-#include <sstream>
-
 using namespace std;
 
 class Ob;
@@ -120,30 +116,23 @@ public:
             return dynamic_cast<T*>(this);
         DBG("error cast"); throw SemanticError();
     }
-
-    // Методы для отладки
-    string typeToString() const;
-    virtual string toString() const {return "{" + typeToString() + "}";}
 };
 
 class TypeInfoBase {
 public:
     TypeInfoBase();
     const Ob::Ptr type_id;
-    virtual string getTypeString() const = 0;
 };
 
 template <class T>
 class TypeInfo : public TypeInfoBase {
 public:
     static const TypeInfo<T> instance;
-    string getTypeString() const {return T::getTypeString();}
 };
 
 class Pair : public Ob {
 public:
     const TypeInfoBase * getTypeInfo() const {return &TypeInfo<Pair>::instance;}
-    static string getTypeString() {return "Pair";}
 private:
     Ptr pcar;
     Ptr pcdr;
@@ -157,25 +146,6 @@ public:
     Ptr cdr() {return pcdr;}
 
     Ptr eval(const Ptr & a) {return pcar->eval(a)->apply(pcdr, a);}
-
-    string toString() const {
-        if(this == pcar || this == pcdr) {  DBG("car==cdr"); throw SemanticError();}
-        string res = "(" + pcar->toString();
-        Ptr p = pcdr;
-        int k = 4;
-        while(p->asPair()) {
-            if(k <= 0) {
-                res += " ...";
-                return res + ")";
-            }
-            res += " " + p->car()->toString();
-            p = p->cdr();
-            k--;
-        }
-        if(!(p == Ob::anil))
-            res += " . " + p->toString();
-        return res + ")";
-    }
 };
 
 class Atom : public Ob {
@@ -196,7 +166,6 @@ public:
 class Lazy : public Ob {
 public:
     const TypeInfoBase * getTypeInfo() const {return &TypeInfo<Lazy>::instance;}
-    static string getTypeString() {return "Lazy";}
 private:
     Ptr e;
     Ptr a;
@@ -234,14 +203,11 @@ public:
         evw(); return e->apply(p, a);
     }
     Ptr unlazy() {evw(); return e;}
-
-    string toString() const {return "{# " + e->toString() + " | " + (ready ? "ready" : a->toString()) + "}";}
 };
 
 class Label : public Ob {
 public:
     const TypeInfoBase * getTypeInfo() const {return &TypeInfo<Label>::instance;}
-    static string getTypeString() {return "Label";}
 private:
     const Ptr * pa;
     Ob * v;
@@ -279,15 +245,12 @@ public:
     Ptr unlazy() {return ptr()->unlazy();}
 
     Label * asLabel() {return this;}
-
-    string toString() const {return "{@ " + (!pa ? v->toString() : "") + "}";}
 };
 
 
 class Symbol : public Atom {
 public:
     const TypeInfoBase * getTypeInfo() const {return &TypeInfo<Symbol>::instance;}
-    static string getTypeString() {return "Symbol";}
 public:
     Ptr eval(const Ptr & a) {
         Ptr p = a;
@@ -302,16 +265,6 @@ public:
     }
 
     Symbol * asSymbol() {return this;}
-
-    string toString() const {
-        if(this == Ob::anil) return "()";
-        else if(this == Ob::at) return "t";
-        else {
-            stringstream ss;
-            ss << "s" << (void *)this;
-            return ss.str();
-        }
-    }
 };
 
 class Const : public Atom {
@@ -332,7 +285,6 @@ public:
 class Evaluator : public Macro {
 public:
     const TypeInfoBase * getTypeInfo() const {return &TypeInfo<Evaluator>::instance;}
-    static string getTypeString() {return "Evaluator";}
 private:
     Ptr a;
 public:
@@ -356,7 +308,6 @@ public:
 class Closure : public Macro {
 public:
     const TypeInfoBase * getTypeInfo() const {return &TypeInfo<Closure>::instance;}
-    static string getTypeString() {return "Closure";}
 private:
     Ptr sp;
     Ptr e;
@@ -372,14 +323,11 @@ public:
     }
 
     Closure * asClosure() {return this;}
-
-    string toString() const {return "{\\ " + sp->toString() + " . " + e->toString() + " | " + a->toString() + "}";}
 };
 
 class MacroClosure : public Macro {
 public:
     const TypeInfoBase * getTypeInfo() const {return &TypeInfo<MacroClosure>::instance;}
-    static string getTypeString() {return "MacroClosure";}
 private:
     Ptr sp;
     Ptr e;
@@ -393,14 +341,11 @@ public:
     }
 
     MacroClosure * asMacroClosure() {return this;}
-
-    string toString() const {return "{% " + sp->toString() + " . " + e->toString() + " | " + a->toString() + "}";}
 };
 
 class CurrentContext : public Macro {
 public:
     const TypeInfoBase * getTypeInfo() const {return &TypeInfo<CurrentContext>::instance;}
-    static string getTypeString() {return "CurrentContext";}
 private:
     Ptr sa;
     Ptr e;
@@ -414,8 +359,6 @@ public:
     }
 
     CurrentContext * asCurrentContext() {return this;}
-
-    string toString() const {return "{% " + sa->toString() + " . " + e->toString() + " | " + a->toString() + "}";}
 };
 
 class Value : public Const {
