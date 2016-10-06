@@ -151,7 +151,6 @@ public:
 class Atom : public Ob {
 public:
     virtual ~Atom() {}
-
     Atom * asAtom() {return this;}
 };
 
@@ -199,7 +198,6 @@ public:
 
     Ptr eval(const Ptr &a) {evw(); return e->eval(a);}
     Ptr apply(const Ptr &p, const Ptr &a) {
-        if(p == Ob::anil) return this;
         evw(); return e->apply(p, a);
     }
     Ptr unlazy() {evw(); return e;}
@@ -241,7 +239,7 @@ public:
     Ptr cdr() {return ptr()->cdr();}
 
     Ptr eval(const Ptr &a) {return ptr()->eval(a);}
-    Ptr apply(const Ptr &p, const Ptr &a) {return p == Ob::anil ? this : ptr()->apply(p, a);}
+    Ptr apply(const Ptr &p, const Ptr &a) {return ptr()->apply(p, a);}
     Ptr unlazy() {return ptr()->unlazy();}
 
     Label * asLabel() {return this;}
@@ -272,7 +270,7 @@ public:
     virtual ~Const() {}
     Const * asConst() {return this;}
 
-    Ob::Ptr eval(const Ptr &a) {return this;}
+    Ptr eval(const Ptr &a) {return this;}
 };
 
 
@@ -305,6 +303,7 @@ public:
     BaseMacro * asBaseMacro() {return this;}
 };
 
+/// TODO: remove it
 class Closure : public Macro {
 public:
     const TypeInfoBase * getTypeInfo() const {return &TypeInfo<Closure>::instance;}
