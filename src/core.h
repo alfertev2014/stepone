@@ -27,11 +27,57 @@ class TypeInfoBase;
 template <class T>
 class TypeInfo;
 
+struct TypeFlags {
+    enum ObType {
+        Pair,
+        Atom,
+        Lazy,
+        Label
+    };
+
+    enum AtomType {
+        Symbol,
+        Const
+    };
+
+    enum ConstType {
+        Macro,
+        Value
+    };
+
+    enum MacroType {
+        Evaluator,
+        BaseMacro,
+        MacroClosure,
+        CurrentContext
+    };
+
+    enum ValueType {
+        ByteArray,
+        Vector,
+        IOStream,
+        Other
+    };
+
+    int obType : 2;
+    int atomType: 1;
+    int constType: 1;
+    int macroValueType: 2;
+
+    TypeFlags() :
+        obType(0),
+        atomType(0),
+        constType(0),
+        macroValueType(0)
+    {}
+};
+
 class SemanticError {};
 
 class Ob {
     int refcount;
-
+protected:
+    TypeFlags typeFlags;
 public:
     class Ptr {
         Ob * ob;
@@ -86,21 +132,21 @@ public:
     virtual Ptr assoc(const Ptr & s) const {DBG("throw assoc "); throw SemanticError();}
 
     //Методы для определения типа
-    virtual Atom * asAtom() {return 0;}
-    virtual Lazy * asLazy() {return 0;}
-    virtual Pair * asPair() {return 0;}
-    virtual Label * asLabel() {return 0;}
+    Atom * asAtom() {return typeFlags.obType == TypeFlags.Atom ? reinterpret_cast<Atom*>(this) : 0;}
+    Lazy * asLazy() {return typeFlags.obType == TypeFlags.Lazy ? reinterpret_cast<Lazy*>(this) : 0;}
+    Pair * asPair() {return typeFlags.obType == TypeFlags.Pair ? reinterpret_cast<Pair*>(this) : 0;}
+    Label * asLabel() {return typeFlags.obType == TypeFlags.Label ? reinterpret_cast<Label*>(this) : 0;}
 
-    virtual Symbol * asSymbol() {return 0;}
-    virtual Const * asConst() {return 0;}
+    Symbol * asSymbol() {return typeFlags.atomType == TypeFlags.Symbol ? reinterpret_cast<Symbol*>(this) : 0;}
+    Const * asConst() {return typeFlags.atomType == TypeFlags.Const ? reinterpret_cast<Const*>(this) : 0;}
 
-    virtual Macro * asMacro() {return 0;}
-    virtual Evaluator * asEvaluator() {return 0;}
-    virtual BaseMacro * asBaseMacro() {return 0;}
-    virtual Closure * asClosure() {return 0;}
-    virtual MacroClosure * asMacroClosure() {return 0;}
-    virtual CurrentContext * asCurrentContext() {return 0;}
-    virtual Value * asValue() {return 0;}
+    Macro * asMacro() {return typeFlags.constType == TypeFlags.Macro ? reinterpret_cast<Macro*>(this) : 0;}
+    Value * asValue() {return typeFlags.constType == TypeFlags.Value ? reinterpret_cast<Value*>(this) : 0;}
+
+    Evaluator * asEvaluator() {return typeFlags.macroValueType == TypeFlags.Evaluator ? reinterpret_cast<Evaluator*>(this) : 0;}
+    BaseMacro * asBaseMacro() {return typeFlags.macroValueType == TypeFlags.BaseMacro ? reinterpret_cast<BaseMacro*>(this) : 0;}
+    MacroClosure * asMacroClosure() {return typeFlags.macroValueType == TypeFlags.MacroClosure ? reinterpret_cast<MacroClosure*>(this) : 0;}
+    CurrentContext * asCurrentContext() {return typeFlags.macroValueType == TypeFlags.CurrentContext ? reinterpret_cast<CurrentContext*>(this) : 0;}
 
     virtual const TypeInfoBase * getTypeInfo() const = 0;
 
@@ -117,6 +163,8 @@ public:
         DBG("error cast"); throw SemanticError();
     }
 };
+
+
 
 class TypeInfoBase {
 public:
@@ -138,9 +186,9 @@ private:
     Ptr pcdr;
 public:
     Pair(const Ptr & _pcar, const Ptr & _pcdr)
-        : pcar(_pcar), pcdr(_pcdr) {}
-
-    Pair * asPair() {return this;}
+        : pcar(_pcar), pcdr(_pcdr) {
+        typeFlags.obType = TypeFlags.Pair;
+    }
 
     Ptr car() {return pcar;}
     Ptr cdr() {return pcdr;}
@@ -150,8 +198,10 @@ public:
 
 class Atom : public Ob {
 public:
+    Atom(){
+        typeFlags.obType = TypeFlags.Atom;
+    }
     virtual ~Atom() {}
-    Atom * asAtom() {return this;}
 };
 
 class Context {
@@ -189,12 +239,13 @@ private:
     }
 
 public:
-    Lazy(const Ptr & _e, const Ptr & _a) : e(_e), a(_a), ready(false) {}
+    Lazy(const Ptr & _e, const Ptr & _a)
+        : e(_e), a(_a), ready(false) {
+        typeFlags.obType = TypeFlags.Lazy;
+    }
 
     Ptr car() {evw(); return e->car();}
     Ptr cdr() {evw(); return e->cdr();}
-
-    Lazy * asLazy() {return this;}
 
     Ptr eval(const Ptr &a) {evw(); return e->eval(a);}
     Ptr apply(const Ptr &p, const Ptr &a) {
@@ -211,11 +262,7 @@ private:
     Ob * v;
 
     Label(Ob * _v, const Ptr * _a) : v(_v), pa(_a) {
-        DBG("Label created");
-    }
-
-    ~Label() {
-        DBG("Label destroyed");
+        typeFlags.obType = TypeFlags.Label;
     }
 
     Ptr ptr() {
@@ -241,8 +288,6 @@ public:
     Ptr eval(const Ptr &a) {return ptr()->eval(a);}
     Ptr apply(const Ptr &p, const Ptr &a) {return ptr()->apply(p, a);}
     Ptr unlazy() {return ptr()->unlazy();}
-
-    Label * asLabel() {return this;}
 };
 
 
@@ -250,6 +295,9 @@ class Symbol : public Atom {
 public:
     const TypeInfoBase * getTypeInfo() const {return &TypeInfo<Symbol>::instance;}
 public:
+    Symbol() : Atom() {
+        typeFlags.atomType = TypeFlags.Symbol;
+    }
     Ptr eval(const Ptr & a) {
         Ptr p = a;
         while(!(p == anil)) {
@@ -261,23 +309,24 @@ public:
         DBG("Unknown symbol");
         throw SemanticError();
     }
-
-    Symbol * asSymbol() {return this;}
 };
 
 class Const : public Atom {
 public:
+    Const() : Atom() {
+        typeFlags.atomType = TypeFlags.Const;
+    }
     virtual ~Const() {}
-    Const * asConst() {return this;}
-
     Ptr eval(const Ptr &a) {return this;}
 };
 
 
 class Macro : public Const {
 public:
+    Macro() : Const() {
+        typeFlags.constType = TypeFlags.Macro;
+    }
     virtual ~Macro() {}
-    Macro * asMacro() {return this;}
 };
 
 class Evaluator : public Macro {
@@ -288,19 +337,18 @@ private:
 public:
     static const Ptr eempty;
 
-    Evaluator(Ptr _a) : a(_a) {}
+    Evaluator(Ptr _a) : Macro(), a(_a) {
+        typeFlags.macroValueType = TypeFlags.Evaluator;
+    }
 
     Ptr getContext() const {return a;}
 
     Ptr apply(const Ptr &p, const Ptr &a) {return p->eval(a)->eval(this->a);}
-
-    Evaluator * asEvaluator() {return this;}
 };
 
 class BaseMacro : public Macro {
 public:
     virtual ~BaseMacro(){}
-    BaseMacro * asBaseMacro() {return this;}
 };
 
 /// TODO: remove it
@@ -313,15 +361,13 @@ private:
     Ptr a;
 public:
     Closure(const Ptr & _sp, const Ptr & _e, const Ptr & _a)
-        : sp(_sp), e(_e), a(_a) {}
+        : Macro(), sp(_sp), e(_e), a(_a) {}
 
     Ptr apply(const Ptr &p, const Ptr &a) {
         if(p == Ob::anil)
             return this;
         return e->eval(Context::make(sp, p->car()->eval(a), this->a))->apply(p->cdr(), a);
     }
-
-    Closure * asClosure() {return this;}
 };
 
 class MacroClosure : public Macro {
@@ -333,13 +379,13 @@ private:
     Ptr a;
 public:
     MacroClosure(const Ptr & _sp, const Ptr & _e, const Ptr & _a)
-        : sp(_sp), e(_e), a(_a) {}
+        : Macro(), sp(_sp), e(_e), a(_a) {
+        typeFlags.macroValueType = TypeFlags.MacroClosure;
+    }
 
     Ptr apply(const Ptr &p, const Ptr &a) {
         return e->eval(Context::make(sp, p, this->a));
     }
-
-    MacroClosure * asMacroClosure() {return this;}
 };
 
 class CurrentContext : public Macro {
@@ -351,19 +397,21 @@ private:
     Ptr a;
 public:
     CurrentContext(const Ptr & _sa, const Ptr & _e, const Ptr & _a)
-        : sa(_sa), e(_e), a(_a) {}
+        : Macro(), sa(_sa), e(_e), a(_a) {
+        typeFlags.macroValueType = TypeFlags.CurrentContext;
+    }
 
     Ptr apply(const Ptr &p, const Ptr &a) {
         return e->eval(Context::make(sa, new Evaluator(a), this->a))->apply(p, this->a);
     }
-
-    CurrentContext * asCurrentContext() {return this;}
 };
 
 class Value : public Const {
 public:
+    Value() : Const() {
+        typeFlags.constType = TypeFlags.Value;
+    }
     virtual ~Value() {}
-    Value * asValue() {return this;}
 };
 
 template <class T>
