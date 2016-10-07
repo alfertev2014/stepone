@@ -19,8 +19,8 @@ public:
 class ReadBinOp {
 public:
     static Ob::Ptr op(const Ob::Ptr &x1, const Ob::Ptr &x2) {
-        istream &in = x1->cast<IOStreamDescriptor>()->getInputStream();
-        int size = x2->cast<ValueType<int> >()->getValue();
+        std::istream &in = x1->cast<IOStreamDescriptor>()->getInputStream();
+        int size = x2->cast<Value<int> >()->getValue();
         ByteArray *res = new ByteArray(size);
         in.read(res->getData(), size);
         return res;
@@ -30,9 +30,9 @@ public:
 class WriteBinOp {
 public:
     static Ob::Ptr op(const Ob::Ptr &x1, const Ob::Ptr &x2) {
-        ostream &out = x1->cast<IOStreamDescriptor>()->getOutputStream();
+        std::ostream &out = x1->cast<IOStreamDescriptor>()->getOutputStream();
         ByteArray * ba = x2->cast<ByteArray>();
         out.write(ba->getData(), ba->getSize());
-        return new ValueType<int>(ba->getSize());
+        return new Value<int>(ba->getSize());
     }
 };

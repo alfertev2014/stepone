@@ -1,13 +1,13 @@
 #pragma once
 
 #include "core.h"
-#include "valuetype.h"
+#include "value.h"
 
 #include <cstring>
 #include <sstream>
 
 
-class ByteArray : public Value {
+class ByteArray : public ValueBase {
 public:
     const TypeInfoBase * getTypeInfo() const {return &TypeInfo<ByteArray>::instance;}
 private:
@@ -50,7 +50,7 @@ public:
     }
 
     int cmp(ByteArray *ba) {
-        int len = min(length, ba->length);
+        int len = std::min(length, ba->length);
         int res = memcmp(buffer, ba->buffer, len);
         if(res == 0)
             return len < ba->length ? -1 : len < length ? 1 : 0;

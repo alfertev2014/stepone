@@ -1,8 +1,9 @@
 #pragma once
 
-#include "valuetype.h"
+#include "value.h"
+#include "macro.h"
 
-class Vector : public Value {
+class Vector : public ValueBase {
 public:
     const TypeInfoBase * getTypeInfo() const {return &TypeInfo<Vector>::instance;}
 private:

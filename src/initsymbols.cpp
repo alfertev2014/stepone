@@ -4,7 +4,7 @@
 #include "bytearray.h"
 
 
-static inline void addInSymbols(Ob::Ptr & symbols, const string & s, const Ob::Ptr & p) {
+static inline void addInSymbols(Ob::Ptr & symbols, const std::string & s, const Ob::Ptr & p) {
     symbols = new Pair(new Pair(p, ByteArray::fromChars(s.size(), s.data())), symbols);
 }
 
@@ -135,7 +135,7 @@ Ob::Ptr BaseSymbolTable::createSymbolTable() {
 
     addInSymbols(symbols, "ctx-get", BaseFuncSymbols::inst().actxget);
     addInSymbols(symbols, "ctx-push", BaseFuncSymbols::inst().actxpush);
-    addInSymbols(symbols, "empty-ctx", Evaluator::eempty);
+    addInSymbols(symbols, "empty-ctx", BaseFuncSymbols::inst().aeempty);
     addInSymbols(symbols, "get-type", BaseFuncSymbols::inst().agettype);
     addInSymbols(symbols, "cons", BaseFuncSymbols::inst().acons);
     addInSymbols(symbols, "car", BaseFuncSymbols::inst().acar);

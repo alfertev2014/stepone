@@ -5,7 +5,7 @@
 
 class VectorLengthUnOp {
 public:
-    static Ob::Ptr op(const Ob::Ptr &x) {return new ValueType<int>(x->cast<Vector>()->getSize());}
+    static Ob::Ptr op(const Ob::Ptr &x) {return new Value<int>(x->cast<Vector>()->getSize());}
 };
 
 class FMakeVector : public BaseMacro {
@@ -13,7 +13,7 @@ public:
     const TypeInfoBase * getTypeInfo() const {return &TypeInfo<FMakeVector>::instance;}
 
     Ptr apply(const Ptr &p, const Ptr &a) {
-        int n = p->car()->eval(a)->cast<ValueType<int> >()->getValue();
+        int n = p->car()->eval(a)->cast<Value<int> >()->getValue();
         return Vector::fromList(n, p->cdr(), a);
     }
 };
@@ -21,7 +21,7 @@ public:
 class VectorElBinOp {
 public:
     static Ob::Ptr op(const Ob::Ptr &x1, const Ob::Ptr &x2) {
-        return x1->cast<Vector>()->array[x2->cast<ValueType<int> >()->getValue()];
+        return x1->cast<Vector>()->array[x2->cast<Value<int> >()->getValue()];
     }
 };
 
@@ -42,14 +42,14 @@ public:
 class VectorMidTerOp {
 public:
     static Ob::Ptr op(const Ob::Ptr &x1, const Ob::Ptr &x2, const Ob::Ptr &x3) {
-        return x1->cast<Vector>()->mid(x2->cast<ValueType<int> >()->getValue(), x3->cast<ValueType<int> >()->getValue());
+        return x1->cast<Vector>()->mid(x2->cast<Value<int> >()->getValue(), x3->cast<Value<int> >()->getValue());
     }
 };
 
 class VectorSliceTerOp {
 public:
     static Ob::Ptr op(const Ob::Ptr &x1, const Ob::Ptr &x2, const Ob::Ptr &x3) {
-        return x1->cast<Vector>()->mid(x2->cast<ValueType<int> >()->getValue(), x3->cast<ValueType<int> >()->getValue());
+        return x1->cast<Vector>()->mid(x2->cast<Value<int> >()->getValue(), x3->cast<Value<int> >()->getValue());
     }
 };
 

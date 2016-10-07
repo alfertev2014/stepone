@@ -1,6 +1,6 @@
 #pragma once
 
-#include "core.h"
+#include "macro.h"
 
 template <class T>
 class FTypeP : public BaseMacro {

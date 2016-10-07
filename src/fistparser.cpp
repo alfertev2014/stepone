@@ -67,7 +67,9 @@ Ob::Ptr FirstParser::parse(const string &_s) {
 }
 
 Ob::Ptr FirstParser::parseEval(const string &s) {
-    return parse(s)->eval(a)->unlazy();
+    Ob::Ptr parsed = parse(s);
+    Ob::Ptr evaluated = parsed->eval(a)->unlazy();
+    return evaluated;
 }
 
 string FirstParser::evalToString(const string &_s) {
@@ -81,13 +83,13 @@ void FirstParser::print(ostream &ts, const Ob::Ptr &p) {
 }
 
 void FirstParser::FirstParserImpl::printValue(ostream &ts, const Ob::Ptr &p) {
-    Value * spt = p->asValue();
-    if(spt->is<ValueType<int> >())
-        ts << spt->as<ValueType<int> >()->getValue();
-    else if(spt->is<ValueType<float> >())
-        ts << spt->as<ValueType<float> >()->getValue();
-    else if(spt->is<ValueType<char> >()) {
-        char c = spt->as<ValueType<char> >()->getValue();
+    ValueBase * spt = p->asValue();
+    if(spt->is<Value<int> >())
+        ts << spt->as<Value<int> >()->getValue();
+    else if(spt->is<Value<float> >())
+        ts << spt->as<Value<float> >()->getValue();
+    else if(spt->is<Value<char> >()) {
+        char c = spt->as<Value<char> >()->getValue();
         if(c == '\"') ts << "&\"\"";
         else ts << "&\"" << c << "\"";
     } else if(spt->is<Vector>()) {
@@ -228,7 +230,7 @@ parseRes FirstParser::FirstParserImpl::parseChar(string::const_iterator si) {
         chars.push_back(*sii);
     if(sii != s.end())
         ++sii;
-    return parseRes(new ValueType<char>(chars.size() > 0 ? chars[0] : '\"'), sii, true);
+    return parseRes(new Value<char>(chars.size() > 0 ? chars[0] : '\"'), sii, true);
 }
 
 parseRes FirstParser::FirstParserImpl::parseString(string::const_iterator si) {
@@ -288,7 +290,7 @@ parseRes FirstParser::FirstParserImpl::parseNumber(string::const_iterator si) {
         istringstream ss(number);
         int i;
         if(ss >> i)
-            return parseRes(new ValueType<int>(i), sii, true);
+            return parseRes(new Value<int>(i), sii, true);
         else {
             DBG("int is not int");
         }
@@ -302,7 +304,7 @@ parseRes FirstParser::FirstParserImpl::parseNumber(string::const_iterator si) {
         float f;
         istringstream ss(number);
         if(ss >> f)
-            return parseRes(new ValueType<float>(f), sii, true);
+            return parseRes(new Value<float>(f), sii, true);
         else {
             DBG("float is not float");
         }

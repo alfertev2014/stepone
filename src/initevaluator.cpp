@@ -2,7 +2,8 @@
 
 #include "stepone_obs.h"
 #include "basesymbols.h"
-#include "valuetype.h"
+#include "macro.h"
+#include "value.h"
 
 static inline void addInContext(Ob::Ptr & a, const Ob::Ptr & p, const Ob::Ptr & v) {
     a = Context::make(p, v, a);
@@ -81,10 +82,10 @@ Ob::Ptr BaseEvaluator::createContext() {
     addInContext(a, BaseNumFuncSymbols::inst().achar2long, BaseNumFunc::inst().fchar2long);
     addInContext(a, BaseNumFuncSymbols::inst().along2char, BaseNumFunc::inst().flong2char);
 
-    addInContext(a, BaseNumFuncSymbols::inst().aszi, new ValueType<int>(sizeof(int)));
-    addInContext(a, BaseNumFuncSymbols::inst().aszf, new ValueType<int>(sizeof(float)));
-    addInContext(a, BaseNumFuncSymbols::inst().aszc, new ValueType<int>(sizeof(char)));
-    addInContext(a, BaseNumFuncSymbols::inst().aszu, new ValueType<int>(sizeof(long long)));
+    addInContext(a, BaseNumFuncSymbols::inst().aszi, new Value<int>(sizeof(int)));
+    addInContext(a, BaseNumFuncSymbols::inst().aszf, new Value<int>(sizeof(float)));
+    addInContext(a, BaseNumFuncSymbols::inst().aszc, new Value<int>(sizeof(char)));
+    addInContext(a, BaseNumFuncSymbols::inst().aszu, new Value<int>(sizeof(long long)));
 
     addInContext(a, VectorFuncSymbols::inst().avecp, VectorFunctions::inst().fvecp);
     addInContext(a, VectorFuncSymbols::inst().amkvec, VectorFunctions::inst().fmkvec);
