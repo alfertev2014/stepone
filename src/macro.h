@@ -7,12 +7,12 @@ public:
     Macro() : Const() {
         typeFlags.constType = TypeFlags::Macro;
     }
-    virtual ~Macro() {}
+    virtual ~Macro();
 };
 
 class Evaluator : public Macro {
 public:
-    const TypeInfoBase * getTypeInfo() const {return &TypeInfo<Evaluator>::instance;}
+    const TypeInfoBase * getTypeInfo() const;
 private:
     Ptr a;
 public:
@@ -21,21 +21,22 @@ public:
     Evaluator(Ptr _a) : Macro(), a(_a) {
         typeFlags.macroValueType = TypeFlags::Evaluator;
     }
-
     Ptr getContext() const {return a;}
-
-    Ptr apply(const Ptr &p, const Ptr &a) {return p->eval(a)->eval(this->a);}
+    Ptr apply(const Ptr &p, const Ptr &a);
 };
 
 class BaseMacro : public Macro {
 public:
-    virtual ~BaseMacro(){}
+    BaseMacro(): Macro() {
+        typeFlags.macroValueType = TypeFlags::BaseMacro;
+    }
+    virtual ~BaseMacro();
 };
 
 /// TODO: remove it
 class Closure : public Macro {
 public:
-    const TypeInfoBase * getTypeInfo() const {return &TypeInfo<Closure>::instance;}
+    const TypeInfoBase * getTypeInfo() const;
 private:
     Ptr sp;
     Ptr e;
@@ -44,16 +45,12 @@ public:
     Closure(const Ptr & _sp, const Ptr & _e, const Ptr & _a)
         : Macro(), sp(_sp), e(_e), a(_a) {}
 
-    Ptr apply(const Ptr &p, const Ptr &a) {
-        if(p == Ob::anil)
-            return this;
-        return e->eval(Context::make(sp, p->car()->eval(a), this->a))->apply(p->cdr(), a);
-    }
+    Ptr apply(const Ptr &p, const Ptr &a);
 };
 
 class MacroClosure : public Macro {
 public:
-    const TypeInfoBase * getTypeInfo() const {return &TypeInfo<MacroClosure>::instance;}
+    const TypeInfoBase * getTypeInfo() const;
 private:
     Ptr sp;
     Ptr e;
@@ -64,14 +61,12 @@ public:
         typeFlags.macroValueType = TypeFlags::MacroClosure;
     }
 
-    Ptr apply(const Ptr &p, const Ptr &a) {
-        return e->eval(Context::make(sp, p, this->a));
-    }
+    Ptr apply(const Ptr &p, const Ptr &a);
 };
 
 class CurrentContext : public Macro {
 public:
-    const TypeInfoBase * getTypeInfo() const {return &TypeInfo<CurrentContext>::instance;}
+    const TypeInfoBase * getTypeInfo() const;
 private:
     Ptr sa;
     Ptr e;
@@ -82,7 +77,5 @@ public:
         typeFlags.macroValueType = TypeFlags::CurrentContext;
     }
 
-    Ptr apply(const Ptr &p, const Ptr &a) {
-        return e->eval(Context::make(sa, new Evaluator(a), this->a))->apply(p, this->a);
-    }
+    Ptr apply(const Ptr &p, const Ptr &a);
 };

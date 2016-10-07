@@ -7,6 +7,11 @@
 #include "bytearray.h"
 #include "vector.h"
 
+#include <cstring>
+#include <sstream>
+
+using namespace std;
+
 struct parseRes {
     Ob::Ptr e;
     string::const_iterator rest;

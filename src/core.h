@@ -71,35 +71,32 @@ public:
     static const Ptr at;
 
     Ob() : refcount(0) {}
-    virtual ~Ob() {}
+    virtual ~Ob();
 
-    virtual Ptr car() {DBG("throw car "); throw SemanticError();}
-    virtual Ptr cdr() {DBG("throw cdr "); throw SemanticError();}
+    virtual Ptr car();
+    virtual Ptr cdr();
 
-    virtual Ptr eval(const Ptr & a) {throw SemanticError();}
-    virtual Ptr apply(const Ptr & p, const Ptr & a) {
-        if(p == Ob::anil) return this;
-        DBG("apply of not applyable"); throw SemanticError();
-    }
-    virtual Ptr unlazy() {return this;}
-    virtual Ptr assoc(const Ptr & s) const {DBG("throw assoc "); throw SemanticError();}
+    virtual Ptr eval(const Ptr & a);
+    virtual Ptr apply(const Ptr & p, const Ptr & a);
+    virtual Ptr unlazy();
+    virtual Ptr assoc(const Ptr & s) const;
 
     //Методы для определения типа
-    Atom * asAtom() {return typeFlags.obType == TypeFlags::Atom ? reinterpret_cast<Atom*>(this) : 0;}
-    Lazy * asLazy() {return typeFlags.obType == TypeFlags::Lazy ? reinterpret_cast<Lazy*>(this) : 0;}
-    Pair * asPair() {return typeFlags.obType == TypeFlags::Pair ? reinterpret_cast<Pair*>(this) : 0;}
-    Label * asLabel() {return typeFlags.obType == TypeFlags::Label ? reinterpret_cast<Label*>(this) : 0;}
+    Atom * asAtom();
+    Lazy * asLazy();
+    Pair * asPair();
+    Label * asLabel();
 
-    Symbol * asSymbol() {return typeFlags.atomType == TypeFlags::Symbol ? reinterpret_cast<Symbol*>(this) : 0;}
-    Const * asConst() {return typeFlags.atomType == TypeFlags::Const ? reinterpret_cast<Const*>(this) : 0;}
+    Symbol * asSymbol();
+    Const * asConst();
 
-    Macro * asMacro() {return typeFlags.constType == TypeFlags::Macro ? reinterpret_cast<Macro*>(this) : 0;}
-    ValueBase * asValue() {return typeFlags.constType == TypeFlags::ValueBase ? reinterpret_cast<ValueBase*>(this) : 0;}
+    Macro * asMacro();
+    ValueBase * asValue();
 
-    Evaluator * asEvaluator() {return typeFlags.macroValueType == TypeFlags::Evaluator ? reinterpret_cast<Evaluator*>(this) : 0;}
-    BaseMacro * asBaseMacro() {return typeFlags.macroValueType == TypeFlags::BaseMacro ? reinterpret_cast<BaseMacro*>(this) : 0;}
-    MacroClosure * asMacroClosure() {return typeFlags.macroValueType == TypeFlags::MacroClosure ? reinterpret_cast<MacroClosure*>(this) : 0;}
-    CurrentContext * asCurrentContext() {return typeFlags.macroValueType == TypeFlags::CurrentContext ? reinterpret_cast<CurrentContext*>(this) : 0;}
+    Evaluator * asEvaluator();
+    BaseMacro * asBaseMacro();
+    MacroClosure * asMacroClosure();
+    CurrentContext * asCurrentContext();
 
     virtual const TypeInfoBase * getTypeInfo() const = 0;
 
@@ -133,7 +130,7 @@ public:
 
 class Pair : public Ob {
 public:
-    const TypeInfoBase * getTypeInfo() const {return &TypeInfo<Pair>::instance;}
+    const TypeInfoBase * getTypeInfo() const;
 private:
     Ptr pcar;
     Ptr pcdr;
@@ -143,18 +140,18 @@ public:
         typeFlags.obType = TypeFlags::Pair;
     }
 
-    Ptr car() {return pcar;}
-    Ptr cdr() {return pcdr;}
+    Ptr car();
+    Ptr cdr();
 
-    Ptr eval(const Ptr & a) {return pcar->eval(a)->apply(pcdr, a);}
+    Ptr eval(const Ptr & a);
 };
 
 class Atom : public Ob {
 public:
-    Atom(){
+    Atom() {
         typeFlags.obType = TypeFlags::Atom;
     }
-    virtual ~Atom() {}
+    virtual ~Atom();
 };
 
 class Context {
@@ -167,29 +164,14 @@ public:
 
 class Lazy : public Ob {
 public:
-    const TypeInfoBase * getTypeInfo() const {return &TypeInfo<Lazy>::instance;}
+    const TypeInfoBase * getTypeInfo() const;
 private:
     Ptr e;
     Ptr a;
     bool ready;
 
-    void ev() {
-        if(!ready) {
-            e = e->eval(a);
-            ready = true;
-            a = Ob::anil;
-        }
-    }
-
-    void evw() {
-        ev();
-        Lazy * l = e->asLazy();
-        while(l != 0) {
-            l->ev();
-            e = l->e;
-            l = e->asLazy();
-        }
-    }
+    void ev();
+    void evw();
 
 public:
     Lazy(const Ptr & _e, const Ptr & _a)
@@ -197,19 +179,17 @@ public:
         typeFlags.obType = TypeFlags::Lazy;
     }
 
-    Ptr car() {evw(); return e->car();}
-    Ptr cdr() {evw(); return e->cdr();}
+    Ptr car();
+    Ptr cdr();
 
-    Ptr eval(const Ptr &a) {evw(); return e->eval(a);}
-    Ptr apply(const Ptr &p, const Ptr &a) {
-        evw(); return e->apply(p, a);
-    }
-    Ptr unlazy() {evw(); return e;}
+    Ptr eval(const Ptr &a);
+    Ptr apply(const Ptr &p, const Ptr &a);
+    Ptr unlazy();
 };
 
 class Label : public Ob {
 public:
-    const TypeInfoBase * getTypeInfo() const {return &TypeInfo<Label>::instance;}
+    const TypeInfoBase * getTypeInfo() const;
 private:
     const Ptr * pa;
     Ob * v;
@@ -218,12 +198,7 @@ private:
         typeFlags.obType = TypeFlags::Label;
     }
 
-    Ptr ptr() {
-        if(pa) {
-            return v->eval(*pa);
-        }
-        return v;
-    }
+    Ptr ptr();
 
 public:
     static Ptr loop(const Ptr & f, const Ptr & e, const Ptr & a) {
@@ -235,33 +210,23 @@ public:
         return res;
     }
 
-    Ptr car() {return ptr()->car();}
-    Ptr cdr() {return ptr()->cdr();}
+    Ptr car();
+    Ptr cdr();
 
-    Ptr eval(const Ptr &a) {return ptr()->eval(a);}
-    Ptr apply(const Ptr &p, const Ptr &a) {return ptr()->apply(p, a);}
-    Ptr unlazy() {return ptr()->unlazy();}
+    Ptr eval(const Ptr &a);
+    Ptr apply(const Ptr &p, const Ptr &a);
+    Ptr unlazy();
 };
 
 
 class Symbol : public Atom {
 public:
-    const TypeInfoBase * getTypeInfo() const {return &TypeInfo<Symbol>::instance;}
+    const TypeInfoBase * getTypeInfo() const;
 public:
     Symbol() : Atom() {
         typeFlags.atomType = TypeFlags::Symbol;
     }
-    Ptr eval(const Ptr & a) {
-        Ptr p = a;
-        while(!(p == anil)) {
-            Ptr pair = p->car();
-            if(pair->car().getPointer() == this)
-                return pair->cdr();
-            p = p->cdr();
-        }
-        DBG("Unknown symbol");
-        throw SemanticError();
-    }
+    Ptr eval(const Ptr & a);
 };
 
 class Const : public Atom {
@@ -269,8 +234,8 @@ public:
     Const() : Atom() {
         typeFlags.atomType = TypeFlags::Const;
     }
-    virtual ~Const() {}
-    Ptr eval(const Ptr &a) {return this;}
+    virtual ~Const();
+    Ptr eval(const Ptr &a);
 };
 
 template <class T>

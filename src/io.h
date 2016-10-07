@@ -7,28 +7,28 @@
 
 class IOStreamDescriptor : public ValueBase {
 public:
-    const TypeInfoBase * getTypeInfo() const {return &TypeInfo<IOStreamDescriptor>::instance;}
+    const TypeInfoBase * getTypeInfo() const;
 private:
     std::ifstream stream;
 public:
-    virtual std::iostream &getStream() {throw SemanticError();}
-    virtual std::istream &getInputStream() {throw SemanticError();}
-    virtual std::ostream &getOutputStream() {throw SemanticError();}
+    virtual std::iostream &getStream();
+    virtual std::istream &getInputStream();
+    virtual std::ostream &getOutputStream();
 };
 
 class StdIn : public IOStreamDescriptor {
 public:
-    std::istream &getInputStream() {return std::cin;}
+    std::istream &getInputStream();
 };
 
 class StdOut : public IOStreamDescriptor {
 public:
-    std::ostream &getOutputStream() {return std::cout;}
+    std::ostream &getOutputStream();
 };
 
 class StdErr : public IOStreamDescriptor {
 public:
-    std::ostream &getOutputStream() {return std::cerr;}
+    std::ostream &getOutputStream();
 };
 
 class FileDescriptor : public IOStreamDescriptor {
@@ -39,18 +39,18 @@ public:
         if(!stream.is_open())
             throw SemanticError();
     }
-    std::iostream &getStream() {return stream;}
-    void close() {stream.close();}
+    std::iostream &getStream();
+    void close();
 };
 
 class FileInputDescriptor : public FileDescriptor {
 public:
     FileInputDescriptor(const char * fname) : FileDescriptor(fname, std::ios_base::in) {}
-    std::istream &getInputStream() {return stream;}
+    std::istream &getInputStream();
 };
 
 class FileOutputDescriptor : public FileDescriptor {
 public:
     FileOutputDescriptor(const char * fname) : FileDescriptor(fname, std::ios_base::out | std::ios_base::app) {}
-    std::ostream &getOutputStream() {return stream;}
+    std::ostream &getOutputStream();
 };

@@ -5,7 +5,7 @@
 
 class Vector : public ValueBase {
 public:
-    const TypeInfoBase * getTypeInfo() const {return &TypeInfo<Vector>::instance;}
+    const TypeInfoBase * getTypeInfo() const;
 private:
     Ptr origin;
     Ptr * array;
@@ -27,65 +27,17 @@ public:
         : origin(_origin), array(_begin), length(_length < 0 ? 0 : _length) {}
 
 
-    ~Vector() {
-        if(origin == Ob::anil) {
-            // manual call destructor ~Ptr()
-            for(int i = 0; i < length; ++i)
-                array[i].~Ptr();
-            delete [] reinterpret_cast<char*>(array);
-        }
-    }
+    ~Vector();
 
     int getSize() const {return length;}
-
     Ptr getElement(int i) {return array[i];}
 
-    static Vector * fromList(int n, const Ptr & list, const Ptr & a) {
-        Vector * res = new Vector(n);
-        Ptr p = list;
-        for(int i = 0; i < n; ++i) {
-            new (res->array + i) Ptr(p->car()->eval(a));
-            p = p->cdr();
-        }
-        return res;
-    }
+    static Vector * fromList(int n, const Ptr & list, const Ptr & a);
 
-    Vector * clone() {
-        Vector * res = new Vector(length);
-        for(int i = 0; i < length; ++i)
-            new (res->array + i) Ptr(array[i]);
-        return res;
-    }
-
-    Vector * concat(Vector * v) const {
-        int nres = length + v->length;
-        Vector * res = new Vector(nres);
-        for(int i = 0; i < length; ++i)
-            new (res->array + i) Ptr(array[i]);
-        for(int i = 0; i < v->length; ++i)
-            new (res->array + length + i) Ptr(v->array[i]);
-        return res;
-    }
-
-    Vector * mid(int begin, int end) {
-        if(begin < 0 || end >= length) {
-            DBG("vector index out of range");
-            throw SemanticError();
-        }
-        int nres = end - begin;
-        Vector * res = new Vector(nres);
-        for(int i = 0; i < nres; ++i)
-            new (res->array + i) Ptr(array[begin + i]);
-        return res;
-    }
-
-    Vector * slice(int begin, int end) {
-        if(begin < 0 || end >= length) {
-            DBG("vector index out of range");
-            throw SemanticError();
-        }
-        return new Vector(this, begin, end - begin);
-    }
+    Vector * clone();
+    Vector * concat(Vector * v) const;
+    Vector * mid(int begin, int end);
+    Vector * slice(int begin, int end);
 
     friend class FMakeVector;
     friend class VectorElBinOp;

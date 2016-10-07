@@ -4,126 +4,92 @@
 
 class MQuote : public BaseMacro {
 public:
-    const TypeInfoBase * getTypeInfo() const {return &TypeInfo<MQuote>::instance;}
+    const TypeInfoBase * getTypeInfo() const;
 public:
-    Ob::Ptr apply(const Ptr &p, const Ptr &a) {
-        return p;
-    }
+    Ob::Ptr apply(const Ptr &p, const Ptr &a);
 };
 
 class MApply : public BaseMacro {
 public:
-    const TypeInfoBase * getTypeInfo() const {return &TypeInfo<MApply>::instance;}
+    const TypeInfoBase * getTypeInfo() const;
 public:
-    Ob::Ptr apply(const Ptr &p, const Ptr &a) {
-        return p->car()->eval(a)->apply(p->cdr(), a);
-    }
+    Ob::Ptr apply(const Ptr &p, const Ptr &a);
 };
 
 class MIf : public BaseMacro {
 public:
-    const TypeInfoBase * getTypeInfo() const {return &TypeInfo<MIf>::instance;}
+    const TypeInfoBase * getTypeInfo() const;
 public:
-    Ob::Ptr apply(const Ptr &p, const Ptr &a) {
-        if(p->car()->eval(a) == Ob::anil)
-            return p->cdr()->cdr()->eval(a);
-        else
-            return p->cdr()->car()->eval(a);
-    }
+    Ob::Ptr apply(const Ptr &p, const Ptr &a);
 };
 
 class MLet : public BaseMacro {
 public:
-    const TypeInfoBase * getTypeInfo() const {return &TypeInfo<MLet>::instance;}
+    const TypeInfoBase * getTypeInfo() const;
 public:
-    Ob::Ptr apply(const Ptr &p, const Ptr &a) {
-        Ob::Ptr val = p->cdr();
-        return val->cdr()->eval(Context::make(p->car(), val->car()->eval(a), a));
-    }
+    Ob::Ptr apply(const Ptr &p, const Ptr &a);
 };
 
 class MLazy : public BaseMacro {
 public:
-    const TypeInfoBase * getTypeInfo() const {return &TypeInfo<MLazy>::instance;}
+    const TypeInfoBase * getTypeInfo() const;
 public:
-    Ob::Ptr apply(const Ptr &p, const Ptr &a) {
-        return new Lazy(p, a);
-    }
+    Ob::Ptr apply(const Ptr &p, const Ptr &a);
 };
 
 class MUnlazy : public BaseMacro {
 public:
-    const TypeInfoBase * getTypeInfo() const {return &TypeInfo<MUnlazy>::instance;}
+    const TypeInfoBase * getTypeInfo() const;
 public:
-    Ob::Ptr apply(const Ptr &p, const Ptr &a) {
-        return p->eval(a)->unlazy();
-    }
+    Ob::Ptr apply(const Ptr &p, const Ptr &a);
 };
 
 class MLabel : public BaseMacro {
 public:
-    const TypeInfoBase * getTypeInfo() const {return &TypeInfo<MLabel>::instance;}
+    const TypeInfoBase * getTypeInfo() const;
 public:
-    Ob::Ptr apply(const Ptr &p, const Ptr &a) {
-        return Label::loop(p->car(), p->cdr(), a);
-    }
+    Ob::Ptr apply(const Ptr &p, const Ptr &a);
 };
 
 class MLambda : public BaseMacro {
 public:
-    const TypeInfoBase * getTypeInfo() const {return &TypeInfo<MLambda>::instance;}
+    const TypeInfoBase * getTypeInfo() const;
 public:
-    Ob::Ptr apply(const Ptr &p, const Ptr &a) {
-        return new Closure(p->car(), p->cdr(), a);
-    }
+    Ob::Ptr apply(const Ptr &p, const Ptr &a);
 };
 
 class MMacro : public BaseMacro {
 public:
-    const TypeInfoBase * getTypeInfo() const {return &TypeInfo<MMacro>::instance;}
+    const TypeInfoBase *getTypeInfo() const;
 public:
-    Ob::Ptr apply(const Ptr &p, const Ptr &a) {
-        return new MacroClosure(p->car(), p->cdr(), a);
-    }
+    Ob::Ptr apply(const Ptr &p, const Ptr &a);
 };
 
 class MCurrentContext : public BaseMacro {
 public:
-    const TypeInfoBase * getTypeInfo() const {return &TypeInfo<MCurrentContext>::instance;}
+    const TypeInfoBase * getTypeInfo() const;
 public:
-    Ob::Ptr apply(const Ptr &p, const Ptr &a) {
-        return new CurrentContext(p->car(), p->cdr(), a);
-    }
+    Ob::Ptr apply(const Ptr &p, const Ptr &a);
 };
 
 class MTry : public BaseMacro {
 public:
-    const TypeInfoBase * getTypeInfo() const {return &TypeInfo<MTry>::instance;}
+    const TypeInfoBase * getTypeInfo() const;
 public:
-    Ob::Ptr apply(const Ptr &p, const Ptr &a) {
-        try {
-            return p->car()->eval(a);
-        } catch(SemanticError e) {
-            return p->cdr()->eval(a);
-        }
-    }
+    Ob::Ptr apply(const Ptr &p, const Ptr &a);
 };
 
 class MBot : public BaseMacro {
 public:
-    const TypeInfoBase * getTypeInfo() const {return &TypeInfo<MBot>::instance;}
+    const TypeInfoBase * getTypeInfo() const;
 public:
-    Ob::Ptr apply(const Ptr &p, const Ptr &a) {
-        throw SemanticError();
-    }
+    Ob::Ptr apply(const Ptr &p, const Ptr &a);
 };
 
 class MGenSymbol : public BaseMacro {
 public:
-    const TypeInfoBase * getTypeInfo() const {return &TypeInfo<MGenSymbol>::instance;}
+    const TypeInfoBase * getTypeInfo() const;
 public:
-    Ob::Ptr apply(const Ptr &p, const Ptr &a) {
-        return new Symbol;
-    }
+    Ob::Ptr apply(const Ptr &p, const Ptr &a);
 };
 

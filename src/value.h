@@ -22,15 +22,14 @@ public:
     ValueBase() : Const() {
         typeFlags.constType = TypeFlags::ValueBase;
     }
-    virtual ~ValueBase() {}
+    virtual ~ValueBase();
 };
 
 class OtherValue : public ValueBase {
-public:
+protected:
     OtherValue() : ValueBase() {
         typeFlags.macroValueType = TypeFlags::Other;
     }
-    virtual ~OtherValue() {}
 };
 
 template <class T>

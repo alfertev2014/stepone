@@ -3,13 +3,9 @@
 #include "core.h"
 #include "value.h"
 
-#include <cstring>
-#include <sstream>
-
-
 class ByteArray : public ValueBase {
 public:
-    const TypeInfoBase * getTypeInfo() const {return &TypeInfo<ByteArray>::instance;}
+    const TypeInfoBase * getTypeInfo() const;
 private:
     Ptr origin;
     char * buffer;
@@ -31,107 +27,31 @@ public:
     ByteArray(char * _begin, int _length)
         : origin(Ob::at), buffer(_begin), length(_length < 0 ? 0 : _length) {}
 
-    ~ByteArray() {
-        if(origin == Ob::anil)
-            delete [] buffer;
-    }
+    ~ByteArray();
 
     int getSize() const {return length;}
-
     char getElement(int i) const {return buffer[i];}
-
     char * getData() const {return buffer;}
 
-    ByteArray * clone() {
-        ByteArray * res = new ByteArray(length);
-        for(int i = 0; i < length; ++i)
-            res->buffer[i] = buffer[i];
-        return res;
-    }
+    ByteArray * clone();
 
-    int cmp(ByteArray *ba) {
-        int len = std::min(length, ba->length);
-        int res = memcmp(buffer, ba->buffer, len);
-        if(res == 0)
-            return len < ba->length ? -1 : len < length ? 1 : 0;
-        return res;
-    }
+    int cmp(ByteArray *ba);
+    int ncmp(ByteArray *ba, int n);
 
-    int ncmp(ByteArray *ba, int n) {
-        return memcmp(buffer, ba->buffer, n);
-    }
+    int findChar(int ch);
+    int findSubarray(ByteArray *ba);
 
-    int findChar(int ch) {
-        char * res = (char *)memchr(buffer, ch, length);
-        return res ? res - buffer : -1;
-    }
+    ByteArray * concat(ByteArray * ba) const;
+    ByteArray * mid(int begin, int end);
+    ByteArray * slice(int begin, int end);
 
-    int findSubarray(ByteArray *ba) {
-        char * pend = buffer + length;
-        char * needleEnd = ba->buffer + ba->length;
-        char *p = buffer, *needle = ba->buffer;
-        while(true) {
-            if(needle == needleEnd)
-                return p - buffer - ba->length;
-            if(p == pend)
-                return -1;
-            if(*p != *needle) {
-                needle = ba->buffer;
-                while(*p != *needle) {
-                    if(p == pend)
-                        return -1;
-                    ++p;
-                }
-            }
-            ++needle;
-            ++p;
-        }
-        return -1;
-    }
-
-    ByteArray * concat(ByteArray * ba) const {
-        int nres = length + ba->length;
-        ByteArray * res = new ByteArray(nres);
-        memcpy(res->buffer, buffer, length);
-        memcpy(res->buffer + length, ba->buffer, ba->length);
-        return res;
-    }
+    static ByteArray * fromChars(int size, const char * chars);
 
     template <class T>
     static ByteArray * from(T f) {
         ByteArray * res = new ByteArray(sizeof(T));
         *(reinterpret_cast<T*>(res->buffer)) = f;
         return res;
-    }
-
-    static ByteArray * fromChars(int size, const char * chars) {
-        ByteArray * res = new ByteArray(size);
-        memcpy(res->buffer, chars, size);
-        return res;
-    }
-
-    ByteArray * mid(int begin, int end) {
-        if(begin > length)
-            begin = length;
-        if(end > length)
-            end = length;
-        int n = end - begin;
-        if(n < 0)
-            n = 0;
-        ByteArray * res = new ByteArray(n);
-        memcpy(res->buffer, buffer + begin, n);
-        return res;
-    }
-
-    ByteArray * slice(int begin, int end) {
-        if(begin > length)
-            begin = length;
-        if(end > length)
-            end = length;
-        int n = end - begin;
-        if(n < 0)
-            n = 0;
-        return new ByteArray(origin == Ob::anil ? this : origin, buffer + begin, n);
     }
 
     template <class T>
