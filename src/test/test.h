@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include "fistparser.h"
+#include "../parser/fistparser.h"
 
 using namespace std;
 

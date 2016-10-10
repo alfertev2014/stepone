@@ -1,14 +1,28 @@
 SOURCES_DIR = src
 BUILD_DIR = build
-TARGET = stepone.exe
+TARGET = build/repl.exe
 CXX = g++
 
-SOURCES := $(wildcard $(SOURCES_DIR)/*.cpp)
-HEADERS := $(wildcard $(SOURCES_DIR)/*.h)
+DEBUG = 1
 
-OBJECTS := $(SOURCES:$(SOURCES_DIR)/%=$(BUILD_DIR)/%.o)
+ifdef DEBUG
+CXX_FLAGS = -rdynamic -DDEBUG -O0 -ggdb -D_GLIBCXX_DEBUG
+else
+CXX_FLAGS = -O3
+endif
 
-FLAGS := -rdynamic -DDEBUG -O0 -ggdb -D_GLIBCXX_DEBUG
+LD_FLAGS =
+
+LIB_SOURCES := \
+$(wildcard $(SOURCES_DIR)/core/*.cpp) \
+$(wildcard $(SOURCES_DIR)/base/*.cpp) \
+$(wildcard $(SOURCES_DIR)/parser/*.cpp) \
+$(wildcard $(SOURCES_DIR)/repl/*.cpp) \
+$(wildcard $(SOURCES_DIR)/test/*.cpp)
+
+INCLUDE_DIRS = -Isrc/include
+
+OBJECTS := $(LIB_SOURCES:$(SOURCES_DIR)/%=$(BUILD_DIR)/%.o)
 
 DIR_GUARD = mkdir -p $(@D) || true
 
@@ -18,11 +32,11 @@ all: $(TARGET)
 
 $(TARGET) : $(OBJECTS) $(HEADERS)
 	@${DIR_GUARD}
-	$(CXX) $(OBJECTS) $(FLAGS) -o $@
+	$(CXX) $(OBJECTS) $(LD_FLAGS) -o $@
 
 $(OBJECTS) : $(BUILD_DIR)/%.cpp.o: $(SOURCES_DIR)/%.cpp
 	@${DIR_GUARD}
-	$(CXX) -c $< $(FLAGS) -o $@
+	$(CXX) -c $< $(CXX_FLAGS) $(INCLUDE_DIRS) -o $@
 
 clean:
 	rm -f $(OBJECTS) $(TARGET)
