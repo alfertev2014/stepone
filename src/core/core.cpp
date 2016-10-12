@@ -24,31 +24,23 @@ Ob::Ptr Ob::unlazy() {return this;}
 
 Ob::Ptr Ob::assoc(const Ob::Ptr &s) const {DBG("throw assoc "); throw SemanticError();}
 
-Atom *Ob::asAtom() {return typeFlags.obType == TypeFlags::Atom ? reinterpret_cast<Atom*>(this) : 0;}
+template<>
+Atom *Ob::as<Atom>() {return typeFlags.obType == TypeFlags::Atom ? dynamic_cast<Atom*>(this) : 0;}
 
-Lazy *Ob::asLazy() {return typeFlags.obType == TypeFlags::Lazy ? reinterpret_cast<Lazy*>(this) : 0;}
+template<>
+Lazy *Ob::as<Lazy>() {return typeFlags.obType == TypeFlags::Lazy ? dynamic_cast<Lazy*>(this) : 0;}
 
-Pair *Ob::asPair() {return typeFlags.obType == TypeFlags::Pair ? reinterpret_cast<Pair*>(this) : 0;}
+template<>
+Pair *Ob::as<Pair>() {return typeFlags.obType == TypeFlags::Pair ? dynamic_cast<Pair*>(this) : 0;}
 
-Label *Ob::asLabel() {return typeFlags.obType == TypeFlags::Label ? reinterpret_cast<Label*>(this) : 0;}
+template<>
+Label *Ob::as<Label>() {return typeFlags.obType == TypeFlags::Label ? dynamic_cast<Label*>(this) : 0;}
 
-Symbol *Ob::asSymbol() {return typeFlags.atomType == TypeFlags::Symbol ? reinterpret_cast<Symbol*>(this) : 0;}
+template<>
+Symbol *Ob::as<Symbol>() {return typeFlags.atomType == TypeFlags::Symbol ? dynamic_cast<Symbol*>(this) : 0;}
 
-Const *Ob::asConst() {return typeFlags.atomType == TypeFlags::Const ? reinterpret_cast<Const*>(this) : 0;}
-
-Macro *Ob::asMacro() {return typeFlags.constType == TypeFlags::Macro ? reinterpret_cast<Macro*>(this) : 0;}
-
-ValueBase *Ob::asValue() {return typeFlags.constType == TypeFlags::ValueBase ? reinterpret_cast<ValueBase*>(this) : 0;}
-
-Evaluator *Ob::asEvaluator() {return typeFlags.macroValueType == TypeFlags::Evaluator ? reinterpret_cast<Evaluator*>(this) : 0;}
-
-BaseMacro *Ob::asBaseMacro() {return typeFlags.macroValueType == TypeFlags::BaseMacro ? reinterpret_cast<BaseMacro*>(this) : 0;}
-
-MacroClosure *Ob::asMacroClosure() {return typeFlags.macroValueType == TypeFlags::MacroClosure ? reinterpret_cast<MacroClosure*>(this) : 0;}
-
-CurrentContext *Ob::asCurrentContext() {return typeFlags.macroValueType == TypeFlags::CurrentContext ? reinterpret_cast<CurrentContext*>(this) : 0;}
-
-
+template<>
+Const *Ob::as<Const>() {return typeFlags.atomType == TypeFlags::Const ? dynamic_cast<Const*>(this) : 0;}
 
 const TypeInfoBase *Pair::getTypeInfo() const {return &TypeInfo<Pair>::instance;}
 
@@ -63,20 +55,19 @@ Atom::~Atom() {}
 const TypeInfoBase *Lazy::getTypeInfo() const {return &TypeInfo<Lazy>::instance;}
 
 inline void Lazy::ev() {
-    if(!ready) {
+    if(!(a == Ob::anil)) {
         e = e->eval(a);
-        ready = true;
         a = Ob::anil;
     }
 }
 
 inline void Lazy::evw() {
     ev();
-    Lazy * l = e->asLazy();
+    Lazy * l = e->as<Lazy>();
     while(l != 0) {
         l->ev();
         e = l->e;
-        l = e->asLazy();
+        l = e->as<Lazy>();
     }
 }
 

@@ -89,7 +89,7 @@ void FirstParser::print(ostream &ts, const Ob::Ptr &p) {
 }
 
 void FirstParser::FirstParserImpl::printValue(ostream &ts, const Ob::Ptr &p) {
-    ValueBase * spt = p->asValue();
+    ValueBase * spt = p->as<ValueBase>();
     if(spt->is<Value<int> >())
         ts << spt->as<Value<int> >()->getValue();
     else if(spt->is<Value<float> >())
@@ -122,18 +122,18 @@ void FirstParser::FirstParserImpl::printValue(ostream &ts, const Ob::Ptr &p) {
 }
 
 ostream &FirstParser::FirstParserImpl::printOb(ostream &ts, const Ob::Ptr &p) {
-    Symbol * sym = p->asSymbol();
+    Symbol * sym = p->as<Symbol>();
     if(sym != 0)
         return printSymbol(ts, sym);
-    if(p->asPair()) {
+    if(p->as<Pair>()) {
         ts << "(";
-        return printList(ts, p->asPair());
+        return printList(ts, p->as<Pair>());
     }
-    if(p->asLazy())
+    if(p->as<Lazy>())
         ts << "{lazy}";
-    else if(p->asLabel())
+    else if(p->as<Label>())
         ts << "{label}";
-    else if(p->asValue()) {
+    else if(p->as<ValueBase>()) {
         printValue(ts, p);
     }
     return ts;
@@ -146,7 +146,7 @@ Ob::Ptr FirstParser::FirstParserImpl::parse(const string &_s) {
 }
 
 ostream &FirstParser::FirstParserImpl::printSymbol(ostream &ts, Symbol *sym) {
-    if(sym == Ob::anil->asSymbol()) {
+    if(sym == Ob::anil->as<Symbol>()) {
         return ts << "()";
     } else {
         for(Ob * p = symbols.getPointer(); p != Ob::anil.getPointer(); p = p->cdr().getPointer()) {
@@ -162,16 +162,16 @@ ostream &FirstParser::FirstParserImpl::printSymbol(ostream &ts, Symbol *sym) {
 ostream &FirstParser::FirstParserImpl::printList(ostream &ts, Pair *pr) {
     printOb(ts, pr->car());
     Ob::Ptr pcdr = pr->cdr();
-    Atom * atom = pcdr->asAtom();
+    Atom * atom = pcdr->as<Atom>();
     if(atom != 0) {
-        if(atom != Ob::anil->asAtom()) {
+        if(atom != Ob::anil->as<Atom>()) {
             ts << " . ";
             printOb(ts, pcdr);
         }
         ts << ")";
     } else {
         ts << " ";
-        printList(ts, pcdr->asPair());
+        printList(ts, pcdr->as<Pair>());
     }
     return ts;
 }

@@ -81,27 +81,10 @@ public:
     virtual Ptr unlazy();
     virtual Ptr assoc(const Ptr & s) const;
 
-    //Методы для определения типа
-    Atom * asAtom();
-    Lazy * asLazy();
-    Pair * asPair();
-    Label * asLabel();
-
-    Symbol * asSymbol();
-    Const * asConst();
-
-    Macro * asMacro();
-    ValueBase * asValue();
-
-    Evaluator * asEvaluator();
-    BaseMacro * asBaseMacro();
-    MacroClosure * asMacroClosure();
-    CurrentContext * asCurrentContext();
-
     virtual const TypeInfoBase * getTypeInfo() const = 0;
 
     template <class T>
-    T * as() {return &TypeInfo<T>::instance == getTypeInfo() ? dynamic_cast<T*>(this) : 0;}
+    T * as();
 
     template <class T>
     bool is() const {return &TypeInfo<T>::instance == getTypeInfo();}
@@ -168,14 +151,13 @@ public:
 private:
     Ptr e;
     Ptr a;
-    bool ready;
 
     void ev();
     void evw();
 
 public:
     Lazy(const Ptr & _e, const Ptr & _a)
-        : e(_e), a(_a), ready(false) {
+        : e(_e), a(_a) {
         typeFlags.obType = TypeFlags::Lazy;
     }
 
@@ -243,5 +225,41 @@ const TypeInfo<T> TypeInfo<T>::instance;
 
 inline bool operator ==(const Ob * const ob, const Ob::Ptr & p) {return ob == p.ob;}
 
+template <class T>
+T * Ob::as() {return &TypeInfo<T>::instance == getTypeInfo() ? dynamic_cast<T*>(this) : 0;}
 
+template<>
+Atom *Ob::as<Atom>();
 
+template<>
+Lazy *Ob::as<Lazy>();
+
+template<>
+Pair *Ob::as<Pair>();
+
+template<>
+Label *Ob::as<Label>();
+
+template<>
+Symbol *Ob::as<Symbol>();
+
+template<>
+Const *Ob::as<Const>();
+
+template<>
+Macro *Ob::as<Macro>();
+
+template<>
+ValueBase *Ob::as<ValueBase>();
+
+template<>
+Evaluator *Ob::as<Evaluator>();
+
+template<>
+BaseMacro *Ob::as<BaseMacro>();
+
+template<>
+MacroClosure *Ob::as<MacroClosure>();
+
+template<>
+CurrentContext *Ob::as<CurrentContext>();
