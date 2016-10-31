@@ -1,6 +1,7 @@
 #pragma once
 
-#include "core.h"
+#include "base.h"
+#include <type_info_inst.h>
 #include <sstream>
 
 template <class T>
@@ -25,6 +26,9 @@ public:
     virtual ~ValueBase();
 };
 
+template<>
+ValueBase *Ob::as<ValueBase>();
+
 class OtherValue : public ValueBase {
 protected:
     OtherValue() : ValueBase() {
@@ -47,7 +51,7 @@ public:
 template <class T1, class T2>
 class ValueCastUnOp {
 public:
-    static Ob::Ptr op(const Ob::Ptr &x) {
+    static Ptr op(const Ptr &x) {
         return new Value<T2>(x->cast<Value<T1> >()->getValue());
     }
 };
@@ -55,7 +59,7 @@ public:
 template <typename T, typename CppUnOp>
 class ValueUnOp {
 public:
-    static Ob::Ptr op(const Ob::Ptr & x) {
+    static Ptr op(const Ptr & x) {
         return new Value<T>(CppUnOp::op(x->cast<Value<T> >()->getValue()));
     }
 };
@@ -63,7 +67,7 @@ public:
 template <typename T, typename CppBinOp>
 class ValueBinOp {
 public:
-    static Ob::Ptr op(const Ob::Ptr & x1, const Ob::Ptr & x2) {
+    static Ptr op(const Ptr & x1, const Ptr & x2) {
         return new Value<T>(CppBinOp::op(x1->cast<Value<T> >()->getValue(), x2->cast<Value<T> >()->getValue()));
     }
 };
@@ -71,7 +75,7 @@ public:
 template <typename T, typename CppCmpOp>
 class ValueCmpOp {
 public:
-    static Ob::Ptr op(const Ob::Ptr & x1, const Ob::Ptr & x2) {
+    static Ptr op(const Ptr & x1, const Ptr & x2) {
         return CppCmpOp::op(x1->cast<Value<T> >()->getValue(), x2->cast<Value<T> >()->getValue());
     }
 };

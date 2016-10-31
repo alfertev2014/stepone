@@ -1,5 +1,6 @@
-#include "basemacro.h"
 #include "basemacro_obs.h"
+
+#include "basemacro.h"
 
 BaseMacroses::BaseMacroses() :
     mquote(new MQuote()),

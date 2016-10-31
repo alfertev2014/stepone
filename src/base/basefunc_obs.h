@@ -7,11 +7,11 @@ class BaseFunctions {
 public:
     static const BaseFunctions &inst();
 
-    const Ob::Ptr fcar;
-    const Ob::Ptr fcdr;
-    const Ob::Ptr fcons;
-    const Ob::Ptr feq;
-    const Ob::Ptr fgettype;
-    const Ob::Ptr fctxget;
-    const Ob::Ptr fctxpush;
+    const Ptr fcar;
+    const Ptr fcdr;
+    const Ptr fcons;
+    const Ptr feq;
+    const Ptr fgettype;
+    const Ptr fctxget;
+    const Ptr fctxpush;
 };

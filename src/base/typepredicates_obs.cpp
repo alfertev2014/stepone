@@ -1,6 +1,6 @@
-#include "typepredicates_ops.h"
 #include "typepredicates_obs.h"
 
+#include "typepredicates_ops.h"
 #include <operations.h>
 
 BaseTypePredicates::BaseTypePredicates() :

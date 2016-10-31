@@ -3,12 +3,12 @@
 #include "basesymbols.h"
 #include <bytearray.h>
 
-static inline void addInSymbols(Ob::Ptr & symbols, const std::string & s, const Ob::Ptr & p) {
+static inline void addInSymbols(Ptr & symbols, const std::string & s, const Ptr & p) {
     symbols = new Pair(new Pair(p, ByteArray::fromChars(s.size(), s.data())), symbols);
 }
 
-Ob::Ptr BaseSymbolTable::createSymbolTable() {
-    Ob::Ptr symbols;
+Ptr BaseSymbolTable::createSymbolTable() {
+    Ptr symbols;
     addInSymbols(symbols, "-i", BaseNumFuncSymbols::inst().aintNeg);
     addInSymbols(symbols, "i+", BaseNumFuncSymbols::inst().aintPlus);
     addInSymbols(symbols, "i-", BaseNumFuncSymbols::inst().aintMinus);

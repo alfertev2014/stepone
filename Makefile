@@ -32,7 +32,7 @@ all: $(TARGET)
 
 $(TARGET) : $(OBJECTS) $(HEADERS)
 	@${DIR_GUARD}
-	$(CXX) $(OBJECTS) $(LD_FLAGS) -o $@
+	$(CXX) -Wl,--start-group $(OBJECTS) -Wl,--end-group $(LD_FLAGS) -o $@
 
 $(OBJECTS) : $(BUILD_DIR)/%.cpp.o: $(SOURCES_DIR)/%.cpp
 	@${DIR_GUARD}

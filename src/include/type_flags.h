@@ -45,4 +45,3 @@ struct TypeFlags {
     {}
 };
 
-class SemanticError {};

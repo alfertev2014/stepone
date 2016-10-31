@@ -10,14 +10,14 @@ public:
     FirstParser(const FirstParser &fp);
     ~FirstParser();
 
-    Ob::Ptr parse(const string & _s);
-    Ob::Ptr parseEval(const string & s);
+    Ptr parse(const string & _s);
+    Ptr parseEval(const string & s);
     string evalToString(const string & _s);
 
-    void print(ostream & ts, const Ob::Ptr & p);
+    void print(ostream & ts, const Ptr & p);
 
 private:
     class FirstParserImpl;
-    Ob::Ptr a;
+    Ptr a;
     FirstParserImpl *impl;
 };

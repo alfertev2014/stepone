@@ -5,5 +5,5 @@
 class BaseEvaluator {
     BaseEvaluator(){}
 public:
-    static Ob::Ptr createContext();
+    static Ptr createContext();
 };

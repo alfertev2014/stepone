@@ -7,22 +7,22 @@ class ByteArrayFunctions {
 public:
     static const ByteArrayFunctions &inst();
 
-    const Ob::Ptr fbarrayp;
-    const Ob::Ptr fbarraylen;
-    const Ob::Ptr fbarrayclone;
-    const Ob::Ptr fbarraycmp;
-    const Ob::Ptr fbarrayncmp;
-    const Ob::Ptr fbarrayfindch;
-    const Ob::Ptr fbarrayfind;
-    const Ob::Ptr fbarraycat;
-    const Ob::Ptr fbarraymid;
-    const Ob::Ptr fbarrayslice;
+    const Ptr fbarrayp;
+    const Ptr fbarraylen;
+    const Ptr fbarrayclone;
+    const Ptr fbarraycmp;
+    const Ptr fbarrayncmp;
+    const Ptr fbarrayfindch;
+    const Ptr fbarrayfind;
+    const Ptr fbarraycat;
+    const Ptr fbarraymid;
+    const Ptr fbarrayslice;
 
-    const Ob::Ptr fserint;
-    const Ob::Ptr fserfloat;
-    const Ob::Ptr fserchar;
+    const Ptr fserint;
+    const Ptr fserfloat;
+    const Ptr fserchar;
 
-    const Ob::Ptr fgetint;
-    const Ob::Ptr fgetfloat;
-    const Ob::Ptr fgetchar;
+    const Ptr fgetint;
+    const Ptr fgetfloat;
+    const Ptr fgetchar;
 };

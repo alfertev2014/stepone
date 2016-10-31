@@ -6,12 +6,12 @@
 #include <macro.h>
 #include <value.h>
 
-static inline void addInContext(Ob::Ptr & a, const Ob::Ptr & p, const Ob::Ptr & v) {
+static inline void addInContext(Ptr & a, const Ptr & p, const Ptr & v) {
     a = Context::make(p, v, a);
 }
 
-Ob::Ptr BaseEvaluator::createContext() {
-    Ob::Ptr a;
+Ptr BaseEvaluator::createContext() {
+    Ptr a;
     addInContext(a, BaseNumFuncSymbols::inst().aintNeg, BaseNumFunc::inst().fintNeg);
     addInContext(a, BaseNumFuncSymbols::inst().aintPlus, BaseNumFunc::inst().fintPlus);
     addInContext(a, BaseNumFuncSymbols::inst().aintMinus, BaseNumFunc::inst().fintMinus);

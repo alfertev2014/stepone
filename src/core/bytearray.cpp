@@ -1,4 +1,5 @@
 #include <bytearray.h>
+#include <type_info_inst.h>
 
 #include <cstring>
 #include <sstream>

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "core.h"
+#include "base.h"
 
 class Macro : public Const {
 public:
@@ -21,11 +21,13 @@ public:
     Evaluator(Ptr _a) : Macro(), a(_a) {
         typeFlags.macroValueType = TypeFlags::Evaluator;
     }
-    Ptr getContext() const {return a;}
+    Ptr getContext() const;
     Ptr apply(const Ptr &p, const Ptr &a);
 };
 
 class BaseMacro : public Macro {
+public:
+    const TypeInfoBase * getTypeInfo() const;
 public:
     BaseMacro(): Macro() {
         typeFlags.macroValueType = TypeFlags::BaseMacro;
@@ -79,3 +81,19 @@ public:
 
     Ptr apply(const Ptr &p, const Ptr &a);
 };
+
+template<>
+Macro *Ob::as<Macro>();
+
+template<>
+Evaluator *Ob::as<Evaluator>();
+
+template<>
+BaseMacro *Ob::as<BaseMacro>();
+
+template<>
+MacroClosure *Ob::as<MacroClosure>();
+
+template<>
+CurrentContext *Ob::as<CurrentContext>();
+

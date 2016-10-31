@@ -1,6 +1,6 @@
-#include "bytearray_ops.h"
 #include "bytearray_obs.h"
 
+#include "bytearray_ops.h"
 #include <operations.h>
 
 ByteArrayFunctions::ByteArrayFunctions() :

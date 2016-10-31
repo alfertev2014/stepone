@@ -7,83 +7,83 @@ class BaseNumFunc {
 public:
     static const BaseNumFunc &inst();
 
-    const Ob::Ptr fintNeg;
-    const Ob::Ptr fintPlus;
-    const Ob::Ptr fintMinus;
-    const Ob::Ptr fintProduct;
-    const Ob::Ptr fintDivision;
-    const Ob::Ptr fintMod;
-    const Ob::Ptr fintp;
+    const Ptr fintNeg;
+    const Ptr fintPlus;
+    const Ptr fintMinus;
+    const Ptr fintProduct;
+    const Ptr fintDivision;
+    const Ptr fintMod;
+    const Ptr fintp;
 
-    const Ob::Ptr fintand;
-    const Ob::Ptr fintor;
-    const Ob::Ptr fintxor;
-    const Ob::Ptr fintnot;
+    const Ptr fintand;
+    const Ptr fintor;
+    const Ptr fintxor;
+    const Ptr fintnot;
 
-    const Ob::Ptr fintshl;
-    const Ob::Ptr fintshr;
+    const Ptr fintshl;
+    const Ptr fintshr;
 
-    const Ob::Ptr fintEql;
-    const Ob::Ptr fintNE;
-    const Ob::Ptr fintGT;
-    const Ob::Ptr fintLT;
-    const Ob::Ptr fintGE;
-    const Ob::Ptr fintLE;
+    const Ptr fintEql;
+    const Ptr fintNE;
+    const Ptr fintGT;
+    const Ptr fintLT;
+    const Ptr fintGE;
+    const Ptr fintLE;
 
-    const Ob::Ptr flongp;
-    const Ob::Ptr flongand;
-    const Ob::Ptr flongor;
-    const Ob::Ptr flongxor;
-    const Ob::Ptr flongnot;
+    const Ptr flongp;
+    const Ptr flongand;
+    const Ptr flongor;
+    const Ptr flongxor;
+    const Ptr flongnot;
 
-    const Ob::Ptr flongEql;
-    const Ob::Ptr flongNE;
-    const Ob::Ptr flongGT;
-    const Ob::Ptr flongLT;
-    const Ob::Ptr flongGE;
-    const Ob::Ptr flongLE;
+    const Ptr flongEql;
+    const Ptr flongNE;
+    const Ptr flongGT;
+    const Ptr flongLT;
+    const Ptr flongGE;
+    const Ptr flongLE;
 
-    const Ob::Ptr flongshl;
-    const Ob::Ptr flongshr;
+    const Ptr flongshl;
+    const Ptr flongshr;
 
-    const Ob::Ptr ffloatNeg;
-    const Ob::Ptr ffloatPlus;
-    const Ob::Ptr ffloatMinus;
-    const Ob::Ptr ffloatProduct;
-    const Ob::Ptr ffloatDivision;
-    const Ob::Ptr ffloatp;
-    const Ob::Ptr ffloatEql;
-    const Ob::Ptr ffloatNE;
-    const Ob::Ptr ffloatGT;
-    const Ob::Ptr ffloatLT;
-    const Ob::Ptr ffloatGE;
-    const Ob::Ptr ffloatLE;
+    const Ptr ffloatNeg;
+    const Ptr ffloatPlus;
+    const Ptr ffloatMinus;
+    const Ptr ffloatProduct;
+    const Ptr ffloatDivision;
+    const Ptr ffloatp;
+    const Ptr ffloatEql;
+    const Ptr ffloatNE;
+    const Ptr ffloatGT;
+    const Ptr ffloatLT;
+    const Ptr ffloatGE;
+    const Ptr ffloatLE;
 
-    const Ob::Ptr flong2int;
-    const Ob::Ptr fint2long;
+    const Ptr flong2int;
+    const Ptr fint2long;
 
-    const Ob::Ptr ffloat2int;
-    const Ob::Ptr fint2float;
+    const Ptr ffloat2int;
+    const Ptr fint2float;
 
-    const Ob::Ptr fchar2int;
-    const Ob::Ptr fint2char;
+    const Ptr fchar2int;
+    const Ptr fint2char;
 
-    const Ob::Ptr fchar2long;
-    const Ob::Ptr flong2char;
+    const Ptr fchar2long;
+    const Ptr flong2char;
 
-    const Ob::Ptr fcharp;
-    const Ob::Ptr fcharand;
-    const Ob::Ptr fcharor;
-    const Ob::Ptr fcharxor;
-    const Ob::Ptr fcharnot;
+    const Ptr fcharp;
+    const Ptr fcharand;
+    const Ptr fcharor;
+    const Ptr fcharxor;
+    const Ptr fcharnot;
 
-    const Ob::Ptr fcharshl;
-    const Ob::Ptr fcharshr;
+    const Ptr fcharshl;
+    const Ptr fcharshr;
 
-    const Ob::Ptr fcharEql;
-    const Ob::Ptr fcharNE;
-    const Ob::Ptr fcharGT;
-    const Ob::Ptr fcharLT;
-    const Ob::Ptr fcharGE;
-    const Ob::Ptr fcharLE;
+    const Ptr fcharEql;
+    const Ptr fcharNE;
+    const Ptr fcharGT;
+    const Ptr fcharLT;
+    const Ptr fcharGE;
+    const Ptr fcharLE;
 };

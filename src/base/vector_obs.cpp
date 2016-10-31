@@ -1,6 +1,6 @@
 #include "vector_obs.h"
-#include "vector_ops.h"
 
+#include "vector_ops.h"
 #include <operations.h>
 
 VectorFunctions::VectorFunctions() :

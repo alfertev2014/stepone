@@ -1,5 +1,7 @@
 #include "basesymbols.h"
 
+#include <base.h>
+
 BaseMacroSymbols::BaseMacroSymbols() :
     aquote(new Symbol),
     aapply(new Symbol),

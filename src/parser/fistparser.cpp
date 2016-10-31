@@ -14,11 +14,11 @@
 using namespace std;
 
 struct parseRes {
-    Ob::Ptr e;
+    Ptr e;
     string::const_iterator rest;
     bool success;
 
-    parseRes(const Ob::Ptr & _e, string::const_iterator _rest, bool _success)
+    parseRes(const Ptr & _e, string::const_iterator _rest, bool _success)
         :e(_e), rest(_rest), success(_success) {}
 };
 
@@ -29,17 +29,17 @@ public:
         nosymbol("(){}[].\"")
     {}
 
-    ostream & printOb(ostream & ts, const Ob::Ptr & p);
+    ostream & printOb(ostream & ts, const Ptr & p);
 
-    Ob::Ptr parse(const string &_s);
+    Ptr parse(const string &_s);
 private:
     string s;
     string nosymbol;
-    Ob::Ptr symbols;
+    Ptr symbols;
 
     ostream & printSymbol(ostream & ts, Symbol * sym);
     ostream & printList(ostream & ts, Pair * pr);
-    void printValue(ostream &ts, const Ob::Ptr &p);
+    void printValue(ostream &ts, const Ptr &p);
 
     parseRes parseExpression(string::const_iterator si);
     parseRes parseTail(string::const_iterator si);
@@ -68,13 +68,13 @@ FirstParser::~FirstParser() {
     delete impl;
 }
 
-Ob::Ptr FirstParser::parse(const string &_s) {
+Ptr FirstParser::parse(const string &_s) {
     return impl->parse(_s);
 }
 
-Ob::Ptr FirstParser::parseEval(const string &s) {
-    Ob::Ptr parsed = parse(s);
-    Ob::Ptr evaluated = parsed->eval(a)->unlazy();
+Ptr FirstParser::parseEval(const string &s) {
+    Ptr parsed = parse(s);
+    Ptr evaluated = parsed->eval(a)->unlazy();
     return evaluated;
 }
 
@@ -84,11 +84,11 @@ string FirstParser::evalToString(const string &_s) {
     return ss.str();
 }
 
-void FirstParser::print(ostream &ts, const Ob::Ptr &p) {
+void FirstParser::print(ostream &ts, const Ptr &p) {
     impl->printOb(ts, p);
 }
 
-void FirstParser::FirstParserImpl::printValue(ostream &ts, const Ob::Ptr &p) {
+void FirstParser::FirstParserImpl::printValue(ostream &ts, const Ptr &p) {
     ValueBase * spt = p->as<ValueBase>();
     if(spt->is<Value<int> >())
         ts << spt->as<Value<int> >()->getValue();
@@ -121,7 +121,7 @@ void FirstParser::FirstParserImpl::printValue(ostream &ts, const Ob::Ptr &p) {
         ts << "{SpecType}";
 }
 
-ostream &FirstParser::FirstParserImpl::printOb(ostream &ts, const Ob::Ptr &p) {
+ostream &FirstParser::FirstParserImpl::printOb(ostream &ts, const Ptr &p) {
     Symbol * sym = p->as<Symbol>();
     if(sym != 0)
         return printSymbol(ts, sym);
@@ -139,7 +139,7 @@ ostream &FirstParser::FirstParserImpl::printOb(ostream &ts, const Ob::Ptr &p) {
     return ts;
 }
 
-Ob::Ptr FirstParser::FirstParserImpl::parse(const string &_s) {
+Ptr FirstParser::FirstParserImpl::parse(const string &_s) {
     s = _s;
     parseRes pr = parseExpression(s.begin());
     return pr.success ? pr.e : Ob::anil;
@@ -161,7 +161,7 @@ ostream &FirstParser::FirstParserImpl::printSymbol(ostream &ts, Symbol *sym) {
 
 ostream &FirstParser::FirstParserImpl::printList(ostream &ts, Pair *pr) {
     printOb(ts, pr->car());
-    Ob::Ptr pcdr = pr->cdr();
+    Ptr pcdr = pr->cdr();
     Atom * atom = pcdr->as<Atom>();
     if(atom != 0) {
         if(atom != Ob::anil->as<Atom>()) {

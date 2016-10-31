@@ -1,4 +1,5 @@
 #include <vector.h>
+#include <type_info_inst.h>
 
 const TypeInfoBase *Vector::getTypeInfo() const {return &TypeInfo<Vector>::instance;}
 
@@ -11,7 +12,7 @@ Vector::~Vector() {
     }
 }
 
-Vector *Vector::fromList(int n, const Ob::Ptr &list, const Ob::Ptr &a) {
+Vector *Vector::fromList(int n, const Ptr &list, const Ptr &a) {
     Vector * res = new Vector(n);
     Ptr p = list;
     for(int i = 0; i < n; ++i) {

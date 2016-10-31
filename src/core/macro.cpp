@@ -1,6 +1,7 @@
 #include <macro.h>
+#include <type_info_inst.h>
 
-const Ob::Ptr Evaluator::eempty(new Evaluator(Ob::anil));
+const Ptr Evaluator::eempty(new Evaluator(Ob::anil));
 
 template<>
 Macro *Ob::as<Macro>() {return typeFlags.constType == TypeFlags::Macro ? dynamic_cast<Macro*>(this) : 0;}
@@ -21,13 +22,17 @@ Macro::~Macro() {}
 
 const TypeInfoBase *Evaluator::getTypeInfo() const {return &TypeInfo<Evaluator>::instance;}
 
-Ob::Ptr Evaluator::apply(const Ob::Ptr &p, const Ob::Ptr &a) {return p->eval(a)->eval(this->a);}
+Ptr Evaluator::getContext() const {return a;}
+
+Ptr Evaluator::apply(const Ptr &p, const Ptr &a) {return p->eval(a)->eval(this->a);}
+
+const TypeInfoBase *BaseMacro::getTypeInfo() const {return &TypeInfo<BaseMacro>::instance;}
 
 BaseMacro::~BaseMacro(){}
 
 const TypeInfoBase *Closure::getTypeInfo() const {return &TypeInfo<Closure>::instance;}
 
-Ob::Ptr Closure::apply(const Ob::Ptr &p, const Ob::Ptr &a) {
+Ptr Closure::apply(const Ptr &p, const Ptr &a) {
     if(p == Ob::anil)
         return this;
     return e->eval(Context::make(sp, p->car()->eval(a), this->a))->apply(p->cdr(), a);
@@ -35,12 +40,12 @@ Ob::Ptr Closure::apply(const Ob::Ptr &p, const Ob::Ptr &a) {
 
 const TypeInfoBase *MacroClosure::getTypeInfo() const {return &TypeInfo<MacroClosure>::instance;}
 
-Ob::Ptr MacroClosure::apply(const Ob::Ptr &p, const Ob::Ptr &a) {
+Ptr MacroClosure::apply(const Ptr &p, const Ptr &a) {
     return e->eval(Context::make(sp, p, this->a));
 }
 
 const TypeInfoBase *CurrentContext::getTypeInfo() const {return &TypeInfo<CurrentContext>::instance;}
 
-Ob::Ptr CurrentContext::apply(const Ob::Ptr &p, const Ob::Ptr &a) {
+Ptr CurrentContext::apply(const Ptr &p, const Ptr &a) {
     return e->eval(Context::make(sa, new Evaluator(a), this->a))->apply(p, this->a);
 }

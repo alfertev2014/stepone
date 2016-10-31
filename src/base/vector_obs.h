@@ -7,12 +7,12 @@ class VectorFunctions {
 public:
     static const VectorFunctions &inst();
 
-    const Ob::Ptr fvecp;
-    const Ob::Ptr fmkvec;
-    const Ob::Ptr fvecclone;
-    const Ob::Ptr fveclen;
-    const Ob::Ptr fvecmid;
-    const Ob::Ptr fvecslice;
-    const Ob::Ptr fvecel;
-    const Ob::Ptr fveccat;
+    const Ptr fvecp;
+    const Ptr fmkvec;
+    const Ptr fvecclone;
+    const Ptr fveclen;
+    const Ptr fvecmid;
+    const Ptr fvecslice;
+    const Ptr fvecel;
+    const Ptr fveccat;
 };

@@ -7,15 +7,15 @@ class BaseTypePredicates {
 public:
     static const BaseTypePredicates &inst();
 
-    const Ob::Ptr fpairp;
-    const Ob::Ptr flazyp;
-    const Ob::Ptr flabelp;
-    const Ob::Ptr fatomp;
-    const Ob::Ptr fsymbolp;
-    const Ob::Ptr fconstp;
-    const Ob::Ptr fmacrop;
-    const Ob::Ptr fevalp;
-    const Ob::Ptr fbasemacrop;
-    const Ob::Ptr fusermacrop;
-    const Ob::Ptr fvaluep;
+    const Ptr fpairp;
+    const Ptr flazyp;
+    const Ptr flabelp;
+    const Ptr fatomp;
+    const Ptr fsymbolp;
+    const Ptr fconstp;
+    const Ptr fmacrop;
+    const Ptr fevalp;
+    const Ptr fbasemacrop;
+    const Ptr fusermacrop;
+    const Ptr fvaluep;
 };

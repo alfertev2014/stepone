@@ -1,6 +1,6 @@
-#include "basefunc_ops.h"
 #include "basefunc_obs.h"
 
+#include "basefunc_ops.h"
 #include <operations.h>
 
 BaseFunctions::BaseFunctions() :

@@ -1,4 +1,5 @@
 #include <io.h>
+#include <type_info_inst.h>
 
 const TypeInfoBase *IOStreamDescriptor::getTypeInfo() const {return &TypeInfo<IOStreamDescriptor>::instance;}
 

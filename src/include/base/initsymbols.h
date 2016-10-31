@@ -5,5 +5,5 @@
 class BaseSymbolTable {
     BaseSymbolTable(){}
 public:
-    static Ob::Ptr createSymbolTable();
+    static Ptr createSymbolTable();
 };

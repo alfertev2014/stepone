@@ -7,17 +7,17 @@ class BaseMacroses {
 public:
     static const BaseMacroses &inst();
 
-    const Ob::Ptr mquote;
-    const Ob::Ptr mapply;
-    const Ob::Ptr mif;
-    const Ob::Ptr mlet;
-    const Ob::Ptr mlazy;
-    const Ob::Ptr munlazy;
-    const Ob::Ptr mlabel;
-    const Ob::Ptr mlambda;
-    const Ob::Ptr mmacro;
-    const Ob::Ptr mcurctx;
-    const Ob::Ptr mtry;
-    const Ob::Ptr mbot;
-    const Ob::Ptr mgensym;
+    const Ptr mquote;
+    const Ptr mapply;
+    const Ptr mif;
+    const Ptr mlet;
+    const Ptr mlazy;
+    const Ptr munlazy;
+    const Ptr mlabel;
+    const Ptr mlambda;
+    const Ptr mmacro;
+    const Ptr mcurctx;
+    const Ptr mtry;
+    const Ptr mbot;
+    const Ptr mgensym;
 };
