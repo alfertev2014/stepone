@@ -16,8 +16,8 @@ Vector *Vector::fromList(int n, const Ptr &list, const Ptr &a) {
     Vector * res = new Vector(n);
     Ptr p = list;
     for(int i = 0; i < n; ++i) {
-        new (res->array + i) Ptr(p->car()->eval(a));
-        p = p->cdr();
+        new (res->array + i) Ptr(p.car().eval(a));
+        p = p.cdr();
     }
     return res;
 }

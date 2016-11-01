@@ -51,8 +51,9 @@ public:
     Ptr(const Ptr & _ob) : ob(_ob.ob) {incRefCount(ob);}
     Ptr(bool b) : ob(b ? Ob::at.ob : Ob::anil.ob) {incRefCount(ob);}
     ~Ptr() {decRefCount(ob);}
-
+    
     bool operator == (const Ptr & p) const {return p.ob == ob;}
+    
     bool operator ==(const Ob * const p) const {return ob == p;}
     friend bool operator ==(const Ob * const ob, const Ptr & p);
 
@@ -66,8 +67,24 @@ public:
         }
         return *this;
     }
+    
+    Ptr car() const;
+    Ptr cdr() const;
 
-    Ob * operator -> () const {return ob;}
+    Ptr eval(const Ptr & a) const;
+    Ptr apply(const Ptr & p, const Ptr & a) const;
+    Ptr unlazy() const;
+    Ptr assoc(const Ptr & s) const;
+
+    Ptr typeId() const;
+    
+    template <class T>
+    T * as() const;
+    template <class T>
+    bool is() const;
+    template <class T>
+    T * cast() const;
+
     Ob * getPointer() const {return ob;}
 };
 
@@ -86,6 +103,38 @@ inline void Ptr::decRefCount(Ob *ob) {
     if(ob->refcount == 0)
         delete ob;
 }
+
+inline Ptr Ptr::car() const
+{
+    return ob->car();
+}
+
+inline Ptr Ptr::cdr() const
+{
+    return ob->cdr();
+}
+
+inline Ptr Ptr::eval(const Ptr &a) const
+{
+    return ob->eval(a);
+}
+
+inline Ptr Ptr::apply(const Ptr &p, const Ptr &a) const
+{
+    return ob->apply(p, a);
+}
+
+inline Ptr Ptr::unlazy() const
+{
+    return ob->unlazy();
+}
+
+inline Ptr Ptr::assoc(const Ptr &s) const
+{
+    return ob->assoc(s);
+}
+
+
 
 inline bool operator ==(const Ob * const ob, const Ptr & p) {return ob == p.ob;}
 

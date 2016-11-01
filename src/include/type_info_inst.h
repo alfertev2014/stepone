@@ -25,3 +25,18 @@ T * Ob::cast() {
         return dynamic_cast<T*>(this);
     DBG("error cast"); throw SemanticError();
 }
+
+template <class T>
+inline T * Ptr::as() const {
+    return ob->as<T>();
+}
+
+template <class T>
+inline bool Ptr::is() const {
+    return ob->is<T>();
+}
+
+template <class T>
+inline T * Ptr::cast() const {
+    return ob->cast<T>();
+}

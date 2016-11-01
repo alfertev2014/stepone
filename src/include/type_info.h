@@ -8,3 +8,7 @@ public:
     const Ptr type_id;
 };
 
+inline Ptr Ptr::typeId() const
+{
+    return ob->getTypeInfo()->type_id;
+}

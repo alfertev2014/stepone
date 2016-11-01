@@ -74,7 +74,7 @@ Ptr FirstParser::parse(const string &_s) {
 
 Ptr FirstParser::parseEval(const string &s) {
     Ptr parsed = parse(s);
-    Ptr evaluated = parsed->eval(a)->unlazy();
+    Ptr evaluated = parsed.eval(a).unlazy();
     return evaluated;
 }
 
@@ -89,7 +89,7 @@ void FirstParser::print(ostream &ts, const Ptr &p) {
 }
 
 void FirstParser::FirstParserImpl::printValue(ostream &ts, const Ptr &p) {
-    ValueBase * spt = p->as<ValueBase>();
+    ValueBase * spt = p.as<ValueBase>();
     if(spt->is<Value<int> >())
         ts << spt->as<Value<int> >()->getValue();
     else if(spt->is<Value<float> >())
@@ -122,18 +122,18 @@ void FirstParser::FirstParserImpl::printValue(ostream &ts, const Ptr &p) {
 }
 
 ostream &FirstParser::FirstParserImpl::printOb(ostream &ts, const Ptr &p) {
-    Symbol * sym = p->as<Symbol>();
+    Symbol * sym = p.as<Symbol>();
     if(sym != 0)
         return printSymbol(ts, sym);
-    if(p->as<Pair>()) {
+    if(p.as<Pair>()) {
         ts << "(";
-        return printList(ts, p->as<Pair>());
+        return printList(ts, p.as<Pair>());
     }
-    if(p->as<Lazy>())
+    if(p.as<Lazy>())
         ts << "{lazy}";
-    else if(p->as<Label>())
+    else if(p.as<Label>())
         ts << "{label}";
-    else if(p->as<ValueBase>()) {
+    else if(p.as<ValueBase>()) {
         printValue(ts, p);
     }
     return ts;
@@ -146,12 +146,12 @@ Ptr FirstParser::FirstParserImpl::parse(const string &_s) {
 }
 
 ostream &FirstParser::FirstParserImpl::printSymbol(ostream &ts, Symbol *sym) {
-    if(sym == Ob::anil->as<Symbol>()) {
+    if(sym == Ob::anil.as<Symbol>()) {
         return ts << "()";
     } else {
         for(Ob * p = symbols.getPointer(); p != Ob::anil.getPointer(); p = p->cdr().getPointer()) {
-            if(p->car()->car() == sym) {
-                ByteArray * ba = p->car()->cdr()->as<ByteArray>();
+            if(p->car().car() == sym) {
+                ByteArray * ba = p->car().cdr().as<ByteArray>();
                 return ts.write(ba->getData(), ba->getSize());
             }
         }
@@ -162,16 +162,16 @@ ostream &FirstParser::FirstParserImpl::printSymbol(ostream &ts, Symbol *sym) {
 ostream &FirstParser::FirstParserImpl::printList(ostream &ts, Pair *pr) {
     printOb(ts, pr->car());
     Ptr pcdr = pr->cdr();
-    Atom * atom = pcdr->as<Atom>();
+    Atom * atom = pcdr.as<Atom>();
     if(atom != 0) {
-        if(atom != Ob::anil->as<Atom>()) {
+        if(atom != Ob::anil.as<Atom>()) {
             ts << " . ";
             printOb(ts, pcdr);
         }
         ts << ")";
     } else {
         ts << " ";
-        printList(ts, pcdr->as<Pair>());
+        printList(ts, pcdr.as<Pair>());
     }
     return ts;
 }
@@ -270,10 +270,10 @@ parseRes FirstParser::FirstParserImpl::parseSymbol(string::const_iterator si) {
         ++sii;
     }
     for(Ob * p = symbols.getPointer(); p != Ob::anil.getPointer(); p = p->cdr().getPointer()) {
-        ByteArray * ba = p->car()->cdr()->as<ByteArray>();
+        ByteArray * ba = p->car().cdr().as<ByteArray>();
         if(ba->getSize() == symbolString.size() &&
                 !memcmp(ba->getData(), symbolString.data(), symbolString.size()))
-            return parseRes(p->car()->car().getPointer(), sii, true);
+            return parseRes(p->car().car().getPointer(), sii, true);
     }
     Symbol * sym = new Symbol();
     symbols = new Pair(new Pair(sym, ByteArray::fromChars(symbolString.size(), symbolString.data())), symbols);

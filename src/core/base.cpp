@@ -25,7 +25,7 @@ Ptr Pair::car() {return pcar;}
 
 Ptr Pair::cdr() {return pcdr;}
 
-Ptr Pair::eval(const Ptr &a) {return pcar->eval(a)->apply(pcdr, a);}
+Ptr Pair::eval(const Ptr &a) {return pcar.eval(a).apply(pcdr, a);}
 
 Atom::~Atom() {}
 
@@ -33,29 +33,29 @@ const TypeInfoBase *Lazy::getTypeInfo() const {return &TypeInfo<Lazy>::instance;
 
 inline void Lazy::ev() {
     if(!(a == Ob::anil)) {
-        e = e->eval(a);
+        e = e.eval(a);
         a = Ob::anil;
     }
 }
 
 inline void Lazy::evw() {
     ev();
-    Lazy * l = e->as<Lazy>();
+    Lazy * l = e.as<Lazy>();
     while(l != 0) {
         l->ev();
         e = l->e;
-        l = e->as<Lazy>();
+        l = e.as<Lazy>();
     }
 }
 
-Ptr Lazy::car() {evw(); return e->car();}
+Ptr Lazy::car() {evw(); return e.car();}
 
-Ptr Lazy::cdr() {evw(); return e->cdr();}
+Ptr Lazy::cdr() {evw(); return e.cdr();}
 
-Ptr Lazy::eval(const Ptr &a) {evw(); return e->eval(a);}
+Ptr Lazy::eval(const Ptr &a) {evw(); return e.eval(a);}
 
 Ptr Lazy::apply(const Ptr &p, const Ptr &a) {
-    evw(); return e->apply(p, a);
+    evw(); return e.apply(p, a);
 }
 
 Ptr Lazy::unlazy() {evw(); return e;}
@@ -72,7 +72,7 @@ inline Ptr Label::ptr() {
 Ptr Label::loop(const Ptr &f, const Ptr &e, const Ptr &a) {
     Label * l = new Label(e.getPointer(), &a);
     Ptr lbl = l;
-    Ptr res = e->eval(Context::make(f, lbl, a));
+    Ptr res = e.eval(Context::make(f, lbl, a));
     l->v = res.getPointer();
     l->pa = 0;
     return res;
@@ -80,25 +80,25 @@ Ptr Label::loop(const Ptr &f, const Ptr &e, const Ptr &a) {
 
 
 
-Ptr Label::car() {return ptr()->car();}
+Ptr Label::car() {return ptr().car();}
 
-Ptr Label::cdr() {return ptr()->cdr();}
+Ptr Label::cdr() {return ptr().cdr();}
 
-Ptr Label::eval(const Ptr &a) {return ptr()->eval(a);}
+Ptr Label::eval(const Ptr &a) {return ptr().eval(a);}
 
-Ptr Label::apply(const Ptr &p, const Ptr &a) {return ptr()->apply(p, a);}
+Ptr Label::apply(const Ptr &p, const Ptr &a) {return ptr().apply(p, a);}
 
-Ptr Label::unlazy() {return ptr()->unlazy();}
+Ptr Label::unlazy() {return ptr().unlazy();}
 
 const TypeInfoBase *Symbol::getTypeInfo() const {return &TypeInfo<Symbol>::instance;}
 
 Ptr Symbol::eval(const Ptr &a) {
     Ptr p = a;
     while(!(p == anil)) {
-        Ptr pair = p->car();
-        if(pair->car().getPointer() == this)
-            return pair->cdr();
-        p = p->cdr();
+        Ptr pair = p.car();
+        if(pair.car().getPointer() == this)
+            return pair.cdr();
+        p = p.cdr();
     }
     DBG("Unknown symbol");
     throw SemanticError();
