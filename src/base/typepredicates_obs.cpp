@@ -2,19 +2,21 @@
 
 #include "typepredicates_ops.h"
 #include <operations.h>
+#include <macro.h>
+#include <value.h>
 
 BaseTypePredicates::BaseTypePredicates() :
-    fpairp(new FUnaryOp<PairPUnOp>),
-    flazyp(new FUnaryOp<LazyPUnOp>),
-    flabelp(new FUnaryOp<LabelPUnOp>),
-    fatomp(new FUnaryOp<AtomPUnOp>),
-    fsymbolp(new FUnaryOp<SymbolPUnOp>),
-    fconstp(new FUnaryOp<ConstPUnOp>),
-    fmacrop(new FUnaryOp<MacroPUnOp>),
-    fevalp(new FUnaryOp<EvaluatorPUnOp>),
-    fbasemacrop(new FUnaryOp<BaseMacroPUnOp>),
-    fusermacrop(new FUnaryOp<UserMacroPUnOp>),
-    fvaluep(new FUnaryOp<ValuePUnOp>)
+    fpairp(new FUnaryOp<TypePUnOp<Pair> >),
+    flazyp(new FUnaryOp<TypePUnOp<Lazy> >),
+    flabelp(new FUnaryOp<TypePUnOp<Lazy> >),
+    fatomp(new FUnaryOp<TypePUnOp<Atom> >),
+    fsymbolp(new FUnaryOp<TypePUnOp<Symbol> >),
+    fconstp(new FUnaryOp<TypePUnOp<Const> >),
+    fmacrop(new FUnaryOp<TypePUnOp<Macro> >),
+    fevalp(new FUnaryOp<TypePUnOp<Evaluator> >),
+    fbasemacrop(new FUnaryOp<TypePUnOp<BaseMacro> >),
+    fusermacrop(new FUnaryOp<TypePUnOp<MacroClosure> >),
+    fvaluep(new FUnaryOp<TypePUnOp<ValueBase> >)
 {}
 
 const BaseTypePredicates &BaseTypePredicates::inst()
