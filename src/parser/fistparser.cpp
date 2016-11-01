@@ -149,9 +149,9 @@ ostream &FirstParser::FirstParserImpl::printSymbol(ostream &ts, Symbol *sym) {
     if(sym == Ob::anil.as<Symbol>()) {
         return ts << "()";
     } else {
-        for(Ob * p = symbols.getPointer(); p != Ob::anil.getPointer(); p = p->cdr().getPointer()) {
-            if(p->car().car() == sym) {
-                ByteArray * ba = p->car().cdr().as<ByteArray>();
+        for(Ptr p = symbols; p != Ob::anil; p = p.cdr()) {
+            if(p.car().car() == sym) {
+                ByteArray * ba = p.car().cdr().as<ByteArray>();
                 return ts.write(ba->getData(), ba->getSize());
             }
         }
@@ -269,11 +269,11 @@ parseRes FirstParser::FirstParserImpl::parseSymbol(string::const_iterator si) {
         symbolString.push_back(*sii);
         ++sii;
     }
-    for(Ob * p = symbols.getPointer(); p != Ob::anil.getPointer(); p = p->cdr().getPointer()) {
-        ByteArray * ba = p->car().cdr().as<ByteArray>();
+    for(Ptr p = symbols; p != Ob::anil; p = p.cdr()) {
+        ByteArray * ba = p.car().cdr().as<ByteArray>();
         if(ba->getSize() == symbolString.size() &&
                 !memcmp(ba->getData(), symbolString.data(), symbolString.size()))
-            return parseRes(p->car().car().getPointer(), sii, true);
+            return parseRes(p.car().car(), sii, true);
     }
     Symbol * sym = new Symbol();
     symbols = new Pair(new Pair(sym, ByteArray::fromChars(symbolString.size(), symbolString.data())), symbols);

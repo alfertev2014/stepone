@@ -70,10 +70,10 @@ inline Ptr Label::ptr() {
 }
 
 Ptr Label::loop(const Ptr &f, const Ptr &e, const Ptr &a) {
-    Label * l = new Label(e.getPointer(), &a);
+    Label * l = new Label(e.ob, &a);
     Ptr lbl = l;
     Ptr res = e.eval(Context::make(f, lbl, a));
-    l->v = res.getPointer();
+    l->v = res.ob;
     l->pa = 0;
     return res;
 }
@@ -94,9 +94,9 @@ const TypeInfoBase *Symbol::getTypeInfo() const {return &TypeInfo<Symbol>::insta
 
 Ptr Symbol::eval(const Ptr &a) {
     Ptr p = a;
-    while(!(p == anil)) {
+    while(p != anil) {
         Ptr pair = p.car();
-        if(pair.car().getPointer() == this)
+        if(pair.car() == this)
             return pair.cdr();
         p = p.cdr();
     }

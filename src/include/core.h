@@ -42,6 +42,8 @@ public:
 };
 
 class Ptr {
+    friend class Label;
+    
     Ob * ob;
     inline static void incRefCount(Ob * ob);
     inline static void decRefCount(Ob * ob);
@@ -51,13 +53,17 @@ public:
     Ptr(const Ptr & _ob) : ob(_ob.ob) {incRefCount(ob);}
     Ptr(bool b) : ob(b ? Ob::at.ob : Ob::anil.ob) {incRefCount(ob);}
     ~Ptr() {decRefCount(ob);}
-    
-    bool operator == (const Ptr & p) const {return p.ob == ob;}
-    
-    bool operator ==(const Ob * const p) const {return ob == p;}
-    friend bool operator ==(const Ob * const ob, const Ptr & p);
 
-    Ptr & operator=(const Ptr & p) {return this->operator=(p.ob);}
+    friend bool operator==(const Ob * const & ob, const Ptr & p);
+    friend bool operator!=(const Ob * const & ob, const Ptr & p);
+    bool operator==(const Ptr & p) const {return ob == p;}
+    bool operator!=(const Ptr & p) const {return ob != p;}
+    
+    bool operator==(const Ob * const p) const {return ob == p;}
+    bool operator!=(const Ob * const p) const {return !(ob == p);}
+
+
+    Ptr & operator=(const Ptr & p) {return operator=(p.ob);}
     Ptr & operator=(Ob * _ob) {
         if(_ob != ob) {
             // don't change order
@@ -67,7 +73,7 @@ public:
         }
         return *this;
     }
-    
+
     Ptr car() const;
     Ptr cdr() const;
 
@@ -84,8 +90,6 @@ public:
     bool is() const;
     template <class T>
     T * cast() const;
-
-    Ob * getPointer() const {return ob;}
 };
 
 inline void Ptr::incRefCount(Ob *ob) {
@@ -136,5 +140,6 @@ inline Ptr Ptr::assoc(const Ptr &s) const
 
 
 
-inline bool operator ==(const Ob * const ob, const Ptr & p) {return ob == p.ob;}
+inline bool operator==(const Ob * const & ob, const Ptr & p) {return ob == p.ob;}
+inline bool operator!=(const Ob * const & ob, const Ptr & p) {return ob != p.ob;}
 
