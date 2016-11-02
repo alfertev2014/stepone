@@ -8,7 +8,7 @@ static inline void addInSymbols(Ptr & symbols, const std::string & s, const Ptr 
 }
 
 Ptr BaseSymbolTable::createSymbolTable() {
-    Ptr symbols;
+    Ptr symbols(Ptr::anil);
     addInSymbols(symbols, "-i", BaseNumFuncSymbols::inst().aintNeg);
     addInSymbols(symbols, "i+", BaseNumFuncSymbols::inst().aintPlus);
     addInSymbols(symbols, "i-", BaseNumFuncSymbols::inst().aintMinus);
@@ -141,7 +141,7 @@ Ptr BaseSymbolTable::createSymbolTable() {
     addInSymbols(symbols, "cdr", BaseFuncSymbols::inst().acdr);
     addInSymbols(symbols, "eq", BaseFuncSymbols::inst().aeq);
 
-    addInSymbols(symbols, "t", Ob::at);
+    addInSymbols(symbols, "t", Ptr::at);
 
     addInSymbols(symbols, "^", BaseMacroSymbols::inst().agensym);
     addInSymbols(symbols, "~", BaseMacroSymbols::inst().acurctx);

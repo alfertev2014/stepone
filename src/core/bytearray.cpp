@@ -7,7 +7,7 @@
 const TypeInfoBase *ByteArray::getTypeInfo() const {return &TypeInfo<ByteArray>::instance;}
 
 ByteArray::~ByteArray() {
-    if(origin == Ob::anil)
+    if(origin == Ptr::anil)
         delete [] buffer;
 }
 
@@ -93,5 +93,5 @@ ByteArray *ByteArray::slice(int begin, int end) {
     int n = end - begin;
     if(n < 0)
         n = 0;
-    return new ByteArray(origin == Ob::anil ? this : origin, buffer + begin, n);
+    return new ByteArray(origin == Ptr::anil ? this : origin, buffer + begin, n);
 }

@@ -142,14 +142,14 @@ ostream &FirstParser::FirstParserImpl::printOb(ostream &ts, const Ptr &p) {
 Ptr FirstParser::FirstParserImpl::parse(const string &_s) {
     s = _s;
     parseRes pr = parseExpression(s.begin());
-    return pr.success ? pr.e : Ob::anil;
+    return pr.success ? pr.e : Ptr::anil;
 }
 
 ostream &FirstParser::FirstParserImpl::printSymbol(ostream &ts, Symbol *sym) {
-    if(sym == Ob::anil.as<Symbol>()) {
+    if(sym == Ptr::anil.as<Symbol>()) {
         return ts << "()";
     } else {
-        for(Ptr p = symbols; p != Ob::anil; p = p.cdr()) {
+        for(Ptr p = symbols; p != Ptr::anil; p = p.cdr()) {
             if(p.car().car() == sym) {
                 ByteArray * ba = p.car().cdr().as<ByteArray>();
                 return ts.write(ba->getData(), ba->getSize());
@@ -164,7 +164,7 @@ ostream &FirstParser::FirstParserImpl::printList(ostream &ts, Pair *pr) {
     Ptr pcdr = pr->cdr();
     Atom * atom = pcdr.as<Atom>();
     if(atom != 0) {
-        if(atom != Ob::anil.as<Atom>()) {
+        if(atom != Ptr::anil.as<Atom>()) {
             ts << " . ";
             printOb(ts, pcdr);
         }
@@ -180,13 +180,13 @@ parseRes FirstParser::FirstParserImpl::parseTail(string::const_iterator si) {
     string::const_iterator sii = si;
     spaces(sii);
     if(lexem(")", sii))
-        return parseRes(Ob::anil, sii, true);
+        return parseRes(Ptr::anil, sii, true);
     if(lexem(".", sii)) {
         spaces(sii);
         parseRes pr = parseExpression(sii);
         if(!pr.success) {
             DBG("parseTail fail");
-            return parseRes(Ob::anil, si, false);
+            return parseRes(Ptr::anil, si, false);
         }
         sii = pr.rest;
         spaces(sii);
@@ -194,18 +194,18 @@ parseRes FirstParser::FirstParserImpl::parseTail(string::const_iterator si) {
             return parseRes(pr.e, sii, true);
         } else {
             DBG("fail ) expected");
-            return parseRes(Ob::anil, si, false);
+            return parseRes(Ptr::anil, si, false);
         }
     }
     parseRes pr1 = parseExpression(sii);
     if(!pr1.success) {
         DBG("parseTail fail");
-        return parseRes(Ob::anil, si, false);
+        return parseRes(Ptr::anil, si, false);
     }
     parseRes pr2 = parseTail(pr1.rest);
     if(!pr2.success) {
         DBG("parseTail fail");
-        return parseRes(Ob::anil, si, false);
+        return parseRes(Ptr::anil, si, false);
     }
     return parseRes(new Pair(pr1.e, pr2.e), pr2.rest, true);
 }
@@ -218,17 +218,17 @@ parseRes FirstParser::FirstParserImpl::parseAtom(string::const_iterator si) {
     pr = parseChar(si);
     if(pr.success) return pr;
     pr = parseSymbol(si);
-    return pr.success ? pr : parseRes(Ob::anil, si, false);
+    return pr.success ? pr : parseRes(Ptr::anil, si, false);
 }
 
 parseRes FirstParser::FirstParserImpl::parseChar(string::const_iterator si) {
     string::const_iterator sii = si;
     if(sii == s.end() || *sii != '&')
-        return parseRes(Ob::anil, si, false);
+        return parseRes(Ptr::anil, si, false);
     else
         ++sii;
     if(sii == s.end() || *sii != '\"')
-        return parseRes(Ob::anil, si, false);
+        return parseRes(Ptr::anil, si, false);
     else
         ++sii;
     string chars;
@@ -242,7 +242,7 @@ parseRes FirstParser::FirstParserImpl::parseChar(string::const_iterator si) {
 parseRes FirstParser::FirstParserImpl::parseString(string::const_iterator si) {
     string::const_iterator sii = si;
     if(sii == s.end() || *sii != '\"')
-        return parseRes(Ob::anil, si, false);
+        return parseRes(Ptr::anil, si, false);
     else
         ++sii;
     string chars;
@@ -261,7 +261,7 @@ parseRes FirstParser::FirstParserImpl::parseSymbol(string::const_iterator si) {
         if(sii == s.end()) DBG("isend");
         else if(isspace(*sii)) DBG("isspace");
         else if((nosymbol.find(*sii) != string::npos)) DBG("nosym");
-        return parseRes(Ob::anil, si, false);
+        return parseRes(Ptr::anil, si, false);
     }
     symbolString.push_back(*sii);
     ++sii;
@@ -269,7 +269,7 @@ parseRes FirstParser::FirstParserImpl::parseSymbol(string::const_iterator si) {
         symbolString.push_back(*sii);
         ++sii;
     }
-    for(Ptr p = symbols; p != Ob::anil; p = p.cdr()) {
+    for(Ptr p = symbols; p != Ptr::anil; p = p.cdr()) {
         ByteArray * ba = p.car().cdr().as<ByteArray>();
         if(ba->getSize() == symbolString.size() &&
                 !memcmp(ba->getData(), symbolString.data(), symbolString.size()))
@@ -284,7 +284,7 @@ parseRes FirstParser::FirstParserImpl::parseNumber(string::const_iterator si) {
     string number;
     string::const_iterator sii = si;
     if(sii == s.end() || !isdigit(*sii) && *sii != '-' || isspace(*sii) || (nosymbol.find(*sii) != string::npos)) {
-        return parseRes(Ob::anil, si, false);
+        return parseRes(Ptr::anil, si, false);
     }
     number.push_back(*sii);
     ++sii;
@@ -315,7 +315,7 @@ parseRes FirstParser::FirstParserImpl::parseNumber(string::const_iterator si) {
             DBG("float is not float");
         }
     }
-    return parseRes(Ob::anil, si, false);
+    return parseRes(Ptr::anil, si, false);
 }
 
 bool FirstParser::FirstParserImpl::lexem(const string &lex, string::const_iterator &si) {

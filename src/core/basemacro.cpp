@@ -10,7 +10,7 @@ Ptr MApply::apply(const Ptr &p, const Ptr &a) {
 }
 
 Ptr MIf::apply(const Ptr &p, const Ptr &a) {
-    if(p.car().eval(a) == Ob::anil)
+    if(p.car().eval(a) == Ptr::anil)
         return p.cdr().cdr().eval(a);
     else
         return p.cdr().car().eval(a);

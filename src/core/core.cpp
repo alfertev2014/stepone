@@ -3,8 +3,8 @@
 
 #include <dbg.h>
 
-const Ptr Ob::anil(new Symbol);
-const Ptr Ob::at(new Symbol);
+const Ptr Ptr::anil(new Symbol);
+const Ptr Ptr::at(new Symbol);
 
 Ob::~Ob() {}
 
@@ -15,7 +15,7 @@ Ptr Ob::cdr() {DBG("throw cdr "); throw SemanticError();}
 Ptr Ob::eval(const Ptr &a) {throw SemanticError();}
 
 Ptr Ob::apply(const Ptr &p, const Ptr &a) {
-    if(p == Ob::anil) return this;
+    if(p == Ptr::anil) return this;
     DBG("apply of not applyable"); throw SemanticError();
 }
 

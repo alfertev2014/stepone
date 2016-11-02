@@ -11,7 +11,7 @@ private:
     Ptr * array;
     int length;
 
-    Vector(int _length): origin(Ob::anil), length(_length) {
+    Vector(int _length): origin(Ptr::anil), length(_length) {
         // array is not initialized
         // allocate memory, don't call constructor Ptr()
         array = reinterpret_cast<Ptr*>(new char[length * sizeof(Ptr)]);

@@ -11,7 +11,8 @@ private:
     char * buffer;
     int length;
 public:
-    explicit ByteArray(int _n): length(_n < 0 ? 0 : _n) {
+    explicit ByteArray(int _n)
+        : origin(Ptr::anil), length(_n < 0 ? 0 : _n) {
         buffer = new char[length];
     }
 
@@ -25,7 +26,7 @@ public:
         : origin(_origin), buffer(_begin), length(_length < 0 ? 0 : _length) {}
 
     ByteArray(char * _begin, int _length)
-        : origin(Ob::at), buffer(_begin), length(_length < 0 ? 0 : _length) {}
+        : origin(Ptr::at), buffer(_begin), length(_length < 0 ? 0 : _length) {}
 
     ~ByteArray();
 

@@ -32,9 +32,9 @@ Atom::~Atom() {}
 const TypeInfoBase *Lazy::getTypeInfo() const {return &TypeInfo<Lazy>::instance;}
 
 inline void Lazy::ev() {
-    if(!(a == Ob::anil)) {
+    if(!(a == Ptr::anil)) {
         e = e.eval(a);
-        a = Ob::anil;
+        a = Ptr::anil;
     }
 }
 
@@ -94,7 +94,7 @@ const TypeInfoBase *Symbol::getTypeInfo() const {return &TypeInfo<Symbol>::insta
 
 Ptr Symbol::eval(const Ptr &a) {
     Ptr p = a;
-    while(p != anil) {
+    while(p != Ptr::anil) {
         Ptr pair = p.car();
         if(pair.car() == this)
             return pair.cdr();

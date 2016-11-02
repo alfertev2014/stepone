@@ -11,7 +11,7 @@ static inline void addInContext(Ptr & a, const Ptr & p, const Ptr & v) {
 }
 
 Ptr BaseEvaluator::createContext() {
-    Ptr a;
+    Ptr a(Ptr::anil);
     addInContext(a, BaseNumFuncSymbols::inst().aintNeg, BaseNumFunc::inst().fintNeg);
     addInContext(a, BaseNumFuncSymbols::inst().aintPlus, BaseNumFunc::inst().fintPlus);
     addInContext(a, BaseNumFuncSymbols::inst().aintMinus, BaseNumFunc::inst().fintMinus);
@@ -144,8 +144,8 @@ Ptr BaseEvaluator::createContext() {
     addInContext(a, BaseFuncSymbols::inst().acdr, BaseFunctions::inst().fcdr);
     addInContext(a, BaseFuncSymbols::inst().aeq, BaseFunctions::inst().feq);
 
-    addInContext(a, Ob::anil, Ob::anil);
-    addInContext(a, Ob::at, Ob::at);
+    addInContext(a, Ptr::anil, Ptr::anil);
+    addInContext(a, Ptr::at, Ptr::at);
 
     addInContext(a, BaseMacroSymbols::inst().agensym, BaseMacroses::inst().mgensym);
     addInContext(a, BaseMacroSymbols::inst().acurctx, BaseMacroses::inst().mcurctx);

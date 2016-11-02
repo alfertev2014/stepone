@@ -4,7 +4,7 @@
 const TypeInfoBase *Vector::getTypeInfo() const {return &TypeInfo<Vector>::instance;}
 
 Vector::~Vector() {
-    if(origin == Ob::anil) {
+    if(origin == Ptr::anil) {
         // manual call destructor ~Ptr()
         for(int i = 0; i < length; ++i)
             array[i].~Ptr();

@@ -1,7 +1,7 @@
 #include <macro.h>
 #include <type_info_inst.h>
 
-const Ptr Evaluator::eempty(new Evaluator(Ob::anil));
+const Ptr Evaluator::eempty(new Evaluator(Ptr::anil));
 
 template<>
 Macro *Ob::as<Macro>() {return typeFlags.constType == TypeFlags::Macro ? dynamic_cast<Macro*>(this) : 0;}
@@ -33,7 +33,7 @@ BaseMacro::~BaseMacro(){}
 const TypeInfoBase *Closure::getTypeInfo() const {return &TypeInfo<Closure>::instance;}
 
 Ptr Closure::apply(const Ptr &p, const Ptr &a) {
-    if(p == Ob::anil)
+    if(p == Ptr::anil)
         return this;
     return e.eval(Context::make(sp, p.car().eval(a), this->a)).apply(p.cdr(), a);
 }

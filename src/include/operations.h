@@ -5,7 +5,7 @@
 template <class T>
 class FTypeP : public BaseMacro {
 public:
-    Ptr apply(const Ptr &p, const Ptr &a) {return p.is<T>() ? Ob::anil : Ob::at;}
+    Ptr apply(const Ptr &p, const Ptr &a) {return p.is<T>() ? Ptr::anil : Ptr::at;}
 };
 
 template <class UnOp>
