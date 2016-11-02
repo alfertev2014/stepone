@@ -64,16 +64,16 @@ const TypeInfoBase *Label::getTypeInfo() const {return &TypeInfo<Label>::instanc
 
 inline Ptr Label::ptr() {
     if(pa) {
-        return v->eval(*pa);
+        return v.eval(*pa);
     }
     return v;
 }
 
 Ptr Label::loop(const Ptr &f, const Ptr &e, const Ptr &a) {
-    Label * l = new Label(e.ob, &a);
+    Label * l = new Label(e, &a);
     Ptr lbl = l;
     Ptr res = e.eval(Context::make(f, lbl, a));
-    l->v = res.ob;
+    l->v = res;
     l->pa = 0;
     return res;
 }

@@ -9,6 +9,7 @@ class SemanticError {};
 
 class TypeInfoBase;
 
+class WPtr;
 class Ptr;
 
 class Ob {
@@ -41,38 +42,20 @@ public:
     T * cast();
 };
 
-class Ptr {
-    friend class Label;
-    
+class WPtr {
+    friend class Ptr;
     Ob * ob;
-    inline static void incRefCount(Ob * ob);
-    inline static void decRefCount(Ob * ob);
-public:
-    Ptr() : ob(Ob::anil.ob) {incRefCount(ob);}
-    Ptr(Ob * _ob) : ob(_ob) {incRefCount(ob);}
-    Ptr(const Ptr & _ob) : ob(_ob.ob) {incRefCount(ob);}
-    Ptr(bool b) : ob(b ? Ob::at.ob : Ob::anil.ob) {incRefCount(ob);}
-    ~Ptr() {decRefCount(ob);}
 
-    friend bool operator==(const Ob * const & ob, const Ptr & p);
-    friend bool operator!=(const Ob * const & ob, const Ptr & p);
-    bool operator==(const Ptr & p) const {return ob == p;}
-    bool operator!=(const Ptr & p) const {return ob != p;}
-    
+    WPtr(Ob * _ob) : ob(_ob) {}
+public:
+    friend bool operator==(const Ob * const & ob, const WPtr & p);
+    friend bool operator!=(const Ob * const & ob, const WPtr & p);
+
+    bool operator==(const WPtr & p) const {return ob == p;}
+    bool operator!=(const WPtr & p) const {return ob != p;}
+
     bool operator==(const Ob * const p) const {return ob == p;}
     bool operator!=(const Ob * const p) const {return !(ob == p);}
-
-
-    Ptr & operator=(const Ptr & p) {return operator=(p.ob);}
-    Ptr & operator=(Ob * _ob) {
-        if(_ob != ob) {
-            // don't change order
-            incRefCount(_ob);
-            decRefCount(ob);
-            ob = _ob;
-        }
-        return *this;
-    }
 
     Ptr car() const;
     Ptr cdr() const;
@@ -83,13 +66,38 @@ public:
     Ptr assoc(const Ptr & s) const;
 
     Ptr typeId() const;
-    
+
     template <class T>
     T * as() const;
     template <class T>
     bool is() const;
     template <class T>
     T * cast() const;
+};
+
+class Ptr : public WPtr {
+    inline static void incRefCount(Ob * ob);
+    inline static void decRefCount(Ob * ob);
+public:
+    Ptr() : WPtr(Ob::anil.ob) {incRefCount(ob);}
+    Ptr(Ob * _ob) : WPtr(_ob) {incRefCount(ob);}
+    Ptr(const Ptr & p) : WPtr(p.ob) {incRefCount(ob);}
+    Ptr(const WPtr & p) : WPtr(p.ob) {incRefCount(ob);}
+    Ptr(bool b) : WPtr(b ? Ob::at.ob : Ob::anil.ob) {incRefCount(ob);}
+    ~Ptr() {decRefCount(ob);}
+
+
+    Ptr & operator=(const Ptr & p) {return operator=(p.ob);}
+    Ptr & operator=(const WPtr & p) {return operator=(p.ob);}
+    Ptr & operator=(Ob * _ob) {
+        if(_ob != ob) {
+            // don't change order
+            incRefCount(_ob);
+            decRefCount(ob);
+            ob = _ob;
+        }
+        return *this;
+    }
 };
 
 inline void Ptr::incRefCount(Ob *ob) {
@@ -108,38 +116,38 @@ inline void Ptr::decRefCount(Ob *ob) {
         delete ob;
 }
 
-inline Ptr Ptr::car() const
+inline Ptr WPtr::car() const
 {
     return ob->car();
 }
 
-inline Ptr Ptr::cdr() const
+inline Ptr WPtr::cdr() const
 {
     return ob->cdr();
 }
 
-inline Ptr Ptr::eval(const Ptr &a) const
+inline Ptr WPtr::eval(const Ptr &a) const
 {
     return ob->eval(a);
 }
 
-inline Ptr Ptr::apply(const Ptr &p, const Ptr &a) const
+inline Ptr WPtr::apply(const Ptr &p, const Ptr &a) const
 {
     return ob->apply(p, a);
 }
 
-inline Ptr Ptr::unlazy() const
+inline Ptr WPtr::unlazy() const
 {
     return ob->unlazy();
 }
 
-inline Ptr Ptr::assoc(const Ptr &s) const
+inline Ptr WPtr::assoc(const Ptr &s) const
 {
     return ob->assoc(s);
 }
 
 
 
-inline bool operator==(const Ob * const & ob, const Ptr & p) {return ob == p.ob;}
-inline bool operator!=(const Ob * const & ob, const Ptr & p) {return ob != p.ob;}
+inline bool operator==(const Ob * const & ob, const WPtr & p) {return ob == p.ob;}
+inline bool operator!=(const Ob * const & ob, const WPtr & p) {return ob != p.ob;}
 

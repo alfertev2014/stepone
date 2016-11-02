@@ -65,9 +65,9 @@ public:
     const TypeInfoBase * getTypeInfo() const;
 private:
     const Ptr * pa;
-    Ob * v;
+    WPtr v;
 
-    Label(Ob * _v, const Ptr * _a) : v(_v), pa(_a) {
+    Label(const WPtr _v, const Ptr * _a) : v(_v), pa(_a) {
         typeFlags.obType = TypeFlags::Label;
     }
 

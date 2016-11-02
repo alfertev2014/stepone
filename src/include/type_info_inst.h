@@ -27,16 +27,16 @@ T * Ob::cast() {
 }
 
 template <class T>
-inline T * Ptr::as() const {
+inline T * WPtr::as() const {
     return ob->as<T>();
 }
 
 template <class T>
-inline bool Ptr::is() const {
+inline bool WPtr::is() const {
     return ob->is<T>();
 }
 
 template <class T>
-inline T * Ptr::cast() const {
+inline T * WPtr::cast() const {
     return ob->cast<T>();
 }

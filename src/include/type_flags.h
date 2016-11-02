@@ -32,10 +32,10 @@ struct TypeFlags {
         Other
     };
 
-    int obType : 2;
-    int atomType: 1;
-    int constType: 1;
-    int macroValueType: 2;
+    unsigned int obType : 2;
+    unsigned int atomType: 1;
+    unsigned int constType: 1;
+    unsigned int macroValueType: 2;
 
     TypeFlags() :
         obType(0),
