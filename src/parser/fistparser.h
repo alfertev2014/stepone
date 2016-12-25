@@ -1,6 +1,7 @@
 #pragma once
 
 #include <core.h>
+#include <string>
 
 using namespace std;
 

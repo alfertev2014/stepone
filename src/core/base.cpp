@@ -1,4 +1,5 @@
 #include <base.h>
+#include <ptr_impl.h>
 #include <type_info_inst.h>
 
 template<>

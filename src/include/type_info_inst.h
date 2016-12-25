@@ -1,6 +1,7 @@
 #pragma once
 
 #include "type_info.h"
+#include "error_exception.h"
 
 #include "dbg.h"
 

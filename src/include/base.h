@@ -14,6 +14,12 @@ public:
         typeFlags.obType = TypeFlags::Pair;
     }
 
+    template <class T>
+    T * carAs();
+
+    template <class T>
+    T * cdrAs();
+
     Ptr car();
     Ptr cdr();
 

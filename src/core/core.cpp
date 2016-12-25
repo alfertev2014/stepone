@@ -1,5 +1,6 @@
 #include <core.h>
 #include <base.h>
+#include <error_exception.h>
 
 #include <dbg.h>
 

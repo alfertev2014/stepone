@@ -1,6 +1,8 @@
 #include "test.h"
 
 #include <fstream>
+#include <iostream>
+#include <error_exception.h>
 
 void TestEngine::test_from_file(const string &fname) {
     cout << "_______________________________________________________________________________________________" << endl;
