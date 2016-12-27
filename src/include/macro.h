@@ -66,22 +66,6 @@ public:
     Ptr apply(const Ptr &p, const Ptr &a);
 };
 
-class CurrentContext : public Macro {
-public:
-    const TypeInfoBase * getTypeInfo() const;
-private:
-    Ptr sa;
-    Ptr e;
-    Ptr a;
-public:
-    CurrentContext(const Ptr & _sa, const Ptr & _e, const Ptr & _a)
-        : Macro(), sa(_sa), e(_e), a(_a) {
-        typeFlags.macroValueType = TypeFlags::CurrentContext;
-    }
-
-    Ptr apply(const Ptr &p, const Ptr &a);
-};
-
 template<>
 Macro *Ob::as<Macro>();
 
@@ -93,7 +77,4 @@ BaseMacro *Ob::as<BaseMacro>();
 
 template<>
 MacroClosure *Ob::as<MacroClosure>();
-
-template<>
-CurrentContext *Ob::as<CurrentContext>();
 

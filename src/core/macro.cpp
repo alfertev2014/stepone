@@ -15,9 +15,6 @@ BaseMacro *Ob::as<BaseMacro>() {return typeFlags.macroValueType == TypeFlags::Ba
 template<>
 MacroClosure *Ob::as<MacroClosure>() {return typeFlags.macroValueType == TypeFlags::MacroClosure ? dynamic_cast<MacroClosure*>(this) : 0;}
 
-template<>
-CurrentContext *Ob::as<CurrentContext>() {return typeFlags.macroValueType == TypeFlags::CurrentContext ? dynamic_cast<CurrentContext*>(this) : 0;}
-
 Macro::~Macro() {}
 
 const TypeInfoBase *Evaluator::getTypeInfo() const {return &TypeInfo<Evaluator>::instance;}
@@ -42,10 +39,4 @@ const TypeInfoBase *MacroClosure::getTypeInfo() const {return &TypeInfo<MacroClo
 
 Ptr MacroClosure::apply(const Ptr &p, const Ptr &a) {
     return e.eval(Context::make(sp, p, this->a));
-}
-
-const TypeInfoBase *CurrentContext::getTypeInfo() const {return &TypeInfo<CurrentContext>::instance;}
-
-Ptr CurrentContext::apply(const Ptr &p, const Ptr &a) {
-    return e.eval(Context::make(sa, new Evaluator(a), this->a)).apply(p, this->a);
 }
