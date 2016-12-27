@@ -1,7 +1,7 @@
 #pragma once
 
-#include "type_flags.h"
 #include "ptr.h"
+#include "type_flags.h"
 
 class TypeInfoBase;
 

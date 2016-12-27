@@ -1,6 +1,6 @@
 #pragma once
 
-#include "core.h"
+#include "ob.h"
 #include "value.h"
 
 class ByteArray : public ValueBase {

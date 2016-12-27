@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ptr.h"
-#include "core.h"
+#include "ob.h"
 #include "type_info.h"
 
 inline void Ptr::acqure() { ob->incRefCount(); }

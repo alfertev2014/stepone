@@ -1,6 +1,7 @@
 #pragma once
 
 #include "type_info.h"
+#include "ob.h"
 #include "error_exception.h"
 
 #include "dbg.h"
@@ -15,10 +16,14 @@ template <class T>
 const TypeInfo<T> TypeInfo<T>::instance;
 
 template <class T>
-T * Ob::as() {return &TypeInfo<T>::instance == getTypeInfo() ? dynamic_cast<T*>(this) : 0;}
+T * Ob::as() {
+    return &TypeInfo<T>::instance == getTypeInfo() ? dynamic_cast<T*>(this) : 0;
+}
 
 template <class T>
-bool Ob::is() const {return &TypeInfo<T>::instance == getTypeInfo();}
+bool Ob::is() const {
+    return &TypeInfo<T>::instance == getTypeInfo();
+}
 
 template <class T>
 T * Ob::cast() {

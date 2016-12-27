@@ -1,6 +1,6 @@
 #pragma once
 
-#include "core.h"
+#include "ptr.h"
 
 class TypeInfoBase {
 public:

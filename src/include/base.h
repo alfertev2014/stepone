@@ -1,6 +1,6 @@
 #pragma once
 
-#include "core.h"
+#include "ob.h"
 
 class Pair : public Ob {
 public:
@@ -13,12 +13,6 @@ public:
         : pcar(_pcar), pcdr(_pcdr) {
         typeFlags.obType = TypeFlags::Pair;
     }
-
-    template <class T>
-    T * carAs();
-
-    template <class T>
-    T * cdrAs();
 
     Ptr car();
     Ptr cdr();
