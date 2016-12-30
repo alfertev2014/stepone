@@ -42,7 +42,7 @@ Ptr MMacro::apply(const Ptr &p, const Ptr &a) {
 }
 
 Ptr MCurrentContext::apply(const Ptr &p, const Ptr &a) {
-    return p.cdr().eval(Context::make(p.car(), new Evaluator(a), a));
+    return new CurrentContext(p.car(), p.cdr(), a);
 }
 
 Ptr MTry::apply(const Ptr &p, const Ptr &a) {
