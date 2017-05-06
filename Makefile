@@ -14,8 +14,11 @@ endif
 LD_FLAGS =
 
 LIB_SOURCES := \
-$(wildcard $(SOURCES_DIR)/core/*.cpp) \
-$(wildcard $(SOURCES_DIR)/base/*.cpp) \
+$(wildcard $(SOURCES_DIR)/impl/base/*.cpp) \
+$(wildcard $(SOURCES_DIR)/impl/core/*.cpp) \
+$(wildcard $(SOURCES_DIR)/impl/init/*.cpp) \
+$(wildcard $(SOURCES_DIR)/impl/objects/*.cpp) \
+$(wildcard $(SOURCES_DIR)/impl/symbols/*.cpp) \
 $(wildcard $(SOURCES_DIR)/parser/*.cpp) \
 $(wildcard $(SOURCES_DIR)/repl/*.cpp) \
 $(wildcard $(SOURCES_DIR)/test/*.cpp)

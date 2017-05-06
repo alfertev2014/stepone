@@ -1,12 +1,15 @@
 #include "fistparser.h"
 
-#include <base/initsymbols.h>
-#include <base/initevaluator.h>
+#include <ptr.h>
+#include <impl/ptr_impl.h>
 
-#include <bytearray.h>
-#include <vector.h>
+#include <init/initsymbols.h>
+#include <init/initevaluator.h>
 
-#include <dbg.h>
+#include <impl/core/bytearray.h>
+#include <impl/core/vector.h>
+
+#include <impl/dbg.h>
 
 #include <cstring>
 #include <sstream>
