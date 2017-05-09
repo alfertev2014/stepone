@@ -6,9 +6,9 @@ CXX = g++
 DEBUG = 1
 
 ifdef DEBUG
-CXX_FLAGS = -rdynamic -DDEBUG -O0 -ggdb -D_GLIBCXX_DEBUG
+CXXFLAGS = -rdynamic -DDEBUG -O0 -ggdb
 else
-CXX_FLAGS = -O3
+CXXFLAGS = -O3
 endif
 
 LD_FLAGS =
@@ -23,23 +23,45 @@ $(wildcard $(SOURCES_DIR)/parser/*.cpp) \
 $(wildcard $(SOURCES_DIR)/repl/*.cpp) \
 $(wildcard $(SOURCES_DIR)/test/*.cpp)
 
-INCLUDE_DIRS = -Isrc/include
-
 OBJECTS := $(LIB_SOURCES:$(SOURCES_DIR)/%=$(BUILD_DIR)/%.o)
 
-DIR_GUARD = mkdir -p $(@D) || true
+INCLUDE_DIRS = -Isrc/include
+
 
 .PHONY: clean all
 
 all: $(TARGET)
 
-$(TARGET) : $(OBJECTS) $(HEADERS)
-	@${DIR_GUARD}
-	$(CXX) -Wl,--start-group $(OBJECTS) -Wl,--end-group $(LD_FLAGS) -o $@
 
-$(OBJECTS) : $(BUILD_DIR)/%.cpp.o: $(SOURCES_DIR)/%.cpp
-	@${DIR_GUARD}
-	$(CXX) -c $< $(CXX_FLAGS) $(INCLUDE_DIRS) -o $@
+# See  http://make.mad-scientist.net/papers/advanced-auto-dependency-generation/
+
+DEPDIR := $(BUILD_DIR)/.deps
+$(shell mkdir -p $(DEPDIR) >/dev/null)
+DEPFLAGS = -MT $@ -MMD -MP -MF $(DEPDIR)/$*.Td
+
+COMPILE.c = $(CC) $(DEPFLAGS) $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c
+COMPILE.cc = $(CXX) $(DEPFLAGS) $(CXXFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c
+POSTCOMPILE = @mv -f $(DEPDIR)/$*.Td $(DEPDIR)/$*.d && touch $@
+
+DIRGUARD = @mkdir -p $(@D)
+
+%.o: %.cpp
+$(BUILD_DIR)/%.cpp.o: $(SOURCES_DIR)/%.cpp $(DEPDIR)/%.d
+	${DIRGUARD}
+	$(COMPILE.cc) $< -o $@ $(INCLUDE_DIRS)
+	$(POSTCOMPILE)
+
+
+$(DEPDIR)/%.d:
+	${DIRGUARD}
+.PRECIOUS: $(DEPDIR)/%.d
+
+
+
+$(TARGET) : $(OBJECTS)
+	$(CXX) -Wl,--start-group $(OBJECTS) -Wl,--end-group $(LD_FLAGS) -o $@
 
 clean:
 	rm -f $(OBJECTS) $(TARGET)
+
+include $(wildcard $(OBJECTS:$(BUILD_DIR)/%.cpp.o=$(DEPDIR)/%.d))
