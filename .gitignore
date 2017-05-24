@@ -12,8 +12,5 @@ build
 # QtCreator
 ###########
 *~
-*.config
-*.creator*
-*.files
-*.includes
 *.pro.user
+*.creator.user*

@@ -25,7 +25,7 @@ $(wildcard $(SOURCES_DIR)/test/*.cpp)
 
 OBJECTS := $(LIB_SOURCES:$(SOURCES_DIR)/%=$(BUILD_DIR)/%.o)
 
-INCLUDE_DIRS = -Isrc/include
+INCLUDE_DIRS = -Isrc/include/stepone -Isrc/include/parser
 
 
 .PHONY: clean all
