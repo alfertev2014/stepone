@@ -1,6 +1,6 @@
 #pragma once
 
-#include <fistparser.h>
+class FirstParser;
 
 class REPL {
 public:

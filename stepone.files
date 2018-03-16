@@ -63,5 +63,6 @@ src/parser/fistparser.cpp
 src/repl/main.cpp
 src/repl/repl.cpp
 src/repl/repl.h
+src/test/main.cpp
 src/test/test.cpp
 src/test/test.h
