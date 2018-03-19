@@ -50,6 +50,6 @@ inline Ptr WPtr::assoc(const Ptr &s) const
 
 inline Ptr WPtr::typeId() const
 {
-    return ob->getTypeInfo()->type_id;
+    return ob->getTypeInfo();
 }
 

@@ -20,7 +20,7 @@ Symbol *Ob::as<Symbol>() {return typeFlags.atomType == TypeFlags::Symbol ? dynam
 template<>
 Const *Ob::as<Const>() {return typeFlags.atomType == TypeFlags::Const ? dynamic_cast<Const*>(this) : 0;}
 
-const TypeInfoBase *Pair::getTypeInfo() const {return &TypeInfo<Pair>::instance;}
+const Ptr Pair::getTypeInfo() const {return TypeInfo<Pair>::instance;}
 
 Ptr Pair::car() {return pcar;}
 
@@ -30,7 +30,7 @@ Ptr Pair::eval(const Ptr &a) {return pcar.eval(a).apply(pcdr, a);}
 
 Atom::~Atom() {}
 
-const TypeInfoBase *Lazy::getTypeInfo() const {return &TypeInfo<Lazy>::instance;}
+const Ptr Lazy::getTypeInfo() const {return TypeInfo<Lazy>::instance;}
 
 inline void Lazy::ev() {
     if(!(a == Ptr::anil)) {
@@ -61,7 +61,7 @@ Ptr Lazy::apply(const Ptr &p, const Ptr &a) {
 
 Ptr Lazy::unlazy() {evw(); return e;}
 
-const TypeInfoBase *Label::getTypeInfo() const {return &TypeInfo<Label>::instance;}
+const Ptr Label::getTypeInfo() const {return TypeInfo<Label>::instance;}
 
 inline Ptr Label::ptr() {
     if(pa) {
@@ -91,7 +91,7 @@ Ptr Label::apply(const Ptr &p, const Ptr &a) {return ptr().apply(p, a);}
 
 Ptr Label::unlazy() {return ptr().unlazy();}
 
-const TypeInfoBase *Symbol::getTypeInfo() const {return &TypeInfo<Symbol>::instance;}
+const Ptr Symbol::getTypeInfo() const {return TypeInfo<Symbol>::instance;}
 
 Ptr Symbol::eval(const Ptr &a) {
     Ptr p = a;

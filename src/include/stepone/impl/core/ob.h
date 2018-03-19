@@ -32,7 +32,7 @@ public:
     virtual Ptr unlazy();
     virtual Ptr assoc(const Ptr & s) const;
 
-    virtual const TypeInfoBase * getTypeInfo() const = 0;
+    virtual const Ptr getTypeInfo() const = 0;
 
     template <class T>
     T * as();

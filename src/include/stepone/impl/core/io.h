@@ -7,7 +7,7 @@
 
 class IOStreamDescriptor : public ValueBase {
 public:
-    const TypeInfoBase * getTypeInfo() const;
+    const Ptr getTypeInfo() const;
 private:
     std::ifstream stream;
 public:

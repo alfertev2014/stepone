@@ -11,7 +11,6 @@ src/impl/core/core.cpp
 src/impl/core/io.cpp
 src/impl/core/macro.cpp
 src/impl/core/ob.cpp
-src/impl/core/type_info.cpp
 src/impl/core/value.cpp
 src/impl/core/vector.cpp
 src/impl/objects/basefunc_obs.cpp

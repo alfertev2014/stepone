@@ -1,7 +1,7 @@
 #include <impl/core/io.h>
 #include <impl/core/type_info_inst.h>
 
-const TypeInfoBase *IOStreamDescriptor::getTypeInfo() const {return &TypeInfo<IOStreamDescriptor>::instance;}
+const Ptr IOStreamDescriptor::getTypeInfo() const {return TypeInfo<IOStreamDescriptor>::instance;}
 
 std::iostream &IOStreamDescriptor::getStream() {throw SemanticError();}
 

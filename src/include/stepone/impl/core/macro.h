@@ -12,7 +12,7 @@ public:
 
 class Evaluator : public Macro {
 public:
-    const TypeInfoBase * getTypeInfo() const;
+    const Ptr getTypeInfo() const;
 private:
     Ptr a;
 public:
@@ -27,7 +27,7 @@ public:
 
 class BaseMacro : public Macro {
 public:
-    const TypeInfoBase * getTypeInfo() const;
+    const Ptr getTypeInfo() const;
 public:
     BaseMacro(): Macro() {
         typeFlags.macroValueType = TypeFlags::BaseMacro;
@@ -38,7 +38,7 @@ public:
 /// TODO: remove it
 class Closure : public Macro {
 public:
-    const TypeInfoBase * getTypeInfo() const;
+    const Ptr getTypeInfo() const;
 private:
     Ptr sp;
     Ptr e;
@@ -52,7 +52,7 @@ public:
 
 class MacroClosure : public Macro {
 public:
-    const TypeInfoBase * getTypeInfo() const;
+    const Ptr getTypeInfo() const;
 private:
     Ptr sp;
     Ptr e;
@@ -68,7 +68,7 @@ public:
 
 class CurrentContext : public Macro {
 public:
-    const TypeInfoBase * getTypeInfo() const;
+    const Ptr getTypeInfo() const;
 private:
     Ptr sa;
     Ptr e;

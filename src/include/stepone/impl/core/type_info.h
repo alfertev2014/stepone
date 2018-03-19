@@ -2,9 +2,9 @@
 
 #include <ptr.h>
 
-class TypeInfoBase {
+template <class T>
+class TypeInfo {
 public:
-    TypeInfoBase();
-    const Ptr type_id;
+    static const Ptr instance;
 };
 

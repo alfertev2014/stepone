@@ -40,7 +40,7 @@ protected:
 template <class T>
 class Value : public OtherValue {
 public:
-    const TypeInfoBase * getTypeInfo() const {return &TypeInfo<Value<T> >::instance;}
+    const Ptr getTypeInfo() const {return TypeInfo<Value<T> >::instance;}
 private:
     T t;
 public:

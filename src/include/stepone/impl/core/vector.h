@@ -4,7 +4,7 @@
 
 class Vector : public ValueBase {
 public:
-    const TypeInfoBase * getTypeInfo() const;
+    const Ptr getTypeInfo() const;
 private:
     Ptr origin;
     Ptr * array;

@@ -4,7 +4,7 @@
 
 class Pair : public Ob {
 public:
-    const TypeInfoBase * getTypeInfo() const;
+    const Ptr getTypeInfo() const;
 private:
     Ptr pcar;
     Ptr pcdr;
@@ -38,7 +38,7 @@ public:
 
 class Lazy : public Ob {
 public:
-    const TypeInfoBase * getTypeInfo() const;
+    const Ptr getTypeInfo() const;
 private:
     Ptr e;
     Ptr a;
@@ -62,7 +62,7 @@ public:
 
 class Label : public Ob {
 public:
-    const TypeInfoBase * getTypeInfo() const;
+    const Ptr getTypeInfo() const;
 private:
     const Ptr * pa;
     WPtr v;
@@ -87,7 +87,7 @@ public:
 
 class Symbol : public Atom {
 public:
-    const TypeInfoBase * getTypeInfo() const;
+    const Ptr getTypeInfo() const;
 public:
     Symbol() : Atom() {
         typeFlags.atomType = TypeFlags::Symbol;

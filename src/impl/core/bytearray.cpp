@@ -4,7 +4,7 @@
 #include <cstring>
 #include <sstream>
 
-const TypeInfoBase *ByteArray::getTypeInfo() const {return &TypeInfo<ByteArray>::instance;}
+const Ptr ByteArray::getTypeInfo() const {return TypeInfo<ByteArray>::instance;}
 
 ByteArray::~ByteArray() {
     if(origin == Ptr::anil)

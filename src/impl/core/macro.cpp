@@ -20,17 +20,17 @@ CurrentContext *Ob::as<CurrentContext>() {return typeFlags.macroValueType == Typ
 
 Macro::~Macro() {}
 
-const TypeInfoBase *Evaluator::getTypeInfo() const {return &TypeInfo<Evaluator>::instance;}
+const Ptr Evaluator::getTypeInfo() const {return TypeInfo<Evaluator>::instance;}
 
 Ptr Evaluator::getContext() const {return a;}
 
 Ptr Evaluator::apply(const Ptr &p, const Ptr &a) {return p.eval(a).eval(this->a);}
 
-const TypeInfoBase *BaseMacro::getTypeInfo() const {return &TypeInfo<BaseMacro>::instance;}
+const Ptr BaseMacro::getTypeInfo() const {return TypeInfo<BaseMacro>::instance;}
 
 BaseMacro::~BaseMacro(){}
 
-const TypeInfoBase *Closure::getTypeInfo() const {return &TypeInfo<Closure>::instance;}
+const Ptr Closure::getTypeInfo() const {return TypeInfo<Closure>::instance;}
 
 Ptr Closure::apply(const Ptr &p, const Ptr &a) {
     if(p == Ptr::anil)
@@ -38,13 +38,13 @@ Ptr Closure::apply(const Ptr &p, const Ptr &a) {
     return e.eval(Context::make(sp, p.car().eval(a), this->a)).apply(p.cdr(), a);
 }
 
-const TypeInfoBase *MacroClosure::getTypeInfo() const {return &TypeInfo<MacroClosure>::instance;}
+const Ptr MacroClosure::getTypeInfo() const {return TypeInfo<MacroClosure>::instance;}
 
 Ptr MacroClosure::apply(const Ptr &p, const Ptr &a) {
     return e.eval(Context::make(sp, p, this->a));
 }
 
-const TypeInfoBase *CurrentContext::getTypeInfo() const {return &TypeInfo<CurrentContext>::instance;}
+const Ptr CurrentContext::getTypeInfo() const {return TypeInfo<CurrentContext>::instance;}
 
 Ptr CurrentContext::apply(const Ptr &p, const Ptr &a) {
     return e.eval(Context::make(sa, new Evaluator(a), this->a)).apply(p, this->a);
