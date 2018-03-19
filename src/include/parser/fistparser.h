@@ -7,7 +7,7 @@ using namespace std;
 
 class FirstParser {
 public:
-    FirstParser();
+    FirstParser(const Ptr &baseEvaluator, const Ptr &baseSymbolTable);
     FirstParser(const FirstParser &fp);
     ~FirstParser();
 

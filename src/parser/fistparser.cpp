@@ -3,9 +3,6 @@
 #include <ptr.h>
 #include <impl/ptr_impl.h>
 
-#include <init/initsymbols.h>
-#include <init/initevaluator.h>
-
 #include <impl/core/bytearray.h>
 #include <impl/core/vector.h>
 
@@ -27,8 +24,8 @@ struct parseRes {
 
 class FirstParser::FirstParserImpl {
 public:
-    FirstParserImpl() :
-        symbols(BaseSymbolTable::createSymbolTable()),
+    FirstParserImpl(const Ptr &baseSymbolTable) :
+        symbols(baseSymbolTable),
         nosymbol("(){}[].\"")
     {}
 
@@ -57,9 +54,9 @@ private:
 };
 
 
-FirstParser::FirstParser() :
-    a(BaseEvaluator::createContext()),
-    impl(new FirstParserImpl)
+FirstParser::FirstParser(const Ptr &baseEvaluator, const Ptr &baseSymbolTable) :
+    a(baseEvaluator),
+    impl(new FirstParserImpl(baseSymbolTable))
 {}
 
 FirstParser::FirstParser(const FirstParser &fp) :
