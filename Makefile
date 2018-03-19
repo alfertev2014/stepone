@@ -27,6 +27,7 @@ $(wildcard $(SOURCES_DIR)/impl/objects/*.cpp) \
 $(wildcard $(SOURCES_DIR)/impl/symbols/*.cpp)
 
 PARSER_SOURSES := \
+$(wildcard $(SOURCES_DIR)/init/*.cpp) \
 $(wildcard $(SOURCES_DIR)/parser/*.cpp)
 
 REPL_SOURCES := \

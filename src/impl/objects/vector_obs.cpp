@@ -1,4 +1,4 @@
-#include "vector_obs.h"
+#include <impl/objects/vector_obs.h>
 
 #include <impl/operations/vector_ops.h>
 #include <impl/base/operations.h>

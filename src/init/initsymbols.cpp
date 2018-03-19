@@ -1,6 +1,6 @@
 #include <init/initsymbols.h>
 
-#include "../symbols/basesymbols.h"
+#include <impl/symbols/basesymbols.h>
 #include <impl/core/bytearray.h>
 
 static inline void addInSymbols(Ptr & symbols, const std::string & s, const Ptr & p) {

@@ -1,4 +1,4 @@
-#include "bytearray_obs.h"
+#include <impl/objects/bytearray_obs.h>
 
 #include <impl/operations/bytearray_ops.h>
 #include <impl/base/operations.h>
