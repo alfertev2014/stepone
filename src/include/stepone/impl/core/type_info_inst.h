@@ -4,7 +4,7 @@
 #include "ob.h"
 
 #include <error_exception.h>
-#include <impl/dbg.h>
+#include <dbg.h>
 
 template <class T>
 class TypeInfo : public TypeInfoBase {

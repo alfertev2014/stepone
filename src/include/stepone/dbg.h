@@ -1,5 +1,7 @@
 #pragma once
 
+// TODO: Use logging framework instead of it
+
 #include <string>
 #include <sstream>
 #include <iostream>

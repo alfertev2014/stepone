@@ -2,7 +2,7 @@
 #include <impl/core/core.h>
 #include <error_exception.h>
 
-#include <impl/dbg.h>
+#include <dbg.h>
 
 const Ptr Ptr::anil(new Symbol);
 const Ptr Ptr::at(new Symbol);

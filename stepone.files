@@ -23,6 +23,7 @@ src/impl/objects/typepredicates_obs.cpp
 src/impl/objects/vector_obs.cpp
 src/impl/symbols/basesymbols.cpp
 src/include/parser/fistparser.h
+src/include/stepone/dbg.h
 src/include/stepone/error_exception.h
 src/include/stepone/impl/base/basemacro.h
 src/include/stepone/impl/base/operations.h
@@ -36,7 +37,6 @@ src/include/stepone/impl/core/type_info.h
 src/include/stepone/impl/core/type_info_inst.h
 src/include/stepone/impl/core/value.h
 src/include/stepone/impl/core/vector.h
-src/include/stepone/impl/dbg.h
 src/include/stepone/impl/objects/basefunc_obs.h
 src/include/stepone/impl/objects/basemacro_obs.h
 src/include/stepone/impl/objects/basenumfunc_obs.h
