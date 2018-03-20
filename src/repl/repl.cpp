@@ -4,7 +4,7 @@
 #include <string>
 #include <fstream>
 
-#include <parser/fistparser.h>
+#include <parser/firstparser.h>
 
 int REPL::do_loop(FirstParser &fp) {
     std::cout << "StepOne REPL" << std::endl;

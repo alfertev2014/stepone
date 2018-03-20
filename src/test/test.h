@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include <parser/fistparser.h>
+#include <parser/firstparser.h>
 
 class TestEngine {
     FirstParser fp;
