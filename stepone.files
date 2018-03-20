@@ -21,7 +21,6 @@ src/impl/objects/io_obs.cpp
 src/impl/objects/typepredicates_obs.cpp
 src/impl/objects/vector_obs.cpp
 src/impl/symbols/basesymbols.cpp
-src/include/parser/fistparser.h
 src/include/stepone/dbg.h
 src/include/stepone/error_exception.h
 src/include/stepone/impl/base/basemacro.h
@@ -55,6 +54,7 @@ src/include/stepone/impl/ptr_impl.h
 src/include/stepone/impl/symbols/basesymbols.h
 src/include/stepone/init/initevaluator.h
 src/include/stepone/init/initsymbols.h
+src/include/stepone/parser/fistparser.h
 src/include/stepone/ptr.h
 src/init/initevaluator.cpp
 src/init/initsymbols.cpp

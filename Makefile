@@ -17,7 +17,7 @@ BUILD_DIR := build
 REPL_TARGET := $(BUILD_DIR)/repl/repl.exe
 TEST_TARGET := $(BUILD_DIR)/test/test.exe
 
-INCLUDE_DIRS := -Isrc/include/stepone -Isrc/include/parser
+INCLUDE_DIRS := -Isrc/include/stepone
 
 LIB_SOURCES := \
 $(wildcard $(SOURCES_DIR)/impl/base/*.cpp) \

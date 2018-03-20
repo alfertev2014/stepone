@@ -1,6 +1,6 @@
 #include "test.h"
 
-#include <fistparser.h>
+#include <parser/fistparser.h>
 
 #include <init/initsymbols.h>
 #include <init/initevaluator.h>
