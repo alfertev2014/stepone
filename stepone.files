@@ -1,10 +1,7 @@
 Makefile
 docs/about_stepone.txt
-other/initlib.txt
-other/std.txt
 other/test.txt
 other/testfile.txt
-other/testinitlib.txt
 src/impl/base/basemacro.cpp
 src/impl/core/bytearray.cpp
 src/impl/core/core.cpp
