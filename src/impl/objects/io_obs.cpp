@@ -3,6 +3,11 @@
 #include <impl/operations/io_ops.h>
 #include <impl/base/operations.h>
 
+namespace stepone { namespace objects {
+
+using namespace base;
+using namespace operations;
+
 IOFunctions::IOFunctions() :
     finputp(new FTypeP<FileInputDescriptor>),
     foutputp(new FTypeP<FileOutputDescriptor>),
@@ -21,3 +26,5 @@ const IOFunctions &IOFunctions::inst()
     static const IOFunctions instance;
     return instance;
 }
+
+}} // namespaces

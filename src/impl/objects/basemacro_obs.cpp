@@ -2,6 +2,10 @@
 
 #include <impl/base/basemacro.h>
 
+namespace stepone { namespace objects {
+
+using namespace base;
+
 BaseMacroses::BaseMacroses() :
     mquote(new MQuote()),
     mapply(new MApply()),
@@ -23,3 +27,5 @@ const BaseMacroses &BaseMacroses::inst()
     static const BaseMacroses instance;
     return instance;
 }
+
+}} // namespaces

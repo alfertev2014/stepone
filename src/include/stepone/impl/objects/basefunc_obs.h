@@ -2,6 +2,8 @@
 
 #include <ptr.h>
 
+namespace stepone { namespace objects {
+
 class BaseFunctions {
     BaseFunctions();
 public:
@@ -15,3 +17,5 @@ public:
     const Ptr fctxget;
     const Ptr fctxpush;
 };
+
+}} // namespaces

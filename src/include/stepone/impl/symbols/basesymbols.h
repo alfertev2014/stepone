@@ -2,6 +2,8 @@
 
 #include <impl/core/ob.h>
 
+namespace stepone { namespace symbols {
+
 class BaseMacroSymbols {
     BaseMacroSymbols();
 public:
@@ -203,3 +205,5 @@ public:
     const Ptr astdout;
     const Ptr astderr;
 };
+
+}} // namespaces

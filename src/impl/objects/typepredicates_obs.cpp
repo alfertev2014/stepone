@@ -5,6 +5,11 @@
 #include <impl/core/macro.h>
 #include <impl/core/value.h>
 
+namespace stepone { namespace objects {
+
+using namespace base;
+using namespace operations;
+
 BaseTypePredicates::BaseTypePredicates() :
     fpairp(new FUnaryOp<TypePUnOp<Pair> >),
     flazyp(new FUnaryOp<TypePUnOp<Lazy> >),
@@ -24,3 +29,5 @@ const BaseTypePredicates &BaseTypePredicates::inst()
     static const BaseTypePredicates instance;
     return instance;
 }
+
+}} // namespaces

@@ -1,5 +1,7 @@
 #pragma once
 
+namespace stepone { namespace core {
+
 struct TypeFlags {
     enum ObType {
         Pair = 0,
@@ -45,3 +47,4 @@ struct TypeFlags {
     {}
 };
 
+}} // namespaces

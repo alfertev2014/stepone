@@ -1,5 +1,9 @@
 #include <impl/core/value.h>
 
+namespace stepone { namespace operations {
+
+using namespace core;
+
 template <class T1, class T2>
 class ValueCastUnOp {
 public:
@@ -31,3 +35,5 @@ public:
         return CppCmpOp::op(x1.cast<Value<T> >()->getValue(), x2.cast<Value<T> >()->getValue());
     }
 }; 
+
+}} // namespaces

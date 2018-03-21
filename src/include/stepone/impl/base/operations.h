@@ -2,6 +2,10 @@
 
 #include <impl/core/macro.h>
 
+namespace stepone { namespace base {
+
+using namespace core;
+
 template <class T>
 class FTypeP : public BaseMacro {
 public:
@@ -30,3 +34,5 @@ public:
         return TerOp::op(p.car().eval(a), pcdr.car().eval(a), pcdr.cdr().eval(a));
     }
 };
+
+}} // namespaces

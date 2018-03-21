@@ -3,10 +3,10 @@
 #include <ptr.h>
 #include "type_flags.h"
 
-class TypeInfoBase;
+namespace stepone { namespace core {
 
 class Ob {
-    friend class Ptr;
+    friend class ::stepone::Ptr;
     int refcount;
 
     void incRefCount() {
@@ -42,4 +42,4 @@ public:
     T * cast();
 };
 
-
+}} // namespaces

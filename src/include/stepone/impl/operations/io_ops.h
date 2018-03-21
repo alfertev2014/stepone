@@ -2,6 +2,10 @@
 
 #include <impl/core/io.h>
 
+namespace stepone { namespace operations {
+
+using namespace core;
+
 class InputOpenUnOp {
 public:
     static Ptr op(const Ptr &x) {
@@ -36,3 +40,5 @@ public:
         return new Value<int>(ba->getSize());
     }
 };
+
+}} // namespaces

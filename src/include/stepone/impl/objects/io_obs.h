@@ -2,6 +2,8 @@
 
 #include <ptr.h>
 
+namespace stepone { namespace objects {
+
 class IOFunctions {
     IOFunctions();
 public:
@@ -18,3 +20,5 @@ public:
     const Ptr stdout;
     const Ptr stderr;
 };
+
+}} // namespaces

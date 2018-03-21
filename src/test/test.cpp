@@ -4,39 +4,39 @@
 #include <iostream>
 #include <error_exception.h>
 
-void TestEngine::test_from_file(const string &fname) {
-    cout << "_______________________________________________________________________________________________" << endl;
-    cout << "===============================================================================================" << endl;
-    cout << "Open test file " << fname << endl;
-    ifstream testfile(fname.c_str());
+void TestEngine::test_from_file(const std::string &fname) {
+    std::cout << "_______________________________________________________________________________________________" << std::endl;
+    std::cout << "===============================================================================================" << std::endl;
+    std::cout << "Open test file " << fname << std::endl;
+    std::ifstream testfile(fname.c_str());
     if(!testfile.is_open()) {
-        cout << "Can\'t open " << fname << endl;
+        std::cout << "Can\'t open " << fname << std::endl;
         return;
     }
-    string s;
-    string res;
+    std::string s;
+    std::string res;
     int i = 0;
     while(getline(testfile, s)) {
         i++;
         bool exc = false;
         if(!s.empty() && s[0] != ';') {
-            cout << "line " << i << ": >>  " << s << endl;
+            std::cout << "line " << i << ": >>  " << s << std::endl;
             try {
                 res = fp.evalToString(s);
-            } catch (const SemanticError &e) {
+            } catch (const stepone::SemanticError &e) {
                 exc = true;
                 res = ";fail";
             }
-            cout << res << endl;
+            std::cout << res << std::endl;
         } else continue;
-        if(getline(testfile, s)) {
+        if(std::getline(testfile, s)) {
             if(s != res && !exc) {
-                cout << " * * * * ** ** ** *** *** **** !!! FAIL !!! **** *** *** ** ** ** * * * * " << endl;
-                cout << "must be: " << s << endl << endl;
+                std::cout << " * * * * ** ** ** *** *** **** !!! FAIL !!! **** *** *** ** ** ** * * * * " << std::endl;
+                std::cout << "must be: " << s << std::endl << std::endl;
             }
             i++;
         }
     }
-    cout << "All tests in file " << fname << " done" << endl;
-    cout << "===============================================================================================" << endl << endl;
+    std::cout << "All tests in file " << fname << " done" << std::endl;
+    std::cout << "===============================================================================================" << std::endl << std::endl;
 }

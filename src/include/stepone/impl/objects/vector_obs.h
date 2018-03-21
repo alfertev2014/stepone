@@ -2,6 +2,8 @@
 
 #include <ptr.h>
 
+namespace stepone { namespace objects {
+
 class VectorFunctions {
     VectorFunctions();
 public:
@@ -16,3 +18,5 @@ public:
     const Ptr fvecel;
     const Ptr fveccat;
 };
+
+}} // namespaces

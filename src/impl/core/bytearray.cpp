@@ -4,6 +4,8 @@
 #include <cstring>
 #include <sstream>
 
+namespace stepone { namespace core {
+
 const Ptr ByteArray::getTypeInfo() const {return TypeInfo<ByteArray>::instance;}
 
 ByteArray::~ByteArray() {
@@ -95,3 +97,5 @@ ByteArray *ByteArray::slice(int begin, int end) {
         n = 0;
     return new ByteArray(origin == Ptr::anil ? this : origin, buffer + begin, n);
 }
+
+}} // namespaces

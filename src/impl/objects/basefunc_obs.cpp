@@ -3,6 +3,11 @@
 #include <impl/operations/basefunc_ops.h>
 #include <impl/base/operations.h>
 
+namespace stepone { namespace objects {
+
+using namespace base;
+using namespace operations;
+
 BaseFunctions::BaseFunctions() :
     fcar(new FUnaryOp<CarUnOp>),
     fcdr(new FUnaryOp<CdrUnOp>),
@@ -18,3 +23,5 @@ const BaseFunctions &BaseFunctions::inst()
     static const BaseFunctions instance;
     return instance;
 }
+
+}} // namespaces

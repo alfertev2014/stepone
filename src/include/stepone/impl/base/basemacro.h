@@ -2,6 +2,10 @@
 
 #include <impl/core/macro.h>
 
+namespace stepone { namespace base {
+
+using namespace core;
+
 class MQuote : public BaseMacro {
 public:
     Ptr apply(const Ptr &p, const Ptr &a);
@@ -67,3 +71,4 @@ public:
     Ptr apply(const Ptr &p, const Ptr &a);
 };
 
+}} // namespaces

@@ -3,7 +3,7 @@
 #include <ptr.h>
 #include <string>
 
-using namespace std;
+namespace stepone { namespace parser {
 
 class FirstParser {
 public:
@@ -11,14 +11,16 @@ public:
     FirstParser(const FirstParser &fp);
     ~FirstParser();
 
-    Ptr parse(const string & _s);
-    Ptr parseEval(const string & s);
-    string evalToString(const string & _s);
+    Ptr parse(const std::string & _s);
+    Ptr parseEval(const std::string & s);
+    std::string evalToString(const std::string & _s);
 
-    void print(ostream & ts, const Ptr & p);
+    void print(std::ostream & ts, const Ptr & p);
 
 private:
     class FirstParserImpl;
     Ptr a;
     FirstParserImpl *impl;
 };
+
+}} // namespaces

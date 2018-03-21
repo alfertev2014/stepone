@@ -4,6 +4,11 @@
 #include <impl/operations/value_operations.h>
 #include <impl/base/operations.h>
 
+namespace stepone { namespace objects {
+
+using namespace base;
+using namespace operations;
+
 BaseNumFunc::BaseNumFunc() :
     fintNeg(new FUnaryOp<ValueUnOp<int, MinusUnOp<int> > >),
     fintPlus(new FBinaryOp<ValueBinOp<int, PlusBinOp<int> > >),
@@ -92,3 +97,4 @@ const BaseNumFunc &BaseNumFunc::inst()
     return instance;
 }
 
+}} // namespaces

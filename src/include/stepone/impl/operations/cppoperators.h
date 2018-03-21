@@ -2,7 +2,7 @@
 
 #include <string>
 
-using namespace std;
+namespace stepone { namespace operations {
 
 template <class T>
 class MinusUnOp {
@@ -111,3 +111,5 @@ class GECmpOp {
 public:
     inline static bool op(T x1, T x2) {return x1 >= x2;}
 };
+
+}} // namespaces

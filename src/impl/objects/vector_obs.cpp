@@ -3,6 +3,11 @@
 #include <impl/operations/vector_ops.h>
 #include <impl/base/operations.h>
 
+namespace stepone { namespace objects {
+
+using namespace base;
+using namespace operations;
+
 VectorFunctions::VectorFunctions() :
     fvecp(new FTypeP<Vector>),
     fmkvec(new FMakeVector),
@@ -19,3 +24,5 @@ const VectorFunctions &VectorFunctions::inst()
     static const VectorFunctions instance;
     return instance;
 }
+
+}} // namespaces

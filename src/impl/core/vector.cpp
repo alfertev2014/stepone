@@ -1,6 +1,8 @@
 #include <impl/core/vector.h>
 #include <impl/core/type_info_inst.h>
 
+namespace stepone { namespace core {
+
 const Ptr Vector::getTypeInfo() const {return TypeInfo<Vector>::instance;}
 
 Vector::~Vector() {
@@ -58,3 +60,5 @@ Vector *Vector::slice(int begin, int end) {
     }
     return new Vector(this, begin, end - begin);
 }
+
+}} // namespaces

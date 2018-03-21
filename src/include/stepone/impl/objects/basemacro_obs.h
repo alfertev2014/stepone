@@ -2,6 +2,8 @@
 
 #include <ptr.h>
 
+namespace stepone { namespace objects {
+
 class BaseMacroses {
     BaseMacroses();
 public:
@@ -21,3 +23,5 @@ public:
     const Ptr mbot;
     const Ptr mgensym;
 };
+
+}} // namespaces

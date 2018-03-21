@@ -3,6 +3,8 @@
 #include "ob.h"
 #include "value.h"
 
+namespace stepone { namespace core {
+
 class ByteArray : public ValueBase {
 public:
     const Ptr getTypeInfo() const;
@@ -62,3 +64,4 @@ public:
     }
 };
 
+}} // namespaces

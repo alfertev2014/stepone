@@ -2,6 +2,8 @@
 
 #include "ob.h"
 
+namespace stepone { namespace core {
+
 class Pair : public Ob {
 public:
     const Ptr getTypeInfo() const;
@@ -123,3 +125,4 @@ Symbol *Ob::as<Symbol>();
 template<>
 Const *Ob::as<Const>();
 
+}} // namespaces

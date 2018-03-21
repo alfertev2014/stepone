@@ -6,6 +6,10 @@
 #include <error_exception.h>
 #include <dbg.h>
 
+namespace stepone {
+
+namespace core {
+
 template <class T>
 const Ptr TypeInfo<T>::instance(new Symbol);
 
@@ -26,6 +30,8 @@ T * Ob::cast() {
     DBG("error cast"); throw SemanticError();
 }
 
+} // core
+
 template <class T>
 inline T * WPtr::as() const {
     return ob->as<T>();
@@ -40,3 +46,5 @@ template <class T>
 inline T * WPtr::cast() const {
     return ob->cast<T>();
 }
+
+} // stepone

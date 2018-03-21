@@ -2,6 +2,10 @@
 
 #include <impl/core/core.h>
 
+namespace stepone { namespace symbols {
+
+using namespace core;
+
 BaseMacroSymbols::BaseMacroSymbols() :
     aquote(new Symbol),
     aapply(new Symbol),
@@ -223,3 +227,5 @@ const IOFuncSymbols &IOFuncSymbols::inst()
     static const IOFuncSymbols instance;
     return instance;
 }
+
+}} // namespaces

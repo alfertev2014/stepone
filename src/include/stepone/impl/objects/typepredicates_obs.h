@@ -2,6 +2,8 @@
 
 #include <ptr.h>
 
+namespace stepone { namespace objects {
+
 class BaseTypePredicates {
     BaseTypePredicates();
 public:
@@ -19,3 +21,5 @@ public:
     const Ptr fusermacrop;
     const Ptr fvaluep;
 };
+
+}} // namespaces

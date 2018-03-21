@@ -2,6 +2,10 @@
 
 #include <impl/core/bytearray.h>
 
+namespace stepone { namespace operations {
+
+using namespace core;
+
 class ByteArrayLengthUnOp {
 public:
     static Ptr op(const Ptr &x) {
@@ -81,3 +85,4 @@ public:
     }
 };
 
+}} // namespaces

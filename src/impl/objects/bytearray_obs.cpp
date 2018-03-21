@@ -3,6 +3,11 @@
 #include <impl/operations/bytearray_ops.h>
 #include <impl/base/operations.h>
 
+namespace stepone { namespace objects {
+
+using namespace base;
+using namespace operations;
+
 ByteArrayFunctions::ByteArrayFunctions() :
     fbarrayp(new FTypeP<ByteArray>),
     fbarraylen(new FUnaryOp<ByteArrayLengthUnOp>),
@@ -31,3 +36,5 @@ const ByteArrayFunctions &ByteArrayFunctions::inst()
     static const ByteArrayFunctions instance;
     return instance;
 }
+
+}} // namespaces

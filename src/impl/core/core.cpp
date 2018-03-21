@@ -2,6 +2,8 @@
 #include <impl/ptr_impl.h>
 #include <impl/core/type_info_inst.h>
 
+namespace stepone { namespace core {
+
 template<>
 Atom *Ob::as<Atom>() {return typeFlags.obType == TypeFlags::Atom ? dynamic_cast<Atom*>(this) : 0;}
 
@@ -108,3 +110,5 @@ Ptr Symbol::eval(const Ptr &a) {
 Const::~Const() {}
 
 Ptr Const::eval(const Ptr &a) {return this;}
+
+}} // namespaces

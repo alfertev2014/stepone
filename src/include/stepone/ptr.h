@@ -1,22 +1,27 @@
 #pragma once
 
+namespace stepone {
+
+namespace core {
 class Ob;
+}
+
 class Ptr;
 
 class WPtr {
     friend class Ptr;
-    Ob * ob;
+    core::Ob * ob;
 
-    WPtr(Ob * _ob) : ob(_ob) {}
+    WPtr(core::Ob * _ob) : ob(_ob) {}
 public:
-    friend bool operator==(const Ob * const & ob, const WPtr & p);
-    friend bool operator!=(const Ob * const & ob, const WPtr & p);
+    friend bool operator==(const core::Ob * const & ob, const WPtr & p);
+    friend bool operator!=(const core::Ob * const & ob, const WPtr & p);
 
     bool operator==(const WPtr & p) const {return ob == p;}
     bool operator!=(const WPtr & p) const {return ob != p;}
 
-    bool operator==(const Ob * const p) const {return ob == p;}
-    bool operator!=(const Ob * const p) const {return !(ob == p);}
+    bool operator==(const core::Ob * const p) const {return ob == p;}
+    bool operator!=(const core::Ob * const p) const {return !(ob == p);}
 
     Ptr car() const;
     Ptr cdr() const;
@@ -35,18 +40,18 @@ public:
     template <class T>
     T * cast() const;
 };
-inline bool operator==(const Ob * const & ob, const WPtr & p) {return ob == p.ob;}
-inline bool operator!=(const Ob * const & ob, const WPtr & p) {return ob != p.ob;}
+inline bool operator==(const core::Ob * const & ob, const WPtr & p) {return ob == p.ob;}
+inline bool operator!=(const core::Ob * const & ob, const WPtr & p) {return ob != p.ob;}
 
 class Ptr : public WPtr {
     void acqure();
     void release();
-    void assing(Ob * _ob);
+    void assing(core::Ob * _ob);
 public:
     static const Ptr anil;
     static const Ptr at;
 
-    Ptr(Ob * _ob) : WPtr(_ob) {acqure();}
+    Ptr(core::Ob * _ob) : WPtr(_ob) {acqure();}
     Ptr(const Ptr & p) : WPtr(p.ob) {acqure();}
     Ptr(const WPtr & p) : WPtr(p.ob) {acqure();}
     Ptr(bool b) : WPtr(b ? at.ob : anil.ob) {acqure();}
@@ -54,8 +59,10 @@ public:
 
     Ptr & operator=(const Ptr & p) {return operator=(p.ob);}
     Ptr & operator=(const WPtr & p) {return operator=(p.ob);}
-    Ptr & operator=(Ob * _ob) {
+    Ptr & operator=(core::Ob * _ob) {
         assing(_ob);
         return *this;
     }
 };
+
+} // namespace

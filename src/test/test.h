@@ -5,9 +5,9 @@
 #include <parser/firstparser.h>
 
 class TestEngine {
-    FirstParser fp;
+    stepone::parser::FirstParser fp;
 public:
-    TestEngine(const FirstParser & _fp) :fp(_fp){}
+    TestEngine(const stepone::parser::FirstParser & _fp) :fp(_fp){}
 
     void test_from_file(const std::string &fname);
 };

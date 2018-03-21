@@ -2,6 +2,15 @@
 
 #include "value.h"
 
+namespace stepone {
+
+namespace operations {
+class FMakeVector;
+class VectorElBinOp;
+}
+
+namespace core {
+
 class Vector : public ValueBase {
 public:
     const Ptr getTypeInfo() const;
@@ -38,6 +47,8 @@ public:
     Vector * mid(int begin, int end);
     Vector * slice(int begin, int end);
 
-    friend class FMakeVector;
-    friend class VectorElBinOp;
+    friend class operations::FMakeVector;
+    friend class operations::VectorElBinOp;
 };
+
+}} // namespaces

@@ -5,6 +5,8 @@
 
 #include <sstream>
 
+namespace stepone { namespace core {
+
 template <class T>
 std::string valueToString(T x) {
     std::stringstream ss;
@@ -49,4 +51,4 @@ public:
     char *getValuePointer() {return reinterpret_cast<char *>(&t);}
 };
 
-
+}} // namespaces

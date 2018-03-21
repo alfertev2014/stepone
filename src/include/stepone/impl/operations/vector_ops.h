@@ -3,6 +3,10 @@
 #include <impl/core/vector.h>
 #include <impl/core/macro.h>
 
+namespace stepone { namespace operations {
+
+using namespace core;
+
 class VectorLengthUnOp {
 public:
     static Ptr op(const Ptr &x) {return new Value<int>(x.cast<Vector>()->getSize());}
@@ -53,3 +57,4 @@ public:
     }
 };
 
+}} // namespaces

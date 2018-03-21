@@ -1,6 +1,8 @@
 #include <impl/core/io.h>
 #include <impl/core/type_info_inst.h>
 
+namespace stepone { namespace core {
+
 const Ptr IOStreamDescriptor::getTypeInfo() const {return TypeInfo<IOStreamDescriptor>::instance;}
 
 std::iostream &IOStreamDescriptor::getStream() {throw SemanticError();}
@@ -22,3 +24,5 @@ void FileDescriptor::close() {stream.close();}
 std::istream &FileInputDescriptor::getInputStream() {return stream;}
 
 std::ostream &FileOutputDescriptor::getOutputStream() {return stream;}
+
+}} // namespaces

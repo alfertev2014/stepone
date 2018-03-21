@@ -5,6 +5,8 @@
 
 #include <fstream>
 
+namespace stepone { namespace core {
+
 class IOStreamDescriptor : public ValueBase {
 public:
     const Ptr getTypeInfo() const;
@@ -54,3 +56,5 @@ public:
     FileOutputDescriptor(const char * fname) : FileDescriptor(fname, std::ios_base::out | std::ios_base::app) {}
     std::ostream &getOutputStream();
 };
+
+}} // namespaces

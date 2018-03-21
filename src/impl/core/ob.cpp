@@ -4,8 +4,12 @@
 
 #include <dbg.h>
 
-const Ptr Ptr::anil(new Symbol);
-const Ptr Ptr::at(new Symbol);
+namespace stepone {
+
+const Ptr Ptr::anil(new core::Symbol);
+const Ptr Ptr::at(new core::Symbol);
+
+namespace core {
 
 Ob::~Ob() {}
 
@@ -23,3 +27,5 @@ Ptr Ob::apply(const Ptr &p, const Ptr &a) {
 Ptr Ob::unlazy() {return this;}
 
 Ptr Ob::assoc(const Ptr &s) const {DBG("throw assoc "); throw SemanticError();}
+
+}} // namespaces

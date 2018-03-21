@@ -2,6 +2,8 @@
 
 #include <ptr.h>
 
+namespace stepone { namespace objects {
+
 class ByteArrayFunctions {
     ByteArrayFunctions();
 public:
@@ -26,3 +28,5 @@ public:
     const Ptr fgetfloat;
     const Ptr fgetchar;
 };
+
+}} //namespaces

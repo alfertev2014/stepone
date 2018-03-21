@@ -1,6 +1,8 @@
 #include <impl/core/macro.h>
 #include <impl/core/type_info_inst.h>
 
+namespace stepone { namespace core {
+
 const Ptr Evaluator::eempty(new Evaluator(Ptr::anil));
 
 template<>
@@ -49,3 +51,5 @@ const Ptr CurrentContext::getTypeInfo() const {return TypeInfo<CurrentContext>::
 Ptr CurrentContext::apply(const Ptr &p, const Ptr &a) {
     return e.eval(Context::make(sa, new Evaluator(a), this->a)).apply(p, this->a);
 }
+
+}} // namespaces

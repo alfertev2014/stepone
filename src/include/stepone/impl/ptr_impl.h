@@ -4,11 +4,13 @@
 #include <impl/core/ob.h>
 #include <impl/core/type_info.h>
 
+namespace stepone {
+
 inline void Ptr::acqure() { ob->incRefCount(); }
 
 inline void Ptr::release() { ob->decRefCount(); }
 
-inline void Ptr::assing(Ob *_ob)
+inline void Ptr::assing(core::Ob *_ob)
 {
     if(_ob != ob) {
         // don't change the order
@@ -53,3 +55,4 @@ inline Ptr WPtr::typeId() const
     return ob->getTypeInfo();
 }
 
+} // namespace

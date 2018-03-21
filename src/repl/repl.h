@@ -1,8 +1,10 @@
 #pragma once
 
-class FirstParser;
+namespace stepone { namespace parser {
+    class FirstParser;
+}}
 
 class REPL {
 public:
-    static int do_loop(FirstParser &fp);
+    static int do_loop(stepone::parser::FirstParser &fp);
 };
