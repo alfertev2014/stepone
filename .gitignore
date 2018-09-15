@@ -12,5 +12,4 @@ build
 # QtCreator
 ###########
 *~
-*.pro.user
-*.creator.user*
+*.user

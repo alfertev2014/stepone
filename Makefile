@@ -22,7 +22,6 @@ INCLUDE_DIRS := -Isrc/include/stepone
 LIB_SOURCES := \
 $(wildcard $(SOURCES_DIR)/impl/base/*.cpp) \
 $(wildcard $(SOURCES_DIR)/impl/core/*.cpp) \
-$(wildcard $(SOURCES_DIR)/impl/init/*.cpp) \
 $(wildcard $(SOURCES_DIR)/impl/objects/*.cpp) \
 $(wildcard $(SOURCES_DIR)/impl/symbols/*.cpp)
 
