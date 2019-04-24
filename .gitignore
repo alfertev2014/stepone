@@ -12,5 +12,8 @@ build
 # QtCreator
 ###########
 *~
-*.pro.user
-*.creator.user*
+*.user
+
+# KDevelop
+##########
+*.kdev4
