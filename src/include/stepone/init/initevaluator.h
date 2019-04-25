@@ -2,7 +2,7 @@
 
 #include <ptr.h>
 
-namespace stepone { namespace init {
+namespace stepone::init {
 
 class BaseEvaluator {
     BaseEvaluator(){}
@@ -10,4 +10,4 @@ public:
     static Ptr createContext();
 };
 
-}} // namespaces
+} // namespaces

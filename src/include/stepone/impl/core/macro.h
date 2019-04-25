@@ -2,7 +2,7 @@
 
 #include "core.h"
 
-namespace stepone { namespace core {
+namespace stepone::core {
 
 class Macro : public Const {
 public:
@@ -99,4 +99,4 @@ MacroClosure *Ob::as<MacroClosure>();
 template<>
 CurrentContext *Ob::as<CurrentContext>();
 
-}} // namespaces
+} // namespaces

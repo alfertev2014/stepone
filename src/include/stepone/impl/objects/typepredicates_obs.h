@@ -2,7 +2,7 @@
 
 #include <ptr.h>
 
-namespace stepone { namespace objects {
+namespace stepone::objects {
 
 class BaseTypePredicates {
     BaseTypePredicates();
@@ -22,4 +22,4 @@ public:
     const Ptr fvaluep;
 };
 
-}} // namespaces
+} // namespaces

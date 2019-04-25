@@ -2,7 +2,7 @@
 
 #include <string>
 
-namespace stepone { namespace operations {
+namespace stepone::operations {
 
 template <class T>
 class MinusUnOp {
@@ -112,4 +112,4 @@ public:
     inline static bool op(T x1, T x2) {return x1 >= x2;}
 };
 
-}} // namespaces
+} // namespaces

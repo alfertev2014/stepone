@@ -3,7 +3,7 @@
 #include <impl/core/vector.h>
 #include <impl/core/macro.h>
 
-namespace stepone { namespace operations {
+namespace stepone::operations {
 
 using namespace core;
 
@@ -57,4 +57,4 @@ public:
     }
 };
 
-}} // namespaces
+} // namespaces

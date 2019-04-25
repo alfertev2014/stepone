@@ -2,7 +2,7 @@
 
 #include <impl/core/io.h>
 
-namespace stepone { namespace operations {
+namespace stepone::operations {
 
 using namespace core;
 
@@ -41,4 +41,4 @@ public:
     }
 };
 
-}} // namespaces
+} // namespaces

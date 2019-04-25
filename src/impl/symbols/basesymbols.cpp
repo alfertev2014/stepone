@@ -2,7 +2,7 @@
 
 #include <impl/core/core.h>
 
-namespace stepone { namespace symbols {
+namespace stepone::symbols {
 
 using namespace core;
 
@@ -228,4 +228,4 @@ const IOFuncSymbols &IOFuncSymbols::inst()
     return instance;
 }
 
-}} // namespaces
+} // namespaces

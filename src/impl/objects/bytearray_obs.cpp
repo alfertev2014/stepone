@@ -3,7 +3,7 @@
 #include <impl/operations/bytearray_ops.h>
 #include <impl/base/operations.h>
 
-namespace stepone { namespace objects {
+namespace stepone::objects {
 
 using namespace base;
 using namespace operations;
@@ -37,4 +37,4 @@ const ByteArrayFunctions &ByteArrayFunctions::inst()
     return instance;
 }
 
-}} // namespaces
+} // namespaces

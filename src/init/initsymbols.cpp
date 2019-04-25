@@ -3,7 +3,7 @@
 #include <impl/symbols/basesymbols.h>
 #include <impl/core/bytearray.h>
 
-namespace stepone { namespace init {
+namespace stepone::init {
 
 using namespace symbols;
 
@@ -163,4 +163,4 @@ Ptr BaseSymbolTable::createSymbolTable() {
     return symbolTable;
 }
 
-}} // namespaces
+} // namespaces

@@ -4,7 +4,7 @@
 #include <impl/operations/value_operations.h>
 #include <impl/base/operations.h>
 
-namespace stepone { namespace objects {
+namespace stepone::objects {
 
 using namespace base;
 using namespace operations;
@@ -97,4 +97,4 @@ const BaseNumFunc &BaseNumFunc::inst()
     return instance;
 }
 
-}} // namespaces
+} // namespaces

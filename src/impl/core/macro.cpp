@@ -1,7 +1,7 @@
 #include <impl/core/macro.h>
 #include <impl/core/type_info_inst.h>
 
-namespace stepone { namespace core {
+namespace stepone::core {
 
 const Ptr Evaluator::eempty(new Evaluator(Ptr::anil));
 
@@ -52,4 +52,4 @@ Ptr CurrentContext::apply(const Ptr &p, const Ptr &a) {
     return e.eval(Context::make(sa, new Evaluator(a), this->a)).apply(p, this->a);
 }
 
-}} // namespaces
+} // namespaces

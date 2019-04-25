@@ -2,7 +2,7 @@
 
 #include "ob.h"
 
-namespace stepone { namespace core {
+namespace stepone::core {
 
 class Pair : public Ob {
 public:
@@ -125,4 +125,4 @@ Symbol *Ob::as<Symbol>();
 template<>
 Const *Ob::as<Const>();
 
-}} // namespaces
+} // namespaces

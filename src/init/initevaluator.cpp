@@ -6,7 +6,7 @@
 #include <impl/core/macro.h>
 #include <impl/core/value.h>
 
-namespace stepone { namespace init {
+namespace stepone::init {
 
 using namespace symbols;
 using namespace objects;
@@ -168,4 +168,4 @@ Ptr BaseEvaluator::createContext() {
     return a;
 }
 
-}} // namespaces
+} // namespaces

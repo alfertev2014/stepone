@@ -3,7 +3,7 @@
 #include <ptr.h>
 #include "type_flags.h"
 
-namespace stepone { namespace core {
+namespace stepone::core {
 
 class Ob {
     friend class ::stepone::Ptr;
@@ -42,4 +42,4 @@ public:
     T * cast();
 };
 
-}} // namespaces
+} // namespaces

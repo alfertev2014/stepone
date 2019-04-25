@@ -2,7 +2,7 @@
 
 #include <impl/core/macro.h>
 
-namespace stepone { namespace base {
+namespace stepone::base {
 
 using namespace core;
 
@@ -71,4 +71,4 @@ public:
     Ptr apply(const Ptr &p, const Ptr &a);
 };
 
-}} // namespaces
+} // namespaces

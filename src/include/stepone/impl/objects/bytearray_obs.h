@@ -2,7 +2,7 @@
 
 #include <ptr.h>
 
-namespace stepone { namespace objects {
+namespace stepone::objects {
 
 class ByteArrayFunctions {
     ByteArrayFunctions();
@@ -29,4 +29,4 @@ public:
     const Ptr fgetchar;
 };
 
-}} //namespaces
+} //namespaces

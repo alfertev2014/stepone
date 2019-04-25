@@ -9,7 +9,9 @@ namespace stepone {
 const Ptr Ptr::anil(new core::Symbol);
 const Ptr Ptr::at(new core::Symbol);
 
-namespace core {
+}
+
+namespace stepone::core {
 
 Ob::~Ob() {}
 
@@ -28,4 +30,4 @@ Ptr Ob::unlazy() {return this;}
 
 Ptr Ob::assoc(const Ptr &s) const {DBG("throw assoc "); throw SemanticError();}
 
-}} // namespaces
+} // namespaces

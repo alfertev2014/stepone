@@ -2,7 +2,7 @@
 
 #include <ptr.h>
 
-namespace stepone { namespace objects {
+namespace stepone::objects {
 
 class VectorFunctions {
     VectorFunctions();
@@ -19,4 +19,4 @@ public:
     const Ptr fveccat;
 };
 
-}} // namespaces
+} // namespaces

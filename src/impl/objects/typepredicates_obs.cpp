@@ -5,7 +5,7 @@
 #include <impl/core/macro.h>
 #include <impl/core/value.h>
 
-namespace stepone { namespace objects {
+namespace stepone::objects {
 
 using namespace base;
 using namespace operations;
@@ -30,4 +30,4 @@ const BaseTypePredicates &BaseTypePredicates::inst()
     return instance;
 }
 
-}} // namespaces
+} // namespaces

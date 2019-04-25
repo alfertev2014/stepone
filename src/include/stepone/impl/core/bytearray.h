@@ -3,7 +3,7 @@
 #include "ob.h"
 #include "value.h"
 
-namespace stepone { namespace core {
+namespace stepone::core {
 
 class ByteArray : public ValueBase {
 public:
@@ -64,4 +64,4 @@ public:
     }
 };
 
-}} // namespaces
+} // namespaces

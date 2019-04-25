@@ -2,7 +2,7 @@
 
 #include <impl/base/basemacro.h>
 
-namespace stepone { namespace objects {
+namespace stepone::objects {
 
 using namespace base;
 
@@ -28,4 +28,4 @@ const BaseMacroses &BaseMacroses::inst()
     return instance;
 }
 
-}} // namespaces
+} // namespaces

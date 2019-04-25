@@ -5,7 +5,7 @@
 
 #include <fstream>
 
-namespace stepone { namespace core {
+namespace stepone::core {
 
 class IOStreamDescriptor : public ValueBase {
 public:
@@ -57,4 +57,4 @@ public:
     std::ostream &getOutputStream();
 };
 
-}} // namespaces
+} // namespaces

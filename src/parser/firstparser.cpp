@@ -11,7 +11,7 @@
 #include <cstring>
 #include <sstream>
 
-namespace stepone { namespace parser {
+namespace stepone::parser {
 
 typedef std::string::const_iterator string_pos;
 static const std::size_t string_end = std::string::npos;
@@ -345,4 +345,4 @@ parseRes FirstParser::FirstParserImpl::parseExpression(string_pos si) {
     return success ? parseTail(si) : parseAtom(si);
 }
 
-}} // namespaces
+} // namespaces

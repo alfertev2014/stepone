@@ -2,7 +2,7 @@
 
 #include <ptr.h>
 
-namespace stepone { namespace objects {
+namespace stepone::objects {
 
 class IOFunctions {
     IOFunctions();
@@ -21,4 +21,4 @@ public:
     const Ptr stderr;
 };
 
-}} // namespaces
+} // namespaces

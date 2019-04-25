@@ -2,14 +2,12 @@
 
 #include "value.h"
 
-namespace stepone {
-
-namespace operations {
+namespace stepone::operations {
 class FMakeVector;
 class VectorElBinOp;
 }
 
-namespace core {
+namespace stepone::core {
 
 class Vector : public ValueBase {
 public:
@@ -51,4 +49,4 @@ public:
     friend class operations::VectorElBinOp;
 };
 
-}} // namespaces
+} // namespaces

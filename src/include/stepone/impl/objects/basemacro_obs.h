@@ -2,7 +2,7 @@
 
 #include <ptr.h>
 
-namespace stepone { namespace objects {
+namespace stepone::objects {
 
 class BaseMacroses {
     BaseMacroses();
@@ -24,4 +24,4 @@ public:
     const Ptr mgensym;
 };
 
-}} // namespaces
+} // namespaces

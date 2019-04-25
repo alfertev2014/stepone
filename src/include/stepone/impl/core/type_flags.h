@@ -1,6 +1,6 @@
 #pragma once
 
-namespace stepone { namespace core {
+namespace stepone::core {
 
 struct TypeFlags {
     enum ObType {
@@ -47,4 +47,4 @@ struct TypeFlags {
     {}
 };
 
-}} // namespaces
+} // namespaces

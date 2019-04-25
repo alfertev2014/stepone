@@ -3,7 +3,7 @@
 #include <impl/operations/basefunc_ops.h>
 #include <impl/base/operations.h>
 
-namespace stepone { namespace objects {
+namespace stepone::objects {
 
 using namespace base;
 using namespace operations;
@@ -24,4 +24,4 @@ const BaseFunctions &BaseFunctions::inst()
     return instance;
 }
 
-}} // namespaces
+} // namespaces

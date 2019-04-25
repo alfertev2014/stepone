@@ -2,7 +2,7 @@
 
 #include <ptr.h>
 
-namespace stepone { namespace objects {
+namespace stepone::objects {
 
 class BaseNumFunc {
     BaseNumFunc();
@@ -90,4 +90,4 @@ public:
     const Ptr fcharLE;
 };
 
-}} //namespaces
+} //namespaces

@@ -3,7 +3,7 @@
 #include <impl/operations/vector_ops.h>
 #include <impl/base/operations.h>
 
-namespace stepone { namespace objects {
+namespace stepone::objects {
 
 using namespace base;
 using namespace operations;
@@ -25,4 +25,4 @@ const VectorFunctions &VectorFunctions::inst()
     return instance;
 }
 
-}} // namespaces
+} // namespaces

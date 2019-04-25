@@ -1,7 +1,7 @@
 #include <impl/base/basemacro.h>
 #include <error_exception.h>
 
-namespace stepone { namespace base {
+namespace stepone::base {
 
 Ptr MQuote::apply(const Ptr &p, const Ptr &a) {
     return p;
@@ -63,4 +63,4 @@ Ptr MGenSymbol::apply(const Ptr &p, const Ptr &a) {
     return new Symbol;
 }
 
-}} // namespaces
+} // namespaces
