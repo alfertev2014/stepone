@@ -43,8 +43,7 @@ Vector *Vector::concat(Vector *v) const {
 
 Vector *Vector::mid(int begin, int end) {
     if(begin < 0 || end >= length) {
-        DBG("vector index out of range");
-        throw SemanticError();
+        throw SemanticError("vector index out of range");
     }
     int nres = end - begin;
     Vector * res = new Vector(nres);
@@ -55,8 +54,7 @@ Vector *Vector::mid(int begin, int end) {
 
 Vector *Vector::slice(int begin, int end) {
     if(begin < 0 || end >= length) {
-        DBG("vector index out of range");
-        throw SemanticError();
+        throw SemanticError("vector index out of range");
     }
     return new Vector(this, begin, end - begin);
 }

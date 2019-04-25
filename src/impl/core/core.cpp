@@ -103,8 +103,7 @@ Ptr Symbol::eval(const Ptr &a) {
             return pair.cdr();
         p = p.cdr();
     }
-    DBG("Unknown symbol");
-    throw SemanticError();
+    throw SemanticError("Unknown symbol");
 }
 
 Const::~Const() {}

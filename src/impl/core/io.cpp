@@ -1,6 +1,8 @@
 #include <impl/core/io.h>
 #include <impl/core/type_info_inst.h>
 
+#include <iostream>
+
 namespace stepone::core {
 
 const Ptr IOStreamDescriptor::getTypeInfo() const {return TypeInfo<IOStreamDescriptor>::instance;}

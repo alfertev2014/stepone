@@ -59,7 +59,7 @@ public:
 
     template <class T>
     T get(int i) {
-        if(i < 0 || i + sizeof(T) > length) { DBG("Error get from bytearray");  throw SemanticError();}
+        if(i < 0 || i + sizeof(T) > length) { throw SemanticError("Error get from bytearray");}
         return *(reinterpret_cast<T*>(buffer + i));
     }
 };

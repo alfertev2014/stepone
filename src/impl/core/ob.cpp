@@ -2,8 +2,6 @@
 #include <impl/core/core.h>
 #include <error_exception.h>
 
-#include <dbg.h>
-
 namespace stepone {
 
 const Ptr Ptr::anil(new core::Symbol);
@@ -15,19 +13,19 @@ namespace stepone::core {
 
 Ob::~Ob() {}
 
-Ptr Ob::car() {DBG("throw car "); throw SemanticError();}
+Ptr Ob::car() {throw SemanticError("throw car ");}
 
-Ptr Ob::cdr() {DBG("throw cdr "); throw SemanticError();}
+Ptr Ob::cdr() {throw SemanticError("throw cdr ");}
 
 Ptr Ob::eval(const Ptr &a) {throw SemanticError();}
 
 Ptr Ob::apply(const Ptr &p, const Ptr &a) {
     if(p == Ptr::anil) return this;
-    DBG("apply of not applyable"); throw SemanticError();
+    throw SemanticError("apply of not applyable");
 }
 
 Ptr Ob::unlazy() {return this;}
 
-Ptr Ob::assoc(const Ptr &s) const {DBG("throw assoc "); throw SemanticError();}
+Ptr Ob::assoc(const Ptr &s) const {throw SemanticError("throw assoc ");}
 
 } // namespaces

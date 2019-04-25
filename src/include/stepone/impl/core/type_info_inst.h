@@ -4,7 +4,6 @@
 #include "core.h"
 
 #include <error_exception.h>
-#include <dbg.h>
 
 namespace stepone {
 
@@ -27,7 +26,7 @@ template <class T>
 T * Ob::cast() {
     if(TypeInfo<T>::instance == getTypeInfo())
         return dynamic_cast<T*>(this);
-    DBG("error cast"); throw SemanticError();
+    throw SemanticError("error cast");
 }
 
 } // core
