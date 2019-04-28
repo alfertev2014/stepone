@@ -6,8 +6,6 @@
 namespace stepone::core {
 
 class ByteArray : public ValueBase {
-public:
-    const Ptr getTypeInfo() const;
 private:
     Ptr origin;
     char * buffer;

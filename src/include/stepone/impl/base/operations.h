@@ -1,6 +1,7 @@
 #pragma once
 
 #include <impl/core/macro.h>
+#include <impl/ptr_impl.h>
 
 namespace stepone::base {
 

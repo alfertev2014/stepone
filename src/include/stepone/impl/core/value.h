@@ -1,7 +1,6 @@
 #pragma once
 
 #include "core.h"
-#include "type_info_inst.h"
 
 #include <sstream>
 
@@ -41,8 +40,6 @@ protected:
 
 template <class T>
 class Value : public OtherValue {
-public:
-    const Ptr getTypeInfo() const {return TypeInfo<Value<T> >::instance;}
 private:
     T t;
 public:

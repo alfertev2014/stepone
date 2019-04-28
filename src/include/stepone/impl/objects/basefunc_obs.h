@@ -13,7 +13,6 @@ public:
     const Ptr fcdr;
     const Ptr fcons;
     const Ptr feq;
-    const Ptr fgettype;
     const Ptr fctxget;
     const Ptr fctxpush;
 };

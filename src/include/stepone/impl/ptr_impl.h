@@ -2,7 +2,6 @@
 
 #include <ptr.h>
 #include <impl/core/ob.h>
-#include <impl/core/type_info.h>
 
 namespace stepone {
 
@@ -50,9 +49,19 @@ inline Ptr WPtr::assoc(const Ptr &s) const
     return ob->assoc(s);
 }
 
-inline Ptr WPtr::typeId() const
-{
-    return ob->getTypeInfo();
+template <class T>
+inline T * WPtr::as() const {
+    return ob->as<T>();
+}
+
+template <class T>
+inline bool WPtr::is() const {
+    return ob->is<T>();
+}
+
+template <class T>
+inline T * WPtr::cast() const {
+    return ob->cast<T>();
 }
 
 } // namespace

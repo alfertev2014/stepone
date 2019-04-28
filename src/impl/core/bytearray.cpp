@@ -1,12 +1,9 @@
 #include <impl/core/bytearray.h>
-#include <impl/core/type_info_inst.h>
 
 #include <cstring>
 #include <sstream>
 
 namespace stepone::core {
-
-const Ptr ByteArray::getTypeInfo() const {return TypeInfo<ByteArray>::instance;}
 
 ByteArray::~ByteArray() {
     if(origin == Ptr::anil)

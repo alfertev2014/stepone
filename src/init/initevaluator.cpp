@@ -143,7 +143,6 @@ Ptr BaseEvaluator::createContext() {
     addToContext(a, BaseFuncSymbols::inst().actxget, BaseFunctions::inst().fctxget);
     addToContext(a, BaseFuncSymbols::inst().actxpush, BaseFunctions::inst().fctxpush);
     addToContext(a, BaseFuncSymbols::inst().aeempty, core::Evaluator::eempty);
-    addToContext(a, BaseFuncSymbols::inst().agettype, BaseFunctions::inst().fgettype);
     addToContext(a, BaseFuncSymbols::inst().acons, BaseFunctions::inst().fcons);
     addToContext(a, BaseFuncSymbols::inst().acar, BaseFunctions::inst().fcar);
     addToContext(a, BaseFuncSymbols::inst().acdr, BaseFunctions::inst().fcdr);

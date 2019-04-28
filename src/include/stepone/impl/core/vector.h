@@ -10,8 +10,6 @@ class VectorElBinOp;
 namespace stepone::core {
 
 class Vector : public ValueBase {
-public:
-    const Ptr getTypeInfo() const;
 private:
     Ptr origin;
     Ptr * array;

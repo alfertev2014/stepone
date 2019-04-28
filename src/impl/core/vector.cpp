@@ -1,9 +1,6 @@
 #include <impl/core/vector.h>
-#include <impl/core/type_info_inst.h>
 
 namespace stepone::core {
-
-const Ptr Vector::getTypeInfo() const {return TypeInfo<Vector>::instance;}
 
 Vector::~Vector() {
     if(origin == Ptr::anil) {

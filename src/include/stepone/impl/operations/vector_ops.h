@@ -13,9 +13,6 @@ public:
 };
 
 class FMakeVector : public BaseMacro {
-public:
-    const Ptr getTypeInfo() const {return TypeInfo<FMakeVector>::instance;}
-
     Ptr apply(const Ptr &p, const Ptr &a) {
         int n = p.car().eval(a).cast<Value<int> >()->getValue();
         return Vector::fromList(n, p.cdr(), a);

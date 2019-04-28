@@ -5,8 +5,6 @@
 namespace stepone::core {
 
 class Pair : public Ob {
-public:
-    const Ptr getTypeInfo() const;
 private:
     Ptr pcar;
     Ptr pcdr;
@@ -22,6 +20,12 @@ public:
     Ptr eval(const Ptr & a);
 };
 
+template <>
+inline bool Ob::is<Pair>() const {
+    return typeFlags.obType == TypeFlags::Pair;
+}
+
+
 class Atom : public Ob {
 public:
     Atom() {
@@ -29,6 +33,12 @@ public:
     }
     virtual ~Atom();
 };
+
+template <>
+inline bool Ob::is<Atom>() const {
+    return typeFlags.obType == TypeFlags::Atom;
+}
+
 
 class Context {
     Context(){}
@@ -39,8 +49,6 @@ public:
 };
 
 class Lazy : public Ob {
-public:
-    const Ptr getTypeInfo() const;
 private:
     Ptr e;
     Ptr a;
@@ -62,9 +70,13 @@ public:
     Ptr unlazy();
 };
 
+template <>
+inline bool Ob::is<Lazy>() const {
+    return typeFlags.obType == TypeFlags::Lazy;
+}
+
+
 class Label : public Ob {
-public:
-    const Ptr getTypeInfo() const;
 private:
     const Ptr * pa;
     WPtr v;
@@ -86,16 +98,25 @@ public:
     Ptr unlazy();
 };
 
+template <>
+inline bool Ob::is<Label>() const {
+    return typeFlags.obType == TypeFlags::Label;
+}
+
 
 class Symbol : public Atom {
-public:
-    const Ptr getTypeInfo() const;
 public:
     Symbol() : Atom() {
         typeFlags.atomType = TypeFlags::Symbol;
     }
     Ptr eval(const Ptr & a);
 };
+
+template <>
+inline bool Ob::is<Symbol>() const {
+    return typeFlags.obType == TypeFlags::Atom && typeFlags.atomType == TypeFlags::Symbol;
+}
+
 
 class Const : public Atom {
 public:
@@ -106,23 +127,9 @@ public:
     Ptr eval(const Ptr &a);
 };
 
-
-template<>
-Atom *Ob::as<Atom>();
-
-template<>
-Lazy *Ob::as<Lazy>();
-
-template<>
-Pair *Ob::as<Pair>();
-
-template<>
-Label *Ob::as<Label>();
-
-template<>
-Symbol *Ob::as<Symbol>();
-
-template<>
-Const *Ob::as<Const>();
+template <>
+inline bool Ob::is<Const>() const {
+    return typeFlags.obType == TypeFlags::Atom && typeFlags.atomType == TypeFlags::Const;
+}
 
 } // namespaces

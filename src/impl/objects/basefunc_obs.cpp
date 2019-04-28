@@ -13,7 +13,6 @@ BaseFunctions::BaseFunctions() :
     fcdr(new FUnaryOp<CdrUnOp>),
     fcons(new FBinaryOp<ConsBinOp>),
     feq(new FBinaryOp<EqBinOp>),
-    fgettype(new FUnaryOp<GetTypeUnOp>),
     fctxget(new FBinaryOp<ContextGetBinOp>),
     fctxpush(new FTernaryOp<ContextPushTerOp>)
 {}

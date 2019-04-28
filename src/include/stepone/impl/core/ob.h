@@ -2,6 +2,7 @@
 
 #include <ptr.h>
 #include "type_flags.h"
+#include "error_exception.h"
 
 namespace stepone::core {
 
@@ -32,14 +33,26 @@ public:
     virtual Ptr unlazy();
     virtual Ptr assoc(const Ptr & s) const;
 
-    virtual const Ptr getTypeInfo() const = 0;
+    template <class T>
+    T * as() {
+        return dynamic_cast<T*>(this);
+    }
 
     template <class T>
-    T * as();
-    template <class T>
     bool is() const;
+
     template <class T>
-    T * cast();
+    T * cast() {
+        if(is<T>())
+            return as<T>();
+        throw SemanticError("error cast");
+    }
+
 };
+
+template <class T>
+inline bool Ob::is() const {
+    return dynamic_cast<const T*>(this) != nullptr;
+}
 
 } // namespaces

@@ -1,3 +1,5 @@
+#pragma once
+
 #include <impl/core/value.h>
 
 namespace stepone::operations {
@@ -34,6 +36,6 @@ public:
     static Ptr op(const Ptr & x1, const Ptr & x2) {
         return CppCmpOp::op(x1.cast<Value<T> >()->getValue(), x2.cast<Value<T> >()->getValue());
     }
-}; 
+};
 
 } // namespaces

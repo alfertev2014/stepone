@@ -8,8 +8,6 @@
 namespace stepone::core {
 
 class IOStreamDescriptor : public ValueBase {
-public:
-    const Ptr getTypeInfo() const;
 private:
     std::ifstream stream;
 public:

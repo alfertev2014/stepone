@@ -1,28 +1,7 @@
 #include <impl/core/core.h>
 #include <impl/ptr_impl.h>
-#include <impl/core/type_info_inst.h>
 
 namespace stepone::core {
-
-template<>
-Atom *Ob::as<Atom>() {return typeFlags.obType == TypeFlags::Atom ? dynamic_cast<Atom*>(this) : 0;}
-
-template<>
-Lazy *Ob::as<Lazy>() {return typeFlags.obType == TypeFlags::Lazy ? dynamic_cast<Lazy*>(this) : 0;}
-
-template<>
-Pair *Ob::as<Pair>() {return typeFlags.obType == TypeFlags::Pair ? dynamic_cast<Pair*>(this) : 0;}
-
-template<>
-Label *Ob::as<Label>() {return typeFlags.obType == TypeFlags::Label ? dynamic_cast<Label*>(this) : 0;}
-
-template<>
-Symbol *Ob::as<Symbol>() {return typeFlags.atomType == TypeFlags::Symbol ? dynamic_cast<Symbol*>(this) : 0;}
-
-template<>
-Const *Ob::as<Const>() {return typeFlags.atomType == TypeFlags::Const ? dynamic_cast<Const*>(this) : 0;}
-
-const Ptr Pair::getTypeInfo() const {return TypeInfo<Pair>::instance;}
 
 Ptr Pair::car() {return pcar;}
 
@@ -31,8 +10,6 @@ Ptr Pair::cdr() {return pcdr;}
 Ptr Pair::eval(const Ptr &a) {return pcar.eval(a).apply(pcdr, a);}
 
 Atom::~Atom() {}
-
-const Ptr Lazy::getTypeInfo() const {return TypeInfo<Lazy>::instance;}
 
 inline void Lazy::ev() {
     if(!(a == Ptr::anil)) {
@@ -63,8 +40,6 @@ Ptr Lazy::apply(const Ptr &p, const Ptr &a) {
 
 Ptr Lazy::unlazy() {evw(); return e;}
 
-const Ptr Label::getTypeInfo() const {return TypeInfo<Label>::instance;}
-
 inline Ptr Label::ptr() {
     if(pa) {
         return v.eval(*pa);
@@ -92,8 +67,6 @@ Ptr Label::eval(const Ptr &a) {return ptr().eval(a);}
 Ptr Label::apply(const Ptr &p, const Ptr &a) {return ptr().apply(p, a);}
 
 Ptr Label::unlazy() {return ptr().unlazy();}
-
-const Ptr Symbol::getTypeInfo() const {return TypeInfo<Symbol>::instance;}
 
 Ptr Symbol::eval(const Ptr &a) {
     Ptr p = a;

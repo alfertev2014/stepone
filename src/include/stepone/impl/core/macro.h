@@ -12,9 +12,14 @@ public:
     virtual ~Macro();
 };
 
+template <>
+inline bool Ob::is<Macro>() const {
+    return typeFlags.obType == TypeFlags::Atom && typeFlags.atomType == TypeFlags::Const
+        && typeFlags.constType == TypeFlags::Macro;
+}
+
+
 class Evaluator : public Macro {
-public:
-    const Ptr getTypeInfo() const;
 private:
     Ptr a;
 public:
@@ -27,9 +32,14 @@ public:
     Ptr apply(const Ptr &p, const Ptr &a);
 };
 
+template <>
+inline bool Ob::is<Evaluator>() const {
+    return typeFlags.obType == TypeFlags::Atom && typeFlags.atomType == TypeFlags::Const
+        && typeFlags.constType == TypeFlags::Macro && typeFlags.macroValueType == TypeFlags::Evaluator;
+}
+
+
 class BaseMacro : public Macro {
-public:
-    const Ptr getTypeInfo() const;
 public:
     BaseMacro(): Macro() {
         typeFlags.macroValueType = TypeFlags::BaseMacro;
@@ -37,10 +47,15 @@ public:
     virtual ~BaseMacro();
 };
 
+template <>
+inline bool Ob::is<BaseMacro>() const {
+    return typeFlags.obType == TypeFlags::Atom && typeFlags.atomType == TypeFlags::Const
+        && typeFlags.constType == TypeFlags::Macro && typeFlags.macroValueType == TypeFlags::BaseMacro;
+}
+
+
 /// TODO: remove it
 class Closure : public Macro {
-public:
-    const Ptr getTypeInfo() const;
 private:
     Ptr sp;
     Ptr e;
@@ -52,9 +67,14 @@ public:
     Ptr apply(const Ptr &p, const Ptr &a);
 };
 
+template <>
+inline bool Ob::is<Closure>() const {
+    return typeFlags.obType == TypeFlags::Atom && typeFlags.atomType == TypeFlags::Const
+        && typeFlags.constType == TypeFlags::Macro && typeFlags.macroValueType == TypeFlags::MacroClosure;
+}
+
+
 class MacroClosure : public Macro {
-public:
-    const Ptr getTypeInfo() const;
 private:
     Ptr sp;
     Ptr e;
@@ -68,9 +88,14 @@ public:
     Ptr apply(const Ptr &p, const Ptr &a);
 };
 
+template <>
+inline bool Ob::is<MacroClosure>() const {
+    return typeFlags.obType == TypeFlags::Atom && typeFlags.atomType == TypeFlags::Const
+        && typeFlags.constType == TypeFlags::Macro && typeFlags.macroValueType == TypeFlags::MacroClosure;
+}
+
+
 class CurrentContext : public Macro {
-public:
-    const Ptr getTypeInfo() const;
 private:
     Ptr sa;
     Ptr e;
@@ -84,19 +109,10 @@ public:
     Ptr apply(const Ptr &p, const Ptr &a);
 };
 
-template<>
-Macro *Ob::as<Macro>();
-
-template<>
-Evaluator *Ob::as<Evaluator>();
-
-template<>
-BaseMacro *Ob::as<BaseMacro>();
-
-template<>
-MacroClosure *Ob::as<MacroClosure>();
-
-template<>
-CurrentContext *Ob::as<CurrentContext>();
+template <>
+inline bool Ob::is<CurrentContext>() const {
+    return typeFlags.obType == TypeFlags::Atom && typeFlags.atomType == TypeFlags::Const
+        && typeFlags.constType == TypeFlags::Macro && typeFlags.macroValueType == TypeFlags::CurrentContext;
+}
 
 } // namespaces

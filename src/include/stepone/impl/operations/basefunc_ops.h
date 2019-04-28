@@ -2,7 +2,6 @@
 
 #include <impl/core/macro.h>
 #include <impl/ptr_impl.h>
-#include <impl/core/type_info_inst.h>
 
 namespace stepone::operations {
 
@@ -26,11 +25,6 @@ public:
 class EqBinOp {
 public:
     static Ptr op(const Ptr &x1, const Ptr &x2) {return x1 == x2;}
-};
-
-class GetTypeUnOp {
-public:
-    static Ptr op(const Ptr &x) {return x.typeId();}
 };
 
 class ContextGetBinOp {
