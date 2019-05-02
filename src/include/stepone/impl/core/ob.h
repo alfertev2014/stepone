@@ -8,7 +8,7 @@ namespace stepone::core {
 
 class Ob {
     friend class ::stepone::Ptr;
-    int refcount;
+    int refcount {0};
 
     void incRefCount() {
        refcount++;
@@ -20,9 +20,10 @@ class Ob {
             delete this;
     }
 protected:
-    TypeFlags typeFlags;
+    const TypeFlags typeFlags {};
+    Ob(TypeFlags typeFlags) : typeFlags(typeFlags) {}
 public:
-    Ob() : refcount(0) {}
+    Ob() = default;
     virtual ~Ob();
 
     virtual Ptr car();

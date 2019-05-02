@@ -5,6 +5,8 @@
 namespace stepone::core {
 
 class Macro : public Const {
+protected:
+    using Const::Const;
 public:
     virtual ~Macro();
 };
@@ -15,15 +17,13 @@ inline bool Ob::is<Macro>() const {
 }
 
 
-class Evaluator : public Macro {
+class Evaluator final : public Macro {
 private:
     Ptr a;
 public:
     static const Ptr eempty;
 
-    Evaluator(Ptr _a) : Macro(), a(_a) {
-        typeFlags.typeTag = BaseTypeTag::Evaluator;
-    }
+    Evaluator(Ptr _a) : Macro(BaseTypeTag::Evaluator), a(_a) {}
     Ptr getContext() const;
     Ptr apply(const Ptr &p, const Ptr &a);
 };
@@ -36,9 +36,7 @@ inline bool Ob::is<Evaluator>() const {
 
 class BaseMacro : public Macro {
 public:
-    BaseMacro(): Macro() {
-        typeFlags.typeTag = BaseTypeTag::BaseMacro;
-    }
+    BaseMacro(): Macro(BaseTypeTag::BaseMacro) {}
     virtual ~BaseMacro();
 };
 
@@ -56,9 +54,7 @@ private:
     Ptr a;
 public:
     Closure(const Ptr & _sp, const Ptr & _e, const Ptr & _a)
-        : Macro(), sp(_sp), e(_e), a(_a) {
-        typeFlags.typeTag = BaseTypeTag::MacroClosure;
-    }
+        : Macro(BaseTypeTag::MacroClosure), sp(_sp), e(_e), a(_a) {}
 
     Ptr apply(const Ptr &p, const Ptr &a);
 };
@@ -76,9 +72,7 @@ private:
     Ptr a;
 public:
     MacroClosure(const Ptr & _sp, const Ptr & _e, const Ptr & _a)
-        : Macro(), sp(_sp), e(_e), a(_a) {
-        typeFlags.typeTag = BaseTypeTag::MacroClosure;
-    }
+        : Macro(BaseTypeTag::MacroClosure), sp(_sp), e(_e), a(_a) {}
 
     Ptr apply(const Ptr &p, const Ptr &a);
 };
@@ -96,9 +90,7 @@ private:
     Ptr a;
 public:
     CurrentContext(const Ptr & _sa, const Ptr & _e, const Ptr & _a)
-        : Macro(), sa(_sa), e(_e), a(_a) {
-        typeFlags.typeTag = BaseTypeTag::CurrentContext;
-    }
+        : Macro(BaseTypeTag::CurrentContext), sa(_sa), e(_e), a(_a) {}
 
     Ptr apply(const Ptr &p, const Ptr &a);
 };

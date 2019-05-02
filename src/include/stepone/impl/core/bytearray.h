@@ -5,28 +5,27 @@
 
 namespace stepone::core {
 
-class ByteArray : public ValueBase {
+class ByteArray final : public ValueBase {
 private:
     Ptr origin;
-    char * buffer;
     int length;
+    char * buffer;
 public:
     explicit ByteArray(int _n)
-        : origin(Ptr::anil), length(_n < 0 ? 0 : _n) {
-        buffer = new char[length];
-    }
+        : ValueBase(BaseTypeTag::ByteArray),
+        origin(Ptr::anil), length(_n < 0 ? 0 : _n), buffer(new char[length]) {}
 
     explicit ByteArray(ByteArray * _origin)
-        : origin(_origin), buffer(_origin->buffer), length(_origin->length) {}
+        : origin(_origin), length(_origin->length), buffer(_origin->buffer) {}
 
     ByteArray(ByteArray * _origin, int _begin, int _length)
-        : origin(_origin), buffer(_origin->buffer + _begin), length(_length < 0 ? 0 : _length) {}
+        : origin(_origin), length(_length < 0 ? 0 : _length), buffer(_origin->buffer + _begin) {}
 
     ByteArray(const Ptr &_origin, char * _begin, int _length)
-        : origin(_origin), buffer(_begin), length(_length < 0 ? 0 : _length) {}
+        : origin(_origin), length(_length < 0 ? 0 : _length), buffer(_begin) {}
 
     ByteArray(char * _begin, int _length)
-        : origin(Ptr::at), buffer(_begin), length(_length < 0 ? 0 : _length) {}
+        : origin(Ptr::at), length(_length < 0 ? 0 : _length), buffer(_begin) {}
 
     ~ByteArray();
 

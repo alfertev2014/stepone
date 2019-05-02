@@ -4,15 +4,13 @@
 
 namespace stepone::core {
 
-class Pair : public Ob {
+class Pair final : public Ob {
 private:
     Ptr pcar;
     Ptr pcdr;
 public:
     Pair(const Ptr & _pcar, const Ptr & _pcdr)
-        : pcar(_pcar), pcdr(_pcdr) {
-        typeFlags.typeTag = BaseTypeTag::Pair;
-    }
+        : Ob(BaseTypeTag::Pair), pcar(_pcar), pcdr(_pcdr) {}
 
     Ptr car();
     Ptr cdr();
@@ -27,6 +25,8 @@ inline bool Ob::is<Pair>() const {
 
 
 class Atom : public Ob {
+protected:
+    using Ob::Ob;
 public:
     virtual ~Atom();
 };
@@ -37,15 +37,15 @@ inline bool Ob::is<Atom>() const {
 }
 
 
-class Context {
-    Context(){}
+class Context final {
+    Context() = delete;
 public:
     static Ptr make(const Ptr & _s, const Ptr & _e, const Ptr & _next) {
         return new Pair(new Pair(_s, _e), _next);
     }
 };
 
-class Lazy : public Ob {
+class Lazy final : public Ob {
 private:
     Ptr e;
     Ptr a;
@@ -55,9 +55,7 @@ private:
 
 public:
     Lazy(const Ptr & _e, const Ptr & _a)
-        : e(_e), a(_a) {
-        typeFlags.typeTag = BaseTypeTag::Lazy;
-    }
+        : Ob(BaseTypeTag::Lazy), e(_e), a(_a) {}
 
     Ptr car();
     Ptr cdr();
@@ -73,14 +71,13 @@ inline bool Ob::is<Lazy>() const {
 }
 
 
-class Label : public Ob {
+class Label final : public Ob {
 private:
-    const Ptr * pa;
     WPtr v;
+    const Ptr * pa;
 
-    Label(const WPtr _v, const Ptr * _a) : v(_v), pa(_a) {
-        typeFlags.typeTag = BaseTypeTag::Label;
-    }
+    Label(const WPtr _v, const Ptr * _a)
+        : Ob(BaseTypeTag::Label), v(_v), pa(_a) {}
 
     Ptr ptr();
 
@@ -101,11 +98,9 @@ inline bool Ob::is<Label>() const {
 }
 
 
-class Symbol : public Atom {
+class Symbol final : public Atom {
 public:
-    Symbol() : Atom() {
-        typeFlags.typeTag = BaseTypeTag::Symbol;
-    }
+    Symbol() : Atom(BaseTypeTag::Symbol) {}
     Ptr eval(const Ptr & a);
 };
 
@@ -116,6 +111,8 @@ inline bool Ob::is<Symbol>() const {
 
 
 class Const : public Atom {
+protected:
+    using Atom::Atom;
 public:
     virtual ~Const();
     Ptr eval(const Ptr &a);

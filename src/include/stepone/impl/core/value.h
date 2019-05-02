@@ -21,10 +21,9 @@ template <> inline std::string cppTypeToString<float>() {return "float";}
 template <> inline std::string cppTypeToString<char>() {return "char";}
 
 class ValueBase : public Const {
+protected:
+    using Const::Const;
 public:
-    ValueBase() : Const() {
-        typeFlags.typeTag = BaseTypeTag::BaseValue;
-    }
     virtual ~ValueBase();
 };
 
@@ -34,9 +33,9 @@ inline bool Ob::is<ValueBase>() const {return typeFlags.isValue();}
 
 class BaseValue : public ValueBase {
 protected:
-    BaseValue() : ValueBase() {
-        typeFlags.typeTag = BaseTypeTag::Other;
-    }
+    using ValueBase::ValueBase;
+protected:
+    BaseValue() : ValueBase(BaseTypeTag::BaseValue) {}
 };
 
 template<>
@@ -45,9 +44,7 @@ inline bool Ob::is<BaseValue>() const {return typeFlags.typeTag == BaseTypeTag::
 
 class OtherValue : public ValueBase {
 protected:
-    OtherValue() : ValueBase() {
-        typeFlags.typeTag = BaseTypeTag::Other;
-    }
+    OtherValue() : ValueBase(BaseTypeTag::Other) {}
 };
 
 template<>
