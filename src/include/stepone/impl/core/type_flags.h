@@ -2,49 +2,37 @@
 
 namespace stepone::core {
 
+enum class BaseTypeTag : int {
+    Pair = 0,
+    Symbol = 0b01,
+    Lazy = 0b10,
+    Label = 0b11,
+
+    BaseMacro = 0b0100,
+    Evaluator = 0b0101,
+    MacroClosure = 0b0110,
+    CurrentContext = 0b0111,
+
+    BaseValue = 0b1000,
+    ByteArray = 0b1001,
+    Vector = 0b1010,
+    Other = 0b1011,
+};
+
 struct TypeFlags {
-    enum ObType {
-        Pair = 0,
-        Atom,
-        Lazy,
-        Label
-    };
+    BaseTypeTag typeTag {};
 
-    enum AtomType {
-        Symbol = 0,
-        Const
-    };
+    TypeFlags() = default;
+    TypeFlags(BaseTypeTag typeTag)
+        : typeTag(typeTag) {}
 
-    enum ConstType {
-        Macro = 0,
-        ValueBase
-    };
+    bool isMacro() const {
+        return (static_cast<int>(typeTag) & 0b1100) == 0b0100;
+    }
 
-    enum MacroType {
-        Evaluator = 0,
-        BaseMacro,
-        MacroClosure,
-        CurrentContext
-    };
-
-    enum ValueType {
-        ByteArray = 0,
-        Vector,
-        IOStream,
-        Other
-    };
-
-    unsigned int obType : 2;
-    unsigned int atomType: 1;
-    unsigned int constType: 1;
-    unsigned int macroValueType: 2;
-
-    TypeFlags() :
-        obType(0),
-        atomType(0),
-        constType(0),
-        macroValueType(0)
-    {}
+    bool isValue() const {
+        return (static_cast<int>(typeTag) & 0b1100) == 0b1000;
+    }
 };
 
 } // namespaces

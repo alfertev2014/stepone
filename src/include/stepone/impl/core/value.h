@@ -23,27 +23,43 @@ template <> inline std::string cppTypeToString<char>() {return "char";}
 class ValueBase : public Const {
 public:
     ValueBase() : Const() {
-        typeFlags.constType = TypeFlags::ValueBase;
+        typeFlags.typeTag = BaseTypeTag::BaseValue;
     }
     virtual ~ValueBase();
 };
 
 template<>
-ValueBase *Ob::as<ValueBase>();
+inline bool Ob::is<ValueBase>() const {return typeFlags.isValue();}
+
+
+class BaseValue : public ValueBase {
+protected:
+    BaseValue() : ValueBase() {
+        typeFlags.typeTag = BaseTypeTag::Other;
+    }
+};
+
+template<>
+inline bool Ob::is<BaseValue>() const {return typeFlags.typeTag == BaseTypeTag::BaseValue;}
+
 
 class OtherValue : public ValueBase {
 protected:
     OtherValue() : ValueBase() {
-        typeFlags.macroValueType = TypeFlags::Other;
+        typeFlags.typeTag = BaseTypeTag::Other;
     }
 };
 
+template<>
+inline bool Ob::is<OtherValue>() const {return typeFlags.typeTag == BaseTypeTag::Other;}
+
+
 template <class T>
-class Value : public OtherValue {
+class Value : public BaseValue {
 private:
     T t;
 public:
-    Value(const T & _t) : OtherValue(), t(_t) {}
+    Value(const T & _t) : BaseValue(), t(_t) {}
     T getValue() const {return t;}
     char *getValuePointer() {return reinterpret_cast<char *>(&t);}
 };

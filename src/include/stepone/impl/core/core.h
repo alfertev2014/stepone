@@ -11,7 +11,7 @@ private:
 public:
     Pair(const Ptr & _pcar, const Ptr & _pcdr)
         : pcar(_pcar), pcdr(_pcdr) {
-        typeFlags.obType = TypeFlags::Pair;
+        typeFlags.typeTag = BaseTypeTag::Pair;
     }
 
     Ptr car();
@@ -22,21 +22,18 @@ public:
 
 template <>
 inline bool Ob::is<Pair>() const {
-    return typeFlags.obType == TypeFlags::Pair;
+    return typeFlags.typeTag == BaseTypeTag::Pair;
 }
 
 
 class Atom : public Ob {
 public:
-    Atom() {
-        typeFlags.obType = TypeFlags::Atom;
-    }
     virtual ~Atom();
 };
 
 template <>
 inline bool Ob::is<Atom>() const {
-    return typeFlags.obType == TypeFlags::Atom;
+    return typeFlags.typeTag != BaseTypeTag::Pair;
 }
 
 
@@ -59,7 +56,7 @@ private:
 public:
     Lazy(const Ptr & _e, const Ptr & _a)
         : e(_e), a(_a) {
-        typeFlags.obType = TypeFlags::Lazy;
+        typeFlags.typeTag = BaseTypeTag::Lazy;
     }
 
     Ptr car();
@@ -72,7 +69,7 @@ public:
 
 template <>
 inline bool Ob::is<Lazy>() const {
-    return typeFlags.obType == TypeFlags::Lazy;
+    return typeFlags.typeTag == BaseTypeTag::Lazy;
 }
 
 
@@ -82,7 +79,7 @@ private:
     WPtr v;
 
     Label(const WPtr _v, const Ptr * _a) : v(_v), pa(_a) {
-        typeFlags.obType = TypeFlags::Label;
+        typeFlags.typeTag = BaseTypeTag::Label;
     }
 
     Ptr ptr();
@@ -100,36 +97,33 @@ public:
 
 template <>
 inline bool Ob::is<Label>() const {
-    return typeFlags.obType == TypeFlags::Label;
+    return typeFlags.typeTag == BaseTypeTag::Label;
 }
 
 
 class Symbol : public Atom {
 public:
     Symbol() : Atom() {
-        typeFlags.atomType = TypeFlags::Symbol;
+        typeFlags.typeTag = BaseTypeTag::Symbol;
     }
     Ptr eval(const Ptr & a);
 };
 
 template <>
 inline bool Ob::is<Symbol>() const {
-    return typeFlags.obType == TypeFlags::Atom && typeFlags.atomType == TypeFlags::Symbol;
+    return typeFlags.typeTag == BaseTypeTag::Symbol;
 }
 
 
 class Const : public Atom {
 public:
-    Const() : Atom() {
-        typeFlags.atomType = TypeFlags::Const;
-    }
     virtual ~Const();
     Ptr eval(const Ptr &a);
 };
 
 template <>
 inline bool Ob::is<Const>() const {
-    return typeFlags.obType == TypeFlags::Atom && typeFlags.atomType == TypeFlags::Const;
+    return static_cast<int>(typeFlags.typeTag) > static_cast<int>(BaseTypeTag::Label);
 }
 
 } // namespaces

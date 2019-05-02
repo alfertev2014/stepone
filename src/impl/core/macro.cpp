@@ -4,21 +4,6 @@ namespace stepone::core {
 
 const Ptr Evaluator::eempty(new Evaluator(Ptr::anil));
 
-template<>
-Macro *Ob::as<Macro>() {return typeFlags.constType == TypeFlags::Macro ? dynamic_cast<Macro*>(this) : 0;}
-
-template<>
-Evaluator *Ob::as<Evaluator>() {return typeFlags.macroValueType == TypeFlags::Evaluator ? dynamic_cast<Evaluator*>(this) : 0;}
-
-template<>
-BaseMacro *Ob::as<BaseMacro>() {return typeFlags.macroValueType == TypeFlags::BaseMacro ? dynamic_cast<BaseMacro*>(this) : 0;}
-
-template<>
-MacroClosure *Ob::as<MacroClosure>() {return typeFlags.macroValueType == TypeFlags::MacroClosure ? dynamic_cast<MacroClosure*>(this) : 0;}
-
-template<>
-CurrentContext *Ob::as<CurrentContext>() {return typeFlags.macroValueType == TypeFlags::CurrentContext ? dynamic_cast<CurrentContext*>(this) : 0;}
-
 Macro::~Macro() {}
 
 Ptr Evaluator::getContext() const {return a;}

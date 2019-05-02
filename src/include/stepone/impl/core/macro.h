@@ -6,16 +6,12 @@ namespace stepone::core {
 
 class Macro : public Const {
 public:
-    Macro() : Const() {
-        typeFlags.constType = TypeFlags::Macro;
-    }
     virtual ~Macro();
 };
 
 template <>
 inline bool Ob::is<Macro>() const {
-    return typeFlags.obType == TypeFlags::Atom && typeFlags.atomType == TypeFlags::Const
-        && typeFlags.constType == TypeFlags::Macro;
+    return typeFlags.isMacro();
 }
 
 
@@ -26,7 +22,7 @@ public:
     static const Ptr eempty;
 
     Evaluator(Ptr _a) : Macro(), a(_a) {
-        typeFlags.macroValueType = TypeFlags::Evaluator;
+        typeFlags.typeTag = BaseTypeTag::Evaluator;
     }
     Ptr getContext() const;
     Ptr apply(const Ptr &p, const Ptr &a);
@@ -34,23 +30,21 @@ public:
 
 template <>
 inline bool Ob::is<Evaluator>() const {
-    return typeFlags.obType == TypeFlags::Atom && typeFlags.atomType == TypeFlags::Const
-        && typeFlags.constType == TypeFlags::Macro && typeFlags.macroValueType == TypeFlags::Evaluator;
+    return typeFlags.typeTag == BaseTypeTag::Evaluator;
 }
 
 
 class BaseMacro : public Macro {
 public:
     BaseMacro(): Macro() {
-        typeFlags.macroValueType = TypeFlags::BaseMacro;
+        typeFlags.typeTag = BaseTypeTag::BaseMacro;
     }
     virtual ~BaseMacro();
 };
 
 template <>
 inline bool Ob::is<BaseMacro>() const {
-    return typeFlags.obType == TypeFlags::Atom && typeFlags.atomType == TypeFlags::Const
-        && typeFlags.constType == TypeFlags::Macro && typeFlags.macroValueType == TypeFlags::BaseMacro;
+    return typeFlags.typeTag == BaseTypeTag::BaseMacro;
 }
 
 
@@ -62,15 +56,16 @@ private:
     Ptr a;
 public:
     Closure(const Ptr & _sp, const Ptr & _e, const Ptr & _a)
-        : Macro(), sp(_sp), e(_e), a(_a) {}
+        : Macro(), sp(_sp), e(_e), a(_a) {
+        typeFlags.typeTag = BaseTypeTag::MacroClosure;
+    }
 
     Ptr apply(const Ptr &p, const Ptr &a);
 };
 
 template <>
 inline bool Ob::is<Closure>() const {
-    return typeFlags.obType == TypeFlags::Atom && typeFlags.atomType == TypeFlags::Const
-        && typeFlags.constType == TypeFlags::Macro && typeFlags.macroValueType == TypeFlags::MacroClosure;
+    return typeFlags.typeTag == BaseTypeTag::MacroClosure;
 }
 
 
@@ -82,7 +77,7 @@ private:
 public:
     MacroClosure(const Ptr & _sp, const Ptr & _e, const Ptr & _a)
         : Macro(), sp(_sp), e(_e), a(_a) {
-        typeFlags.macroValueType = TypeFlags::MacroClosure;
+        typeFlags.typeTag = BaseTypeTag::MacroClosure;
     }
 
     Ptr apply(const Ptr &p, const Ptr &a);
@@ -90,8 +85,7 @@ public:
 
 template <>
 inline bool Ob::is<MacroClosure>() const {
-    return typeFlags.obType == TypeFlags::Atom && typeFlags.atomType == TypeFlags::Const
-        && typeFlags.constType == TypeFlags::Macro && typeFlags.macroValueType == TypeFlags::MacroClosure;
+    return typeFlags.typeTag == BaseTypeTag::MacroClosure;
 }
 
 
@@ -103,7 +97,7 @@ private:
 public:
     CurrentContext(const Ptr & _sa, const Ptr & _e, const Ptr & _a)
         : Macro(), sa(_sa), e(_e), a(_a) {
-        typeFlags.macroValueType = TypeFlags::CurrentContext;
+        typeFlags.typeTag = BaseTypeTag::CurrentContext;
     }
 
     Ptr apply(const Ptr &p, const Ptr &a);
@@ -111,8 +105,7 @@ public:
 
 template <>
 inline bool Ob::is<CurrentContext>() const {
-    return typeFlags.obType == TypeFlags::Atom && typeFlags.atomType == TypeFlags::Const
-        && typeFlags.constType == TypeFlags::Macro && typeFlags.macroValueType == TypeFlags::CurrentContext;
+    return typeFlags.typeTag == BaseTypeTag::CurrentContext;
 }
 
 } // namespaces
