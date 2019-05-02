@@ -102,16 +102,6 @@ Ptr BaseEvaluator::createContext() {
     addToContext(a, VectorFuncSymbols::inst().avecel, VectorFunctions::inst().fvecel);
     addToContext(a, VectorFuncSymbols::inst().aveccat, VectorFunctions::inst().fveccat);
 
-    addToContext(a, IOFuncSymbols::inst().ainputp, IOFunctions::inst().finputp);
-    addToContext(a, IOFuncSymbols::inst().aoutputp, IOFunctions::inst().foutputp);
-    addToContext(a, IOFuncSymbols::inst().aopenin, IOFunctions::inst().fopenin);
-    addToContext(a, IOFuncSymbols::inst().aopenout, IOFunctions::inst().fopenout);
-    addToContext(a, IOFuncSymbols::inst().aread, IOFunctions::inst().fread);
-    addToContext(a, IOFuncSymbols::inst().awrite, IOFunctions::inst().fwrite);
-    addToContext(a, IOFuncSymbols::inst().astdin, IOFunctions::inst().stdin);
-    addToContext(a, IOFuncSymbols::inst().astdout, IOFunctions::inst().stdout);
-    addToContext(a, IOFuncSymbols::inst().astderr, IOFunctions::inst().stderr);
-
     addToContext(a, ByteArrayFuncSymbols::inst().abarrayp, ByteArrayFunctions::inst().fbarrayp);
     addToContext(a, ByteArrayFuncSymbols::inst().abarraylen, ByteArrayFunctions::inst().fbarraylen);
     addToContext(a, ByteArrayFuncSymbols::inst().abarrayclone, ByteArrayFunctions::inst().fbarrayclone);

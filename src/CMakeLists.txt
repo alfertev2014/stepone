@@ -11,7 +11,6 @@ add_library(libstepone
 
     impl/core/bytearray.cpp
     impl/core/core.cpp
-    impl/core/io.cpp
     impl/core/macro.cpp
     impl/core/ob.cpp
     impl/core/value.cpp
@@ -21,7 +20,6 @@ add_library(libstepone
     impl/objects/basemacro_obs.cpp
     impl/objects/basenumfunc_obs.cpp
     impl/objects/bytearray_obs.cpp
-    impl/objects/io_obs.cpp
     impl/objects/typepredicates_obs.cpp
     impl/objects/vector_obs.cpp
 

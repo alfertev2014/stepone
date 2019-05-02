@@ -6,4 +6,3 @@
 #include "basenumfunc_obs.h"
 #include "vector_obs.h"
 #include "bytearray_obs.h"
-#include "io_obs.h"

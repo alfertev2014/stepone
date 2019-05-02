@@ -98,16 +98,6 @@ Ptr BaseSymbolTable::createSymbolTable() {
     addSymbol(symbolTable, "vec-el", VectorFuncSymbols::inst().avecel);
     addSymbol(symbolTable, "vec-cat", VectorFuncSymbols::inst().aveccat);
 
-    addSymbol(symbolTable, "input?", IOFuncSymbols::inst().ainputp);
-    addSymbol(symbolTable, "output?", IOFuncSymbols::inst().aoutputp);
-    addSymbol(symbolTable, "open-in", IOFuncSymbols::inst().aopenin);
-    addSymbol(symbolTable, "open-out", IOFuncSymbols::inst().aopenout);
-    addSymbol(symbolTable, "read", IOFuncSymbols::inst().aread);
-    addSymbol(symbolTable, "write", IOFuncSymbols::inst().awrite);
-    addSymbol(symbolTable, "stdin", IOFuncSymbols::inst().astdin);
-    addSymbol(symbolTable, "stdout", IOFuncSymbols::inst().astdout);
-    addSymbol(symbolTable, "stderr", IOFuncSymbols::inst().astderr);
-
     addSymbol(symbolTable, "b?", ByteArrayFuncSymbols::inst().abarrayp);
     addSymbol(symbolTable, "b-len", ByteArrayFuncSymbols::inst().abarraylen);
     addSymbol(symbolTable, "b-clone", ByteArrayFuncSymbols::inst().abarrayclone);

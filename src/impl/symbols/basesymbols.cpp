@@ -208,24 +208,4 @@ const ByteArrayFuncSymbols &ByteArrayFuncSymbols::inst()
     return instance;
 }
 
-
-IOFuncSymbols::IOFuncSymbols() :
-    ainputp(new Symbol),
-    aoutputp(new Symbol),
-    aopenin(new Symbol),
-    aopenout(new Symbol),
-    aread(new Symbol),
-    awrite(new Symbol),
-
-    astdin(new Symbol),
-    astdout(new Symbol),
-    astderr(new Symbol)
-{}
-
-const IOFuncSymbols &IOFuncSymbols::inst()
-{
-    static const IOFuncSymbols instance;
-    return instance;
-}
-
 } // namespaces
