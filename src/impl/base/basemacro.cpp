@@ -1,7 +1,11 @@
 #include <impl/base/basemacro.h>
 #include <error_exception.h>
 
+#include <impl/core/ob.h>
+
 namespace stepone::base {
+
+using namespace core;
 
 Ptr MQuote::apply(const Ptr &p, const Ptr &a) {
     return p;
@@ -24,7 +28,7 @@ Ptr MLet::apply(const Ptr &p, const Ptr &a) {
 }
 
 Ptr MLazy::apply(const Ptr &p, const Ptr &a) {
-    return new Lazy(p, a);
+    return new Ob(Lazy(p, a));
 }
 
 Ptr MUnlazy::apply(const Ptr &p, const Ptr &a) {
@@ -35,16 +39,12 @@ Ptr MLabel::apply(const Ptr &p, const Ptr &a) {
     return Label::loop(p.car(), p.cdr(), a);
 }
 
-Ptr MLambda::apply(const Ptr &p, const Ptr &a) {
-    return new Closure(p.car(), p.cdr(), a);
-}
-
 Ptr MMacro::apply(const Ptr &p, const Ptr &a) {
-    return new MacroClosure(p.car(), p.cdr(), a);
+    return new Ob(MacroClosure(p.car(), p.cdr(), a));
 }
 
 Ptr MCurrentContext::apply(const Ptr &p, const Ptr &a) {
-    return new CurrentContext(p.car(), p.cdr(), a);
+    return new Ob(CurrentContext(p.car(), p.cdr(), a));
 }
 
 Ptr MTry::apply(const Ptr &p, const Ptr &a) {
@@ -56,11 +56,11 @@ Ptr MTry::apply(const Ptr &p, const Ptr &a) {
 }
 
 Ptr MBot::apply(const Ptr &p, const Ptr &a) {
-    throw SemanticError();
+    throw SemanticError("Bottom");
 }
 
 Ptr MGenSymbol::apply(const Ptr &p, const Ptr &a) {
-    return new Symbol;
+    return new Ob(Symbol());
 }
 
 } // namespaces

@@ -1,4 +1,5 @@
 #include <impl/core/bytearray.h>
+#include <impl/core/ob.h>
 
 #include <cstring>
 #include <sstream>
@@ -10,10 +11,11 @@ ByteArray::~ByteArray() {
         delete [] buffer;
 }
 
-ByteArray *ByteArray::clone() {
-    ByteArray * res = new ByteArray(length);
+Ptr ByteArray::clone() {
+    Ptr res = new Ob(ByteArray(length));
+    ByteArray * ba = res.as<ByteArray>();
     for(int i = 0; i < length; ++i)
-        res->buffer[i] = buffer[i];
+        ba->buffer[i] = buffer[i];
     return res;
 }
 
@@ -57,21 +59,23 @@ int ByteArray::findSubarray(ByteArray *ba) {
     return -1;
 }
 
-ByteArray *ByteArray::concat(ByteArray *ba) const {
+Ptr ByteArray::concat(ByteArray *ba) const {
     int nres = length + ba->length;
-    ByteArray * res = new ByteArray(nres);
-    memcpy(res->buffer, buffer, length);
-    memcpy(res->buffer + length, ba->buffer, ba->length);
+    Ptr res = new Ob(ByteArray(nres));
+    ByteArray * b = res.as<ByteArray>();
+    memcpy(b->buffer, buffer, length);
+    memcpy(b->buffer + length, ba->buffer, ba->length);
     return res;
 }
 
-ByteArray *ByteArray::fromChars(int size, const char *chars) {
-    ByteArray * res = new ByteArray(size);
-    memcpy(res->buffer, chars, size);
+Ptr ByteArray::fromChars(int size, const char *chars) {
+    Ptr res = new Ob(ByteArray(size));
+    ByteArray * ba = res.as<ByteArray>();
+    memcpy(ba->buffer, chars, size);
     return res;
 }
 
-ByteArray *ByteArray::mid(int begin, int end) {
+Ptr ByteArray::mid(int begin, int end) {
     if(begin > length)
         begin = length;
     if(end > length)
@@ -79,20 +83,10 @@ ByteArray *ByteArray::mid(int begin, int end) {
     int n = end - begin;
     if(n < 0)
         n = 0;
-    ByteArray * res = new ByteArray(n);
-    memcpy(res->buffer, buffer + begin, n);
+    Ptr res = new Ob(ByteArray(n));
+    ByteArray * ba = res.as<ByteArray>();
+    memcpy(ba->buffer, buffer + begin, n);
     return res;
-}
-
-ByteArray *ByteArray::slice(int begin, int end) {
-    if(begin > length)
-        begin = length;
-    if(end > length)
-        end = length;
-    int n = end - begin;
-    if(n < 0)
-        n = 0;
-    return new ByteArray(origin == Ptr::anil ? this : origin, buffer + begin, n);
 }
 
 } // namespaces

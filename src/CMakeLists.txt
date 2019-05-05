@@ -13,7 +13,6 @@ add_library(libstepone
     impl/core/core.cpp
     impl/core/macro.cpp
     impl/core/ob.cpp
-    impl/core/value.cpp
     impl/core/vector.cpp
 
     impl/objects/basefunc_obs.cpp
@@ -37,14 +36,26 @@ add_library(steponeparser
     parser/firstparser.cpp
     )
 
+target_include_directories(steponeparser
+    PUBLIC include/stepone
+    )
+
 add_executable(steponerepl
     repl/main.cpp
     repl/repl.cpp
     )
 
+target_include_directories(steponerepl
+    PUBLIC include/stepone
+    )
+
 add_executable(steponetest
     test/main.cpp
     test/test.cpp
+    )
+
+target_include_directories(steponetest
+    PUBLIC include/stepone
     )
 
 target_link_libraries(steponeparser libstepone)

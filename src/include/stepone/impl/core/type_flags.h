@@ -16,7 +16,11 @@ enum class BaseTypeTag : int {
     BaseValue = 0b1000,
     ByteArray = 0b1001,
     Vector = 0b1010,
-    Other = 0b1011,
+
+    Int,
+    Float,
+    Char,
+    Long
 };
 
 struct TypeFlags {
@@ -31,7 +35,7 @@ struct TypeFlags {
     }
 
     bool isValue() const {
-        return (static_cast<int>(typeTag) & 0b1100) == 0b1000;
+        return static_cast<int>(typeTag) >= static_cast<int>(BaseTypeTag::BaseValue);
     }
 };
 

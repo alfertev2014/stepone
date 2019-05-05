@@ -88,10 +88,10 @@ Ptr BaseEvaluator::createContext() {
     addToContext(a, BaseNumFuncSymbols::inst().achar2long, BaseNumFunc::inst().fchar2long);
     addToContext(a, BaseNumFuncSymbols::inst().along2char, BaseNumFunc::inst().flong2char);
 
-    addToContext(a, BaseNumFuncSymbols::inst().aszi, new core::Value<int>(sizeof(int)));
-    addToContext(a, BaseNumFuncSymbols::inst().aszf, new core::Value<int>(sizeof(float)));
-    addToContext(a, BaseNumFuncSymbols::inst().aszc, new core::Value<int>(sizeof(char)));
-    addToContext(a, BaseNumFuncSymbols::inst().aszu, new core::Value<int>(sizeof(long long)));
+    addToContext(a, BaseNumFuncSymbols::inst().aszi, new core::Ob(core::Value<int>(sizeof(int))));
+    addToContext(a, BaseNumFuncSymbols::inst().aszf, new core::Ob(core::Value<int>(sizeof(float))));
+    addToContext(a, BaseNumFuncSymbols::inst().aszc, new core::Ob(core::Value<int>(sizeof(char))));
+    addToContext(a, BaseNumFuncSymbols::inst().aszu, new core::Ob(core::Value<int>(sizeof(long long))));
 
     addToContext(a, VectorFuncSymbols::inst().avecp, VectorFunctions::inst().fvecp);
     addToContext(a, VectorFuncSymbols::inst().amkvec, VectorFunctions::inst().fmkvec);
@@ -111,7 +111,6 @@ Ptr BaseEvaluator::createContext() {
     addToContext(a, ByteArrayFuncSymbols::inst().abarrayfind, ByteArrayFunctions::inst().fbarrayfind);
     addToContext(a, ByteArrayFuncSymbols::inst().abarraycat, ByteArrayFunctions::inst().fbarraycat);
     addToContext(a, ByteArrayFuncSymbols::inst().abarraymid, ByteArrayFunctions::inst().fbarraymid);
-    addToContext(a, ByteArrayFuncSymbols::inst().abarrayslice, ByteArrayFunctions::inst().fbarrayslice);
     addToContext(a, ByteArrayFuncSymbols::inst().aserint, ByteArrayFunctions::inst().fserint);
     addToContext(a, ByteArrayFuncSymbols::inst().aserfloat, ByteArrayFunctions::inst().fserfloat);
     addToContext(a, ByteArrayFuncSymbols::inst().aserchar, ByteArrayFunctions::inst().fserchar);
@@ -151,7 +150,6 @@ Ptr BaseEvaluator::createContext() {
     addToContext(a, BaseMacroSymbols::inst().aapply, BaseMacroses::inst().mapply);
     addToContext(a, BaseMacroSymbols::inst().alabel, BaseMacroses::inst().mlabel);
     addToContext(a, BaseMacroSymbols::inst().aif, BaseMacroses::inst().mif);
-    addToContext(a, BaseMacroSymbols::inst().alambda, BaseMacroses::inst().mlambda);
     addToContext(a, BaseMacroSymbols::inst().alet, BaseMacroses::inst().mlet);
     addToContext(a, BaseMacroSymbols::inst().aquote, BaseMacroses::inst().mquote);
     return a;

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "ob.h"
-#include "value.h"
+#include <impl/core/value.h>
+#include <error_exception.h>
 
 namespace stepone::core {
 
@@ -12,14 +12,13 @@ private:
     char * buffer;
 public:
     explicit ByteArray(int _n)
-        : ValueBase(BaseTypeTag::ByteArray),
-        origin(Ptr::anil), length(_n < 0 ? 0 : _n), buffer(new char[length]) {}
+        : origin(Ptr::anil), length(_n < 0 ? 0 : _n), buffer(new char[length]) {}
 
-    explicit ByteArray(ByteArray * _origin)
-        : origin(_origin), length(_origin->length), buffer(_origin->buffer) {}
+    explicit ByteArray(const Ptr &_origin)
+        : origin(_origin), length(_origin.as<ByteArray>()->length), buffer(_origin.as<ByteArray>()->buffer) {}
 
-    ByteArray(ByteArray * _origin, int _begin, int _length)
-        : origin(_origin), length(_length < 0 ? 0 : _length), buffer(_origin->buffer + _begin) {}
+    ByteArray(const Ptr &_origin, int _begin, int _length)
+        : origin(_origin), length(_length < 0 ? 0 : _length), buffer(_origin.as<ByteArray>()->buffer + _begin) {}
 
     ByteArray(const Ptr &_origin, char * _begin, int _length)
         : origin(_origin), length(_length < 0 ? 0 : _length), buffer(_begin) {}
@@ -33,7 +32,7 @@ public:
     char getElement(int i) const {return buffer[i];}
     char * getData() const {return buffer;}
 
-    ByteArray * clone();
+    Ptr clone();
 
     int cmp(ByteArray *ba);
     int ncmp(ByteArray *ba, int n);
@@ -41,17 +40,14 @@ public:
     int findChar(int ch);
     int findSubarray(ByteArray *ba);
 
-    ByteArray * concat(ByteArray * ba) const;
-    ByteArray * mid(int begin, int end);
-    ByteArray * slice(int begin, int end);
+    Ptr concat(ByteArray * ba) const;
+    Ptr mid(int begin, int end);
 
-    static ByteArray * fromChars(int size, const char * chars);
+    static Ptr fromChars(int size, const char * chars);
 
     template <class T>
-    static ByteArray * from(T f) {
-        ByteArray * res = new ByteArray(sizeof(T));
-        *(reinterpret_cast<T*>(res->buffer)) = f;
-        return res;
+    static Ptr from(T f) {
+        return fromChars(sizeof(T), reinterpret_cast<char*>(&f));
     }
 
     template <class T>

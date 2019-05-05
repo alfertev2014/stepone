@@ -7,19 +7,19 @@ namespace stepone::symbols {
 using namespace core;
 
 BaseMacroSymbols::BaseMacroSymbols() :
-    aquote(new Symbol),
-    aapply(new Symbol),
-    aif(new Symbol),
-    alet(new Symbol),
-    alazy(new Symbol),
-    aunlazy(new Symbol),
-    alabel(new Symbol),
-    alambda(new Symbol),
-    amacro(new Symbol),
-    acurctx(new Symbol),
-    atry(new Symbol),
-    abot(new Symbol),
-    agensym(new Symbol)
+    aquote(new Ob(Symbol())),
+    aapply(new Ob(Symbol())),
+    aif(new Ob(Symbol())),
+    alet(new Ob(Symbol())),
+    alazy(new Ob(Symbol())),
+    aunlazy(new Ob(Symbol())),
+    alabel(new Ob(Symbol())),
+    alambda(new Ob(Symbol())),
+    amacro(new Ob(Symbol())),
+    acurctx(new Ob(Symbol())),
+    atry(new Ob(Symbol())),
+    abot(new Ob(Symbol())),
+    agensym(new Ob(Symbol()))
 {}
 
 const BaseMacroSymbols &BaseMacroSymbols::inst()
@@ -30,15 +30,15 @@ const BaseMacroSymbols &BaseMacroSymbols::inst()
 
 
 BaseFuncSymbols::BaseFuncSymbols() :
-    acar(new Symbol),
-    acdr(new Symbol),
-    acons(new Symbol),
-    aeq(new Symbol),
-    agettype(new Symbol),
-    actxget(new Symbol),
-    actxpush(new Symbol),
+    acar(new Ob(Symbol())),
+    acdr(new Ob(Symbol())),
+    acons(new Ob(Symbol())),
+    aeq(new Ob(Symbol())),
+    agettype(new Ob(Symbol())),
+    actxget(new Ob(Symbol())),
+    actxpush(new Ob(Symbol())),
 
-    aeempty(new Symbol)
+    aeempty(new Ob(Symbol()))
 {}
 
 const BaseFuncSymbols &BaseFuncSymbols::inst()
@@ -49,17 +49,17 @@ const BaseFuncSymbols &BaseFuncSymbols::inst()
 
 
 BaseTypePredSymbols::BaseTypePredSymbols() :
-    apairp(new Symbol),
-    alazyp(new Symbol),
-    alabelp(new Symbol),
-    aatomp(new Symbol),
-    asymbolp(new Symbol),
-    aconstp(new Symbol),
-    amacrop(new Symbol),
-    aevalp(new Symbol),
-    abasemacrop(new Symbol),
-    ausermacrop(new Symbol),
-    avaluep(new Symbol)
+    apairp(new Ob(Symbol())),
+    alazyp(new Ob(Symbol())),
+    alabelp(new Ob(Symbol())),
+    aatomp(new Ob(Symbol())),
+    asymbolp(new Ob(Symbol())),
+    aconstp(new Ob(Symbol())),
+    amacrop(new Ob(Symbol())),
+    aevalp(new Ob(Symbol())),
+    abasemacrop(new Ob(Symbol())),
+    ausermacrop(new Ob(Symbol())),
+    avaluep(new Ob(Symbol()))
 {}
 
 const BaseTypePredSymbols &BaseTypePredSymbols::inst()
@@ -70,90 +70,90 @@ const BaseTypePredSymbols &BaseTypePredSymbols::inst()
 
 
 BaseNumFuncSymbols::BaseNumFuncSymbols() :
-    aintNeg(new Symbol),
-    aintPlus(new Symbol),
-    aintMinus(new Symbol),
-    aintProduct(new Symbol),
-    aintDivision(new Symbol),
-    aintMod(new Symbol),
-    aintp(new Symbol),
+    aintNeg(new Ob(Symbol())),
+    aintPlus(new Ob(Symbol())),
+    aintMinus(new Ob(Symbol())),
+    aintProduct(new Ob(Symbol())),
+    aintDivision(new Ob(Symbol())),
+    aintMod(new Ob(Symbol())),
+    aintp(new Ob(Symbol())),
 
-    aintand(new Symbol),
-    aintor(new Symbol),
-    aintxor(new Symbol),
-    aintnot(new Symbol),
+    aintand(new Ob(Symbol())),
+    aintor(new Ob(Symbol())),
+    aintxor(new Ob(Symbol())),
+    aintnot(new Ob(Symbol())),
 
-    aintshl(new Symbol),
-    aintshr(new Symbol),
+    aintshl(new Ob(Symbol())),
+    aintshr(new Ob(Symbol())),
 
-    aintEql(new Symbol),
-    aintNE(new Symbol),
-    aintGT(new Symbol),
-    aintLT(new Symbol),
-    aintGE(new Symbol),
-    aintLE(new Symbol),
+    aintEql(new Ob(Symbol())),
+    aintNE(new Ob(Symbol())),
+    aintGT(new Ob(Symbol())),
+    aintLT(new Ob(Symbol())),
+    aintGE(new Ob(Symbol())),
+    aintLE(new Ob(Symbol())),
 
-    alongp(new Symbol),
-    alongand(new Symbol),
-    alongor(new Symbol),
-    alongxor(new Symbol),
-    alongnot(new Symbol),
+    alongp(new Ob(Symbol())),
+    alongand(new Ob(Symbol())),
+    alongor(new Ob(Symbol())),
+    alongxor(new Ob(Symbol())),
+    alongnot(new Ob(Symbol())),
 
-    alongEql(new Symbol),
-    alongNE(new Symbol),
-    alongGT(new Symbol),
-    alongLT(new Symbol),
-    alongGE(new Symbol),
-    alongLE(new Symbol),
+    alongEql(new Ob(Symbol())),
+    alongNE(new Ob(Symbol())),
+    alongGT(new Ob(Symbol())),
+    alongLT(new Ob(Symbol())),
+    alongGE(new Ob(Symbol())),
+    alongLE(new Ob(Symbol())),
 
-    alongshl(new Symbol),
-    alongshr(new Symbol),
+    alongshl(new Ob(Symbol())),
+    alongshr(new Ob(Symbol())),
 
-    afloatNeg(new Symbol),
-    afloatPlus(new Symbol),
-    afloatMinus(new Symbol),
-    afloatProduct(new Symbol),
-    afloatDivision(new Symbol),
-    afloatp(new Symbol),
-    afloatEql(new Symbol),
-    afloatNE(new Symbol),
-    afloatGT(new Symbol),
-    afloatLT(new Symbol),
-    afloatGE(new Symbol),
-    afloatLE(new Symbol),
+    afloatNeg(new Ob(Symbol())),
+    afloatPlus(new Ob(Symbol())),
+    afloatMinus(new Ob(Symbol())),
+    afloatProduct(new Ob(Symbol())),
+    afloatDivision(new Ob(Symbol())),
+    afloatp(new Ob(Symbol())),
+    afloatEql(new Ob(Symbol())),
+    afloatNE(new Ob(Symbol())),
+    afloatGT(new Ob(Symbol())),
+    afloatLT(new Ob(Symbol())),
+    afloatGE(new Ob(Symbol())),
+    afloatLE(new Ob(Symbol())),
 
-    along2int(new Symbol),
-    aint2long(new Symbol),
+    along2int(new Ob(Symbol())),
+    aint2long(new Ob(Symbol())),
 
-    afloat2int(new Symbol),
-    aint2float(new Symbol),
+    afloat2int(new Ob(Symbol())),
+    aint2float(new Ob(Symbol())),
 
-    achar2int(new Symbol),
-    aint2char(new Symbol),
+    achar2int(new Ob(Symbol())),
+    aint2char(new Ob(Symbol())),
 
-    achar2long(new Symbol),
-    along2char(new Symbol),
+    achar2long(new Ob(Symbol())),
+    along2char(new Ob(Symbol())),
 
-    acharp(new Symbol),
-    acharand(new Symbol),
-    acharor(new Symbol),
-    acharxor(new Symbol),
-    acharnot(new Symbol),
+    acharp(new Ob(Symbol())),
+    acharand(new Ob(Symbol())),
+    acharor(new Ob(Symbol())),
+    acharxor(new Ob(Symbol())),
+    acharnot(new Ob(Symbol())),
 
-    acharshl(new Symbol),
-    acharshr(new Symbol),
+    acharshl(new Ob(Symbol())),
+    acharshr(new Ob(Symbol())),
 
-    acharEql(new Symbol),
-    acharNE(new Symbol),
-    acharGT(new Symbol),
-    acharLT(new Symbol),
-    acharGE(new Symbol),
-    acharLE(new Symbol),
+    acharEql(new Ob(Symbol())),
+    acharNE(new Ob(Symbol())),
+    acharGT(new Ob(Symbol())),
+    acharLT(new Ob(Symbol())),
+    acharGE(new Ob(Symbol())),
+    acharLE(new Ob(Symbol())),
 
-    aszi(new Symbol),
-    aszf(new Symbol),
-    aszc(new Symbol),
-    aszu(new Symbol)
+    aszi(new Ob(Symbol())),
+    aszf(new Ob(Symbol())),
+    aszc(new Ob(Symbol())),
+    aszu(new Ob(Symbol()))
 {}
 
 const BaseNumFuncSymbols &BaseNumFuncSymbols::inst()
@@ -164,14 +164,14 @@ const BaseNumFuncSymbols &BaseNumFuncSymbols::inst()
 
 
 VectorFuncSymbols::VectorFuncSymbols() :
-    avecp(new Symbol),
-    amkvec(new Symbol),
-    avecclone(new Symbol),
-    aveclen(new Symbol),
-    avecmid(new Symbol),
-    avecslice(new Symbol),
-    avecel(new Symbol),
-    aveccat(new Symbol)
+    avecp(new Ob(Symbol())),
+    amkvec(new Ob(Symbol())),
+    avecclone(new Ob(Symbol())),
+    aveclen(new Ob(Symbol())),
+    avecmid(new Ob(Symbol())),
+    avecslice(new Ob(Symbol())),
+    avecel(new Ob(Symbol())),
+    aveccat(new Ob(Symbol()))
 {}
 
 const VectorFuncSymbols &VectorFuncSymbols::inst()
@@ -182,24 +182,24 @@ const VectorFuncSymbols &VectorFuncSymbols::inst()
 
 
 ByteArrayFuncSymbols::ByteArrayFuncSymbols() :
-    abarrayp(new Symbol),
-    abarraylen(new Symbol),
-    abarrayclone(new Symbol),
-    abarraycmp(new Symbol),
-    abarrayncmp(new Symbol),
-    abarrayfindch(new Symbol),
-    abarrayfind(new Symbol),
-    abarraycat(new Symbol),
-    abarraymid(new Symbol),
-    abarrayslice(new Symbol),
+    abarrayp(new Ob(Symbol())),
+    abarraylen(new Ob(Symbol())),
+    abarrayclone(new Ob(Symbol())),
+    abarraycmp(new Ob(Symbol())),
+    abarrayncmp(new Ob(Symbol())),
+    abarrayfindch(new Ob(Symbol())),
+    abarrayfind(new Ob(Symbol())),
+    abarraycat(new Ob(Symbol())),
+    abarraymid(new Ob(Symbol())),
+    abarrayslice(new Ob(Symbol())),
 
-    aserint(new Symbol),
-    aserfloat(new Symbol),
-    aserchar(new Symbol),
+    aserint(new Ob(Symbol())),
+    aserfloat(new Ob(Symbol())),
+    aserchar(new Ob(Symbol())),
 
-    agetint(new Symbol),
-    agetfloat(new Symbol),
-    agetchar(new Symbol)
+    agetint(new Ob(Symbol())),
+    agetfloat(new Ob(Symbol())),
+    agetchar(new Ob(Symbol()))
 {}
 
 const ByteArrayFuncSymbols &ByteArrayFuncSymbols::inst()

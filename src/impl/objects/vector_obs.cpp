@@ -1,5 +1,6 @@
 #include <impl/objects/vector_obs.h>
 
+#include <impl/core/ob.h>
 #include <impl/operations/vector_ops.h>
 #include <impl/base/operations.h>
 
@@ -9,14 +10,14 @@ using namespace base;
 using namespace operations;
 
 VectorFunctions::VectorFunctions() :
-    fvecp(new FTypeP<Vector>),
-    fmkvec(new FMakeVector),
-    fvecclone(new FUnaryOp<VectorCloneUnOp>),
-    fveclen(new FUnaryOp<VectorLengthUnOp>),
-    fvecmid(new FTernaryOp<VectorMidTerOp>),
-    fvecslice(new FTernaryOp<VectorSliceTerOp>),
-    fvecel(new FBinaryOp<VectorElBinOp>),
-    fveccat(new FBinaryOp<VectorConcatBinOp>)
+    fvecp(new Ob(FTypeP<Vector>::apply)),
+    fmkvec(new Ob(FMakeVector::apply)),
+    fvecclone(new Ob(FUnaryOp<VectorCloneUnOp>::apply)),
+    fveclen(new Ob(FUnaryOp<VectorLengthUnOp>::apply)),
+    fvecmid(new Ob(FTernaryOp<VectorMidTerOp>::apply)),
+    fvecslice(new Ob(FTernaryOp<VectorSliceTerOp>::apply)),
+    fvecel(new Ob(FBinaryOp<VectorElBinOp>::apply)),
+    fveccat(new Ob(FBinaryOp<VectorConcatBinOp>::apply))
 {}
 
 const VectorFunctions &VectorFunctions::inst()

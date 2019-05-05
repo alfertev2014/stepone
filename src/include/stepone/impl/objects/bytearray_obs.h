@@ -18,7 +18,6 @@ public:
     const Ptr fbarrayfind;
     const Ptr fbarraycat;
     const Ptr fbarraymid;
-    const Ptr fbarrayslice;
 
     const Ptr fserint;
     const Ptr fserfloat;

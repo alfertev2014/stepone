@@ -1,6 +1,6 @@
 #pragma once
 
-#include <impl/core/bytearray.h>
+#include <impl/core/ob.h>
 
 namespace stepone::operations {
 
@@ -9,7 +9,7 @@ using namespace core;
 class ByteArrayLengthUnOp {
 public:
     static Ptr op(const Ptr &x) {
-        return new Value<int>(x.cast<ByteArray>()->getSize());
+        return new Ob(Value<int>(x.cast<ByteArray>()->getSize()));
     }
 };
 
@@ -23,28 +23,28 @@ public:
 class CompareByteArrayBinOp {
 public:
     static Ptr op(const Ptr &x1, const Ptr &x2) {
-        return new Value<int>(x1.cast<ByteArray>()->cmp(x2.cast<ByteArray>()));
+        return new Ob(Value<int>(x1.cast<ByteArray>()->cmp(x2.cast<ByteArray>())));
     }
 };
 
 class NCompareByteArrayTerOp {
 public:
     static Ptr op(const Ptr &x1, const Ptr &x2, const Ptr &x3) {
-        return new Value<int>(x1.cast<ByteArray>()->ncmp(x2.cast<ByteArray>(), x3.cast<Value<int> >()->getValue()));
+        return new Ob(Value<int>(x1.cast<ByteArray>()->ncmp(x2.cast<ByteArray>(), x3.cast<Value<int> >()->getValue())));
     }
 };
 
 class FindCharByteArrayBinOp {
 public:
     static Ptr op(const Ptr &x1, const Ptr &x2) {
-        return new Value<int>(x1.cast<ByteArray>()->findChar(x2.cast<Value<char> >()->getValue()));
+        return new Ob(Value<int>(x1.cast<ByteArray>()->findChar(x2.cast<Value<char> >()->getValue())));
     }
 };
 
 class FindCharsByteArrayBinOp {
 public:
     static Ptr op(const Ptr &x1, const Ptr &x2) {
-        return new Value<int>(x1.cast<ByteArray>()->findSubarray(x2.cast<ByteArray>()));
+        return new Ob(Value<int>(x1.cast<ByteArray>()->findSubarray(x2.cast<ByteArray>())));
     }
 };
 
@@ -62,12 +62,6 @@ public:
     }
 };
 
-class SliceByteArrayTerOp {
-public:
-    static Ptr op(const Ptr &x1, const Ptr &x2, const Ptr &x3) {
-        return x1.cast<ByteArray>()->slice(x2.cast<Value<int> >()->getValue(), x3.cast<Value<int> >()->getValue());
-    }
-};
 
 template <class T>
 class SerializeUnOp {
@@ -81,7 +75,7 @@ template <class T>
 class ByteArrayGetBinOp {
 public:
     static Ptr op(const Ptr &x1, const Ptr &x2) {
-        return new Value<T>(x1.cast<ByteArray>()->get<T>(x2.cast<Value<int> >()->getValue()));
+        return new Ob(Value<T>(x1.cast<ByteArray>()->get<T>(x2.cast<Value<int> >()->getValue())));
     }
 };
 

@@ -1,19 +1,20 @@
 #pragma once
 
-#include <impl/core/vector.h>
-#include <impl/core/macro.h>
+#include <impl/core/ob.h>
+#include <impl/ptr_impl.h>
 
 namespace stepone::operations {
 
-using namespace core;
+using namespace stepone::core;
 
 class VectorLengthUnOp {
 public:
-    static Ptr op(const Ptr &x) {return new Value<int>(x.cast<Vector>()->getSize());}
+    static Ptr op(const Ptr &x) {return new Ob(Value<int>(x.cast<Vector>()->getSize()));}
 };
 
-class FMakeVector : public BaseMacro {
-    Ptr apply(const Ptr &p, const Ptr &a) {
+class FMakeVector {
+public:
+    static Ptr apply(const Ptr &p, const Ptr &a) {
         int n = p.car().eval(a).cast<Value<int> >()->getValue();
         return Vector::fromList(n, p.cdr(), a);
     }

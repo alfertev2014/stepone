@@ -1,74 +1,74 @@
 #pragma once
 
-#include <impl/core/macro.h>
+#include <ptr.h>
 
 namespace stepone::base {
 
 using namespace core;
 
-class MQuote : public BaseMacro {
+class MQuote {
 public:
-    Ptr apply(const Ptr &p, const Ptr &a);
+    static Ptr apply(const Ptr &p, const Ptr &a);
 };
 
-class MApply : public BaseMacro {
+class MApply {
 public:
-    Ptr apply(const Ptr &p, const Ptr &a);
+    static Ptr apply(const Ptr &p, const Ptr &a);
 };
 
-class MIf : public BaseMacro {
+class MIf {
 public:
-    Ptr apply(const Ptr &p, const Ptr &a);
+    static Ptr apply(const Ptr &p, const Ptr &a);
 };
 
-class MLet : public BaseMacro {
+class MLet {
 public:
-    Ptr apply(const Ptr &p, const Ptr &a);
+    static Ptr apply(const Ptr &p, const Ptr &a);
 };
 
-class MLazy : public BaseMacro {
+class MLazy {
 public:
-    Ptr apply(const Ptr &p, const Ptr &a);
+    static Ptr apply(const Ptr &p, const Ptr &a);
 };
 
-class MUnlazy : public BaseMacro {
+class MUnlazy {
 public:
-    Ptr apply(const Ptr &p, const Ptr &a);
+    static Ptr apply(const Ptr &p, const Ptr &a);
 };
 
-class MLabel : public BaseMacro {
+class MLabel {
 public:
-    Ptr apply(const Ptr &p, const Ptr &a);
+    static Ptr apply(const Ptr &p, const Ptr &a);
 };
 
-class MLambda : public BaseMacro {
+class MLambda {
 public:
-    Ptr apply(const Ptr &p, const Ptr &a);
+    static Ptr apply(const Ptr &p, const Ptr &a);
 };
 
-class MMacro : public BaseMacro {
+class MMacro {
 public:
-    Ptr apply(const Ptr &p, const Ptr &a);
+    static Ptr apply(const Ptr &p, const Ptr &a);
 };
 
-class MCurrentContext : public BaseMacro {
+class MCurrentContext {
 public:
-    Ptr apply(const Ptr &p, const Ptr &a);
+    static Ptr apply(const Ptr &p, const Ptr &a);
 };
 
-class MTry : public BaseMacro {
+class MTry {
 public:
-    Ptr apply(const Ptr &p, const Ptr &a);
+    static Ptr apply(const Ptr &p, const Ptr &a);
 };
 
-class MBot : public BaseMacro {
+class MBot {
 public:
-    Ptr apply(const Ptr &p, const Ptr &a);
+    static Ptr apply(const Ptr &p, const Ptr &a);
 };
 
-class MGenSymbol : public BaseMacro {
+class MGenSymbol {
 public:
-    Ptr apply(const Ptr &p, const Ptr &a);
+    static Ptr apply(const Ptr &p, const Ptr &a);
 };
 
 } // namespaces

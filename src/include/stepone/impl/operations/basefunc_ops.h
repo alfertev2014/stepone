@@ -1,6 +1,6 @@
 #pragma once
 
-#include <impl/core/macro.h>
+#include <impl/core/ob.h>
 #include <impl/ptr_impl.h>
 
 namespace stepone::operations {
@@ -19,12 +19,12 @@ public:
 
 class ConsBinOp {
 public:
-    static Ptr op(const Ptr &x1, const Ptr &x2) {return new Pair(x1, x2);}
+    static Ptr op(const Ptr &x1, const Ptr &x2) {return new Ob(Pair(x1, x2));}
 };
 
 class EqBinOp {
 public:
-    static Ptr op(const Ptr &x1, const Ptr &x2) {return x1 == x2;}
+    static Ptr op(const Ptr &x1, const Ptr &x2) {return x1 == x2 ? Ptr::at : Ptr::anil;}
 };
 
 class ContextGetBinOp {
@@ -34,7 +34,7 @@ public:
 
 class ContextPushTerOp {
 public:
-    static Ptr op(const Ptr &x1, const Ptr &x2, const Ptr &x3) {return new Evaluator(Context::make(x2, x3, x1.cast<Evaluator>()->getContext()));}
+    static Ptr op(const Ptr &x1, const Ptr &x2, const Ptr &x3) {return new Ob(Evaluator(Context::make(x2, x3, x1.cast<Evaluator>()->getContext())));}
 };
 
 } // namespaces

@@ -42,7 +42,7 @@ private:
     std::string nosymbol;
     Ptr symbols;
 
-    std::ostream & printSymbol(std::ostream & ts, Symbol * sym);
+    std::ostream & printSymbol(std::ostream & ts, const Ptr &sym);
     std::ostream & printList(std::ostream & ts, Pair * pr);
     void printValue(std::ostream &ts, const Ptr &p);
 
@@ -94,17 +94,19 @@ void FirstParser::print(std::ostream &ts, const Ptr &p) {
 }
 
 void FirstParser::FirstParserImpl::printValue(std::ostream &ts, const Ptr &p) {
-    ValueBase * spt = p.as<ValueBase>();
-    if(spt->is<Value<int> >())
-        ts << spt->as<Value<int> >()->getValue();
-    else if(spt->is<Value<float> >())
-        ts << spt->as<Value<float> >()->getValue();
-    else if(spt->is<Value<char> >()) {
-        char c = spt->as<Value<char> >()->getValue();
+
+    if(Value<int> *val = p.as<Value<int> >(); val)
+        ts << val->getValue();
+    else if(Value<float> *val = p.as<Value<float> >(); val)
+        ts << val->getValue();
+    else if(Value<char> *val = p.as<Value<char> >(); val) {
+        char c = val->getValue();
         if(c == '\"') ts << "&\"\"";
         else ts << "&\"" << c << "\"";
-    } else if(spt->is<Vector>()) {
-        Vector * v = spt->as<Vector>();
+    }
+    else if(Value<long long> *val = p.as<Value<long long> >(); val)
+        ts << val->getValue();
+    else if(Vector * v = p.as<Vector>(); v) {
         int n = v->getSize();
         if(n == 0)
             ts << "[]";
@@ -117,8 +119,7 @@ void FirstParser::FirstParserImpl::printValue(std::ostream &ts, const Ptr &p) {
             }
             ts << "]";
         }
-    } else if(spt->is<ByteArray>()) {
-        ByteArray * ba = spt->as<ByteArray>();
+    } else if(ByteArray * ba = p.as<ByteArray>(); ba) {
         ts << "\"";
         ts.write(ba->getData(), ba->getSize());
         ts << "\"";
@@ -127,18 +128,17 @@ void FirstParser::FirstParserImpl::printValue(std::ostream &ts, const Ptr &p) {
 }
 
 std::ostream &FirstParser::FirstParserImpl::printOb(std::ostream &ts, const Ptr &p) {
-    Symbol * sym = p.as<Symbol>();
-    if(sym != 0)
-        return printSymbol(ts, sym);
-    if(p.as<Pair>()) {
+    if(p.is<Symbol>())
+        return printSymbol(ts, p);
+    if(p.is<Pair>()) {
         ts << "(";
         return printList(ts, p.as<Pair>());
     }
-    if(p.as<Lazy>())
+    if(p.is<Lazy>())
         ts << "{lazy}";
-    else if(p.as<Label>())
+    else if(p.is<Label>())
         ts << "{label}";
-    else if(p.as<ValueBase>()) {
+    else if(p.is<ValueBase>()) {
         printValue(ts, p);
     }
     return ts;
@@ -150,8 +150,8 @@ Ptr FirstParser::FirstParserImpl::parse(const std::string &_s) {
     return pr.success ? pr.e : Ptr::anil;
 }
 
-std::ostream &FirstParser::FirstParserImpl::printSymbol(std::ostream &ts, Symbol *sym) {
-    if(sym == Ptr::anil.as<Symbol>()) {
+std::ostream &FirstParser::FirstParserImpl::printSymbol(std::ostream &ts, const Ptr &sym) {
+    if(sym == Ptr::anil) {
         return ts << "()";
     } else {
         for(Ptr p = symbols; p != Ptr::anil; p = p.cdr()) {
@@ -212,7 +212,7 @@ parseRes FirstParser::FirstParserImpl::parseTail(string_pos si) {
         DBG("parseTail fail");
         return parseRes(Ptr::anil, si, false);
     }
-    return parseRes(new Pair(pr1.e, pr2.e), pr2.rest, true);
+    return parseRes(new Ob(Pair(pr1.e, pr2.e)), pr2.rest, true);
 }
 
 parseRes FirstParser::FirstParserImpl::parseAtom(string_pos si) {
@@ -241,7 +241,7 @@ parseRes FirstParser::FirstParserImpl::parseChar(string_pos si) {
         chars.push_back(*sii);
     if(sii != s.end())
         ++sii;
-    return parseRes(new Value<char>(chars.size() > 0 ? chars[0] : '\"'), sii, true);
+    return parseRes(new Ob(Value<char>(chars.size() > 0 ? chars[0] : '\"')), sii, true);
 }
 
 parseRes FirstParser::FirstParserImpl::parseString(string_pos si) {
@@ -280,8 +280,8 @@ parseRes FirstParser::FirstParserImpl::parseSymbol(string_pos si) {
                 !memcmp(ba->getData(), symbolString.data(), symbolString.size()))
             return parseRes(p.car().car(), sii, true);
     }
-    Symbol * sym = new Symbol();
-    symbols = new Pair(new Pair(sym, ByteArray::fromChars(symbolString.size(), symbolString.data())), symbols);
+    Ptr sym = new Ob(Symbol());
+    symbols = new Ob(Pair(new Ob(Pair(sym, ByteArray::fromChars(symbolString.size(), symbolString.data()))), symbols));
     return parseRes(sym, sii, true);
 }
 
@@ -301,7 +301,7 @@ parseRes FirstParser::FirstParserImpl::parseNumber(string_pos si) {
         std::istringstream ss(number);
         int i;
         if(ss >> i)
-            return parseRes(new Value<int>(i), sii, true);
+            return parseRes(new Ob(Value<int>(i)), sii, true);
         else {
             DBG("int is not int");
         }
@@ -315,7 +315,7 @@ parseRes FirstParser::FirstParserImpl::parseNumber(string_pos si) {
         float f;
         std::istringstream ss(number);
         if(ss >> f)
-            return parseRes(new Value<float>(f), sii, true);
+            return parseRes(new Ob(Value<float>(f)), sii, true);
         else {
             DBG("float is not float");
         }

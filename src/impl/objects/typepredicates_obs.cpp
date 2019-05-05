@@ -11,17 +11,17 @@ using namespace base;
 using namespace operations;
 
 BaseTypePredicates::BaseTypePredicates() :
-    fpairp(new FUnaryOp<TypePUnOp<Pair> >),
-    flazyp(new FUnaryOp<TypePUnOp<Lazy> >),
-    flabelp(new FUnaryOp<TypePUnOp<Lazy> >),
-    fatomp(new FUnaryOp<TypePUnOp<Atom> >),
-    fsymbolp(new FUnaryOp<TypePUnOp<Symbol> >),
-    fconstp(new FUnaryOp<TypePUnOp<Const> >),
-    fmacrop(new FUnaryOp<TypePUnOp<Macro> >),
-    fevalp(new FUnaryOp<TypePUnOp<Evaluator> >),
-    fbasemacrop(new FUnaryOp<TypePUnOp<BaseMacro> >),
-    fusermacrop(new FUnaryOp<TypePUnOp<MacroClosure> >),
-    fvaluep(new FUnaryOp<TypePUnOp<ValueBase> >)
+    fpairp(new Ob(FUnaryOp<TypePUnOp<Pair> >::apply)),
+    flazyp(new Ob(FUnaryOp<TypePUnOp<Lazy> >::apply)),
+    flabelp(new Ob(FUnaryOp<TypePUnOp<Lazy> >::apply)),
+    fatomp(new Ob(FUnaryOp<TypePUnOp<Atom> >::apply)),
+    fsymbolp(new Ob(FUnaryOp<TypePUnOp<Symbol> >::apply)),
+    fconstp(new Ob(FUnaryOp<TypePUnOp<Const> >::apply)),
+    fmacrop(new Ob(FUnaryOp<TypePUnOp<Macro> >::apply)),
+    fevalp(new Ob(FUnaryOp<TypePUnOp<Evaluator> >::apply)),
+    fbasemacrop(new Ob(FUnaryOp<TypePUnOp<BaseMacro> >::apply)),
+    fusermacrop(new Ob(FUnaryOp<TypePUnOp<MacroClosure> >::apply)),
+    fvaluep(new Ob(FUnaryOp<TypePUnOp<ValueBase> >::apply))
 {}
 
 const BaseTypePredicates &BaseTypePredicates::inst()

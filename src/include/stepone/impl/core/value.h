@@ -20,43 +20,23 @@ template <> inline std::string cppTypeToString<int>() {return "int";}
 template <> inline std::string cppTypeToString<float>() {return "float";}
 template <> inline std::string cppTypeToString<char>() {return "char";}
 
-class ValueBase : public Const {
-protected:
-    using Const::Const;
-public:
-    virtual ~ValueBase();
-};
 
-template<>
-inline bool Ob::is<ValueBase>() const {return typeFlags.isValue();}
+class ValueBase : public Const {};
 
 
 class BaseValue : public ValueBase {
+// TODO: Place here a payload for built in cpp types and value type tag
 protected:
-    using ValueBase::ValueBase;
-protected:
-    BaseValue() : ValueBase(BaseTypeTag::BaseValue) {}
+    BaseValue() = default;
 };
-
-template<>
-inline bool Ob::is<BaseValue>() const {return typeFlags.typeTag == BaseTypeTag::BaseValue;}
-
-
-class OtherValue : public ValueBase {
-protected:
-    OtherValue() : ValueBase(BaseTypeTag::Other) {}
-};
-
-template<>
-inline bool Ob::is<OtherValue>() const {return typeFlags.typeTag == BaseTypeTag::Other;}
 
 
 template <class T>
 class Value : public BaseValue {
 private:
-    T t;
+    T t; // TODO: Use place in BaseValue and reinterpret_cast
 public:
-    Value(const T & _t) : BaseValue(), t(_t) {}
+    Value(const T & _t) : t(_t) {}
     T getValue() const {return t;}
     char *getValuePointer() {return reinterpret_cast<char *>(&t);}
 };

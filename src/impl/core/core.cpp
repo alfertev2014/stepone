@@ -1,4 +1,4 @@
-#include <impl/core/core.h>
+#include <impl/core/ob.h>
 #include <impl/ptr_impl.h>
 
 namespace stepone::core {
@@ -9,7 +9,9 @@ Ptr Pair::cdr() {return pcdr;}
 
 Ptr Pair::eval(const Ptr &a) {return pcar.eval(a).apply(pcdr, a);}
 
-Atom::~Atom() {}
+Ptr Context::make(const Ptr & _s, const Ptr & _e, const Ptr & _next) {
+    return new Ob(Pair(new Ob(Pair(_s, _e)), _next));
+}
 
 inline void Lazy::ev() {
     if(!(a == Ptr::anil)) {
@@ -48,8 +50,8 @@ inline Ptr Label::ptr() {
 }
 
 Ptr Label::loop(const Ptr &f, const Ptr &e, const Ptr &a) {
-    Label * l = new Label(e, &a);
-    Ptr lbl = l;
+    Ptr lbl = new Ob(Label(e, &a));
+    Label * l = lbl.as<Label>();
     Ptr res = e.eval(Context::make(f, lbl, a));
     l->v = res;
     l->pa = 0;
@@ -68,19 +70,5 @@ Ptr Label::apply(const Ptr &p, const Ptr &a) {return ptr().apply(p, a);}
 
 Ptr Label::unlazy() {return ptr().unlazy();}
 
-Ptr Symbol::eval(const Ptr &a) {
-    Ptr p = a;
-    while(p != Ptr::anil) {
-        Ptr pair = p.car();
-        if(pair.car() == this)
-            return pair.cdr();
-        p = p.cdr();
-    }
-    throw SemanticError("Unknown symbol");
-}
-
-Const::~Const() {}
-
-Ptr Const::eval(const Ptr &a) {return this;}
 
 } // namespaces

@@ -6,9 +6,10 @@
 namespace stepone::init {
 
 using namespace symbols;
+using namespace core;
 
 static inline void addSymbol(Ptr & symbolTable, const std::string & s, const Ptr & p) {
-    symbolTable = new core::Pair(new core::Pair(p, core::ByteArray::fromChars(s.size(), s.data())), symbolTable);
+    symbolTable = new Ob(Pair(new Ob(Pair(p, ByteArray::fromChars(s.size(), s.data()))), symbolTable));
 }
 
 Ptr BaseSymbolTable::createSymbolTable() {

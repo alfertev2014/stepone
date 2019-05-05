@@ -54,7 +54,6 @@ public:
     Ptr(core::Ob * _ob) : WPtr(_ob) {acqure();}
     Ptr(const Ptr & p) : WPtr(p.ob) {acqure();}
     Ptr(const WPtr & p) : WPtr(p.ob) {acqure();}
-    Ptr(bool b) : WPtr(b ? at.ob : anil.ob) {acqure();}
     ~Ptr() {release();}
 
     Ptr & operator=(const Ptr & p) {return operator=(p.ob);}

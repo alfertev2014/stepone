@@ -9,25 +9,24 @@ using namespace base;
 using namespace operations;
 
 ByteArrayFunctions::ByteArrayFunctions() :
-    fbarrayp(new FTypeP<ByteArray>),
-    fbarraylen(new FUnaryOp<ByteArrayLengthUnOp>),
-    fbarrayclone(new FUnaryOp<ByteArrayCloneUnOp>),
-    fbarraycmp(new FBinaryOp<CompareByteArrayBinOp>),
-    fbarrayncmp(new FTernaryOp<NCompareByteArrayTerOp>),
-    fbarrayfindch(new FBinaryOp<FindCharByteArrayBinOp>),
-    fbarrayfind(new FBinaryOp<FindCharsByteArrayBinOp>),
-    fbarraycat(new FBinaryOp<ConcatByteArrayBinOp>),
-    fbarraymid(new FTernaryOp<MidByteArrayTerOp>),
-    fbarrayslice(new FTernaryOp<SliceByteArrayTerOp>),
+    fbarrayp(new Ob(FTypeP<ByteArray>::apply)),
+    fbarraylen(new Ob(FUnaryOp<ByteArrayLengthUnOp>::apply)),
+    fbarrayclone(new Ob(FUnaryOp<ByteArrayCloneUnOp>::apply)),
+    fbarraycmp(new Ob(FBinaryOp<CompareByteArrayBinOp>::apply)),
+    fbarrayncmp(new Ob(FTernaryOp<NCompareByteArrayTerOp>::apply)),
+    fbarrayfindch(new Ob(FBinaryOp<FindCharByteArrayBinOp>::apply)),
+    fbarrayfind(new Ob(FBinaryOp<FindCharsByteArrayBinOp>::apply)),
+    fbarraycat(new Ob(FBinaryOp<ConcatByteArrayBinOp>::apply)),
+    fbarraymid(new Ob(FTernaryOp<MidByteArrayTerOp>::apply)),
 
 
-    fserint(new FUnaryOp<SerializeUnOp<int> >),
-    fserfloat(new FUnaryOp<SerializeUnOp<float> >),
-    fserchar(new FUnaryOp<SerializeUnOp<char> >),
+    fserint(new Ob(FUnaryOp<SerializeUnOp<int> >::apply)),
+    fserfloat(new Ob(FUnaryOp<SerializeUnOp<float> >::apply)),
+    fserchar(new Ob(FUnaryOp<SerializeUnOp<char> >::apply)),
 
-    fgetint(new FBinaryOp<ByteArrayGetBinOp<int> >),
-    fgetfloat(new FBinaryOp<ByteArrayGetBinOp<float> >),
-    fgetchar(new FBinaryOp<ByteArrayGetBinOp<char> >)
+    fgetint(new Ob(FBinaryOp<ByteArrayGetBinOp<int> >::apply)),
+    fgetfloat(new Ob(FBinaryOp<ByteArrayGetBinOp<float> >::apply)),
+    fgetchar(new Ob(FBinaryOp<ByteArrayGetBinOp<char> >::apply))
 {}
 
 

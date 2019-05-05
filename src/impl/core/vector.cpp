@@ -1,4 +1,5 @@
-#include <impl/core/vector.h>
+#include <impl/core/ob.h>
+#include <error_exception.h>
 
 namespace stepone::core {
 
@@ -11,49 +12,46 @@ Vector::~Vector() {
     }
 }
 
-Vector *Vector::fromList(int n, const Ptr &list, const Ptr &a) {
-    Vector * res = new Vector(n);
+Ptr Vector::fromList(int n, const Ptr &list, const Ptr &a) {
+    Ptr res = new Ob(Vector(n));
+    Vector * v = res.as<Vector>();
     Ptr p = list;
     for(int i = 0; i < n; ++i) {
-        new (res->array + i) Ptr(p.car().eval(a));
+        new (v->array + i) Ptr(p.car().eval(a));
         p = p.cdr();
     }
     return res;
 }
 
-Vector *Vector::clone() {
-    Vector * res = new Vector(length);
+Ptr Vector::clone() {
+    Ptr res = new Ob(Vector(length));
+    Vector * v = res.as<Vector>();
     for(int i = 0; i < length; ++i)
-        new (res->array + i) Ptr(array[i]);
+        new (v->array + i) Ptr(array[i]);
     return res;
 }
 
-Vector *Vector::concat(Vector *v) const {
+Ptr Vector::concat(Vector *v) const {
     int nres = length + v->length;
-    Vector * res = new Vector(nres);
+    Ptr res = new Ob(Vector(nres));
+    Vector * vv = res.as<Vector>();
     for(int i = 0; i < length; ++i)
-        new (res->array + i) Ptr(array[i]);
+        new (vv->array + i) Ptr(array[i]);
     for(int i = 0; i < v->length; ++i)
-        new (res->array + length + i) Ptr(v->array[i]);
+        new (vv->array + length + i) Ptr(v->array[i]);
     return res;
 }
 
-Vector *Vector::mid(int begin, int end) {
+Ptr Vector::mid(int begin, int end) {
     if(begin < 0 || end >= length) {
         throw SemanticError("vector index out of range");
     }
     int nres = end - begin;
-    Vector * res = new Vector(nres);
+    Ptr res = new Ob(Vector(nres));
+    Vector * v = res.as<Vector>();
     for(int i = 0; i < nres; ++i)
-        new (res->array + i) Ptr(array[begin + i]);
+        new (v->array + i) Ptr(array[begin + i]);
     return res;
-}
-
-Vector *Vector::slice(int begin, int end) {
-    if(begin < 0 || end >= length) {
-        throw SemanticError("vector index out of range");
-    }
-    return new Vector(this, begin, end - begin);
 }
 
 } // namespaces

@@ -16,7 +16,6 @@ public:
     const Ptr mlazy;
     const Ptr munlazy;
     const Ptr mlabel;
-    const Ptr mlambda;
     const Ptr mmacro;
     const Ptr mcurctx;
     const Ptr mtry;
