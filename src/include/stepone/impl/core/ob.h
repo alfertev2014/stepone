@@ -86,6 +86,9 @@ class Ob {
         ~Payload() {}
     } payload;
 
+    template <class Action>
+    void visit(Action action = Action()) const;
+
     template <typename T>
     T * unsafe_as();
 
@@ -95,6 +98,7 @@ class Ob {
     Ob(const T &t);
 public:
     Ob() = delete;
+    Ob(const Ob &ob);
     ~Ob();
 
 

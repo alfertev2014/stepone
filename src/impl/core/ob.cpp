@@ -2,6 +2,8 @@
 #include <impl/core/ob.h>
 #include <error_exception.h>
 
+#include <type_traits>
+
 namespace stepone {
 
 const Ptr Ptr::anil(new core::Ob(core::Symbol()));
@@ -11,57 +13,72 @@ const Ptr Ptr::at(new core::Ob(core::Symbol()));
 
 namespace stepone::core {
 
-Ob::~Ob() {
+template <class Action>
+void Ob::visit(Action action) const {
     switch(typeFlags.typeTag) {
         case BaseTypeTag::Pair:
-            payload.pair.~Pair();
+            action(payload.pair);
             break;
         case BaseTypeTag::Symbol:
-            payload.symbol.~Symbol();
+            action(payload.symbol);
             break;
         case BaseTypeTag::Lazy:
-            payload.lazy.~Lazy();
+            action(payload.lazy);
             break;
         case BaseTypeTag::Label:
-            payload.label.~Label();
+            action(payload.label);
             break;
 
         case BaseTypeTag::BaseMacro:
-            payload.baseMacro.~BaseMacro();
+            action(payload.baseMacro);
             break;
         case BaseTypeTag::Evaluator:
-            payload.evaluator.~Evaluator();
+            action(payload.evaluator);
             break;
         case BaseTypeTag::MacroClosure:
-            payload.macroClosure.~MacroClosure();
+            action(payload.macroClosure);
             break;
         case BaseTypeTag::CurrentContext:
-            payload.currentContext.~CurrentContext();
+            action(payload.currentContext);
             break;
 
         case BaseTypeTag::BaseValue:
-            payload.baseValue.~BaseValue();
+            action(payload.baseValue);
             break;
         case BaseTypeTag::ByteArray:
-            payload.byteArray.~ByteArray();
+            action(payload.byteArray);
             break;
         case BaseTypeTag::Vector:
-            payload.vector.~Vector();
+            action(payload.vector);
             break;
 
         case BaseTypeTag::Int:
-            payload.valueInt.~Value<int>();
+            action(payload.valueInt);
             break;
         case BaseTypeTag::Float:
-            payload.valueFloat.~Value<float>();
+            action(payload.valueFloat);
             break;
         case BaseTypeTag::Char:
-            payload.valueChar.~Value<char>();
+            action(payload.valueChar);
             break;
         case BaseTypeTag::Long:
-            payload.valueLong.~Value<long long>();
+            action(payload.valueLong);
             break;
     }
+}
+
+Ob::Ob(const Ob &ob) : Ob(TypeFlags{ob.typeFlags}) {
+    ob.visit([this](const auto &p) {
+        using T = typename std::decay<decltype(p)>::type;
+        new (unsafe_as<T>()) T(p);
+    });
+}
+
+Ob::~Ob() {
+    visit([](const auto &p) {
+        using T = typename std::decay<decltype(p)>::type;
+        p.~T();
+    });
 }
 
 
