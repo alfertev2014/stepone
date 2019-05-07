@@ -167,9 +167,8 @@ std::ostream &FirstParser::FirstParserImpl::printSymbol(std::ostream &ts, const 
 std::ostream &FirstParser::FirstParserImpl::printList(std::ostream &ts, Pair *pr) {
     printOb(ts, pr->car());
     Ptr pcdr = pr->cdr();
-    Atom * atom = pcdr.as<Atom>();
-    if(atom != 0) {
-        if(atom != Ptr::anil.as<Atom>()) {
+    if(pcdr.is<Atom>()) {
+        if(pcdr != Ptr::anil) {
             ts << " . ";
             printOb(ts, pcdr);
         }

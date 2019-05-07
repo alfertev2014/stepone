@@ -10,14 +10,14 @@ using namespace base;
 using namespace operations;
 
 VectorFunctions::VectorFunctions() :
-    fvecp(new Ob(FTypeP<Vector>::apply)),
-    fmkvec(new Ob(FMakeVector::apply)),
-    fvecclone(new Ob(FUnaryOp<VectorCloneUnOp>::apply)),
-    fveclen(new Ob(FUnaryOp<VectorLengthUnOp>::apply)),
-    fvecmid(new Ob(FTernaryOp<VectorMidTerOp>::apply)),
-    fvecslice(new Ob(FTernaryOp<VectorSliceTerOp>::apply)),
-    fvecel(new Ob(FBinaryOp<VectorElBinOp>::apply)),
-    fveccat(new Ob(FBinaryOp<VectorConcatBinOp>::apply))
+    fvecp(new Ob(BaseMacro(FTypeP<Vector>::apply))),
+    fmkvec(new Ob(BaseMacro(FMakeVector::apply))),
+    fvecclone(new Ob(BaseMacro(FUnaryOp<VectorCloneUnOp>::apply))),
+    fveclen(new Ob(BaseMacro(FUnaryOp<VectorLengthUnOp>::apply))),
+    fvecmid(new Ob(BaseMacro(FTernaryOp<VectorMidTerOp>::apply))),
+    fvecslice(new Ob(BaseMacro(FTernaryOp<VectorSliceTerOp>::apply))),
+    fvecel(new Ob(BaseMacro(FBinaryOp<VectorElBinOp>::apply))),
+    fveccat(new Ob(BaseMacro(FBinaryOp<VectorConcatBinOp>::apply)))
 {}
 
 const VectorFunctions &VectorFunctions::inst()

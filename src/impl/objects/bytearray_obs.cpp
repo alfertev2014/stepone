@@ -9,24 +9,23 @@ using namespace base;
 using namespace operations;
 
 ByteArrayFunctions::ByteArrayFunctions() :
-    fbarrayp(new Ob(FTypeP<ByteArray>::apply)),
-    fbarraylen(new Ob(FUnaryOp<ByteArrayLengthUnOp>::apply)),
-    fbarrayclone(new Ob(FUnaryOp<ByteArrayCloneUnOp>::apply)),
-    fbarraycmp(new Ob(FBinaryOp<CompareByteArrayBinOp>::apply)),
-    fbarrayncmp(new Ob(FTernaryOp<NCompareByteArrayTerOp>::apply)),
-    fbarrayfindch(new Ob(FBinaryOp<FindCharByteArrayBinOp>::apply)),
-    fbarrayfind(new Ob(FBinaryOp<FindCharsByteArrayBinOp>::apply)),
-    fbarraycat(new Ob(FBinaryOp<ConcatByteArrayBinOp>::apply)),
-    fbarraymid(new Ob(FTernaryOp<MidByteArrayTerOp>::apply)),
+    fbarrayp(new Ob(BaseMacro(FTypeP<ByteArray>::apply))),
+    fbarraylen(new Ob(BaseMacro(FUnaryOp<ByteArrayLengthUnOp>::apply))),
+    fbarrayclone(new Ob(BaseMacro(FUnaryOp<ByteArrayCloneUnOp>::apply))),
+    fbarraycmp(new Ob(BaseMacro(FBinaryOp<CompareByteArrayBinOp>::apply))),
+    fbarrayncmp(new Ob(BaseMacro(FTernaryOp<NCompareByteArrayTerOp>::apply))),
+    fbarrayfindch(new Ob(BaseMacro(FBinaryOp<FindCharByteArrayBinOp>::apply))),
+    fbarrayfind(new Ob(BaseMacro(FBinaryOp<FindCharsByteArrayBinOp>::apply))),
+    fbarraycat(new Ob(BaseMacro(FBinaryOp<ConcatByteArrayBinOp>::apply))),
+    fbarraymid(new Ob(BaseMacro(FTernaryOp<MidByteArrayTerOp>::apply))),
 
+    fserint(new Ob(BaseMacro(FUnaryOp<SerializeUnOp<int> >::apply))),
+    fserfloat(new Ob(BaseMacro(FUnaryOp<SerializeUnOp<float> >::apply))),
+    fserchar(new Ob(BaseMacro(FUnaryOp<SerializeUnOp<char> >::apply))),
 
-    fserint(new Ob(FUnaryOp<SerializeUnOp<int> >::apply)),
-    fserfloat(new Ob(FUnaryOp<SerializeUnOp<float> >::apply)),
-    fserchar(new Ob(FUnaryOp<SerializeUnOp<char> >::apply)),
-
-    fgetint(new Ob(FBinaryOp<ByteArrayGetBinOp<int> >::apply)),
-    fgetfloat(new Ob(FBinaryOp<ByteArrayGetBinOp<float> >::apply)),
-    fgetchar(new Ob(FBinaryOp<ByteArrayGetBinOp<char> >::apply))
+    fgetint(new Ob(BaseMacro(FBinaryOp<ByteArrayGetBinOp<int> >::apply))),
+    fgetfloat(new Ob(BaseMacro(FBinaryOp<ByteArrayGetBinOp<float> >::apply))),
+    fgetchar(new Ob(BaseMacro(FBinaryOp<ByteArrayGetBinOp<char> >::apply)))
 {}
 
 

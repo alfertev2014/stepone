@@ -11,6 +11,60 @@ const Ptr Ptr::at(new core::Ob(core::Symbol()));
 
 namespace stepone::core {
 
+Ob::~Ob() {
+    switch(typeFlags.typeTag) {
+        case BaseTypeTag::Pair:
+            payload.pair.~Pair();
+            break;
+        case BaseTypeTag::Symbol:
+            payload.symbol.~Symbol();
+            break;
+        case BaseTypeTag::Lazy:
+            payload.lazy.~Lazy();
+            break;
+        case BaseTypeTag::Label:
+            payload.label.~Label();
+            break;
+
+        case BaseTypeTag::BaseMacro:
+            payload.baseMacro.~BaseMacro();
+            break;
+        case BaseTypeTag::Evaluator:
+            payload.evaluator.~Evaluator();
+            break;
+        case BaseTypeTag::MacroClosure:
+            payload.macroClosure.~MacroClosure();
+            break;
+        case BaseTypeTag::CurrentContext:
+            payload.currentContext.~CurrentContext();
+            break;
+
+        case BaseTypeTag::BaseValue:
+            payload.baseValue.~BaseValue();
+            break;
+        case BaseTypeTag::ByteArray:
+            payload.byteArray.~ByteArray();
+            break;
+        case BaseTypeTag::Vector:
+            payload.vector.~Vector();
+            break;
+
+        case BaseTypeTag::Int:
+            payload.valueInt.~Value<int>();
+            break;
+        case BaseTypeTag::Float:
+            payload.valueFloat.~Value<float>();
+            break;
+        case BaseTypeTag::Char:
+            payload.valueChar.~Value<char>();
+            break;
+        case BaseTypeTag::Long:
+            payload.valueLong.~Value<long long>();
+            break;
+    }
+}
+
+
 Ptr Ob::car() {
     return as<Pair>()->car();
 }

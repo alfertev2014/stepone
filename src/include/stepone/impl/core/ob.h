@@ -12,6 +12,52 @@
 
 namespace stepone::core {
 
+template <>
+struct TypeTagOf<Pair> : TypeTagValue<BaseTypeTag::Pair> {};
+
+template <>
+struct TypeTagOf<Lazy> : TypeTagValue<BaseTypeTag::Lazy> {};
+
+template <>
+struct TypeTagOf<Label> : TypeTagValue<BaseTypeTag::Label> {};
+
+template <>
+struct TypeTagOf<Symbol> : TypeTagValue<BaseTypeTag::Symbol> {};
+
+template <>
+struct TypeTagOf<Evaluator> : TypeTagValue<BaseTypeTag::Evaluator> {};
+
+template <>
+struct TypeTagOf<BaseMacro> : TypeTagValue<BaseTypeTag::BaseMacro> {};
+
+template <>
+struct TypeTagOf<MacroClosure> : TypeTagValue<BaseTypeTag::MacroClosure> {};
+
+template <>
+struct TypeTagOf<CurrentContext> : TypeTagValue<BaseTypeTag::CurrentContext> {};
+
+template <>
+struct TypeTagOf<BaseValue> : TypeTagValue<BaseTypeTag::BaseValue> {};
+
+template <>
+struct TypeTagOf<ByteArray> : TypeTagValue<BaseTypeTag::ByteArray> {};
+
+template <>
+struct TypeTagOf<Vector> : TypeTagValue<BaseTypeTag::Vector> {};
+
+template <>
+struct TypeTagOf<Value<int>> : TypeTagValue<BaseTypeTag::Int> {};
+
+template <>
+struct TypeTagOf<Value<float>> : TypeTagValue<BaseTypeTag::Float> {};
+
+template <>
+struct TypeTagOf<Value<char>> : TypeTagValue<BaseTypeTag::Char> {};
+
+template <>
+struct TypeTagOf<Value<long long>> : TypeTagValue<BaseTypeTag::Long> {};
+
+
 class Ob {
     friend class ::stepone::Ptr;
     int refcount {0};
@@ -41,108 +87,16 @@ class Ob {
     } payload;
 
     template <typename T>
-    T * unsafe_as() {return nullptr;}
+    T * unsafe_as();
 
     Ob(TypeFlags typeFlags) : typeFlags(typeFlags) {}
 public:
     Ob() = delete;
-    Ob(const Pair &pair) : Ob(BaseTypeTag::Pair) {
-        new (&payload.pair) Pair(pair);
-    }
-    Ob(const Lazy &lazy) : Ob(BaseTypeTag::Lazy) {
-        new (&payload.lazy) Lazy(lazy);
-    }
-    Ob(const Label &label) : Ob(BaseTypeTag::Label) {
-        new (&payload.label) Label(label);
-    }
-    Ob(const Symbol &symbol) : Ob(BaseTypeTag::Symbol) {
-        new (&payload.symbol) Symbol(symbol);
-    }
-    Ob(const Evaluator &evaluator) : Ob(BaseTypeTag::Evaluator) {
-        new (&payload.evaluator) Evaluator(evaluator);
-    }
-    Ob(const BaseMacro &baseMacro) : Ob(BaseTypeTag::BaseMacro) {
-        new (&payload.baseMacro) BaseMacro(baseMacro);
-    }
-    Ob(const MacroClosure &macroClosure) : Ob(BaseTypeTag::MacroClosure) {
-        new (&payload.macroClosure) MacroClosure(macroClosure);
-    }
-    Ob(const CurrentContext &currentContext) : Ob(BaseTypeTag::CurrentContext) {
-        new (&payload.currentContext) CurrentContext(currentContext);
-    }
-    Ob(const BaseValue &baseValue) : Ob(BaseTypeTag::BaseValue) {
-        new (&payload.baseValue) BaseValue(baseValue);
-    }
-    Ob(const ByteArray &byteArray) : Ob(BaseTypeTag::ByteArray) {
-        new (&payload.byteArray) ByteArray(byteArray);
-    }
-    Ob(const Vector &vector) : Ob(BaseTypeTag::Vector) {
-        new (&payload.vector) Vector(vector);
-    }
-    Ob(const Value<int> &v) : Ob(BaseTypeTag::Int) {
-        new (&payload.valueInt) Value<int>(v);
-    }
-    Ob(const Value<float> &v) : Ob(BaseTypeTag::Float) {
-        new (&payload.valueFloat) Value<float>(v);
-    }
-    Ob(const Value<char> &v) : Ob(BaseTypeTag::Char) {
-        new (&payload.valueChar) Value<char>(v);
-    }
-    Ob(const Value<long long> &v) : Ob(BaseTypeTag::Long) {
-        new (&payload.valueLong) Value<long long>(v);
-    }
-    ~Ob() {
-        switch(typeFlags.typeTag) {
-            case BaseTypeTag::Pair:
-                payload.pair.~Pair();
-                break;
-            case BaseTypeTag::Symbol:
-                payload.symbol.~Symbol();
-                break;
-            case BaseTypeTag::Lazy:
-                payload.lazy.~Lazy();
-                break;
-            case BaseTypeTag::Label:
-                payload.label.~Label();
-                break;
+    ~Ob();
 
-            case BaseTypeTag::BaseMacro:
-                payload.baseMacro.~BaseMacro();
-                break;
-            case BaseTypeTag::Evaluator:
-                payload.evaluator.~Evaluator();
-                break;
-            case BaseTypeTag::MacroClosure:
-                payload.macroClosure.~MacroClosure();
-                break;
-            case BaseTypeTag::CurrentContext:
-                payload.currentContext.~CurrentContext();
-                break;
+    template <class T>
+    Ob(const T &t);
 
-            case BaseTypeTag::BaseValue:
-                payload.baseValue.~BaseValue();
-                break;
-            case BaseTypeTag::ByteArray:
-                payload.byteArray.~ByteArray();
-                break;
-            case BaseTypeTag::Vector:
-                payload.vector.~Vector();
-                break;
-
-            case BaseTypeTag::Int:
-                payload.valueInt.~Value<int>();
-                break;
-            case BaseTypeTag::Float:
-                payload.valueFloat.~Value<float>();
-                break;
-            case BaseTypeTag::Char:
-                payload.valueChar.~Value<char>();
-                break;
-            case BaseTypeTag::Long:
-                payload.valueLong.~Value<long long>();
-                break;
-        }
-    }
 
     Ptr car();
     Ptr cdr();
@@ -153,11 +107,7 @@ public:
     Ptr assoc(const Ptr & s) const;
 
     template <class T>
-    T * as() {
-        if(! is<T>())
-            return nullptr;
-        return unsafe_as<T>();
-    }
+    T * as();
 
     template <class T>
     bool is() const {
@@ -165,12 +115,7 @@ public:
     }
 
     template <class T>
-    T * cast() {
-        T * res = as<T>();
-        if (res == nullptr)
-            throw SemanticError("error cast");
-        return res;
-    }
+    T * cast();
 };
 
 
@@ -224,51 +169,35 @@ inline ByteArray *Ob::unsafe_as<ByteArray>() {
     return &payload.byteArray;
 }
 
+template <>
+inline Vector *Ob::unsafe_as<Vector>() {
+    return &payload.vector;
+}
 
 template <>
-struct TypeTagOf<Pair> : TypeTagValue<BaseTypeTag::Pair> {};
+inline Value<int> *Ob::unsafe_as<Value<int>>() {
+    return &payload.valueInt;
+}
 
 template <>
-struct TypeTagOf<Lazy> : TypeTagValue<BaseTypeTag::Lazy> {};
+inline Value<float> *Ob::unsafe_as<Value<float>>() {
+    return &payload.valueFloat;
+}
 
 template <>
-struct TypeTagOf<Label> : TypeTagValue<BaseTypeTag::Label> {};
+inline Value<char> *Ob::unsafe_as<Value<char>>() {
+    return &payload.valueChar;
+}
 
 template <>
-struct TypeTagOf<Symbol> : TypeTagValue<BaseTypeTag::Symbol> {};
+inline Value<long long> *Ob::unsafe_as<Value<long long>>() {
+    return &payload.valueLong;
+}
 
-template <>
-struct TypeTagOf<Evaluator> : TypeTagValue<BaseTypeTag::Evaluator> {};
-
-template <>
-struct TypeTagOf<BaseMacro> : TypeTagValue<BaseTypeTag::BaseMacro> {};
-
-template <>
-struct TypeTagOf<MacroClosure> : TypeTagValue<BaseTypeTag::MacroClosure> {};
-
-template <>
-struct TypeTagOf<CurrentContext> : TypeTagValue<BaseTypeTag::CurrentContext> {};
-
-template <>
-struct TypeTagOf<BaseValue> : TypeTagValue<BaseTypeTag::BaseValue> {};
-
-template <>
-struct TypeTagOf<ByteArray> : TypeTagValue<BaseTypeTag::ByteArray> {};
-
-template <>
-struct TypeTagOf<Vector> : TypeTagValue<BaseTypeTag::Vector> {};
-
-template <>
-struct TypeTagOf<Value<int>> : TypeTagValue<BaseTypeTag::Int> {};
-
-template <>
-struct TypeTagOf<Value<float>> : TypeTagValue<BaseTypeTag::Float> {};
-
-template <>
-struct TypeTagOf<Value<char>> : TypeTagValue<BaseTypeTag::Char> {};
-
-template <>
-struct TypeTagOf<Value<long long>> : TypeTagValue<BaseTypeTag::Long> {};
+template <class T>
+inline Ob::Ob(const T &t) : Ob(TypeFlags{TypeTagOf<T>::typeTagValue}) {
+    new (unsafe_as<T>()) T(t);
+}
 
 
 template <>
@@ -289,6 +218,21 @@ inline bool Ob::is<Macro>() const {
 template<>
 inline bool Ob::is<ValueBase>() const {
     return typeFlags.isValue();
+}
+
+template <class T>
+inline T * Ob::as() {
+    if(! is<T>())
+        return nullptr;
+    return unsafe_as<T>();
+}
+
+template <class T>
+T * Ob::cast() {
+    T * res = as<T>();
+    if (res == nullptr)
+        throw SemanticError("error cast");
+    return res;
 }
 
 } // namespaces
