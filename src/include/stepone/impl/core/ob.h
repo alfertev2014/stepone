@@ -160,7 +160,9 @@ public:
     }
 
     template <class T>
-    bool is() const {return false;}
+    bool is() const {
+        return typeFlags.typeTag == TypeTagOf<T>::typeTagValue;
+    }
 
     template <class T>
     T * cast() {
@@ -170,6 +172,7 @@ public:
         return res;
     }
 };
+
 
 template <>
 inline Pair *Ob::unsafe_as<Pair>() {
@@ -223,28 +226,54 @@ inline ByteArray *Ob::unsafe_as<ByteArray>() {
 
 
 template <>
-inline bool Ob::is<Pair>() const {
-    return typeFlags.typeTag == BaseTypeTag::Pair;
-}
+struct TypeTagOf<Pair> : TypeTagValue<BaseTypeTag::Pair> {};
+
+template <>
+struct TypeTagOf<Lazy> : TypeTagValue<BaseTypeTag::Lazy> {};
+
+template <>
+struct TypeTagOf<Label> : TypeTagValue<BaseTypeTag::Label> {};
+
+template <>
+struct TypeTagOf<Symbol> : TypeTagValue<BaseTypeTag::Symbol> {};
+
+template <>
+struct TypeTagOf<Evaluator> : TypeTagValue<BaseTypeTag::Evaluator> {};
+
+template <>
+struct TypeTagOf<BaseMacro> : TypeTagValue<BaseTypeTag::BaseMacro> {};
+
+template <>
+struct TypeTagOf<MacroClosure> : TypeTagValue<BaseTypeTag::MacroClosure> {};
+
+template <>
+struct TypeTagOf<CurrentContext> : TypeTagValue<BaseTypeTag::CurrentContext> {};
+
+template <>
+struct TypeTagOf<BaseValue> : TypeTagValue<BaseTypeTag::BaseValue> {};
+
+template <>
+struct TypeTagOf<ByteArray> : TypeTagValue<BaseTypeTag::ByteArray> {};
+
+template <>
+struct TypeTagOf<Vector> : TypeTagValue<BaseTypeTag::Vector> {};
+
+template <>
+struct TypeTagOf<Value<int>> : TypeTagValue<BaseTypeTag::Int> {};
+
+template <>
+struct TypeTagOf<Value<float>> : TypeTagValue<BaseTypeTag::Float> {};
+
+template <>
+struct TypeTagOf<Value<char>> : TypeTagValue<BaseTypeTag::Char> {};
+
+template <>
+struct TypeTagOf<Value<long long>> : TypeTagValue<BaseTypeTag::Long> {};
+
 
 template <>
 inline bool Ob::is<Atom>() const {
     return typeFlags.typeTag != BaseTypeTag::Pair;
-}
-
-template <>
-inline bool Ob::is<Lazy>() const {
-    return typeFlags.typeTag == BaseTypeTag::Lazy;
-}
-
-template <>
-inline bool Ob::is<Label>() const {
-    return typeFlags.typeTag == BaseTypeTag::Label;
-}
-
-template <>
-inline bool Ob::is<Symbol>() const {
-    return typeFlags.typeTag == BaseTypeTag::Symbol;
 }
 
 template <>
@@ -257,59 +286,9 @@ inline bool Ob::is<Macro>() const {
     return typeFlags.isMacro();
 }
 
-template <>
-inline bool Ob::is<Evaluator>() const {
-    return typeFlags.typeTag == BaseTypeTag::Evaluator;
-}
-
-template <>
-inline bool Ob::is<BaseMacro>() const {
-    return typeFlags.typeTag == BaseTypeTag::BaseMacro;
-}
-
-template <>
-inline bool Ob::is<MacroClosure>() const {
-    return typeFlags.typeTag == BaseTypeTag::MacroClosure;
-}
-
-template <>
-inline bool Ob::is<CurrentContext>() const {
-    return typeFlags.typeTag == BaseTypeTag::CurrentContext;
-}
-
 template<>
 inline bool Ob::is<ValueBase>() const {
     return typeFlags.isValue();
-}
-
-template<>
-inline bool Ob::is<BaseValue>() const {
-    return typeFlags.typeTag == BaseTypeTag::BaseValue;
-}
-
-template<>
-inline bool Ob::is<ByteArray>() const {
-    return typeFlags.typeTag == BaseTypeTag::ByteArray;
-}
-
-template<>
-inline bool Ob::is<Vector>() const {
-    return typeFlags.typeTag == BaseTypeTag::Vector;
-}
-
-template<>
-inline bool Ob::is<Value<float>>() const {
-    return typeFlags.typeTag == BaseTypeTag::Float;
-}
-
-template<>
-inline bool Ob::is<Value<char>>() const {
-    return typeFlags.typeTag == BaseTypeTag::Char;
-}
-
-template<>
-inline bool Ob::is<Value<long long>>() const {
-    return typeFlags.typeTag == BaseTypeTag::Long;
 }
 
 } // namespaces
