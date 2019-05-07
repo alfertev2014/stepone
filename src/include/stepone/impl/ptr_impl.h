@@ -5,18 +5,14 @@
 
 namespace stepone {
 
-inline void Ptr::acqure() { ob->incRefCount(); }
+inline void Ptr::acqure() const {
+    ob->refcount++;
+}
 
-inline void Ptr::release() { ob->decRefCount(); }
-
-inline void Ptr::assing(core::Ob *_ob)
-{
-    if(_ob != ob) {
-        // don't change the order
-        _ob->incRefCount();
-        ob->decRefCount();
-        ob = _ob;
-    }
+inline void Ptr::release() const {
+    ob->refcount--;
+    if(ob->refcount == 0)
+        delete ob;
 }
 
 inline Ptr WPtr::car() const

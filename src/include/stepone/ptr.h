@@ -1,5 +1,7 @@
 #pragma once
 
+#include <utility>
+
 namespace stepone {
 
 namespace core {
@@ -10,7 +12,7 @@ class Ptr;
 
 class WPtr {
     friend class Ptr;
-    core::Ob * ob;
+    core::Ob * ob; // Always not nullptr
 
     WPtr(core::Ob * _ob) : ob(_ob) {}
 public:
@@ -31,8 +33,6 @@ public:
     Ptr unlazy() const;
     Ptr assoc(const Ptr & s) const;
 
-    Ptr typeId() const;
-
     template <class T>
     T * as() const;
     template <class T>
@@ -44,23 +44,42 @@ inline bool operator==(const core::Ob * const & ob, const WPtr & p) {return ob =
 inline bool operator!=(const core::Ob * const & ob, const WPtr & p) {return ob != p.ob;}
 
 class Ptr : public WPtr {
-    void acqure();
-    void release();
-    void assing(core::Ob * _ob);
+    void acqure() const;
+    void release() const;
 public:
     static const Ptr anil;
     static const Ptr at;
 
-    Ptr(core::Ob * _ob) : WPtr(_ob) {acqure();}
-    Ptr(const Ptr & p) : WPtr(p.ob) {acqure();}
-    Ptr(const WPtr & p) : WPtr(p.ob) {acqure();}
-    ~Ptr() {release();}
+    // TODO: Ensure _ob is not nullptr
+    Ptr(core::Ob * _ob) : WPtr(_ob) {
+        acqure();
+    }
+    Ptr(const Ptr & p) : Ptr(p.ob) {}
+    Ptr(Ptr &&p) : WPtr(p.ob) {
+        p.ob = Ptr::anil.ob;
+    }
+    Ptr(const WPtr & p) : Ptr(p.ob) {}
+    ~Ptr() {
+        release();
+    }
 
-    Ptr & operator=(const Ptr & p) {return operator=(p.ob);}
-    Ptr & operator=(const WPtr & p) {return operator=(p.ob);}
-    Ptr & operator=(core::Ob * _ob) {
-        assing(_ob);
+    Ptr &operator=(const Ptr &p) {
+        p.acqure();
+        release();
+        ob = p.ob;
         return *this;
+    }
+    Ptr &operator=(Ptr &&p) {
+        if (&p != this) { // TODO: Is it always true?
+            release();
+            ob = p.ob;
+            p.ob = Ptr::anil.ob;
+        }
+        return *this;
+    }
+
+    void swap(Ptr &p) noexcept {
+        std::swap(ob, p.ob);
     }
 };
 

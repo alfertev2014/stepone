@@ -16,16 +16,6 @@ class Ob {
     friend class ::stepone::Ptr;
     int refcount {0};
 
-    void incRefCount() {
-       refcount++;
-    }
-
-    void decRefCount() {
-        refcount--;
-        if(refcount == 0)
-            delete this;
-    }
-
     const TypeFlags typeFlags {};
     union Payload {
         Pair pair;
