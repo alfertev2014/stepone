@@ -96,9 +96,12 @@ class Ob {
 
     template <class T>
     Ob(const T &t);
+    template <class T>
+    Ob(T&& t);
 public:
     Ob() = delete;
     Ob(const Ob &ob);
+    Ob(Ob&&) = delete;
     ~Ob();
 
 
@@ -204,6 +207,11 @@ inline Value<long long> *Ob::unsafe_as<Value<long long>>() {
 template <class T>
 inline Ob::Ob(const T &t) : Ob(TypeFlags{TypeTagOf<T>::typeTagValue}) {
     new (unsafe_as<T>()) T(t);
+}
+
+template <class T>
+inline Ob::Ob(T&& t) : Ob(TypeFlags{TypeTagOf<T>::typeTagValue}) {
+    new (unsafe_as<T>()) T(std::move(t));
 }
 
 template <class T, class ...Args>
