@@ -9,7 +9,7 @@ using namespace stepone::core;
 
 class VectorLengthUnOp {
 public:
-    static Ptr op(const Ptr &x) {return new Ob(Value<int>(x.cast<Vector>()->getSize()));}
+    static Ptr op(const Ptr &x) {return Ob::of<Value<int>>(x.cast<Vector>()->getSize());}
 };
 
 class FMakeVector {

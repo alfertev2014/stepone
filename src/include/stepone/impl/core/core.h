@@ -51,6 +51,7 @@ public:
 
 
 class Label final {
+    friend class Ob;
 private:
     WPtr v;
     const Ptr * pa;

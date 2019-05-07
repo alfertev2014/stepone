@@ -10,6 +10,7 @@ class VectorElBinOp;
 namespace stepone::core {
 
 class Vector : public ValueBase {
+    friend class Ob;
 private:
     Ptr origin;
     Ptr * array;

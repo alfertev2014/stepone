@@ -8,18 +8,18 @@ namespace stepone::objects {
 using namespace base;
 
 BaseMacroses::BaseMacroses() :
-    mquote(new Ob(BaseMacro(MQuote::apply))),
-    mapply(new Ob(BaseMacro(MApply::apply))),
-    mif(new Ob(BaseMacro(MIf::apply))),
-    mlet(new Ob(BaseMacro(MLet::apply))),
-    mlazy(new Ob(BaseMacro(MLazy::apply))),
-    munlazy(new Ob(BaseMacro(MUnlazy::apply))),
-    mlabel(new Ob(BaseMacro(MLabel::apply))),
-    mmacro(new Ob(BaseMacro(MMacro::apply))),
-    mcurctx(new Ob(BaseMacro(MCurrentContext::apply))),
-    mtry(new Ob(BaseMacro(MTry::apply))),
-    mbot(new Ob(BaseMacro(MBot::apply))),
-    mgensym(new Ob(BaseMacro(MGenSymbol::apply)))
+    mquote(Ob::of<BaseMacro>(MQuote::apply)),
+    mapply(Ob::of<BaseMacro>(MApply::apply)),
+    mif(Ob::of<BaseMacro>(MIf::apply)),
+    mlet(Ob::of<BaseMacro>(MLet::apply)),
+    mlazy(Ob::of<BaseMacro>(MLazy::apply)),
+    munlazy(Ob::of<BaseMacro>(MUnlazy::apply)),
+    mlabel(Ob::of<BaseMacro>(MLabel::apply)),
+    mmacro(Ob::of<BaseMacro>(MMacro::apply)),
+    mcurctx(Ob::of<BaseMacro>(MCurrentContext::apply)),
+    mtry(Ob::of<BaseMacro>(MTry::apply)),
+    mbot(Ob::of<BaseMacro>(MBot::apply)),
+    mgensym(Ob::of<BaseMacro>(MGenSymbol::apply))
 {}
 
 const BaseMacroses &BaseMacroses::inst()

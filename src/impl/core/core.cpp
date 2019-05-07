@@ -10,7 +10,7 @@ Ptr Pair::cdr() {return pcdr;}
 Ptr Pair::eval(const Ptr &a) {return pcar.eval(a).apply(pcdr, a);}
 
 Ptr Context::make(const Ptr & _s, const Ptr & _e, const Ptr & _next) {
-    return new Ob(Pair(new Ob(Pair(_s, _e)), _next));
+    return Ob::of<Pair>(Ob::of<Pair>(_s, _e), _next);
 }
 
 inline void Lazy::ev() {
@@ -50,7 +50,7 @@ inline Ptr Label::ptr() {
 }
 
 Ptr Label::loop(const Ptr &f, const Ptr &e, const Ptr &a) {
-    Ptr lbl = new Ob(Label(e, &a));
+    Ptr lbl = Ob::of<Label>(e, &a);
     Label * l = lbl.as<Label>();
     Ptr res = e.eval(Context::make(f, lbl, a));
     l->v = res;

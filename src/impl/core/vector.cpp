@@ -13,7 +13,7 @@ Vector::~Vector() {
 }
 
 Ptr Vector::fromList(int n, const Ptr &list, const Ptr &a) {
-    Ptr res = new Ob(Vector(n));
+    Ptr res = Ob::of<Vector>(n);
     Vector * v = res.as<Vector>();
     Ptr p = list;
     for(int i = 0; i < n; ++i) {
@@ -24,7 +24,7 @@ Ptr Vector::fromList(int n, const Ptr &list, const Ptr &a) {
 }
 
 Ptr Vector::clone() {
-    Ptr res = new Ob(Vector(length));
+    Ptr res = Ob::of<Vector>(length);
     Vector * v = res.as<Vector>();
     for(int i = 0; i < length; ++i)
         new (v->array + i) Ptr(array[i]);
@@ -33,7 +33,7 @@ Ptr Vector::clone() {
 
 Ptr Vector::concat(Vector *v) const {
     int nres = length + v->length;
-    Ptr res = new Ob(Vector(nres));
+    Ptr res = Ob::of<Vector>(nres);
     Vector * vv = res.as<Vector>();
     for(int i = 0; i < length; ++i)
         new (vv->array + i) Ptr(array[i]);
@@ -47,7 +47,7 @@ Ptr Vector::mid(int begin, int end) {
         throw SemanticError("vector index out of range");
     }
     int nres = end - begin;
-    Ptr res = new Ob(Vector(nres));
+    Ptr res = Ob::of<Vector>(nres);
     Vector * v = res.as<Vector>();
     for(int i = 0; i < nres; ++i)
         new (v->array + i) Ptr(array[begin + i]);

@@ -90,13 +90,16 @@ class Ob {
     T * unsafe_as();
 
     Ob(TypeFlags typeFlags) : typeFlags(typeFlags) {}
+
+    template <class T>
+    Ob(const T &t);
 public:
     Ob() = delete;
     ~Ob();
 
-    template <class T>
-    Ob(const T &t);
 
+    template <class T, class ...Args>
+    static Ptr of(Args&&... args);
 
     Ptr car();
     Ptr cdr();
@@ -197,6 +200,11 @@ inline Value<long long> *Ob::unsafe_as<Value<long long>>() {
 template <class T>
 inline Ob::Ob(const T &t) : Ob(TypeFlags{TypeTagOf<T>::typeTagValue}) {
     new (unsafe_as<T>()) T(t);
+}
+
+template <class T, class ...Args>
+inline Ptr Ob::of(Args&&... args) {
+    return new Ob(T(std::forward<Args>(args)...));
 }
 
 

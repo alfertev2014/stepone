@@ -28,7 +28,7 @@ Ptr MLet::apply(const Ptr &p, const Ptr &a) {
 }
 
 Ptr MLazy::apply(const Ptr &p, const Ptr &a) {
-    return new Ob(Lazy(p, a));
+    return Ob::of<Lazy>(p, a);
 }
 
 Ptr MUnlazy::apply(const Ptr &p, const Ptr &a) {
@@ -40,11 +40,11 @@ Ptr MLabel::apply(const Ptr &p, const Ptr &a) {
 }
 
 Ptr MMacro::apply(const Ptr &p, const Ptr &a) {
-    return new Ob(MacroClosure(p.car(), p.cdr(), a));
+    return Ob::of<MacroClosure>(p.car(), p.cdr(), a);
 }
 
 Ptr MCurrentContext::apply(const Ptr &p, const Ptr &a) {
-    return new Ob(CurrentContext(p.car(), p.cdr(), a));
+    return Ob::of<CurrentContext>(p.car(), p.cdr(), a);
 }
 
 Ptr MTry::apply(const Ptr &p, const Ptr &a) {
@@ -60,7 +60,7 @@ Ptr MBot::apply(const Ptr &p, const Ptr &a) {
 }
 
 Ptr MGenSymbol::apply(const Ptr &p, const Ptr &a) {
-    return new Ob(Symbol());
+    return Ob::of<Symbol>();
 }
 
 } // namespaces

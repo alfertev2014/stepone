@@ -12,7 +12,7 @@ ByteArray::~ByteArray() {
 }
 
 Ptr ByteArray::clone() {
-    Ptr res = new Ob(ByteArray(length));
+    Ptr res = Ob::of<ByteArray>(length);
     ByteArray * ba = res.as<ByteArray>();
     for(int i = 0; i < length; ++i)
         ba->buffer[i] = buffer[i];
@@ -61,7 +61,7 @@ int ByteArray::findSubarray(ByteArray *ba) {
 
 Ptr ByteArray::concat(ByteArray *ba) const {
     int nres = length + ba->length;
-    Ptr res = new Ob(ByteArray(nres));
+    Ptr res = Ob::of<ByteArray>(nres);
     ByteArray * b = res.as<ByteArray>();
     memcpy(b->buffer, buffer, length);
     memcpy(b->buffer + length, ba->buffer, ba->length);
@@ -69,7 +69,7 @@ Ptr ByteArray::concat(ByteArray *ba) const {
 }
 
 Ptr ByteArray::fromChars(int size, const char *chars) {
-    Ptr res = new Ob(ByteArray(size));
+    Ptr res = Ob::of<ByteArray>(size);
     ByteArray * ba = res.as<ByteArray>();
     memcpy(ba->buffer, chars, size);
     return res;
@@ -83,7 +83,7 @@ Ptr ByteArray::mid(int begin, int end) {
     int n = end - begin;
     if(n < 0)
         n = 0;
-    Ptr res = new Ob(ByteArray(n));
+    Ptr res = Ob::of<ByteArray>(n);
     ByteArray * ba = res.as<ByteArray>();
     memcpy(ba->buffer, buffer + begin, n);
     return res;

@@ -211,7 +211,7 @@ parseRes FirstParser::FirstParserImpl::parseTail(string_pos si) {
         DBG("parseTail fail");
         return parseRes(Ptr::anil, si, false);
     }
-    return parseRes(new Ob(Pair(pr1.e, pr2.e)), pr2.rest, true);
+    return parseRes(Ob::of<Pair>(pr1.e, pr2.e), pr2.rest, true);
 }
 
 parseRes FirstParser::FirstParserImpl::parseAtom(string_pos si) {
@@ -240,7 +240,7 @@ parseRes FirstParser::FirstParserImpl::parseChar(string_pos si) {
         chars.push_back(*sii);
     if(sii != s.end())
         ++sii;
-    return parseRes(new Ob(Value<char>(chars.size() > 0 ? chars[0] : '\"')), sii, true);
+    return parseRes(Ob::of<Value<char>>(chars.size() > 0 ? chars[0] : '\"'), sii, true);
 }
 
 parseRes FirstParser::FirstParserImpl::parseString(string_pos si) {
@@ -279,8 +279,8 @@ parseRes FirstParser::FirstParserImpl::parseSymbol(string_pos si) {
                 !memcmp(ba->getData(), symbolString.data(), symbolString.size()))
             return parseRes(p.car().car(), sii, true);
     }
-    Ptr sym = new Ob(Symbol());
-    symbols = new Ob(Pair(new Ob(Pair(sym, ByteArray::fromChars(symbolString.size(), symbolString.data()))), symbols));
+    Ptr sym = Ob::of<Symbol>();
+    symbols = Ob::of<Pair>(Ob::of<Pair>(sym, ByteArray::fromChars(symbolString.size(), symbolString.data())), symbols);
     return parseRes(sym, sii, true);
 }
 
@@ -300,7 +300,7 @@ parseRes FirstParser::FirstParserImpl::parseNumber(string_pos si) {
         std::istringstream ss(number);
         int i;
         if(ss >> i)
-            return parseRes(new Ob(Value<int>(i)), sii, true);
+            return parseRes(Ob::of<Value<int>>(i), sii, true);
         else {
             DBG("int is not int");
         }
@@ -314,7 +314,7 @@ parseRes FirstParser::FirstParserImpl::parseNumber(string_pos si) {
         float f;
         std::istringstream ss(number);
         if(ss >> f)
-            return parseRes(new Ob(Value<float>(f)), sii, true);
+            return parseRes(Ob::of<Value<float>>(f), sii, true);
         else {
             DBG("float is not float");
         }

@@ -2,7 +2,7 @@
 
 namespace stepone::core {
 
-const Ptr Evaluator::eempty(new Ob(Evaluator(Ptr::anil)));
+const Ptr Evaluator::eempty(Ob::of<Evaluator>(Ptr::anil));
 
 Ptr Evaluator::getContext() const {return a;}
 
@@ -16,7 +16,7 @@ Ptr MacroClosure::apply(const Ptr &p, const Ptr &a) {
 }
 
 Ptr CurrentContext::apply(const Ptr &p, const Ptr &a) {
-    return e.eval(Context::make(sa, new Ob(Evaluator(a)), this->a)).apply(p, this->a);
+    return e.eval(Context::make(sa, Ob::of<Evaluator>(a), this->a)).apply(p, this->a);
 }
 
 } // namespaces

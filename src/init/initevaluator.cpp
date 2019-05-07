@@ -88,10 +88,10 @@ Ptr BaseEvaluator::createContext() {
     addToContext(a, BaseNumFuncSymbols::inst().achar2long, BaseNumFunc::inst().fchar2long);
     addToContext(a, BaseNumFuncSymbols::inst().along2char, BaseNumFunc::inst().flong2char);
 
-    addToContext(a, BaseNumFuncSymbols::inst().aszi, new core::Ob(core::Value<int>(sizeof(int))));
-    addToContext(a, BaseNumFuncSymbols::inst().aszf, new core::Ob(core::Value<int>(sizeof(float))));
-    addToContext(a, BaseNumFuncSymbols::inst().aszc, new core::Ob(core::Value<int>(sizeof(char))));
-    addToContext(a, BaseNumFuncSymbols::inst().aszu, new core::Ob(core::Value<int>(sizeof(long long))));
+    addToContext(a, BaseNumFuncSymbols::inst().aszi, core::Ob::of<core::Value<int>>(sizeof(int)));
+    addToContext(a, BaseNumFuncSymbols::inst().aszf, core::Ob::of<core::Value<int>>(sizeof(float)));
+    addToContext(a, BaseNumFuncSymbols::inst().aszc, core::Ob::of<core::Value<int>>(sizeof(char)));
+    addToContext(a, BaseNumFuncSymbols::inst().aszu, core::Ob::of<core::Value<int>>(sizeof(long long)));
 
     addToContext(a, VectorFuncSymbols::inst().avecp, VectorFunctions::inst().fvecp);
     addToContext(a, VectorFuncSymbols::inst().amkvec, VectorFunctions::inst().fmkvec);

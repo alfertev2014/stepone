@@ -19,7 +19,7 @@ public:
 
 class ConsBinOp {
 public:
-    static Ptr op(const Ptr &x1, const Ptr &x2) {return new Ob(Pair(x1, x2));}
+    static Ptr op(const Ptr &x1, const Ptr &x2) {return Ob::of<Pair>(x1, x2);}
 };
 
 class EqBinOp {
@@ -34,7 +34,7 @@ public:
 
 class ContextPushTerOp {
 public:
-    static Ptr op(const Ptr &x1, const Ptr &x2, const Ptr &x3) {return new Ob(Evaluator(Context::make(x2, x3, x1.cast<Evaluator>()->getContext())));}
+    static Ptr op(const Ptr &x1, const Ptr &x2, const Ptr &x3) {return Ob::of<Evaluator>(Context::make(x2, x3, x1.cast<Evaluator>()->getContext()));}
 };
 
 } // namespaces
