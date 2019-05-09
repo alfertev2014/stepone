@@ -1,40 +1,33 @@
 #include <impl/core/ob.h>
 #include <error_exception.h>
 
+#include <utility>
+
 namespace stepone::core {
 
-Ptr Vector::fromList(int n, const Ptr &list, const Ptr &a) {
-    Ptr res = Ob::of<Vector>(n);
-    Vector * v = res.as<Vector>();
+Vector::Vector(int _length, const Ptr &list, const Ptr &a) {
     Ptr p = list;
-    for(int i = 0; i < n; ++i) {
-        v->array[i] = p.car().eval(a);
+    array.reserve(_length);
+    for(int i = 0; i < _length; ++i) {
+        array.emplace_back(p.car().eval(a));
         p = p.cdr();
     }
-    return res;
 }
 
-Ptr Vector::concat(Vector *v) const {
-    int nres = getSize() + v->getSize();
-    Ptr res = Ob::of<Vector>(nres);
-    Vector * vv = res.as<Vector>();
-    for(int i = 0; i < getSize(); ++i)
-        v->array[i] = array[i];
-    for(int i = 0; i < v->getSize(); ++i)
-        vv->array[getSize() + i] = v->array[i];
-    return res;
+Vector::Vector(const Vector &v1, const Vector &v2) {
+    array.reserve(v1.getSize() + v2.getSize());
+    array.insert(array.end(), v1.array.cbegin(), v1.array.cend());
+    array.insert(array.end(), v2.array.cbegin(), v2.array.cend());
 }
 
-Ptr Vector::mid(int begin, int end) {
-    if(begin < 0 || end >= getSize()) {
+Vector::Vector(const Vector &_origin, int _begin, int _length) {
+    if(_begin < 0 || _begin + _length >= _origin.getSize()) {
         throw SemanticError("vector index out of range");
     }
-    int nres = end - begin;
-    Ptr res = Ob::of<Vector>(nres);
-    Vector * v = res.as<Vector>();
-    for(int i = 0; i < nres; ++i)
-        v->array[i] = array[begin + i];
-    return res;
+
+    array.reserve(_length);
+    auto itBegin = _origin.array.cbegin() + _begin;
+    array.insert(array.end(), itBegin, itBegin + _length);
 }
 
 } // namespaces
