@@ -9,7 +9,7 @@ using namespace stepone::core;
 
 class VectorLengthUnOp {
 public:
-    static Ptr op(const Ptr &x) {return Ob::of<Value<int>>(x.cast<Vector>()->getSize());}
+    static Ptr op(const Ptr &x) {return Ob::of<Value<int>>(static_cast<int>(x.cast<Vector>()->getSize()));}
 };
 
 class FMakeVector {
@@ -23,14 +23,14 @@ public:
 class VectorElBinOp {
 public:
     static Ptr op(const Ptr &x1, const Ptr &x2) {
-        return x1.cast<Vector>()->array[x2.cast<Value<int> >()->getValue()];
+        return x1.cast<Vector>()->getElement(x2.cast<Value<int> >()->getValue());
     }
 };
 
 class VectorCloneUnOp {
 public:
     static Ptr op(const Ptr &x) {
-        return x.cast<Vector>()->clone();
+        return Ob::of<Vector>(x);
     }
 };
 
@@ -44,15 +44,9 @@ public:
 class VectorMidTerOp {
 public:
     static Ptr op(const Ptr &x1, const Ptr &x2, const Ptr &x3) {
-        return x1.cast<Vector>()->mid(x2.cast<Value<int> >()->getValue(), x3.cast<Value<int> >()->getValue());
+        return Ob::of<Vector>(x1, x2.cast<Value<int> >()->getValue(), x3.cast<Value<int> >()->getValue());
     }
 };
 
-class VectorSliceTerOp {
-public:
-    static Ptr op(const Ptr &x1, const Ptr &x2, const Ptr &x3) {
-        return x1.cast<Vector>()->mid(x2.cast<Value<int> >()->getValue(), x3.cast<Value<int> >()->getValue());
-    }
-};
 
 } // namespaces

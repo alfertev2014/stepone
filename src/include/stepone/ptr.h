@@ -50,6 +50,8 @@ public:
     static const Ptr anil;
     static const Ptr at;
 
+    Ptr() : Ptr(anil) {}
+
     // TODO: Ensure _ob is not nullptr
     Ptr(core::Ob * _ob) : WPtr(_ob) {
         acqure();

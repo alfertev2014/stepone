@@ -15,7 +15,6 @@ VectorFunctions::VectorFunctions() :
     fvecclone(Ob::of<BaseMacro>(FUnaryOp<VectorCloneUnOp>::apply)),
     fveclen(Ob::of<BaseMacro>(FUnaryOp<VectorLengthUnOp>::apply)),
     fvecmid(Ob::of<BaseMacro>(FTernaryOp<VectorMidTerOp>::apply)),
-    fvecslice(Ob::of<BaseMacro>(FTernaryOp<VectorSliceTerOp>::apply)),
     fvecel(Ob::of<BaseMacro>(FBinaryOp<VectorElBinOp>::apply)),
     fveccat(Ob::of<BaseMacro>(FBinaryOp<VectorConcatBinOp>::apply))
 {}
