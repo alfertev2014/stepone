@@ -9,7 +9,7 @@ using namespace symbols;
 using namespace core;
 
 static inline void addSymbol(Ptr & symbolTable, const std::string & s, const Ptr & p) {
-    symbolTable = Ob::of<Pair>(Ob::of<Pair>(p, ByteArray::fromChars(s.size(), s.data())), symbolTable);
+    symbolTable = Ob::of<Pair>(Ob::of<Pair>(p, Ob::of<ByteArray>(s.data(), s.size())), symbolTable);
 }
 
 Ptr BaseSymbolTable::createSymbolTable() {

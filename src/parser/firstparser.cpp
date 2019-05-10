@@ -254,7 +254,7 @@ parseRes FirstParser::FirstParserImpl::parseString(string_pos si) {
         chars.push_back(*sii);
     if(sii != s.end())
         ++sii;
-    return parseRes(ByteArray::fromChars(chars.size(), chars.c_str()), sii, true);
+    return parseRes(Ob::of<ByteArray>(chars.c_str(), chars.size()), sii, true);
 }
 
 parseRes FirstParser::FirstParserImpl::parseSymbol(string_pos si) {
@@ -280,7 +280,7 @@ parseRes FirstParser::FirstParserImpl::parseSymbol(string_pos si) {
             return parseRes(p.car().car(), sii, true);
     }
     Ptr sym = Ob::of<Symbol>();
-    symbols = Ob::of<Pair>(Ob::of<Pair>(sym, ByteArray::fromChars(symbolString.size(), symbolString.data())), symbols);
+    symbols = Ob::of<Pair>(Ob::of<Pair>(sym, Ob::of<ByteArray>(symbolString.data(), symbolString.size())), symbols);
     return parseRes(sym, sii, true);
 }
 

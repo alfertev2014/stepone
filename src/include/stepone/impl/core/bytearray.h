@@ -1,59 +1,39 @@
 #pragma once
 
-#include <impl/core/value.h>
+#include "value.h"
 #include <error_exception.h>
+#include <vector>
 
 namespace stepone::core {
 
 class ByteArray final : public ValueBase {
 private:
-    Ptr origin;
-    int length;
-    char * buffer;
+    std::vector<char> buffer {};
 public:
     explicit ByteArray(int _n)
-        : origin(Ptr::anil), length(_n < 0 ? 0 : _n), buffer(new char[length]) {}
+        : buffer(_n) {}
 
-    explicit ByteArray(const Ptr &_origin)
-        : origin(_origin), length(_origin.as<ByteArray>()->length), buffer(_origin.as<ByteArray>()->buffer) {}
-
-    ByteArray(const Ptr &_origin, int _begin, int _length)
-        : origin(_origin), length(_length < 0 ? 0 : _length), buffer(_origin.as<ByteArray>()->buffer + _begin) {}
-
-    ByteArray(const Ptr &_origin, char * _begin, int _length)
-        : origin(_origin), length(_length < 0 ? 0 : _length), buffer(_begin) {}
-
-    ByteArray(char * _begin, int _length)
-        : origin(Ptr::at), length(_length < 0 ? 0 : _length), buffer(_begin) {}
-
-    ~ByteArray();
-
-    int getSize() const {return length;}
-    char getElement(int i) const {return buffer[i];}
-    char * getData() const {return buffer;}
-
-    Ptr clone();
-
-    int cmp(ByteArray *ba);
-    int ncmp(ByteArray *ba, int n);
-
-    int findChar(int ch);
-    int findSubarray(ByteArray *ba);
-
-    Ptr concat(ByteArray * ba) const;
-    Ptr mid(int begin, int end);
-
-    static Ptr fromChars(int size, const char * chars);
+    ByteArray(const ByteArray &_origin, size_t _begin, size_t _length);
+    ByteArray(const ByteArray &v1, const ByteArray &v2);
+    ByteArray(const char *_begin, size_t _length);
 
     template <class T>
-    static Ptr from(T f) {
-        return fromChars(sizeof(T), reinterpret_cast<char*>(&f));
-    }
+    explicit ByteArray(const T &f) : ByteArray(reinterpret_cast<const char*>(&f), sizeof(T)) {}
+
+    size_t getSize() const {return buffer.size();}
+    char getElement(int i) const {return buffer[i];}
+    char * getData() const {return const_cast<char*>(buffer.data());}
+
+    int cmp(const ByteArray &ba);
+    int ncmp(const ByteArray &ba, size_t n);
+
+    int findChar(int ch);
+    int findSubarray(const ByteArray &ba);
 
     template <class T>
     T get(int i) {
-        if(i < 0 || i + sizeof(T) > length) { throw SemanticError("Error get from bytearray");}
-        return *(reinterpret_cast<T*>(buffer + i));
+        if(i < 0 || i + sizeof(T) > getSize()) { throw SemanticError("Error get from bytearray");}
+        return *(reinterpret_cast<T*>(getData() + i));
     }
 };
 
