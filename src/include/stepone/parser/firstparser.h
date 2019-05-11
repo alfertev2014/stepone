@@ -2,8 +2,9 @@
 
 #include <ptr.h>
 #include <string>
+#include <memory>
 
-namespace stepone { namespace parser {
+namespace stepone::parser {
 
 class FirstParser {
 public:
@@ -20,7 +21,7 @@ public:
 private:
     class FirstParserImpl;
     Ptr a;
-    FirstParserImpl *impl;
+    std::unique_ptr<FirstParserImpl> impl;
 };
 
-}} // namespaces
+} // namespaces
