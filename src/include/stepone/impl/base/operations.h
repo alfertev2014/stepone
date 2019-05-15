@@ -6,32 +6,38 @@ namespace stepone::base {
 
 using namespace core;
 
-template <class T>
-class FTypeP {
-public:
-    static Ptr apply(const Ptr &p, const Ptr &a) {return p.is<T>() ? Ptr::anil : Ptr::at;}
-};
+template <typename Func>
+class FunctionImpl;
 
-template <class UnOp>
-class FUnaryOp {
+template <typename Ret, typename Arg, typename ...Args>
+class FunctionImpl<Ret (*)(Arg, Args...)> {
 public:
-    static Ptr apply(const Ptr &p, const Ptr &a) {return UnOp::op(p.eval(a));}
-};
-
-template <class BinOp>
-class FBinaryOp {
-public:
-    static Ptr apply(const Ptr &p, const Ptr &a) {
-        return BinOp::op(p.car().eval(a), p.cdr().eval(a));
+    template <typename Func, typename ...AllArgs>
+    static Ptr apply(Func func, const Ptr &p, const Ptr &a, AllArgs && ...args) {
+        return FunctionImpl<Ret (*)(Args...)>::apply(func, p.cdr(), a,
+            std::forward<AllArgs>(args)..., p.car().eval(a));
     }
 };
 
-template <class TerOp>
-class FTernaryOp {
+template <typename Ret>
+class FunctionImpl<Ret (*)()> {
 public:
-    static Ptr apply(const Ptr &p, const Ptr &a) {
-        Ptr pcdr = p.cdr();
-        return TerOp::op(p.car().eval(a), pcdr.car().eval(a), pcdr.cdr().eval(a));
+    template <typename Func, typename ...AllArgs>
+    static Ptr apply(Func func, const Ptr &p, const Ptr &a, AllArgs && ...args) {
+        return func(std::forward<AllArgs>(args)...);
+    }
+};
+
+
+
+template <class Func>
+class Function {
+    Func func;
+public:
+    Function(Func func) : func(func) {}
+    
+    Ptr operator()(const Ptr &p, const Ptr &a) {
+        return FunctionImpl<Func>::apply(func, p, a);
     }
 };
 

@@ -1,6 +1,7 @@
 #include <impl/objects/bytearray_obs.h>
 
 #include <impl/operations/bytearray_ops.h>
+#include <impl/operations/typepredicates_ops.h>
 #include <impl/base/operations.h>
 
 namespace stepone::objects {
@@ -9,23 +10,23 @@ using namespace base;
 using namespace operations;
 
 ByteArrayFunctions::ByteArrayFunctions() :
-    fbarrayp(Ob::of<BaseMacro>(FTypeP<ByteArray>::apply)),
-    fbarraylen(Ob::of<BaseMacro>(FUnaryOp<ByteArrayLengthUnOp>::apply)),
-    fbarrayclone(Ob::of<BaseMacro>(FUnaryOp<ByteArrayCloneUnOp>::apply)),
-    fbarraycmp(Ob::of<BaseMacro>(FBinaryOp<CompareByteArrayBinOp>::apply)),
-    fbarrayncmp(Ob::of<BaseMacro>(FTernaryOp<NCompareByteArrayTerOp>::apply)),
-    fbarrayfindch(Ob::of<BaseMacro>(FBinaryOp<FindCharByteArrayBinOp>::apply)),
-    fbarrayfind(Ob::of<BaseMacro>(FBinaryOp<FindCharsByteArrayBinOp>::apply)),
-    fbarraycat(Ob::of<BaseMacro>(FBinaryOp<ConcatByteArrayBinOp>::apply)),
-    fbarraymid(Ob::of<BaseMacro>(FTernaryOp<MidByteArrayTerOp>::apply)),
+    fbarrayp(Ob::of<BaseMacro>(Function(TypePUnOp<ByteArray>::op))),
+    fbarraylen(Ob::of<BaseMacro>(Function(ByteArrayLengthUnOp::op))),
+    fbarrayclone(Ob::of<BaseMacro>(Function(ByteArrayCloneUnOp::op))),
+    fbarraycmp(Ob::of<BaseMacro>(Function(CompareByteArrayBinOp::op))),
+    fbarrayncmp(Ob::of<BaseMacro>(Function(NCompareByteArrayTerOp::op))),
+    fbarrayfindch(Ob::of<BaseMacro>(Function(FindCharByteArrayBinOp::op))),
+    fbarrayfind(Ob::of<BaseMacro>(Function(FindCharsByteArrayBinOp::op))),
+    fbarraycat(Ob::of<BaseMacro>(Function(ConcatByteArrayBinOp::op))),
+    fbarraymid(Ob::of<BaseMacro>(Function(MidByteArrayTerOp::op))),
 
-    fserint(Ob::of<BaseMacro>(FUnaryOp<SerializeUnOp<int> >::apply)),
-    fserfloat(Ob::of<BaseMacro>(FUnaryOp<SerializeUnOp<float> >::apply)),
-    fserchar(Ob::of<BaseMacro>(FUnaryOp<SerializeUnOp<char> >::apply)),
+    fserint(Ob::of<BaseMacro>(Function(SerializeUnOp<int> ::op))),
+    fserfloat(Ob::of<BaseMacro>(Function(SerializeUnOp<float> ::op))),
+    fserchar(Ob::of<BaseMacro>(Function(SerializeUnOp<char> ::op))),
 
-    fgetint(Ob::of<BaseMacro>(FBinaryOp<ByteArrayGetBinOp<int> >::apply)),
-    fgetfloat(Ob::of<BaseMacro>(FBinaryOp<ByteArrayGetBinOp<float> >::apply)),
-    fgetchar(Ob::of<BaseMacro>(FBinaryOp<ByteArrayGetBinOp<char> >::apply))
+    fgetint(Ob::of<BaseMacro>(Function(ByteArrayGetBinOp<int> ::op))),
+    fgetfloat(Ob::of<BaseMacro>(Function(ByteArrayGetBinOp<float> ::op))),
+    fgetchar(Ob::of<BaseMacro>(Function(ByteArrayGetBinOp<char> ::op)))
 {}
 
 

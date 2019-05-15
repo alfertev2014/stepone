@@ -1,6 +1,7 @@
 #pragma once
 
 #include "core.h"
+#include <functional>
 
 namespace stepone::core {
 
@@ -21,7 +22,7 @@ public:
 
 
 // TODO: Think about using of std::function<Ptr(const Ptr&, const Ptr &)>
-using BaseMacroApplyFunction = Ptr (*)(const Ptr &p, const Ptr &a);
+using BaseMacroApplyFunction = std::function<Ptr(const Ptr &p, const Ptr &a)>;
 
 class BaseMacro final : public Macro {
 private:
