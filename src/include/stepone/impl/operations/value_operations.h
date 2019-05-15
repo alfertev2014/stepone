@@ -11,7 +11,7 @@ template <class T1, class T2>
 class ValueCastUnOp {
 public:
     static Ptr op(const Ptr &x) {
-        return Ob::of<Value<T2>>(x.cast<Value<T1> >()->getValue());
+        return Ob::of<Value<T2>>(x.cast<Value<T1> >().getValue());
     }
 };
 
@@ -19,7 +19,7 @@ template <typename T, typename CppUnOp>
 class ValueUnOp {
 public:
     static Ptr op(const Ptr & x) {
-        return Ob::of<Value<T>>(CppUnOp::op(x.cast<Value<T> >()->getValue()));
+        return Ob::of<Value<T>>(CppUnOp::op(x.cast<Value<T> >().getValue()));
     }
 };
 
@@ -27,7 +27,7 @@ template <typename T, typename CppBinOp>
 class ValueBinOp {
 public:
     static Ptr op(const Ptr & x1, const Ptr & x2) {
-        return Ob::of<Value<T>>(CppBinOp::op(x1.cast<Value<T> >()->getValue(), x2.cast<Value<T> >()->getValue()));
+        return Ob::of<Value<T>>(CppBinOp::op(x1.cast<Value<T> >().getValue(), x2.cast<Value<T> >().getValue()));
     }
 };
 
@@ -35,7 +35,7 @@ template <typename T, typename CppCmpOp>
 class ValueCmpOp {
 public:
     static Ptr op(const Ptr & x1, const Ptr & x2) {
-        return CppCmpOp::op(x1.cast<Value<T> >()->getValue(), x2.cast<Value<T> >()->getValue()) ? Ptr::at : Ptr::anil;
+        return CppCmpOp::op(x1.cast<Value<T> >().getValue(), x2.cast<Value<T> >().getValue()) ? Ptr::at : Ptr::anil;
     }
 };
 

@@ -70,7 +70,7 @@ void Ob::visit(Action action) const {
 Ob::Ob(const Ob &ob) : Ob(TypeFlags{ob.typeFlags}) {
     ob.visit([this](const auto &p) {
         using T = typename std::decay<decltype(p)>::type;
-        new (unsafe_as<T>()) T(p);
+        new (&unsafe_as<T>()) T(p);
     });
 }
 

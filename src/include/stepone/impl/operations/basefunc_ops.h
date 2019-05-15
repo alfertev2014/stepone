@@ -29,12 +29,12 @@ public:
 
 class ContextGetBinOp {
 public:
-    static Ptr op(const Ptr &x1, const Ptr &x2) {return x1.cast<Evaluator>()->getContext().assoc(x2);}
+    static Ptr op(const Ptr &x1, const Ptr &x2) {return x1.cast<Evaluator>().getContext().assoc(x2);}
 };
 
 class ContextPushTerOp {
 public:
-    static Ptr op(const Ptr &x1, const Ptr &x2, const Ptr &x3) {return Ob::of<Evaluator>(Context::make(x2, x3, x1.cast<Evaluator>()->getContext()));}
+    static Ptr op(const Ptr &x1, const Ptr &x2, const Ptr &x3) {return Ob::of<Evaluator>(Context::make(x2, x3, x1.cast<Evaluator>().getContext()));}
 };
 
 } // namespaces

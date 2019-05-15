@@ -38,7 +38,7 @@ public:
     template <class T>
     bool is() const;
     template <class T>
-    T * cast() const;
+    T &cast() const;
 };
 inline bool operator==(const core::Ob * const & ob, const WPtr & p) {return ob == p.ob;}
 inline bool operator!=(const core::Ob * const & ob, const WPtr & p) {return ob != p.ob;}

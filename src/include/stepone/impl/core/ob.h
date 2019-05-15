@@ -90,7 +90,7 @@ class Ob {
     void visit(Action action = Action()) const;
 
     template <typename T>
-    T * unsafe_as();
+    T &unsafe_as();
 
     Ob(TypeFlags typeFlags) : typeFlags(typeFlags) {}
 
@@ -125,93 +125,93 @@ public:
     }
 
     template <class T>
-    T * cast();
+    T &cast();
 };
 
 
 template <>
-inline Pair *Ob::unsafe_as<Pair>() {
-    return &payload.pair;
+inline Pair &Ob::unsafe_as<Pair>() {
+    return payload.pair;
 }
 
 template <>
-inline Lazy *Ob::unsafe_as<Lazy>() {
-    return &payload.lazy;
+inline Lazy &Ob::unsafe_as<Lazy>() {
+    return payload.lazy;
 }
 
 template <>
-inline Label *Ob::unsafe_as<Label>() {
-    return &payload.label;
+inline Label &Ob::unsafe_as<Label>() {
+    return payload.label;
 }
 
 template <>
-inline Symbol *Ob::unsafe_as<Symbol>() {
-    return &payload.symbol;
+inline Symbol &Ob::unsafe_as<Symbol>() {
+    return payload.symbol;
 }
 
 template <>
-inline Evaluator *Ob::unsafe_as<Evaluator>() {
-    return &payload.evaluator;
+inline Evaluator &Ob::unsafe_as<Evaluator>() {
+    return payload.evaluator;
 }
 
 template <>
-inline BaseMacro *Ob::unsafe_as<BaseMacro>() {
-    return &payload.baseMacro;
+inline BaseMacro &Ob::unsafe_as<BaseMacro>() {
+    return payload.baseMacro;
 }
 
 template <>
-inline MacroClosure *Ob::unsafe_as<MacroClosure>() {
-    return &payload.macroClosure;
+inline MacroClosure &Ob::unsafe_as<MacroClosure>() {
+    return payload.macroClosure;
 }
 
 template <>
-inline CurrentContext *Ob::unsafe_as<CurrentContext>() {
-    return &payload.currentContext;
+inline CurrentContext &Ob::unsafe_as<CurrentContext>() {
+    return payload.currentContext;
 }
 
 template <>
-inline BaseValue *Ob::unsafe_as<BaseValue>() {
-    return &payload.baseValue;
+inline BaseValue &Ob::unsafe_as<BaseValue>() {
+    return payload.baseValue;
 }
 
 template <>
-inline ByteArray *Ob::unsafe_as<ByteArray>() {
-    return &payload.byteArray;
+inline ByteArray &Ob::unsafe_as<ByteArray>() {
+    return payload.byteArray;
 }
 
 template <>
-inline Vector *Ob::unsafe_as<Vector>() {
-    return &payload.vector;
+inline Vector &Ob::unsafe_as<Vector>() {
+    return payload.vector;
 }
 
 template <>
-inline Value<int> *Ob::unsafe_as<Value<int>>() {
-    return &payload.valueInt;
+inline Value<int> &Ob::unsafe_as<Value<int>>() {
+    return payload.valueInt;
 }
 
 template <>
-inline Value<float> *Ob::unsafe_as<Value<float>>() {
-    return &payload.valueFloat;
+inline Value<float> &Ob::unsafe_as<Value<float>>() {
+    return payload.valueFloat;
 }
 
 template <>
-inline Value<char> *Ob::unsafe_as<Value<char>>() {
-    return &payload.valueChar;
+inline Value<char> &Ob::unsafe_as<Value<char>>() {
+    return payload.valueChar;
 }
 
 template <>
-inline Value<long long> *Ob::unsafe_as<Value<long long>>() {
-    return &payload.valueLong;
+inline Value<long long> &Ob::unsafe_as<Value<long long>>() {
+    return payload.valueLong;
 }
 
 template <class T>
 inline Ob::Ob(const T &t) : Ob(TypeFlags{TypeTagOf<T>::typeTagValue}) {
-    new (unsafe_as<T>()) T(t);
+    new (&unsafe_as<T>()) T(t);
 }
 
 template <class T>
 inline Ob::Ob(T&& t) : Ob(TypeFlags{TypeTagOf<T>::typeTagValue}) {
-    new (unsafe_as<T>()) T(std::move(t));
+    new (&unsafe_as<T>()) T(std::move(t));
 }
 
 template <class T, class ...Args>
@@ -244,15 +244,14 @@ template <class T>
 inline T * Ob::as() {
     if(! is<T>())
         return nullptr;
-    return unsafe_as<T>();
+    return &unsafe_as<T>();
 }
 
 template <class T>
-T * Ob::cast() {
-    T * res = as<T>();
-    if (res == nullptr)
+T &Ob::cast() {
+    if (! is<T>())
         throw SemanticError("error cast");
-    return res;
+    return unsafe_as<T>();
 }
 
 } // namespaces

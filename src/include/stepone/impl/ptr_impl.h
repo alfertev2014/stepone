@@ -56,7 +56,7 @@ inline bool WPtr::is() const {
 }
 
 template <class T>
-inline T * WPtr::cast() const {
+inline T &WPtr::cast() const {
     return ob->cast<T>();
 }
 
