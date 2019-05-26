@@ -37,7 +37,7 @@ private:
 };
 
 
-class FinitStateMachine {
+class Parser {
     Ptr &symbols;
 
     std::string_view s;
@@ -47,7 +47,7 @@ class FinitStateMachine {
     bool eos() const { return si == s.end(); }
     bool punctuation() const { return nosymbol.find(*si) != std::string_view::npos; }
 public:
-    FinitStateMachine(Ptr &symbols, std::string_view s)
+    Parser(Ptr &symbols, std::string_view s)
         : symbols(symbols), s(s), si(s.begin()) {}
 
     parseRes parseExpression();
@@ -116,7 +116,7 @@ std::ostream &FirstParser::FirstParserImpl::printOb(std::ostream &ts, const Ptr 
 }
 
 Ptr FirstParser::FirstParserImpl::parse(const std::string &_s) {
-    FinitStateMachine fsm(this->symbols, _s);
+    Parser fsm(this->symbols, _s);
     parseRes pr = fsm.parseExpression();
     return pr.value_or(Ptr::anil);
 }
@@ -204,7 +204,7 @@ std::ostream &Printer::printList(std::ostream &ts, Pair *pr) {
 }
 
 
-parseRes FinitStateMachine::parseTail() {
+parseRes Parser::parseTail() {
     spaces();
     if (lexem(")"))
         return Ptr::anil;
@@ -236,7 +236,7 @@ parseRes FinitStateMachine::parseTail() {
     return Ob::of<Pair>(pr1.value(), pr2.value());
 }
 
-parseRes FinitStateMachine::parseAtom() {
+parseRes Parser::parseAtom() {
     string_pos sii = si;
     parseRes pr = parseNumber();
     if (pr.has_value()) return pr;
@@ -256,7 +256,7 @@ parseRes FinitStateMachine::parseAtom() {
     return std::nullopt;
 }
 
-parseRes FinitStateMachine::parseChar() {
+parseRes Parser::parseChar() {
     if (eos() || *si != '&')
         return std::nullopt;
 
@@ -273,7 +273,7 @@ parseRes FinitStateMachine::parseChar() {
     return Ob::of<Value<char>>(chars.size() > 0 ? chars[0] : '\"');
 }
 
-parseRes FinitStateMachine::parseString() {
+parseRes Parser::parseString() {
     if (eos() || *si != '\"')
         return std::nullopt;
 
@@ -286,7 +286,7 @@ parseRes FinitStateMachine::parseString() {
     return Ob::of<ByteArray>(chars.c_str(), chars.size());
 }
 
-parseRes FinitStateMachine::parseSymbol() {
+parseRes Parser::parseSymbol() {
     std::string symbolString;
     if (eos()) {
         DBG("Fail to parse symbol: eos has reached");
@@ -320,7 +320,7 @@ parseRes FinitStateMachine::parseSymbol() {
     return sym;
 }
 
-parseRes FinitStateMachine::parseNumber() {
+parseRes Parser::parseNumber() {
     std::string number;
     if(eos() || (!isdigit(*si) && *si != '-') || isspace(*si) || punctuation()) {
         return std::nullopt;
@@ -357,7 +357,7 @@ parseRes FinitStateMachine::parseNumber() {
     return std::nullopt;
 }
 
-bool FinitStateMachine::lexem(std::string_view lex) {
+bool Parser::lexem(std::string_view lex) {
     if (std::search(si, s.end(), lex.begin(), lex.end()) == si) {
         si += lex.size();
         return true;
@@ -365,12 +365,12 @@ bool FinitStateMachine::lexem(std::string_view lex) {
     return false;
 }
 
-void FinitStateMachine::spaces() {
+void Parser::spaces() {
     while(!eos() && isspace(*si))
         ++si;
 }
 
-parseRes FinitStateMachine::parseExpression() {
+parseRes Parser::parseExpression() {
     spaces();
     if (lexem("("))
         return parseTail();
