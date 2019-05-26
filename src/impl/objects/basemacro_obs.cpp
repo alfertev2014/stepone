@@ -2,24 +2,25 @@
 
 #include <impl/core/ob.h>
 #include <impl/base/basemacro.h>
+#include <impl/base/operations.h>
 
 namespace stepone::objects {
 
 using namespace base;
 
 BaseMacroses::BaseMacroses() :
-    mquote(Ob::of<BaseMacro>(MQuote::apply)),
-    mapply(Ob::of<BaseMacro>(MApply::apply)),
-    mif(Ob::of<BaseMacro>(MIf::apply)),
-    mlet(Ob::of<BaseMacro>(MLet::apply)),
-    mlazy(Ob::of<BaseMacro>(MLazy::apply)),
-    munlazy(Ob::of<BaseMacro>(MUnlazy::apply)),
-    mlabel(Ob::of<BaseMacro>(MLabel::apply)),
-    mmacro(Ob::of<BaseMacro>(MMacro::apply)),
-    mcurctx(Ob::of<BaseMacro>(MCurrentContext::apply)),
-    mtry(Ob::of<BaseMacro>(MTry::apply)),
-    mbot(Ob::of<BaseMacro>(MBot::apply)),
-    mgensym(Ob::of<BaseMacro>(MGenSymbol::apply))
+    mquote(Ob::of<BaseMacro>(Function<MQuote>())),
+    mapply(Ob::of<BaseMacro>(Function<MApply>())),
+    mif(Ob::of<BaseMacro>(Function<MIf>())),
+    mlet(Ob::of<BaseMacro>(Function<MLet>())),
+    mlazy(Ob::of<BaseMacro>(Function<MLazy>())),
+    munlazy(Ob::of<BaseMacro>(Function<MUnlazy>())),
+    mlabel(Ob::of<BaseMacro>(Function<MLabel>())),
+    mmacro(Ob::of<BaseMacro>(Function<MMacro>())),
+    mcurctx(Ob::of<BaseMacro>(Function<MCurrentContext>())),
+    mtry(Ob::of<BaseMacro>(Function<MTry>())),
+    mbot(Ob::of<BaseMacro>(Function<MBot>())),
+    mgensym(Ob::of<BaseMacro>(Function<MGenSymbol>()))
 {}
 
 const BaseMacroses &BaseMacroses::inst()

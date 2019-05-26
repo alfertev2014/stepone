@@ -8,67 +8,67 @@ using namespace core;
 
 class MQuote {
 public:
-    static Ptr apply(const Ptr &p, const Ptr &a);
+    Ptr operator()(const Ptr &p, const Ptr &a) const;
 };
 
 class MApply {
 public:
-    static Ptr apply(const Ptr &p, const Ptr &a);
+    Ptr operator()(const Ptr &p, const Ptr &a) const;
 };
 
 class MIf {
 public:
-    static Ptr apply(const Ptr &p, const Ptr &a);
+    Ptr operator()(const Ptr &p, const Ptr &a) const;
 };
 
 class MLet {
 public:
-    static Ptr apply(const Ptr &p, const Ptr &a);
+    Ptr operator()(const Ptr &p, const Ptr &a) const;
 };
 
 class MLazy {
 public:
-    static Ptr apply(const Ptr &p, const Ptr &a);
+    Ptr operator()(const Ptr &p, const Ptr &a) const;
 };
 
 class MUnlazy {
 public:
-    static Ptr apply(const Ptr &p, const Ptr &a);
+    Ptr operator()(const Ptr &p, const Ptr &a) const;
 };
 
 class MLabel {
 public:
-    static Ptr apply(const Ptr &p, const Ptr &a);
+    Ptr operator()(const Ptr &p, const Ptr &a) const;
 };
 
 class MLambda {
 public:
-    static Ptr apply(const Ptr &p, const Ptr &a);
+    Ptr operator()(const Ptr &p, const Ptr &a) const;
 };
 
 class MMacro {
 public:
-    static Ptr apply(const Ptr &p, const Ptr &a);
+    Ptr operator()(const Ptr &p, const Ptr &a) const;
 };
 
 class MCurrentContext {
 public:
-    static Ptr apply(const Ptr &p, const Ptr &a);
+    Ptr operator()(const Ptr &p, const Ptr &a) const;
 };
 
 class MTry {
 public:
-    static Ptr apply(const Ptr &p, const Ptr &a);
+    Ptr operator()(const Ptr &p, const Ptr &a) const;
 };
 
 class MBot {
 public:
-    static Ptr apply(const Ptr &p, const Ptr &a);
+    Ptr operator()(const Ptr &p, const Ptr &a) const;
 };
 
 class MGenSymbol {
 public:
-    static Ptr apply(const Ptr &p, const Ptr &a);
+    Ptr operator()(const Ptr &p, const Ptr &a) const;
 };
 
 } // namespaces

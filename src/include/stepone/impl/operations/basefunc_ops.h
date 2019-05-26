@@ -9,32 +9,32 @@ using namespace core;
 
 class CarUnOp {
 public:
-    static Ptr op(const Ptr &x) {return x.car();}
+    Ptr operator()(const Ptr &x) const {return x.car();}
 };
 
 class CdrUnOp {
 public:
-    static Ptr op(const Ptr &x) {return x.cdr();}
+    Ptr operator()(const Ptr &x) const {return x.cdr();}
 };
 
 class ConsBinOp {
 public:
-    static Ptr op(const Ptr &x1, const Ptr &x2) {return Ob::of<Pair>(x1, x2);}
+    Ptr operator()(const Ptr &x1, const Ptr &x2) const {return Ob::of<Pair>(x1, x2);}
 };
 
 class EqBinOp {
 public:
-    static Ptr op(const Ptr &x1, const Ptr &x2) {return x1 == x2 ? Ptr::at : Ptr::anil;}
+    Ptr operator()(const Ptr &x1, const Ptr &x2) const {return x1 == x2 ? Ptr::at : Ptr::anil;}
 };
 
 class ContextGetBinOp {
 public:
-    static Ptr op(const Ptr &x1, const Ptr &x2) {return x1.cast<Evaluator>().getContext().assoc(x2);}
+    Ptr operator()(const Ptr &x1, const Ptr &x2) const {return x1.cast<Evaluator>().getContext().assoc(x2);}
 };
 
 class ContextPushTerOp {
 public:
-    static Ptr op(const Ptr &x1, const Ptr &x2, const Ptr &x3) {return Ob::of<Evaluator>(Context::make(x2, x3, x1.cast<Evaluator>().getContext()));}
+    Ptr operator()(const Ptr &x1, const Ptr &x2, const Ptr &x3) const {return Ob::of<Evaluator>(Context::make(x2, x3, x1.cast<Evaluator>().getContext()));}
 };
 
 } // namespaces

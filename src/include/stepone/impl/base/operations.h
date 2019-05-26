@@ -16,7 +16,7 @@ public:
 
 template <typename T>
 class TypeMapping : TypeMapping<std::remove_cv_t<std::remove_reference_t<T>>> {
-    
+
 };
 
 template <>
@@ -49,16 +49,16 @@ class TypeConvertionWrapper {
     const Ptr &ptr;
 public:
     TypeConvertionWrapper(const Ptr &ptr) : ptr(ptr) {}
-    
+
     template <typename T>
     operator T() {
         return ptr.cast<Value<T>>().getValue();
     }
-    
+
     operator const Ptr&() {
         return ptr;
     }
-    
+
 };
 
 
@@ -84,25 +84,48 @@ public:
     }
 };
 
-}
-
-
-template <typename Func>
-class Function;
+template <typename FuncPtr>
+class FunctionPtrImpl;
 
 template <typename Ret, typename ...Args>
-class Function<Ret (*)(Args...)> {
+class FunctionPtrImpl<Ret (*)(Args...)> {
     using Func = Ret (*)(Args...);
-    Func func;    
 public:
-    Function(Func func) : func(func) {}
-    Ptr operator()(const Ptr &p, const Ptr &a) {
+    static Ptr apply(Func func, const Ptr &p, const Ptr &a) {
         return FunctionImpl<Args...>::apply(func, p, a);
     }
 };
 
-template <class Func>
-Function(Func) -> Function<Func>;
+template <typename Func>
+class FunctionFunctorImpl;
+
+template <typename Func, typename Ret, typename ...Args>
+class FunctionFunctorImpl<Ret (Func::*)(Args...) const> {
+public:
+    static Ptr apply(const Ptr &p, const Ptr &a) {
+        return FunctionImpl<Args...>::apply(Func(), p, a);
+    }
+};
+
+}
+
+
+template <typename Func>
+class Function {
+public:
+    Ptr operator()(const Ptr &p, const Ptr &a) const {
+        return FunctionFunctorImpl<decltype(&Func::operator())>::apply(p, a);
+    }
+};
+
+
+template <typename Func, Func func>
+class FunctionPtr {
+public:
+    Ptr operator()(const Ptr &p, const Ptr &a) const {
+        return FunctionPtrImpl<Func>::apply(func, p, a);
+    }
+};
 
 
 } // namespaces

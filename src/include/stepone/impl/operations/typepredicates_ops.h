@@ -7,7 +7,7 @@ namespace stepone::operations {
 template <class T>
 class TypePUnOp {
 public:
-    static Ptr op(const Ptr &x) {return x.is<T>() ? Ptr::at : Ptr::anil;}
+    Ptr operator()(const Ptr &x) const {return x.is<T>() ? Ptr::at : Ptr::anil;}
 };
 
 } // namespaces

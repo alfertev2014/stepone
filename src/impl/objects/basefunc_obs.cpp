@@ -9,12 +9,12 @@ using namespace base;
 using namespace operations;
 
 BaseFunctions::BaseFunctions() :
-    fcar(Ob::of<BaseMacro>(Function(CarUnOp::op))),
-    fcdr(Ob::of<BaseMacro>(Function(CdrUnOp::op))),
-    fcons(Ob::of<BaseMacro>(Function(ConsBinOp::op))),
-    feq(Ob::of<BaseMacro>(Function(EqBinOp::op))),
-    fctxget(Ob::of<BaseMacro>(Function(ContextGetBinOp::op))),
-    fctxpush(Ob::of<BaseMacro>(Function(ContextPushTerOp::op)))
+    fcar(Ob::of<BaseMacro>(Function<CarUnOp>())),
+    fcdr(Ob::of<BaseMacro>(Function<CdrUnOp>())),
+    fcons(Ob::of<BaseMacro>(Function<ConsBinOp>())),
+    feq(Ob::of<BaseMacro>(Function<EqBinOp>())),
+    fctxget(Ob::of<BaseMacro>(Function<ContextGetBinOp>())),
+    fctxpush(Ob::of<BaseMacro>(Function<ContextPushTerOp>()))
 {}
 
 const BaseFunctions &BaseFunctions::inst()

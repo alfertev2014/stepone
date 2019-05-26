@@ -21,20 +21,22 @@ public:
 };
 
 
-// TODO: Think about using of std::function<Ptr(const Ptr&, const Ptr &)>
-using BaseMacroApplyFunction = std::function<Ptr(const Ptr &p, const Ptr &a)>;
+using BaseMacroApplyFunction = Ptr(*)(const Ptr &p, const Ptr &a);
 
 class BaseMacro final : public Macro {
 private:
     BaseMacroApplyFunction applyFunction;
 public:
-    BaseMacro(BaseMacroApplyFunction applyFunction) : applyFunction(applyFunction) {}
+    BaseMacro(const BaseMacroApplyFunction &applyFunction) : applyFunction(applyFunction) {}
+
+    template <typename Func>
+    BaseMacro(const Func &f) : applyFunction([](const Ptr &p, const Ptr &a) { return Func()(p, a); }) {}
 
     Ptr apply(const Ptr &p, const Ptr &a) {return applyFunction(p, a);}
 };
 
 
-class MacroClosure : public Macro {
+class MacroClosure final : public Macro {
 private:
     Ptr sp;
     Ptr e;
@@ -47,7 +49,7 @@ public:
 };
 
 
-class CurrentContext : public Macro {
+class CurrentContext final : public Macro {
 private:
     Ptr sa;
     Ptr e;

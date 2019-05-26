@@ -11,13 +11,13 @@ using namespace base;
 using namespace operations;
 
 VectorFunctions::VectorFunctions() :
-    fvecp(Ob::of<BaseMacro>(Function(TypePUnOp<Vector>::op))),
-    fmkvec(Ob::of<BaseMacro>(FMakeVector::apply)),
-    fvecclone(Ob::of<BaseMacro>(Function(VectorCloneUnOp::op))),
-    fveclen(Ob::of<BaseMacro>(Function(VectorLengthUnOp::op))),
-    fvecmid(Ob::of<BaseMacro>(Function(VectorMidTerOp::op))),
-    fvecel(Ob::of<BaseMacro>(Function(VectorElBinOp::op))),
-    fveccat(Ob::of<BaseMacro>(Function(VectorConcatBinOp::op)))
+    fvecp(Ob::of<BaseMacro>(Function<TypePUnOp<Vector>>())),
+    fmkvec(Ob::of<BaseMacro>(Function<FMakeVector>())),
+    fvecclone(Ob::of<BaseMacro>(Function<VectorCloneUnOp>())),
+    fveclen(Ob::of<BaseMacro>(Function<VectorLengthUnOp>())),
+    fvecmid(Ob::of<BaseMacro>(Function<VectorMidTerOp>())),
+    fvecel(Ob::of<BaseMacro>(Function<VectorElBinOp>())),
+    fveccat(Ob::of<BaseMacro>(Function<VectorConcatBinOp>()))
 {}
 
 const VectorFunctions &VectorFunctions::inst()
