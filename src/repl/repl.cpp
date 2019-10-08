@@ -13,8 +13,10 @@ int REPL::do_loop(stepone::parser::FirstParser &fp) {
         std::cout << "alz> ";
         std::string s;
         std::getline(std::cin, s);
-        if (s == ":quit")
+        if (s == ":quit" || std::cin.eof())
             break;
+	else if (s.empty())
+            continue;
         fp.print(std::cout, fp.parseEval(s));
         std::cout << std::endl;
     }
