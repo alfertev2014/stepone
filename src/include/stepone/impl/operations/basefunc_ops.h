@@ -24,7 +24,7 @@ public:
 
 class EqBinOp {
 public:
-    Ptr operator()(const Ptr &x1, const Ptr &x2) const {return x1 == x2 ? Ptr::at : Ptr::anil;}
+    Ptr operator()(const Ptr &x1, const Ptr &x2) const {return x1 == x2 ? Ptr::at() : Ptr::anil();}
 };
 
 class ContextGetBinOp {

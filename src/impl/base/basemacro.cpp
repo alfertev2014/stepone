@@ -16,7 +16,7 @@ Ptr MApply::operator()(const Ptr &p, const Ptr &a) const {
 }
 
 Ptr MIf::operator()(const Ptr &p, const Ptr &a) const {
-    if(p.car().eval(a) == Ptr::anil)
+    if(p.car().eval(a) == Ptr::anil())
         return p.cdr().cdr().eval(a);
     else
         return p.cdr().car().eval(a);

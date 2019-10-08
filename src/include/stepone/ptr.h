@@ -2,6 +2,8 @@
 
 #include <utility>
 
+#include <stdio.h>
+
 namespace stepone {
 
 namespace core {
@@ -44,38 +46,44 @@ inline bool operator==(const core::Ob * const & ob, const WPtr & p) {return ob =
 inline bool operator!=(const core::Ob * const & ob, const WPtr & p) {return ob != p.ob;}
 
 class Ptr : public WPtr {
-    void acqure() const;
+    void acquire() const;
     void release() const;
 public:
-    static const Ptr anil;
-    static const Ptr at;
+    static const Ptr anil();
+    static const Ptr at();
 
-    Ptr() : Ptr(anil) {}
+    Ptr() : Ptr(Ptr::anil()) {}
 
     // TODO: Ensure _ob is not nullptr
     Ptr(core::Ob * _ob) : WPtr(_ob) {
-        acqure();
+        // printf("Ptr(), ob=%lx\t", (unsigned long)ob);
+        acquire();
     }
     Ptr(const Ptr & p) : Ptr(p.ob) {}
     Ptr(Ptr &&p) : WPtr(p.ob) {
-        p.ob = Ptr::anil.ob;
+        p.ob = Ptr::anil().ob;
+	Ptr::anil().acquire();
     }
     Ptr(const WPtr & p) : Ptr(p.ob) {}
     ~Ptr() {
+        // printf("~Ptr(), ob=%lx\t", (unsigned long)ob);
         release();
     }
 
     Ptr &operator=(const Ptr &p) {
-        p.acqure();
+        // printf("Ptr::operator=, ob=%lx\n", (unsigned long) ob);
+        p.acquire();
         release();
         ob = p.ob;
         return *this;
     }
     Ptr &operator=(Ptr &&p) {
+        // printf("Ptr::operator= &&, ob=%lx\n", (unsigned long) ob);
         if (&p != this) { // TODO: Is it always true?
             release();
             ob = p.ob;
-            p.ob = Ptr::anil.ob;
+            p.ob = Ptr::anil().ob;
+	    Ptr::anil().acquire();
         }
         return *this;
     }

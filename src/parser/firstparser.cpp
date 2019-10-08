@@ -118,7 +118,7 @@ std::ostream &FirstParser::FirstParserImpl::printOb(std::ostream &ts, const Ptr 
 Ptr FirstParser::FirstParserImpl::parse(const std::string &_s) {
     Parser fsm(this->symbols, _s);
     parseRes pr = fsm.parseExpression();
-    return pr.value_or(Ptr::anil);
+    return pr.value_or(Ptr::anil());
 }
 
 
@@ -174,10 +174,10 @@ std::ostream &Printer::printOb(std::ostream &ts, const Ptr &p) {
 }
 
 std::ostream &Printer::printSymbol(std::ostream &ts, const Ptr &sym) {
-    if(sym == Ptr::anil) {
+    if(sym == Ptr::anil()) {
         return ts << "()";
     } else {
-        for(Ptr p = symbols; p != Ptr::anil; p = p.cdr()) {
+        for(Ptr p = symbols; p != Ptr::anil(); p = p.cdr()) {
             if(p.car().car() == sym) {
                 ByteArray * ba = p.car().cdr().as<ByteArray>();
                 return ts.write(ba->getData(), ba->getSize());
@@ -191,7 +191,7 @@ std::ostream &Printer::printList(std::ostream &ts, Pair *pr) {
     printOb(ts, pr->car());
     Ptr pcdr = pr->cdr();
     if(pcdr.is<Atom>()) {
-        if(pcdr != Ptr::anil) {
+        if(pcdr != Ptr::anil()) {
             ts << " . ";
             printOb(ts, pcdr);
         }
@@ -207,7 +207,7 @@ std::ostream &Printer::printList(std::ostream &ts, Pair *pr) {
 parseRes Parser::parseTail() {
     spaces();
     if (lexem(")"))
-        return Ptr::anil;
+        return Ptr::anil();
     if (lexem(".")) {
         spaces();
         parseRes pr = parseExpression();
@@ -302,7 +302,7 @@ parseRes Parser::parseSymbol() {
     for ( ; !eos() && !isspace(*si) && !punctuation(); ++si) {
         symbolString.push_back(*si);
     }
-    for (Ptr p = symbols; p != Ptr::anil; p = p.cdr()) {
+    for (Ptr p = symbols; p != Ptr::anil(); p = p.cdr()) {
         ByteArray * ba = p.car().cdr().as<ByteArray>();
         if(ba->getSize() == symbolString.size() &&
                 !memcmp(ba->getData(), symbolString.data(), symbolString.size()))

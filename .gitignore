@@ -17,3 +17,8 @@ build
 # KDevelop
 ##########
 *.kdev4
+
+# Vim, CTags
+##########
+tags
+*.ycm*

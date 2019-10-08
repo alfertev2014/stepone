@@ -14,9 +14,9 @@ Ptr Context::make(const Ptr & _s, const Ptr & _e, const Ptr & _next) {
 }
 
 inline void Lazy::ev() {
-    if(!(a == Ptr::anil)) {
+    if(!(a == Ptr::anil())) {
         e = e.eval(a);
-        a = Ptr::anil;
+        a = Ptr::anil();
     }
 }
 

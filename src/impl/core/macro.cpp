@@ -1,8 +1,9 @@
 #include <impl/core/ob.h>
+#include <impl/ptr_impl.h>
 
 namespace stepone::core {
 
-const Ptr Evaluator::eempty(Ob::of<Evaluator>(Ptr::anil));
+const Ptr Evaluator::eempty(Ob::of<Evaluator>(Ptr::anil()));
 
 Ptr Evaluator::getContext() const {return a;}
 

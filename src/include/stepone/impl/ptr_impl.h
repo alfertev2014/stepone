@@ -5,14 +5,19 @@
 
 namespace stepone {
 
-inline void Ptr::acqure() const {
+inline void Ptr::acquire() const {
     ob->refcount++;
+    // printf("Ptr::acquire, ob=%lx, refcount=%d\n", (unsigned long)ob, ob->refcount);
 }
 
 inline void Ptr::release() const {
+    // printf("Ptr::release, ob=%lx, ", (unsigned long)ob);
     ob->refcount--;
-    if(ob->refcount == 0)
+    // printf("refcount=%d\n", ob->refcount);
+    if (ob->refcount == 0) {
+        // printf("delete\n");
         delete ob;
+    }
 }
 
 inline Ptr WPtr::car() const

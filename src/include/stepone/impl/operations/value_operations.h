@@ -35,7 +35,7 @@ template <typename T, typename CppCmpOp>
 class ValueCmpOp {
 public:
     Ptr operator()(const Ptr & x1, const Ptr & x2) const {
-        return CppCmpOp::op(x1.cast<Value<T> >().getValue(), x2.cast<Value<T> >().getValue()) ? Ptr::at : Ptr::anil;
+        return CppCmpOp::op(x1.cast<Value<T> >().getValue(), x2.cast<Value<T> >().getValue()) ? Ptr::at() : Ptr::anil();
     }
 };
 

@@ -6,8 +6,15 @@
 
 namespace stepone {
 
-const Ptr Ptr::anil(new core::Ob(core::Symbol()));
-const Ptr Ptr::at(new core::Ob(core::Symbol()));
+const Ptr Ptr::anil() {
+    static const Ptr p = new core::Ob(core::Symbol());
+    return p;
+}
+
+const Ptr Ptr::at() {
+    static const Ptr p = new core::Ob(core::Symbol());
+    return p;
+}
 
 }
 
@@ -97,7 +104,7 @@ Ptr Ob::eval(const Ptr &a) {
         case BaseTypeTag::Symbol:
             {
                 Ptr p = a;
-                while(p != Ptr::anil) {
+                while(p != Ptr::anil()) {
                     Ptr pair = p.car();
                     if(pair.car() == this)
                         return pair.cdr();
@@ -130,7 +137,7 @@ Ptr Ob::eval(const Ptr &a) {
 }
 
 Ptr Ob::apply(const Ptr &p, const Ptr &a) {
-    if(p == Ptr::anil) return this;
+    if(p == Ptr::anil()) return this;
     switch(typeFlags.typeTag) {
         case BaseTypeTag::Lazy:
             return payload.lazy.apply(p, a);
