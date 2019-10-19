@@ -9,17 +9,19 @@ class BaseTypePredicates {
 public:
     static const BaseTypePredicates &inst();
 
-    const Ptr fpairp;
-    const Ptr flazyp;
-    const Ptr flabelp;
-    const Ptr fatomp;
-    const Ptr fsymbolp;
-    const Ptr fconstp;
-    const Ptr fmacrop;
-    const Ptr fevalp;
-    const Ptr fbasemacrop;
-    const Ptr fusermacrop;
-    const Ptr fvaluep;
+    const Ptr apairp;
+    const Ptr alazyp;
+    const Ptr alabelp;
+    const Ptr aatomp;
+    const Ptr asymbolp;
+    const Ptr aconstp;
+    const Ptr amacrop;
+    const Ptr aevalp;
+    const Ptr abasemacrop;
+    const Ptr ausermacrop;
+    const Ptr avaluep;
+
+    Ptr populateContext(const Ptr &a) const;
 };
 
 } // namespaces

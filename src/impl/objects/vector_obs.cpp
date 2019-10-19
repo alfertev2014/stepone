@@ -11,14 +11,29 @@ using namespace base;
 using namespace operations;
 
 VectorFunctions::VectorFunctions() :
-    fvecp(Ob::of<BaseMacro>(Function<TypePUnOp<Vector>>())),
-    fmkvec(Ob::of<BaseMacro>(Function<FMakeVector>())),
-    fvecclone(Ob::of<BaseMacro>(Function<VectorCloneUnOp>())),
-    fveclen(Ob::of<BaseMacro>(Function<VectorLengthUnOp>())),
-    fvecmid(Ob::of<BaseMacro>(Function<VectorMidTerOp>())),
-    fvecel(Ob::of<BaseMacro>(Function<VectorElBinOp>())),
-    fveccat(Ob::of<BaseMacro>(Function<VectorConcatBinOp>()))
+    avecp(Ob::of<Symbol>()),
+    amkvec(Ob::of<Symbol>()),
+    avecclone(Ob::of<Symbol>()),
+    aveclen(Ob::of<Symbol>()),
+    avecmid(Ob::of<Symbol>()),
+    avecslice(Ob::of<Symbol>()),
+    avecel(Ob::of<Symbol>()),
+    aveccat(Ob::of<Symbol>())
 {}
+
+
+Ptr VectorFunctions::populateContext(const Ptr &a) const
+{
+    Ptr ctx = Context::make(avecp, Ob::of<BaseMacro>(Function<TypePUnOp<Vector>>()), a);
+    Context::make(amkvec, Ob::of<BaseMacro>(Function<FMakeVector>()), ctx);
+    Context::make(avecclone, Ob::of<BaseMacro>(Function<VectorCloneUnOp>()), ctx);
+    Context::make(aveclen, Ob::of<BaseMacro>(Function<VectorLengthUnOp>()), ctx);
+    Context::make(avecmid, Ob::of<BaseMacro>(Function<VectorMidTerOp>()), ctx);
+    Context::make(avecel, Ob::of<BaseMacro>(Function<VectorElBinOp>()), ctx);
+    Context::make(aveccat, Ob::of<BaseMacro>(Function<VectorConcatBinOp>()), ctx);
+
+    return ctx;
+}
 
 const VectorFunctions &VectorFunctions::inst()
 {

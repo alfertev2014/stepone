@@ -10,25 +10,49 @@ using namespace base;
 using namespace operations;
 
 ByteArrayFunctions::ByteArrayFunctions() :
-    fbarrayp(Ob::of<BaseMacro>(Function<TypePUnOp<ByteArray>>())),
-    fbarraylen(Ob::of<BaseMacro>(Function<ByteArrayLengthUnOp>())),
-    fbarrayclone(Ob::of<BaseMacro>(Function<ByteArrayCloneUnOp>())),
-    fbarraycmp(Ob::of<BaseMacro>(Function<CompareByteArrayBinOp>())),
-    fbarrayncmp(Ob::of<BaseMacro>(Function<NCompareByteArrayTerOp>())),
-    fbarrayfindch(Ob::of<BaseMacro>(Function<FindCharByteArrayBinOp>())),
-    fbarrayfind(Ob::of<BaseMacro>(Function<FindCharsByteArrayBinOp>())),
-    fbarraycat(Ob::of<BaseMacro>(Function<ConcatByteArrayBinOp>())),
-    fbarraymid(Ob::of<BaseMacro>(Function<MidByteArrayTerOp>())),
+    abarrayp(Ob::of<Symbol>()),
+    abarraylen(Ob::of<Symbol>()),
+    abarrayclone(Ob::of<Symbol>()),
+    abarraycmp(Ob::of<Symbol>()),
+    abarrayncmp(Ob::of<Symbol>()),
+    abarrayfindch(Ob::of<Symbol>()),
+    abarrayfind(Ob::of<Symbol>()),
+    abarraycat(Ob::of<Symbol>()),
+    abarraymid(Ob::of<Symbol>()),
+    abarrayslice(Ob::of<Symbol>()),
 
-    fserint(Ob::of<BaseMacro>(Function<SerializeUnOp<int> >())),
-    fserfloat(Ob::of<BaseMacro>(Function<SerializeUnOp<float> >())),
-    fserchar(Ob::of<BaseMacro>(Function<SerializeUnOp<char> >())),
+    aserint(Ob::of<Symbol>()),
+    aserfloat(Ob::of<Symbol>()),
+    aserchar(Ob::of<Symbol>()),
 
-    fgetint(Ob::of<BaseMacro>(Function<ByteArrayGetBinOp<int> >())),
-    fgetfloat(Ob::of<BaseMacro>(Function<ByteArrayGetBinOp<float> >())),
-    fgetchar(Ob::of<BaseMacro>(Function<ByteArrayGetBinOp<char> >()))
+    agetint(Ob::of<Symbol>()),
+    agetfloat(Ob::of<Symbol>()),
+    agetchar(Ob::of<Symbol>())
 {}
 
+
+Ptr ByteArrayFunctions::populateContext(const Ptr &a) const
+{
+    Ptr ctx = Context::make(abarrayp, Ob::of<BaseMacro>(Function<TypePUnOp<ByteArray>>()), a);
+    Context::make(abarraylen, Ob::of<BaseMacro>(Function<ByteArrayLengthUnOp>()), ctx);
+    Context::make(abarrayclone, Ob::of<BaseMacro>(Function<ByteArrayCloneUnOp>()), ctx);
+    Context::make(abarraycmp, Ob::of<BaseMacro>(Function<CompareByteArrayBinOp>()), ctx);
+    Context::make(abarrayncmp, Ob::of<BaseMacro>(Function<NCompareByteArrayTerOp>()), ctx);
+    Context::make(abarrayfindch, Ob::of<BaseMacro>(Function<FindCharByteArrayBinOp>()), ctx);
+    Context::make(abarrayfind, Ob::of<BaseMacro>(Function<FindCharsByteArrayBinOp>()), ctx);
+    Context::make(abarraycat, Ob::of<BaseMacro>(Function<ConcatByteArrayBinOp>()), ctx);
+    Context::make(abarraymid, Ob::of<BaseMacro>(Function<MidByteArrayTerOp>()), ctx);
+
+    Context::make(aserint, Ob::of<BaseMacro>(Function<SerializeUnOp<int> >()), ctx);
+    Context::make(aserfloat, Ob::of<BaseMacro>(Function<SerializeUnOp<float> >()), ctx);
+    Context::make(aserchar, Ob::of<BaseMacro>(Function<SerializeUnOp<char> >()), ctx);
+
+    Context::make(agetint, Ob::of<BaseMacro>(Function<ByteArrayGetBinOp<int> >()), ctx);
+    Context::make(agetfloat, Ob::of<BaseMacro>(Function<ByteArrayGetBinOp<float> >()), ctx);
+    Context::make(agetchar, Ob::of<BaseMacro>(Function<ByteArrayGetBinOp<char> >()), ctx);
+
+    return ctx;
+}
 
 const ByteArrayFunctions &ByteArrayFunctions::inst()
 {

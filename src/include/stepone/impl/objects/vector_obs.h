@@ -9,14 +9,16 @@ class VectorFunctions {
 public:
     static const VectorFunctions &inst();
 
-    const Ptr fvecp;
-    const Ptr fmkvec;
-    const Ptr fvecclone;
-    const Ptr fveclen;
-    const Ptr fvecmid;
-    const Ptr fvecslice;
-    const Ptr fvecel;
-    const Ptr fveccat;
+    const Ptr avecp;
+    const Ptr amkvec;
+    const Ptr avecclone;
+    const Ptr aveclen;
+    const Ptr avecmid;
+    const Ptr avecslice;
+    const Ptr avecel;
+    const Ptr aveccat;
+
+    Ptr populateContext(const Ptr &a) const;
 };
 
 } // namespaces

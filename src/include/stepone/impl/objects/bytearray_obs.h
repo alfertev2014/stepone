@@ -9,23 +9,26 @@ class ByteArrayFunctions {
 public:
     static const ByteArrayFunctions &inst();
 
-    const Ptr fbarrayp;
-    const Ptr fbarraylen;
-    const Ptr fbarrayclone;
-    const Ptr fbarraycmp;
-    const Ptr fbarrayncmp;
-    const Ptr fbarrayfindch;
-    const Ptr fbarrayfind;
-    const Ptr fbarraycat;
-    const Ptr fbarraymid;
+    const Ptr abarrayp;
+    const Ptr abarraylen;
+    const Ptr abarrayclone;
+    const Ptr abarraycmp;
+    const Ptr abarrayncmp;
+    const Ptr abarrayfindch;
+    const Ptr abarrayfind;
+    const Ptr abarraycat;
+    const Ptr abarraymid;
+    const Ptr abarrayslice;
 
-    const Ptr fserint;
-    const Ptr fserfloat;
-    const Ptr fserchar;
+    const Ptr aserint;
+    const Ptr aserfloat;
+    const Ptr aserchar;
 
-    const Ptr fgetint;
-    const Ptr fgetfloat;
-    const Ptr fgetchar;
+    const Ptr agetint;
+    const Ptr agetfloat;
+    const Ptr agetchar;
+
+    Ptr populateContext(const Ptr &a) const;
 };
 
 } //namespaces

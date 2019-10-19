@@ -20,9 +20,7 @@ add_library(libstepone
     impl/objects/basenumfunc_obs.cpp
     impl/objects/bytearray_obs.cpp
     impl/objects/typepredicates_obs.cpp
-    impl/objects/vector_obs.cpp
-
-    impl/symbols/basesymbols.cpp)
+    impl/objects/vector_obs.cpp)
 
 target_include_directories(libstepone
     PUBLIC include/stepone

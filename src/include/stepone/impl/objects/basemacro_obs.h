@@ -9,18 +9,21 @@ class BaseMacroses {
 public:
     static const BaseMacroses &inst();
 
-    const Ptr mquote;
-    const Ptr mapply;
-    const Ptr mif;
-    const Ptr mlet;
-    const Ptr mlazy;
-    const Ptr munlazy;
-    const Ptr mlabel;
-    const Ptr mmacro;
-    const Ptr mcurctx;
-    const Ptr mtry;
-    const Ptr mbot;
-    const Ptr mgensym;
+    const Ptr aquote;
+    const Ptr aapply;
+    const Ptr aif;
+    const Ptr alet;
+    const Ptr alazy;
+    const Ptr aunlazy;
+    const Ptr alabel;
+    const Ptr alambda;
+    const Ptr amacro;
+    const Ptr acurctx;
+    const Ptr atry;
+    const Ptr abot;
+    const Ptr agensym;
+
+    Ptr populateContext(const Ptr &a) const;
 };
 
 } // namespaces

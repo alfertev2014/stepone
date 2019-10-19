@@ -9,12 +9,17 @@ class BaseFunctions {
 public:
     static const BaseFunctions &inst();
 
-    const Ptr fcar;
-    const Ptr fcdr;
-    const Ptr fcons;
-    const Ptr feq;
-    const Ptr fctxget;
-    const Ptr fctxpush;
+    const Ptr acar;
+    const Ptr acdr;
+    const Ptr acons;
+    const Ptr aeq;
+    const Ptr agettype;
+    const Ptr actxget;
+    const Ptr actxpush;
+
+    const Ptr aeempty;
+
+    Ptr populateContext(const Ptr &a) const;
 };
 
 } // namespaces

@@ -1,12 +1,21 @@
 #include <init/initsymbols.h>
 
-#include <impl/symbols/basesymbols.h>
+#include <impl/objects/basefunc_obs.h>
+#include <impl/objects/basenumfunc_obs.h>
+#include <impl/objects/basemacro_obs.h>
+#include <impl/objects/typepredicates_obs.h>
+#include <impl/objects/bytearray_obs.h>
+#include <impl/objects/vector_obs.h>
+
 #include <impl/core/bytearray.h>
+
+#include <impl/ptr_impl.h>
+
+using namespace stepone::core;
+using namespace stepone::objects;
 
 namespace stepone::init {
 
-using namespace symbols;
-using namespace core;
 
 static inline void addSymbol(Ptr & symbolTable, const std::string & s, const Ptr & p) {
     symbolTable = Ob::of<Pair>(Ob::of<Pair>(p, Ob::of<ByteArray>(s.data(), s.size())), symbolTable);
@@ -14,143 +23,143 @@ static inline void addSymbol(Ptr & symbolTable, const std::string & s, const Ptr
 
 Ptr BaseSymbolTable::createSymbolTable() {
     Ptr symbolTable(Ptr::anil());
-    addSymbol(symbolTable, "-i", BaseNumFuncSymbols::inst().aintNeg);
-    addSymbol(symbolTable, "i+", BaseNumFuncSymbols::inst().aintPlus);
-    addSymbol(symbolTable, "i-", BaseNumFuncSymbols::inst().aintMinus);
-    addSymbol(symbolTable, "i*", BaseNumFuncSymbols::inst().aintProduct);
-    addSymbol(symbolTable, "i/", BaseNumFuncSymbols::inst().aintDivision);
-    addSymbol(symbolTable, "i%", BaseNumFuncSymbols::inst().aintMod);
-    addSymbol(symbolTable, "i?", BaseNumFuncSymbols::inst().aintp);
-    addSymbol(symbolTable, "i-not", BaseNumFuncSymbols::inst().aintnot);
-    addSymbol(symbolTable, "i-and", BaseNumFuncSymbols::inst().aintand);
-    addSymbol(symbolTable, "i-or", BaseNumFuncSymbols::inst().aintor);
-    addSymbol(symbolTable, "i-xor", BaseNumFuncSymbols::inst().aintxor);
-    addSymbol(symbolTable, "i-shl", BaseNumFuncSymbols::inst().aintshl);
-    addSymbol(symbolTable, "i-shr", BaseNumFuncSymbols::inst().aintshr);
-    addSymbol(symbolTable, "i=", BaseNumFuncSymbols::inst().aintEql);
-    addSymbol(symbolTable, "i!=", BaseNumFuncSymbols::inst().aintNE);
-    addSymbol(symbolTable, "i<", BaseNumFuncSymbols::inst().aintLT);
-    addSymbol(symbolTable, "i>", BaseNumFuncSymbols::inst().aintGT);
-    addSymbol(symbolTable, "i<=", BaseNumFuncSymbols::inst().aintLE);
-    addSymbol(symbolTable, "i>=", BaseNumFuncSymbols::inst().aintGE);
+    addSymbol(symbolTable, "-i", BaseNumFunc::inst().aintNeg);
+    addSymbol(symbolTable, "i+", BaseNumFunc::inst().aintPlus);
+    addSymbol(symbolTable, "i-", BaseNumFunc::inst().aintMinus);
+    addSymbol(symbolTable, "i*", BaseNumFunc::inst().aintProduct);
+    addSymbol(symbolTable, "i/", BaseNumFunc::inst().aintDivision);
+    addSymbol(symbolTable, "i%", BaseNumFunc::inst().aintMod);
+    addSymbol(symbolTable, "i?", BaseNumFunc::inst().aintp);
+    addSymbol(symbolTable, "i-not", BaseNumFunc::inst().aintnot);
+    addSymbol(symbolTable, "i-and", BaseNumFunc::inst().aintand);
+    addSymbol(symbolTable, "i-or", BaseNumFunc::inst().aintor);
+    addSymbol(symbolTable, "i-xor", BaseNumFunc::inst().aintxor);
+    addSymbol(symbolTable, "i-shl", BaseNumFunc::inst().aintshl);
+    addSymbol(symbolTable, "i-shr", BaseNumFunc::inst().aintshr);
+    addSymbol(symbolTable, "i=", BaseNumFunc::inst().aintEql);
+    addSymbol(symbolTable, "i!=", BaseNumFunc::inst().aintNE);
+    addSymbol(symbolTable, "i<", BaseNumFunc::inst().aintLT);
+    addSymbol(symbolTable, "i>", BaseNumFunc::inst().aintGT);
+    addSymbol(symbolTable, "i<=", BaseNumFunc::inst().aintLE);
+    addSymbol(symbolTable, "i>=", BaseNumFunc::inst().aintGE);
 
-    addSymbol(symbolTable, "u?", BaseNumFuncSymbols::inst().alongp);
-    addSymbol(symbolTable, "u-not", BaseNumFuncSymbols::inst().alongnot);
-    addSymbol(symbolTable, "u-and", BaseNumFuncSymbols::inst().alongand);
-    addSymbol(symbolTable, "u-or", BaseNumFuncSymbols::inst().alongor);
-    addSymbol(symbolTable, "u-xor", BaseNumFuncSymbols::inst().alongxor);
-    addSymbol(symbolTable, "u-shl", BaseNumFuncSymbols::inst().alongshl);
-    addSymbol(symbolTable, "u-shr", BaseNumFuncSymbols::inst().alongshr);
+    addSymbol(symbolTable, "u?", BaseNumFunc::inst().alongp);
+    addSymbol(symbolTable, "u-not", BaseNumFunc::inst().alongnot);
+    addSymbol(symbolTable, "u-and", BaseNumFunc::inst().alongand);
+    addSymbol(symbolTable, "u-or", BaseNumFunc::inst().alongor);
+    addSymbol(symbolTable, "u-xor", BaseNumFunc::inst().alongxor);
+    addSymbol(symbolTable, "u-shl", BaseNumFunc::inst().alongshl);
+    addSymbol(symbolTable, "u-shr", BaseNumFunc::inst().alongshr);
 
-    addSymbol(symbolTable, "u=", BaseNumFuncSymbols::inst().alongEql);
-    addSymbol(symbolTable, "u!=", BaseNumFuncSymbols::inst().alongNE);
-    addSymbol(symbolTable, "u<", BaseNumFuncSymbols::inst().alongLT);
-    addSymbol(symbolTable, "u>", BaseNumFuncSymbols::inst().alongGT);
-    addSymbol(symbolTable, "u<=", BaseNumFuncSymbols::inst().alongLE);
-    addSymbol(symbolTable, "u>=", BaseNumFuncSymbols::inst().alongGE);
+    addSymbol(symbolTable, "u=", BaseNumFunc::inst().alongEql);
+    addSymbol(symbolTable, "u!=", BaseNumFunc::inst().alongNE);
+    addSymbol(symbolTable, "u<", BaseNumFunc::inst().alongLT);
+    addSymbol(symbolTable, "u>", BaseNumFunc::inst().alongGT);
+    addSymbol(symbolTable, "u<=", BaseNumFunc::inst().alongLE);
+    addSymbol(symbolTable, "u>=", BaseNumFunc::inst().alongGE);
 
-    addSymbol(symbolTable, "c?", BaseNumFuncSymbols::inst().acharp);
-    addSymbol(symbolTable, "c-not", BaseNumFuncSymbols::inst().acharnot);
-    addSymbol(symbolTable, "c-and", BaseNumFuncSymbols::inst().acharand);
-    addSymbol(symbolTable, "c-or", BaseNumFuncSymbols::inst().acharor);
-    addSymbol(symbolTable, "c-xor", BaseNumFuncSymbols::inst().acharxor);
-    addSymbol(symbolTable, "c-shl", BaseNumFuncSymbols::inst().acharshl);
-    addSymbol(symbolTable, "c-shr", BaseNumFuncSymbols::inst().acharshr);
-    addSymbol(symbolTable, "c=", BaseNumFuncSymbols::inst().acharEql);
-    addSymbol(symbolTable, "c!=", BaseNumFuncSymbols::inst().acharNE);
-    addSymbol(symbolTable, "c<", BaseNumFuncSymbols::inst().acharLT);
-    addSymbol(symbolTable, "c>", BaseNumFuncSymbols::inst().acharGT);
-    addSymbol(symbolTable, "c<=", BaseNumFuncSymbols::inst().acharLE);
-    addSymbol(symbolTable, "c>=", BaseNumFuncSymbols::inst().acharGE);
+    addSymbol(symbolTable, "c?", BaseNumFunc::inst().acharp);
+    addSymbol(symbolTable, "c-not", BaseNumFunc::inst().acharnot);
+    addSymbol(symbolTable, "c-and", BaseNumFunc::inst().acharand);
+    addSymbol(symbolTable, "c-or", BaseNumFunc::inst().acharor);
+    addSymbol(symbolTable, "c-xor", BaseNumFunc::inst().acharxor);
+    addSymbol(symbolTable, "c-shl", BaseNumFunc::inst().acharshl);
+    addSymbol(symbolTable, "c-shr", BaseNumFunc::inst().acharshr);
+    addSymbol(symbolTable, "c=", BaseNumFunc::inst().acharEql);
+    addSymbol(symbolTable, "c!=", BaseNumFunc::inst().acharNE);
+    addSymbol(symbolTable, "c<", BaseNumFunc::inst().acharLT);
+    addSymbol(symbolTable, "c>", BaseNumFunc::inst().acharGT);
+    addSymbol(symbolTable, "c<=", BaseNumFunc::inst().acharLE);
+    addSymbol(symbolTable, "c>=", BaseNumFunc::inst().acharGE);
 
-    addSymbol(symbolTable, "-f", BaseNumFuncSymbols::inst().afloatNeg);
-    addSymbol(symbolTable, "f+", BaseNumFuncSymbols::inst().afloatPlus);
-    addSymbol(symbolTable, "f-", BaseNumFuncSymbols::inst().afloatMinus);
-    addSymbol(symbolTable, "f*", BaseNumFuncSymbols::inst().afloatProduct);
-    addSymbol(symbolTable, "f/", BaseNumFuncSymbols::inst().afloatDivision);
-    addSymbol(symbolTable, "f?", BaseNumFuncSymbols::inst().afloatp);
-    addSymbol(symbolTable, "f=", BaseNumFuncSymbols::inst().afloatEql);
-    addSymbol(symbolTable, "f!=", BaseNumFuncSymbols::inst().afloatNE);
-    addSymbol(symbolTable, "f<", BaseNumFuncSymbols::inst().afloatLT);
-    addSymbol(symbolTable, "f>", BaseNumFuncSymbols::inst().afloatGT);
-    addSymbol(symbolTable, "f<=", BaseNumFuncSymbols::inst().afloatLE);
-    addSymbol(symbolTable, "f>=", BaseNumFuncSymbols::inst().afloatGE);
+    addSymbol(symbolTable, "-f", BaseNumFunc::inst().afloatNeg);
+    addSymbol(symbolTable, "f+", BaseNumFunc::inst().afloatPlus);
+    addSymbol(symbolTable, "f-", BaseNumFunc::inst().afloatMinus);
+    addSymbol(symbolTable, "f*", BaseNumFunc::inst().afloatProduct);
+    addSymbol(symbolTable, "f/", BaseNumFunc::inst().afloatDivision);
+    addSymbol(symbolTable, "f?", BaseNumFunc::inst().afloatp);
+    addSymbol(symbolTable, "f=", BaseNumFunc::inst().afloatEql);
+    addSymbol(symbolTable, "f!=", BaseNumFunc::inst().afloatNE);
+    addSymbol(symbolTable, "f<", BaseNumFunc::inst().afloatLT);
+    addSymbol(symbolTable, "f>", BaseNumFunc::inst().afloatGT);
+    addSymbol(symbolTable, "f<=", BaseNumFunc::inst().afloatLE);
+    addSymbol(symbolTable, "f>=", BaseNumFunc::inst().afloatGE);
 
-    addSymbol(symbolTable, "u2i", BaseNumFuncSymbols::inst().along2int);
-    addSymbol(symbolTable, "i2u", BaseNumFuncSymbols::inst().aint2long);
-    addSymbol(symbolTable, "f2i", BaseNumFuncSymbols::inst().afloat2int);
-    addSymbol(symbolTable, "i2f", BaseNumFuncSymbols::inst().aint2float);
-    addSymbol(symbolTable, "c2i", BaseNumFuncSymbols::inst().achar2int);
-    addSymbol(symbolTable, "i2c", BaseNumFuncSymbols::inst().aint2char);
-    addSymbol(symbolTable, "c2u", BaseNumFuncSymbols::inst().achar2long);
-    addSymbol(symbolTable, "u2c", BaseNumFuncSymbols::inst().along2char);
+    addSymbol(symbolTable, "u2i", BaseNumFunc::inst().along2int);
+    addSymbol(symbolTable, "i2u", BaseNumFunc::inst().aint2long);
+    addSymbol(symbolTable, "f2i", BaseNumFunc::inst().afloat2int);
+    addSymbol(symbolTable, "i2f", BaseNumFunc::inst().aint2float);
+    addSymbol(symbolTable, "c2i", BaseNumFunc::inst().achar2int);
+    addSymbol(symbolTable, "i2c", BaseNumFunc::inst().aint2char);
+    addSymbol(symbolTable, "c2u", BaseNumFunc::inst().achar2long);
+    addSymbol(symbolTable, "u2c", BaseNumFunc::inst().along2char);
 
-    addSymbol(symbolTable, "sz-i", BaseNumFuncSymbols::inst().aszi);
-    addSymbol(symbolTable, "sz-f", BaseNumFuncSymbols::inst().aszf);
-    addSymbol(symbolTable, "sz-c", BaseNumFuncSymbols::inst().aszc);
-    addSymbol(symbolTable, "sz-u", BaseNumFuncSymbols::inst().aszu);
+    addSymbol(symbolTable, "sz-i", BaseNumFunc::inst().aszi);
+    addSymbol(symbolTable, "sz-f", BaseNumFunc::inst().aszf);
+    addSymbol(symbolTable, "sz-c", BaseNumFunc::inst().aszc);
+    addSymbol(symbolTable, "sz-u", BaseNumFunc::inst().aszu);
 
-    addSymbol(symbolTable, "vec?", VectorFuncSymbols::inst().avecp);
-    addSymbol(symbolTable, "mkvec", VectorFuncSymbols::inst().amkvec);
-    addSymbol(symbolTable, "vec-clone", VectorFuncSymbols::inst().avecclone);
-    addSymbol(symbolTable, "vec-len", VectorFuncSymbols::inst().aveclen);
-    addSymbol(symbolTable, "vec-mid", VectorFuncSymbols::inst().avecmid);
-    addSymbol(symbolTable, "vec-slice", VectorFuncSymbols::inst().avecslice);
-    addSymbol(symbolTable, "vec-el", VectorFuncSymbols::inst().avecel);
-    addSymbol(symbolTable, "vec-cat", VectorFuncSymbols::inst().aveccat);
+    addSymbol(symbolTable, "vec?", VectorFunctions::inst().avecp);
+    addSymbol(symbolTable, "mkvec", VectorFunctions::inst().amkvec);
+    addSymbol(symbolTable, "vec-clone", VectorFunctions::inst().avecclone);
+    addSymbol(symbolTable, "vec-len", VectorFunctions::inst().aveclen);
+    addSymbol(symbolTable, "vec-mid", VectorFunctions::inst().avecmid);
+    addSymbol(symbolTable, "vec-slice", VectorFunctions::inst().avecslice);
+    addSymbol(symbolTable, "vec-el", VectorFunctions::inst().avecel);
+    addSymbol(symbolTable, "vec-cat", VectorFunctions::inst().aveccat);
 
-    addSymbol(symbolTable, "b?", ByteArrayFuncSymbols::inst().abarrayp);
-    addSymbol(symbolTable, "b-len", ByteArrayFuncSymbols::inst().abarraylen);
-    addSymbol(symbolTable, "b-clone", ByteArrayFuncSymbols::inst().abarrayclone);
-    addSymbol(symbolTable, "b-cmp", ByteArrayFuncSymbols::inst().abarraycmp);
-    addSymbol(symbolTable, "b-ncmp", ByteArrayFuncSymbols::inst().abarrayncmp);
-    addSymbol(symbolTable, "b-findch", ByteArrayFuncSymbols::inst().abarrayfindch);
-    addSymbol(symbolTable, "b-find", ByteArrayFuncSymbols::inst().abarrayfind);
-    addSymbol(symbolTable, "b-cat", ByteArrayFuncSymbols::inst().abarraycat);
-    addSymbol(symbolTable, "b-mid", ByteArrayFuncSymbols::inst().abarraymid);
-    addSymbol(symbolTable, "b-slice", ByteArrayFuncSymbols::inst().abarrayslice);
-    addSymbol(symbolTable, "i2b", ByteArrayFuncSymbols::inst().aserint);
-    addSymbol(symbolTable, "f2b", ByteArrayFuncSymbols::inst().aserfloat);
-    addSymbol(symbolTable, "c2b", ByteArrayFuncSymbols::inst().aserchar);
-    addSymbol(symbolTable, "b-geti", ByteArrayFuncSymbols::inst().agetint);
-    addSymbol(symbolTable, "b-getf", ByteArrayFuncSymbols::inst().agetfloat);
-    addSymbol(symbolTable, "b-getc", ByteArrayFuncSymbols::inst().agetchar);
+    addSymbol(symbolTable, "b?", ByteArrayFunctions::inst().abarrayp);
+    addSymbol(symbolTable, "b-len", ByteArrayFunctions::inst().abarraylen);
+    addSymbol(symbolTable, "b-clone", ByteArrayFunctions::inst().abarrayclone);
+    addSymbol(symbolTable, "b-cmp", ByteArrayFunctions::inst().abarraycmp);
+    addSymbol(symbolTable, "b-ncmp", ByteArrayFunctions::inst().abarrayncmp);
+    addSymbol(symbolTable, "b-findch", ByteArrayFunctions::inst().abarrayfindch);
+    addSymbol(symbolTable, "b-find", ByteArrayFunctions::inst().abarrayfind);
+    addSymbol(symbolTable, "b-cat", ByteArrayFunctions::inst().abarraycat);
+    addSymbol(symbolTable, "b-mid", ByteArrayFunctions::inst().abarraymid);
+    addSymbol(symbolTable, "b-slice", ByteArrayFunctions::inst().abarrayslice);
+    addSymbol(symbolTable, "i2b", ByteArrayFunctions::inst().aserint);
+    addSymbol(symbolTable, "f2b", ByteArrayFunctions::inst().aserfloat);
+    addSymbol(symbolTable, "c2b", ByteArrayFunctions::inst().aserchar);
+    addSymbol(symbolTable, "b-geti", ByteArrayFunctions::inst().agetint);
+    addSymbol(symbolTable, "b-getf", ByteArrayFunctions::inst().agetfloat);
+    addSymbol(symbolTable, "b-getc", ByteArrayFunctions::inst().agetchar);
 
-    addSymbol(symbolTable, "pair?", BaseTypePredSymbols::inst().apairp);
-    addSymbol(symbolTable, "lazy?", BaseTypePredSymbols::inst().alazyp);
-    addSymbol(symbolTable, "label?", BaseTypePredSymbols::inst().alabelp);
-    addSymbol(symbolTable, "atom?", BaseTypePredSymbols::inst().aatomp);
-    addSymbol(symbolTable, "symbol?", BaseTypePredSymbols::inst().asymbolp);
-    addSymbol(symbolTable, "const?", BaseTypePredSymbols::inst().aconstp);
-    addSymbol(symbolTable, "macro?", BaseTypePredSymbols::inst().amacrop);
-    addSymbol(symbolTable, "basemacro?", BaseTypePredSymbols::inst().abasemacrop);
-    addSymbol(symbolTable, "usermacro?", BaseTypePredSymbols::inst().ausermacrop);
-    addSymbol(symbolTable, "spectype?", BaseTypePredSymbols::inst().avaluep);
+    addSymbol(symbolTable, "pair?", BaseTypePredicates::inst().apairp);
+    addSymbol(symbolTable, "lazy?", BaseTypePredicates::inst().alazyp);
+    addSymbol(symbolTable, "label?", BaseTypePredicates::inst().alabelp);
+    addSymbol(symbolTable, "atom?", BaseTypePredicates::inst().aatomp);
+    addSymbol(symbolTable, "symbol?", BaseTypePredicates::inst().asymbolp);
+    addSymbol(symbolTable, "const?", BaseTypePredicates::inst().aconstp);
+    addSymbol(symbolTable, "macro?", BaseTypePredicates::inst().amacrop);
+    addSymbol(symbolTable, "basemacro?", BaseTypePredicates::inst().abasemacrop);
+    addSymbol(symbolTable, "usermacro?", BaseTypePredicates::inst().ausermacrop);
+    addSymbol(symbolTable, "spectype?", BaseTypePredicates::inst().avaluep);
 
-    addSymbol(symbolTable, "ctx-get", BaseFuncSymbols::inst().actxget);
-    addSymbol(symbolTable, "ctx-push", BaseFuncSymbols::inst().actxpush);
-    addSymbol(symbolTable, "empty-ctx", BaseFuncSymbols::inst().aeempty);
-    addSymbol(symbolTable, "get-type", BaseFuncSymbols::inst().agettype);
-    addSymbol(symbolTable, "cons", BaseFuncSymbols::inst().acons);
-    addSymbol(symbolTable, "car", BaseFuncSymbols::inst().acar);
-    addSymbol(symbolTable, "cdr", BaseFuncSymbols::inst().acdr);
-    addSymbol(symbolTable, "eq", BaseFuncSymbols::inst().aeq);
+    addSymbol(symbolTable, "ctx-get", BaseFunctions::inst().actxget);
+    addSymbol(symbolTable, "ctx-push", BaseFunctions::inst().actxpush);
+    addSymbol(symbolTable, "empty-ctx", BaseFunctions::inst().aeempty);
+    addSymbol(symbolTable, "get-type", BaseFunctions::inst().agettype);
+    addSymbol(symbolTable, "cons", BaseFunctions::inst().acons);
+    addSymbol(symbolTable, "car", BaseFunctions::inst().acar);
+    addSymbol(symbolTable, "cdr", BaseFunctions::inst().acdr);
+    addSymbol(symbolTable, "eq", BaseFunctions::inst().aeq);
 
     addSymbol(symbolTable, "t", Ptr::at());
 
-    addSymbol(symbolTable, "^", BaseMacroSymbols::inst().agensym);
-    addSymbol(symbolTable, "~", BaseMacroSymbols::inst().acurctx);
-    addSymbol(symbolTable, "_", BaseMacroSymbols::inst().abot);
-    addSymbol(symbolTable, "|", BaseMacroSymbols::inst().atry);
-    addSymbol(symbolTable, "$", BaseMacroSymbols::inst().aunlazy);
-    addSymbol(symbolTable, "#", BaseMacroSymbols::inst().alazy);
-    addSymbol(symbolTable, "%", BaseMacroSymbols::inst().amacro);
-    addSymbol(symbolTable, "`", BaseMacroSymbols::inst().aapply);
-    addSymbol(symbolTable, "@", BaseMacroSymbols::inst().alabel);
-    addSymbol(symbolTable, "?", BaseMacroSymbols::inst().aif);
-    addSymbol(symbolTable, "\\", BaseMacroSymbols::inst().alambda);
-    addSymbol(symbolTable, ">-", BaseMacroSymbols::inst().alet);
-    addSymbol(symbolTable, "'", BaseMacroSymbols::inst().aquote);
+    addSymbol(symbolTable, "^", BaseMacroses::inst().agensym);
+    addSymbol(symbolTable, "~", BaseMacroses::inst().acurctx);
+    addSymbol(symbolTable, "_", BaseMacroses::inst().abot);
+    addSymbol(symbolTable, "|", BaseMacroses::inst().atry);
+    addSymbol(symbolTable, "$", BaseMacroses::inst().aunlazy);
+    addSymbol(symbolTable, "#", BaseMacroses::inst().alazy);
+    addSymbol(symbolTable, "%", BaseMacroses::inst().amacro);
+    addSymbol(symbolTable, "`", BaseMacroses::inst().aapply);
+    addSymbol(symbolTable, "@", BaseMacroses::inst().alabel);
+    addSymbol(symbolTable, "?", BaseMacroses::inst().aif);
+    addSymbol(symbolTable, "\\", BaseMacroses::inst().alambda);
+    addSymbol(symbolTable, ">-", BaseMacroses::inst().alet);
+    addSymbol(symbolTable, "'", BaseMacroses::inst().aquote);
     return symbolTable;
 }
 
