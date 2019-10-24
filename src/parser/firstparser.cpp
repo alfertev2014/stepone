@@ -322,7 +322,7 @@ parseRes Parser::parseSymbol() {
 
 parseRes Parser::parseNumber() {
     std::string number;
-    if(eos() || (!isdigit(*si) && *si != '-') || isspace(*si) || punctuation()) {
+    if (eos() || (!isdigit(*si) && *si != '-') || isspace(*si) || punctuation()) {
         return std::nullopt;
     }
 
@@ -335,10 +335,8 @@ parseRes Parser::parseNumber() {
     if (eos() || *si != '.') {
         std::istringstream ss(number);
         int i;
-        if(ss >> i)
+        if (ss >> i) {
             return Ob::of<Value<int>>(i);
-        else {
-            DBG("int is not int");
         }
     } else {
         number.push_back(*si);
@@ -348,10 +346,8 @@ parseRes Parser::parseNumber() {
         }
         float f;
         std::istringstream ss(number);
-        if(ss >> f)
+        if (ss >> f) {
             return Ob::of<Value<float>>(f);
-        else {
-            DBG("float is not float");
         }
     }
     return std::nullopt;
