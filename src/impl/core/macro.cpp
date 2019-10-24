@@ -3,7 +3,10 @@
 
 namespace stepone::core {
 
-const Ptr Evaluator::eempty(Ob::of<Evaluator>(Ptr::anil()));
+Ptr Evaluator::eempty() {
+    static Ptr e = Ob::of<Evaluator>(Ptr::anil());
+    return e;
+}
 
 Ptr Evaluator::getContext() const {return a;}
 

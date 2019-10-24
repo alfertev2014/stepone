@@ -12,7 +12,7 @@ class Evaluator final : public Macro {
 private:
     Ptr a;
 public:
-    static const Ptr eempty;
+    static Ptr eempty();
 
     Evaluator(Ptr _a) : a(_a) {}
     Ptr getContext() const;
