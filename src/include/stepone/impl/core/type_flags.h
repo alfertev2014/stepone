@@ -39,12 +39,4 @@ struct TypeFlags {
     }
 };
 
-template <BaseTypeTag TAG>
-struct TypeTagValue {
-    static constexpr BaseTypeTag typeTagValue {TAG};
-};
-
-template <class T>
-struct TypeTagOf;
-
 } // namespaces

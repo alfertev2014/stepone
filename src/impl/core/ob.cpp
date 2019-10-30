@@ -24,52 +24,49 @@ template <class Action>
 void Ob::visit(Action action) const {
     switch(typeFlags.typeTag) {
         case BaseTypeTag::Pair:
-            action(payload.pair);
+            action(const_unsafe_as<Pair>());
             break;
         case BaseTypeTag::Symbol:
-            action(payload.symbol);
+            action(const_unsafe_as<Symbol>());
             break;
         case BaseTypeTag::Lazy:
-            action(payload.lazy);
+            action(const_unsafe_as<Lazy>());
             break;
         case BaseTypeTag::Label:
-            action(payload.label);
+            action(const_unsafe_as<Label>());
             break;
 
         case BaseTypeTag::BaseMacro:
-            action(payload.baseMacro);
+            action(const_unsafe_as<BaseMacro>());
             break;
         case BaseTypeTag::Evaluator:
-            action(payload.evaluator);
+            action(const_unsafe_as<Evaluator>());
             break;
         case BaseTypeTag::MacroClosure:
-            action(payload.macroClosure);
+            action(const_unsafe_as<MacroClosure>());
             break;
         case BaseTypeTag::CurrentContext:
-            action(payload.currentContext);
+            action(const_unsafe_as<CurrentContext>());
             break;
 
-        case BaseTypeTag::BaseValue:
-            action(payload.baseValue);
-            break;
         case BaseTypeTag::ByteArray:
-            action(payload.byteArray);
+            action(const_unsafe_as<ByteArray>());
             break;
         case BaseTypeTag::Vector:
-            action(payload.vector);
+            action(const_unsafe_as<Vector>());
             break;
 
         case BaseTypeTag::Int:
-            action(payload.valueInt);
+            action(const_unsafe_as<Value<int>>());
             break;
         case BaseTypeTag::Float:
-            action(payload.valueFloat);
+            action(const_unsafe_as<Value<float>>());
             break;
         case BaseTypeTag::Char:
-            action(payload.valueChar);
+            action(const_unsafe_as<Value<char>>());
             break;
         case BaseTypeTag::Long:
-            action(payload.valueLong);
+            action(const_unsafe_as<Value<long long>>());
             break;
     }
 }
@@ -77,7 +74,8 @@ void Ob::visit(Action action) const {
 Ob::Ob(const Ob &ob) : Ob(TypeFlags{ob.typeFlags}) {
     ob.visit([this](const auto &p) {
         using T = typename std::decay<decltype(p)>::type;
-        new (&unsafe_as<T>()) T(p);
+        static_assert(sizeof(T) <= sizeOfPayload);
+        new (payload) T(p);
     });
 }
 
@@ -100,7 +98,7 @@ Ptr Ob::cdr() {
 Ptr Ob::eval(const Ptr &a) {
     switch(typeFlags.typeTag) {
         case BaseTypeTag::Pair:
-            return payload.pair.eval(a);
+            return unsafe_as<Pair>().eval(a);
         case BaseTypeTag::Symbol:
             {
                 Ptr p = a;
@@ -113,9 +111,9 @@ Ptr Ob::eval(const Ptr &a) {
                 throw SemanticError("Unknown symbol");
             }
         case BaseTypeTag::Lazy:
-            return payload.lazy.eval(a);
+            return unsafe_as<Lazy>().eval(a);
         case BaseTypeTag::Label:
-            return payload.label.eval(a);
+            return unsafe_as<Label>().eval(a);
 
         case BaseTypeTag::BaseMacro:
         case BaseTypeTag::Evaluator:
@@ -140,18 +138,18 @@ Ptr Ob::apply(const Ptr &p, const Ptr &a) {
     if(p == Ptr::anil()) return this;
     switch(typeFlags.typeTag) {
         case BaseTypeTag::Lazy:
-            return payload.lazy.apply(p, a);
+            return unsafe_as<Lazy>().apply(p, a);
         case BaseTypeTag::Label:
-            return payload.label.apply(p, a);
+            return unsafe_as<Label>().apply(p, a);
 
         case BaseTypeTag::BaseMacro:
-            return payload.baseMacro.apply(p, a);
+            return unsafe_as<BaseMacro>().apply(p, a);
         case BaseTypeTag::Evaluator:
-            return payload.evaluator.apply(p, a);
+            return unsafe_as<Evaluator>().apply(p, a);
         case BaseTypeTag::MacroClosure:
-            return payload.macroClosure.apply(p, a);
+            return unsafe_as<MacroClosure>().apply(p, a);
         case BaseTypeTag::CurrentContext:
-            return payload.currentContext.apply(p, a);
+            return unsafe_as<CurrentContext>().apply(p, a);
 
         default:
             throw SemanticError("apply of not applyable");
@@ -161,9 +159,9 @@ Ptr Ob::apply(const Ptr &p, const Ptr &a) {
 Ptr Ob::unlazy() {
     switch(typeFlags.typeTag) {
         case BaseTypeTag::Lazy:
-            return payload.lazy.unlazy();
+            return unsafe_as<Lazy>().unlazy();
         case BaseTypeTag::Label:
-            return payload.label.unlazy();
+            return unsafe_as<Label>().unlazy();
         default:
             return this;
     }
@@ -172,7 +170,7 @@ Ptr Ob::unlazy() {
 Ptr Ob::assoc(const Ptr& s) const {
     if (typeFlags.typeTag != BaseTypeTag::Evaluator)
         throw SemanticError("throw assoc ");
-    return payload.evaluator.assoc(s);
+    return const_unsafe_as<Evaluator>().assoc(s);
 }
 
 } // namespaces
