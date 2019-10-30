@@ -3,15 +3,15 @@
 namespace stepone::core {
 
 enum class BaseTypeTag : int {
-    Pair = 0,
-    Symbol = 0b01,
-    Lazy = 0b10,
-    Label = 0b11,
+    Pair,
+    Symbol,
+    Lazy,
+    Label,
 
-    BaseMacro = 0b0100,
-    Evaluator = 0b0101,
-    MacroClosure = 0b0110,
-    CurrentContext = 0b0111,
+    BaseMacro,
+    Evaluator,
+    MacroClosure,
+    CurrentContext,
 
     BaseValue = 0b1000,
     ByteArray = 0b1001,
@@ -20,7 +20,9 @@ enum class BaseTypeTag : int {
     Int,
     Float,
     Char,
-    Long
+    Long,
+
+    LastValue = Long
 };
 
 struct TypeFlags {
@@ -31,11 +33,11 @@ struct TypeFlags {
         : typeTag(typeTag) {}
 
     bool isMacro() const {
-        return (static_cast<int>(typeTag) & 0b1100) == 0b0100;
+        return typeTag >= BaseTypeTag::BaseMacro && typeTag <= BaseTypeTag::CurrentContext;
     }
 
     bool isValue() const {
-        return static_cast<int>(typeTag) >= static_cast<int>(BaseTypeTag::BaseValue);
+        return typeTag >= BaseTypeTag::BaseValue && typeTag <= BaseTypeTag::LastValue;
     }
 };
 

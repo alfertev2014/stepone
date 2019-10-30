@@ -115,21 +115,9 @@ Ptr Ob::eval(const Ptr &a) {
         case BaseTypeTag::Label:
             return unsafe_as<Label>().eval(a);
 
-        case BaseTypeTag::BaseMacro:
-        case BaseTypeTag::Evaluator:
-        case BaseTypeTag::MacroClosure:
-        case BaseTypeTag::CurrentContext:
-
-        case BaseTypeTag::BaseValue:
-        case BaseTypeTag::ByteArray:
-        case BaseTypeTag::Vector:
-        case BaseTypeTag::Int:
-        case BaseTypeTag::Float:
-        case BaseTypeTag::Char:
-        case BaseTypeTag::Long:
-            return this;
-
         default:
+            if (typeFlags.isValue())
+                return this;
             throw SemanticError("eval");
     }
 }
