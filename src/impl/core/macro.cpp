@@ -12,8 +12,11 @@ Ptr Evaluator::getContext() const {return a;}
 
 Ptr Evaluator::apply(const Ptr &p, const Ptr &a) {return p.eval(a).eval(this->a);}
 
-Ptr Evaluator::assoc(const Ptr &s) const {return s.eval(this->a);}
+Ptr Evaluator::assoc(const Ptr &s) const {return Context::assoc(a, s);}
 
+Ptr Evaluator::push(const Ptr &s, const Ptr &p) const {
+    return Ob::of<Evaluator>(Context::make(s, p, a));
+}
 
 Ptr MacroClosure::apply(const Ptr &p, const Ptr &a) {
     return e.eval(Context::make(sp, p, this->a));

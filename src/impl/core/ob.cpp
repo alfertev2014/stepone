@@ -100,16 +100,7 @@ Ptr Ob::eval(const Ptr &a) {
         case BaseTypeTag::Pair:
             return unsafe_as<Pair>().eval(a);
         case BaseTypeTag::Symbol:
-            {
-                Ptr p = a;
-                while(p != Ptr::anil()) {
-                    Ptr pair = p.car();
-                    if(pair.car() == this)
-                        return pair.cdr();
-                    p = p.cdr();
-                }
-                throw SemanticError("Unknown symbol");
-            }
+            return Context::assoc(a, this);
         case BaseTypeTag::Lazy:
             return unsafe_as<Lazy>().eval(a);
         case BaseTypeTag::Label:
@@ -153,12 +144,6 @@ Ptr Ob::unlazy() {
         default:
             return this;
     }
-}
-
-Ptr Ob::assoc(const Ptr& s) const {
-    if (typeFlags.typeTag != BaseTypeTag::Evaluator)
-        throw SemanticError("throw assoc ");
-    return const_unsafe_as<Evaluator>().assoc(s);
 }
 
 } // namespaces

@@ -26,6 +26,7 @@ class Context final {
     Context() = delete;
 public:
     static Ptr make(const Ptr & _s, const Ptr & _e, const Ptr & _next);
+    static Ptr assoc(const Ptr & ctx, const Ptr & s);
 };
 
 

@@ -33,7 +33,6 @@ public:
     Ptr eval(const Ptr & a) const;
     Ptr apply(const Ptr & p, const Ptr & a) const;
     Ptr unlazy() const;
-    Ptr assoc(const Ptr & s) const;
 
     template <class T>
     T * as() const;

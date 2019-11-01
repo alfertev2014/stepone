@@ -13,6 +13,17 @@ Ptr Context::make(const Ptr & _s, const Ptr & _e, const Ptr & _next) {
     return Ob::of<Pair>(Ob::of<Pair>(_s, _e), _next);
 }
 
+Ptr Context::assoc(const Ptr & ctx, const Ptr & s) {
+    Ptr p = ctx;
+    while (p != Ptr::anil()) {
+        Ptr pair = p.car();
+        if(pair.car() == s)
+            return pair.cdr();
+        p = p.cdr();
+    }
+    throw SemanticError("assoc");
+}
+
 inline void Lazy::ev() {
     if(!(a == Ptr::anil())) {
         e = e.eval(a);

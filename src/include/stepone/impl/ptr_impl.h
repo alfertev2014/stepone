@@ -45,11 +45,6 @@ inline Ptr WPtr::unlazy() const
     return ob->unlazy();
 }
 
-inline Ptr WPtr::assoc(const Ptr &s) const
-{
-    return ob->assoc(s);
-}
-
 template <class T>
 inline T * WPtr::as() const {
     return ob->as<T>();

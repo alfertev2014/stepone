@@ -18,6 +18,7 @@ public:
     Ptr getContext() const;
     Ptr apply(const Ptr &p, const Ptr &a);
     Ptr assoc(const Ptr &s) const;
+    Ptr push(const Ptr &s, const Ptr &p) const;
 };
 
 
