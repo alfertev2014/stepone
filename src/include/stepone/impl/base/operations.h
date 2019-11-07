@@ -20,28 +20,34 @@ class TypeMapping : TypeMapping<std::remove_cv_t<std::remove_reference_t<T>>> {
 };
 
 template <>
-class TypeMapping<int> : Type<Value<int>> {
+class TypeMapping<int> : public Type<Value<int>> {
 };
 
 template <>
-class TypeMapping<float> : Type<Value<float>> {
+class TypeMapping<float> : public Type<Value<float>> {
 };
 
 template <>
-class TypeMapping<char> : Type<Value<char>> {
+class TypeMapping<char> : public Type<Value<char>> {
 };
 
 template <>
-class TypeMapping<long long> : Type<Value<long long>> {
+class TypeMapping<long long> : public Type<Value<long long>> {
 };
 
 template <typename T>
 inline Ptr convertToOb(T &&value) {
-    return Ob::of<TypeMapping<T>::type>(std::forward<T>(value));
+    return Ob::of<typename TypeMapping<T>::type>(std::forward<T>(value));
 }
 
-inline Ptr convertToOb(Ptr &&value) {
+template <>
+inline Ptr convertToOb<Ptr>(Ptr &&value) {
     return std::forward<Ptr>(value);
+}
+
+template <>
+inline Ptr convertToOb<bool>(bool &&value) {
+    return value ? Ptr::at() : Ptr::anil();
 }
 
 
