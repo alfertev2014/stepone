@@ -1,13 +1,11 @@
 #include <impl/objects/basenumfunc_obs.h>
 
-#include <impl/operations/cppoperators.h>
 #include <impl/operations/value_operations.h>
 #include <impl/operations/typepredicates_ops.h>
 #include <impl/base/operations.h>
 
 #include <functional>
 #include <type_traits>
-#include <iostream>
 
 namespace stepone::objects {
 
@@ -42,6 +40,17 @@ BaseNumOps<T>::BaseNumOps() :
     aSz(Ob::of<Symbol>())
 {}
 
+namespace {
+// constexpr lambdas
+
+template <typename T>
+struct Shl { auto operator()(const T &lhs, const T &rhs) const { return lhs << rhs;}};
+
+template <typename T>
+struct Shr { auto operator()(const T &lhs, const T &rhs) const { return lhs >> rhs;}};
+
+}
+
 template <typename T>
 Ptr BaseNumOps<T>::populateContext(const Ptr &a) const
 {
@@ -61,8 +70,8 @@ Ptr BaseNumOps<T>::populateContext(const Ptr &a) const
         ctx = Context::make(aXor, Ob::of<BaseMacro>(Function<std::bit_xor<T>>()), ctx);
         ctx = Context::make(aNot, Ob::of<BaseMacro>(Function<std::bit_not<T>>()), ctx);
 
-        ctx = Context::make(aShl, Ob::of<BaseMacro>(Function<ValueBinOp<T, BitSHLBinOp>>()), ctx);
-        ctx = Context::make(aShr, Ob::of<BaseMacro>(Function<ValueBinOp<T, BitSHRBinOp>>()), ctx);
+        ctx = Context::make(aShl, Ob::of<BaseMacro>(Function<Shl<T>>()), ctx);
+        ctx = Context::make(aShr, Ob::of<BaseMacro>(Function<Shr<T>>()), ctx);
     }
 
     ctx = Context::make(aEql, Ob::of<BaseMacro>(Function<std::equal_to<T>>()), ctx);
