@@ -1,8 +1,8 @@
-#include <impl/objects/bytearray_obs.h>
+#include <objects/bytearray_obs.h>
 
-#include <impl/operations/bytearray_ops.h>
-#include <impl/operations/typepredicates_ops.h>
-#include <impl/base/operations.h>
+#include <operations/bytearray_ops.h>
+#include <operations/typepredicates_ops.h>
+#include <base/operations.h>
 
 namespace stepone::objects {
 

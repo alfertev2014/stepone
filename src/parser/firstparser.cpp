@@ -1,10 +1,10 @@
 #include <parser/firstparser.h>
 
 #include <ptr.h>
-#include <impl/ptr_impl.h>
+#include <ptr_impl.h>
 
-#include <impl/core/bytearray.h>
-#include <impl/core/vector.h>
+#include <core/bytearray.h>
+#include <core/vector.h>
 
 #include <dbg.h>
 

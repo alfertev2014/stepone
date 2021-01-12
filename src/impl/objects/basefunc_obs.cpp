@@ -1,7 +1,7 @@
-#include <impl/objects/basefunc_obs.h>
+#include <objects/basefunc_obs.h>
 
-#include <impl/operations/basefunc_ops.h>
-#include <impl/base/operations.h>
+#include <operations/basefunc_ops.h>
+#include <base/operations.h>
 
 namespace stepone::objects {
 

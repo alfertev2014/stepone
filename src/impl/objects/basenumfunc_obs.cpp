@@ -1,8 +1,8 @@
-#include <impl/objects/basenumfunc_obs.h>
+#include <objects/basenumfunc_obs.h>
 
-#include <impl/operations/value_operations.h>
-#include <impl/operations/typepredicates_ops.h>
-#include <impl/base/operations.h>
+#include <operations/value_operations.h>
+#include <operations/typepredicates_ops.h>
+#include <base/operations.h>
 
 #include <functional>
 #include <type_traits>

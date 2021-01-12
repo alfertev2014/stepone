@@ -23,7 +23,7 @@ add_library(libstepone
     impl/objects/vector_obs.cpp)
 
 target_include_directories(libstepone
-    PUBLIC include/stepone
+    PUBLIC include/stepone impl/include
     )
 
 
@@ -35,7 +35,7 @@ add_library(steponeparser
     )
 
 target_include_directories(steponeparser
-    PUBLIC include/stepone
+    PUBLIC include/stepone impl/include
     )
 
 add_executable(steponerepl

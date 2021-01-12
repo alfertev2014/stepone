@@ -1,6 +1,6 @@
 #pragma once
 
-#include <impl/ptr_impl.h>
+#include <ptr_impl.h>
 
 namespace stepone::base {
 

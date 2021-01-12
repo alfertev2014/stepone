@@ -1,9 +1,9 @@
-#include <impl/objects/typepredicates_obs.h>
+#include <objects/typepredicates_obs.h>
 
-#include <impl/operations/typepredicates_ops.h>
-#include <impl/base/operations.h>
-#include <impl/core/macro.h>
-#include <impl/core/value.h>
+#include <operations/typepredicates_ops.h>
+#include <base/operations.h>
+#include <core/macro.h>
+#include <core/value.h>
 
 namespace stepone::objects {
 
