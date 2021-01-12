@@ -47,18 +47,7 @@ target_include_directories(steponerepl
     PUBLIC include/stepone
     )
 
-add_executable(steponetest
-    test/main.cpp
-    test/test.cpp
-    )
-
-target_include_directories(steponetest
-    PUBLIC include/stepone
-    )
-
 target_link_libraries(steponeparser libstepone)
 
 target_link_libraries(steponerepl steponeparser libstepone)
-
-target_link_libraries(steponetest steponeparser libstepone)
 
