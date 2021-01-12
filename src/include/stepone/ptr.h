@@ -2,8 +2,6 @@
 
 #include <utility>
 
-#include <stdio.h>
-
 namespace stepone {
 
 namespace core {
@@ -55,7 +53,6 @@ public:
 
     // TODO: Ensure _ob is not nullptr
     Ptr(core::Ob * _ob) : WPtr(_ob) {
-        // printf("Ptr(), ob=%lx\t", (unsigned long)ob);
         acquire();
     }
     Ptr(const Ptr & p) : Ptr(p.ob) {}
@@ -65,19 +62,16 @@ public:
     }
     Ptr(const WPtr & p) : Ptr(p.ob) {}
     ~Ptr() {
-        // printf("~Ptr(), ob=%lx\t", (unsigned long)ob);
         release();
     }
 
     Ptr &operator=(const Ptr &p) {
-        // printf("Ptr::operator=, ob=%lx\n", (unsigned long) ob);
         p.acquire();
         release();
         ob = p.ob;
         return *this;
     }
     Ptr &operator=(Ptr &&p) {
-        // printf("Ptr::operator= &&, ob=%lx\n", (unsigned long) ob);
         if (&p != this) { // TODO: Is it always true?
             release();
             ob = p.ob;
