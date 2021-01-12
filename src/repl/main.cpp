@@ -1,10 +1,10 @@
 
 #include "repl.h"
 
-#include <parser/firstparser.h>
+#include <firstparser.h>
 
-#include <init/initsymbols.h>
-#include <init/initevaluator.h>
+#include "initsymbols.h"
+#include "initevaluator.h"
 
 #include <iostream>
 

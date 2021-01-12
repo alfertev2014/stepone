@@ -1,6 +1,6 @@
 #include "repl.h"
 
-#include <parser/firstparser.h>
+#include <firstparser.h>
 
 #include <iostream>
 #include <string>

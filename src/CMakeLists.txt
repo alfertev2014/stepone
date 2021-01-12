@@ -28,26 +28,22 @@ target_include_directories(libstepone
 
 
 add_library(steponeparser
-    init/initevaluator.cpp
-    init/initsymbols.cpp
-
     parser/firstparser.cpp
     )
 
-target_include_directories(steponeparser
-    PUBLIC include/stepone impl/include
-    )
+target_link_libraries(steponeparser libstepone)
+
 
 add_executable(steponerepl
+    repl/initevaluator.cpp
+    repl/initsymbols.cpp
     repl/main.cpp
     repl/repl.cpp
     )
 
 target_include_directories(steponerepl
-    PUBLIC include/stepone
+    PUBLIC parser
     )
-
-target_link_libraries(steponeparser libstepone)
 
 target_link_libraries(steponerepl steponeparser libstepone)
 

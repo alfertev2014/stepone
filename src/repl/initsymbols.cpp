@@ -1,4 +1,4 @@
-#include <init/initsymbols.h>
+#include "initsymbols.h"
 
 #include <objects/basefunc_obs.h>
 #include <objects/basenumfunc_obs.h>
