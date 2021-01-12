@@ -5,55 +5,59 @@
 
 namespace stepone {
 
+inline core::Ob* as_ob(void *ob) {
+    return reinterpret_cast<core::Ob*>(ob);
+}
+
 inline void Ptr::acquire() const {
-    ob->refcount++;
+    as_ob(ob)->refcount++;
 }
 
 inline void Ptr::release() const {
-    ob->refcount--;
-    if (ob->refcount == 0) {
-        delete ob;
+    as_ob(ob)->refcount--;
+    if (as_ob(ob)->refcount == 0) {
+        delete as_ob(ob);
     }
 }
 
 inline Ptr WPtr::car() const
 {
-    return ob->car();
+    return as_ob(ob)->car();
 }
 
 inline Ptr WPtr::cdr() const
 {
-    return ob->cdr();
+    return as_ob(ob)->cdr();
 }
 
 inline Ptr WPtr::eval(const Ptr &a) const
 {
-    return ob->eval(a);
+    return as_ob(ob)->eval(a);
 }
 
 inline Ptr WPtr::apply(const Ptr &p, const Ptr &a) const
 {
-    return ob->apply(p, a);
+    return as_ob(ob)->apply(p, a);
 }
 
 inline Ptr WPtr::unlazy() const
 {
-    return ob->unlazy();
+    return as_ob(ob)->unlazy();
 }
 
 template <class T>
 inline T * WPtr::as() const {
-    return ob->as<T>();
+    return as_ob(ob)->as<T>();
 }
 
 template <class T>
 inline bool WPtr::is() const {
-    return ob->is<T>();
+    return as_ob(ob)->is<T>();
 }
 
 template <class T>
 inline T &WPtr::cast() const {
-    return ob->cast<T>();
+    return as_ob(ob)->cast<T>();
 }
 
 } // namespace

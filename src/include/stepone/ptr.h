@@ -4,26 +4,22 @@
 
 namespace stepone {
 
-namespace core {
-class Ob;
-}
-
 class Ptr;
 
 class WPtr {
     friend class Ptr;
-    core::Ob * ob; // Always not nullptr
+    void * ob; // Always not nullptr
 
-    WPtr(core::Ob * _ob) : ob(_ob) {}
+    WPtr(void * _ob) : ob(_ob) {}
 public:
-    friend bool operator==(const core::Ob * const & ob, const WPtr & p);
-    friend bool operator!=(const core::Ob * const & ob, const WPtr & p);
+    friend bool operator==(const void * const & ob, const WPtr & p);
+    friend bool operator!=(const void * const & ob, const WPtr & p);
 
     bool operator==(const WPtr & p) const {return ob == p;}
     bool operator!=(const WPtr & p) const {return ob != p;}
 
-    bool operator==(const core::Ob * const p) const {return ob == p;}
-    bool operator!=(const core::Ob * const p) const {return !(ob == p);}
+    bool operator==(const void * const p) const {return ob == p;}
+    bool operator!=(const void * const p) const {return !(ob == p);}
 
     Ptr car() const;
     Ptr cdr() const;
@@ -39,8 +35,8 @@ public:
     template <class T>
     T &cast() const;
 };
-inline bool operator==(const core::Ob * const & ob, const WPtr & p) {return ob == p.ob;}
-inline bool operator!=(const core::Ob * const & ob, const WPtr & p) {return ob != p.ob;}
+inline bool operator==(const void * const & ob, const WPtr & p) {return ob == p.ob;}
+inline bool operator!=(const void * const & ob, const WPtr & p) {return ob != p.ob;}
 
 class Ptr : public WPtr {
     void acquire() const;
@@ -52,7 +48,7 @@ public:
     Ptr() : Ptr(Ptr::anil()) {}
 
     // TODO: Ensure _ob is not nullptr
-    Ptr(core::Ob * _ob) : WPtr(_ob) {
+    Ptr(void * _ob) : WPtr(_ob) {
         acquire();
     }
     Ptr(const Ptr & p) : Ptr(p.ob) {}
@@ -72,12 +68,7 @@ public:
         return *this;
     }
     Ptr &operator=(Ptr &&p) {
-        if (&p != this) { // TODO: Is it always true?
-            release();
-            ob = p.ob;
-            p.ob = Ptr::anil().ob;
-	    Ptr::anil().acquire();
-        }
+        swap(p);
         return *this;
     }
 

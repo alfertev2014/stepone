@@ -4,8 +4,6 @@
 
 namespace stepone::base {
 
-using namespace core;
-
 class MQuote {
 public:
     Ptr operator()(const Ptr &p, const Ptr &a) const;
