@@ -1,101 +1,58 @@
-#include <impl/core/bytearray.h>
-#include <impl/core/type_info_inst.h>
+#include <core/bytearray.h>
+#include <core/ob.h>
 
 #include <cstring>
 #include <sstream>
+#include <algorithm>
 
-namespace stepone { namespace core {
+namespace stepone::core {
+ByteArray::ByteArray(const ByteArray &_origin, size_t _begin, size_t _length) {
+    if(_begin < 0 || _begin + _length >= _origin.getSize()) {
+        throw SemanticError("buffer index out of range");
+    }
 
-const Ptr ByteArray::getTypeInfo() const {return TypeInfo<ByteArray>::instance;}
-
-ByteArray::~ByteArray() {
-    if(origin == Ptr::anil)
-        delete [] buffer;
+    buffer.reserve(_length);
+    auto itBegin = _origin.buffer.cbegin() + _begin;
+    buffer.insert(buffer.end(), itBegin, itBegin + _length);
 }
 
-ByteArray *ByteArray::clone() {
-    ByteArray * res = new ByteArray(length);
-    for(int i = 0; i < length; ++i)
-        res->buffer[i] = buffer[i];
-    return res;
+ByteArray::ByteArray(const ByteArray &v1, const ByteArray &v2) {
+    buffer.reserve(v1.getSize() + v2.getSize());
+    buffer.insert(buffer.end(), v1.buffer.cbegin(), v1.buffer.cend());
+    buffer.insert(buffer.end(), v2.buffer.cbegin(), v2.buffer.cend());
 }
 
-int ByteArray::cmp(ByteArray *ba) {
-    int len = std::min(length, ba->length);
-    int res = memcmp(buffer, ba->buffer, len);
-    if(res == 0)
-        return len < ba->length ? -1 : len < length ? 1 : 0;
-    return res;
+ByteArray::ByteArray(const char *_begin, size_t _length) {
+    if(_begin == nullptr || _length < 0) {
+        throw SemanticError("buffer index out of range");
+    }
+
+    buffer.reserve(_length);
+    buffer.insert(buffer.end(), _begin, _begin + _length);
 }
 
-int ByteArray::ncmp(ByteArray *ba, int n) {
-    return memcmp(buffer, ba->buffer, n);
+int ByteArray::cmp(const ByteArray &ba) {
+    return std::lexicographical_compare(
+        buffer.cbegin(), buffer.cend(),
+        ba.buffer.cbegin(), ba.buffer.cend());
+}
+
+int ByteArray::ncmp(const ByteArray &ba, size_t n) {
+    n = std::min(buffer.size(), n);
+    n = std::min(ba.buffer.size(), n);
+    return std::lexicographical_compare(
+        buffer.cbegin(), buffer.cbegin() + n,
+        ba.buffer.cbegin(), ba.buffer.cbegin() + n);
 }
 
 int ByteArray::findChar(int ch) {
-    char * res = (char *)memchr(buffer, ch, length);
-    return res ? res - buffer : -1;
+    auto res = std::find(buffer.cbegin(), buffer.cend(), ch);
+    return res != buffer.cend() ? res - buffer.cbegin() : -1;
 }
 
-int ByteArray::findSubarray(ByteArray *ba) {
-    char * pend = buffer + length;
-    char * needleEnd = ba->buffer + ba->length;
-    char *p = buffer, *needle = ba->buffer;
-    while(true) {
-        if(needle == needleEnd)
-            return p - buffer - ba->length;
-        if(p == pend)
-            return -1;
-        if(*p != *needle) {
-            needle = ba->buffer;
-            while(*p != *needle) {
-                if(p == pend)
-                    return -1;
-                ++p;
-            }
-        }
-        ++needle;
-        ++p;
-    }
-    return -1;
+int ByteArray::findSubarray(const ByteArray &ba) {
+    auto res = std::search(buffer.cbegin(), buffer.cend(), ba.buffer.cbegin(), ba.buffer.cend());
+    return res != buffer.cend() ? res - buffer.cbegin() : -1;
 }
 
-ByteArray *ByteArray::concat(ByteArray *ba) const {
-    int nres = length + ba->length;
-    ByteArray * res = new ByteArray(nres);
-    memcpy(res->buffer, buffer, length);
-    memcpy(res->buffer + length, ba->buffer, ba->length);
-    return res;
-}
-
-ByteArray *ByteArray::fromChars(int size, const char *chars) {
-    ByteArray * res = new ByteArray(size);
-    memcpy(res->buffer, chars, size);
-    return res;
-}
-
-ByteArray *ByteArray::mid(int begin, int end) {
-    if(begin > length)
-        begin = length;
-    if(end > length)
-        end = length;
-    int n = end - begin;
-    if(n < 0)
-        n = 0;
-    ByteArray * res = new ByteArray(n);
-    memcpy(res->buffer, buffer + begin, n);
-    return res;
-}
-
-ByteArray *ByteArray::slice(int begin, int end) {
-    if(begin > length)
-        begin = length;
-    if(end > length)
-        end = length;
-    int n = end - begin;
-    if(n < 0)
-        n = 0;
-    return new ByteArray(origin == Ptr::anil ? this : origin, buffer + begin, n);
-}
-
-}} // namespaces
+} // namespaces

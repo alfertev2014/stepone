@@ -1,77 +1,92 @@
-#include <parser/firstparser.h>
+#include "firstparser.h"
 
 #include <ptr.h>
-#include <impl/ptr_impl.h>
+#include <ptr_impl.h>
 
-#include <impl/core/bytearray.h>
-#include <impl/core/vector.h>
+#include <core/bytearray.h>
+#include <core/vector.h>
 
 #include <dbg.h>
 
 #include <cstring>
 #include <sstream>
+#include <string_view>
+#include <optional>
+#include <algorithm>
 
-namespace stepone { namespace parser {
-
-typedef std::string::const_iterator string_pos;
-static const std::size_t string_end = std::string::npos;
+namespace stepone::parser {
 
 using namespace core;
 
-struct parseRes {
-    Ptr e;
-    string_pos rest;
-    bool success;
+using string_pos = std::string_view::const_iterator;
 
-    parseRes(const Ptr & _e, string_pos _rest, bool _success)
-        :e(_e), rest(_rest), success(_success) {}
-};
+using parseRes = std::optional<Ptr>;
+
 
 class FirstParser::FirstParserImpl {
 public:
     FirstParserImpl(const Ptr &baseSymbolTable) :
-        symbols(baseSymbolTable),
-        nosymbol("(){}[].\"")
+        symbols(baseSymbolTable)
     {}
 
     std::ostream & printOb(std::ostream & ts, const Ptr & p);
 
     Ptr parse(const std::string &_s);
 private:
-    std::string s;
-    std::string nosymbol;
     Ptr symbols;
+};
 
-    std::ostream & printSymbol(std::ostream & ts, Symbol * sym);
+
+class Parser {
+    Ptr &symbols;
+
+    std::string_view s;
+    string_pos si;
+    const std::string nosymbol {"(){}[].\""};
+
+    bool eos() const { return si == s.end(); }
+    bool punctuation() const { return nosymbol.find(*si) != std::string_view::npos; }
+public:
+    Parser(Ptr &symbols, std::string_view s)
+        : symbols(symbols), s(s), si(s.begin()) {}
+
+    parseRes parseExpression();
+    parseRes parseTail();
+    parseRes parseAtom();
+    parseRes parseChar();
+    parseRes parseString();
+    parseRes parseSymbol();
+    parseRes parseNumber();
+
+    bool lexem(std::string_view lex);
+    void spaces();
+};
+
+
+class Printer {
+    const Ptr &symbols;
+public:
+    Printer(const Ptr &symbols)
+        : symbols(symbols) {}
+
+    std::ostream & printOb(std::ostream & ts, const Ptr & p);
+    std::ostream & printSymbol(std::ostream & ts, const Ptr &sym);
     std::ostream & printList(std::ostream & ts, Pair * pr);
     void printValue(std::ostream &ts, const Ptr &p);
-
-    parseRes parseExpression(string_pos si);
-    parseRes parseTail(string_pos si);
-    parseRes parseAtom(string_pos si);
-    parseRes parseChar(string_pos si);
-    parseRes parseString(string_pos si);
-    parseRes parseSymbol(string_pos si);
-    parseRes parseNumber(string_pos si);
-
-    bool lexem(const std::string & lex, string_pos & si);
-    void spaces(string_pos & si);
 };
 
 
 FirstParser::FirstParser(const Ptr &baseEvaluator, const Ptr &baseSymbolTable) :
     a(baseEvaluator),
-    impl(new FirstParserImpl(baseSymbolTable))
+    impl(std::make_unique<FirstParserImpl>(baseSymbolTable))
 {}
 
 FirstParser::FirstParser(const FirstParser &fp) :
     a(fp.a),
-    impl(new FirstParserImpl(*fp.impl))
+    impl(std::make_unique<FirstParserImpl>(*fp.impl))
 {}
 
-FirstParser::~FirstParser() {
-    delete impl;
-}
+FirstParser::~FirstParser() = default;
 
 Ptr FirstParser::parse(const std::string &_s) {
     return impl->parse(_s);
@@ -93,18 +108,34 @@ void FirstParser::print(std::ostream &ts, const Ptr &p) {
     impl->printOb(ts, p);
 }
 
-void FirstParser::FirstParserImpl::printValue(std::ostream &ts, const Ptr &p) {
-    ValueBase * spt = p.as<ValueBase>();
-    if(spt->is<Value<int> >())
-        ts << spt->as<Value<int> >()->getValue();
-    else if(spt->is<Value<float> >())
-        ts << spt->as<Value<float> >()->getValue();
-    else if(spt->is<Value<char> >()) {
-        char c = spt->as<Value<char> >()->getValue();
+
+std::ostream &FirstParser::FirstParserImpl::printOb(std::ostream &ts, const Ptr &p) {
+    Printer printer(symbols);
+    printer.printOb(ts, p);
+    return ts;
+}
+
+Ptr FirstParser::FirstParserImpl::parse(const std::string &_s) {
+    Parser fsm(this->symbols, _s);
+    parseRes pr = fsm.parseExpression();
+    return pr.value_or(Ptr::anil());
+}
+
+
+void Printer::printValue(std::ostream &ts, const Ptr &p) {
+
+    if (Value<int> *val = p.as<Value<int> >(); val)
+        ts << val->getValue();
+    else if (Value<float> *val = p.as<Value<float> >(); val)
+        ts << val->getValue();
+    else if (Value<char> *val = p.as<Value<char> >(); val) {
+        char c = val->getValue();
         if(c == '\"') ts << "&\"\"";
         else ts << "&\"" << c << "\"";
-    } else if(spt->is<Vector>()) {
-        Vector * v = spt->as<Vector>();
+    }
+    else if (Value<long long> *val = p.as<Value<long long> >(); val)
+        ts << val->getValue();
+    else if (Vector * v = p.as<Vector>(); v) {
         int n = v->getSize();
         if(n == 0)
             ts << "[]";
@@ -117,8 +148,7 @@ void FirstParser::FirstParserImpl::printValue(std::ostream &ts, const Ptr &p) {
             }
             ts << "]";
         }
-    } else if(spt->is<ByteArray>()) {
-        ByteArray * ba = spt->as<ByteArray>();
+    } else if (ByteArray * ba = p.as<ByteArray>(); ba) {
         ts << "\"";
         ts.write(ba->getData(), ba->getSize());
         ts << "\"";
@@ -126,35 +156,28 @@ void FirstParser::FirstParserImpl::printValue(std::ostream &ts, const Ptr &p) {
         ts << "{SpecType}";
 }
 
-std::ostream &FirstParser::FirstParserImpl::printOb(std::ostream &ts, const Ptr &p) {
-    Symbol * sym = p.as<Symbol>();
-    if(sym != 0)
-        return printSymbol(ts, sym);
-    if(p.as<Pair>()) {
+std::ostream &Printer::printOb(std::ostream &ts, const Ptr &p) {
+    if (p.is<Symbol>())
+        return printSymbol(ts, p);
+    if (p.is<Pair>()) {
         ts << "(";
         return printList(ts, p.as<Pair>());
     }
-    if(p.as<Lazy>())
+    if (p.is<Lazy>())
         ts << "{lazy}";
-    else if(p.as<Label>())
+    else if (p.is<Label>())
         ts << "{label}";
-    else if(p.as<ValueBase>()) {
+    else if (p.is<ValueBase>()) {
         printValue(ts, p);
     }
     return ts;
 }
 
-Ptr FirstParser::FirstParserImpl::parse(const std::string &_s) {
-    s = _s;
-    parseRes pr = parseExpression(s.begin());
-    return pr.success ? pr.e : Ptr::anil;
-}
-
-std::ostream &FirstParser::FirstParserImpl::printSymbol(std::ostream &ts, Symbol *sym) {
-    if(sym == Ptr::anil.as<Symbol>()) {
+std::ostream &Printer::printSymbol(std::ostream &ts, const Ptr &sym) {
+    if(sym == Ptr::anil()) {
         return ts << "()";
     } else {
-        for(Ptr p = symbols; p != Ptr::anil; p = p.cdr()) {
+        for(Ptr p = symbols; p != Ptr::anil(); p = p.cdr()) {
             if(p.car().car() == sym) {
                 ByteArray * ba = p.car().cdr().as<ByteArray>();
                 return ts.write(ba->getData(), ba->getSize());
@@ -164,12 +187,11 @@ std::ostream &FirstParser::FirstParserImpl::printSymbol(std::ostream &ts, Symbol
     return ts << "{sym}";
 }
 
-std::ostream &FirstParser::FirstParserImpl::printList(std::ostream &ts, Pair *pr) {
+std::ostream &Printer::printList(std::ostream &ts, Pair *pr) {
     printOb(ts, pr->car());
     Ptr pcdr = pr->cdr();
-    Atom * atom = pcdr.as<Atom>();
-    if(atom != 0) {
-        if(atom != Ptr::anil.as<Atom>()) {
+    if(pcdr.is<Atom>()) {
+        if(pcdr != Ptr::anil()) {
             ts << " . ";
             printOb(ts, pcdr);
         }
@@ -181,168 +203,174 @@ std::ostream &FirstParser::FirstParserImpl::printList(std::ostream &ts, Pair *pr
     return ts;
 }
 
-parseRes FirstParser::FirstParserImpl::parseTail(string_pos si) {
-    string_pos sii = si;
-    spaces(sii);
-    if(lexem(")", sii))
-        return parseRes(Ptr::anil, sii, true);
-    if(lexem(".", sii)) {
-        spaces(sii);
-        parseRes pr = parseExpression(sii);
-        if(!pr.success) {
+
+parseRes Parser::parseTail() {
+    spaces();
+    if (lexem(")"))
+        return Ptr::anil();
+    if (lexem(".")) {
+        spaces();
+        parseRes pr = parseExpression();
+        if(!pr.has_value()) {
             DBG("parseTail fail");
-            return parseRes(Ptr::anil, si, false);
+            return std::nullopt;
         }
-        sii = pr.rest;
-        spaces(sii);
-        if(lexem(")", sii))  {
-            return parseRes(pr.e, sii, true);
+        spaces();
+        if(lexem(")"))  {
+            return pr;
         } else {
             DBG("fail ) expected");
-            return parseRes(Ptr::anil, si, false);
+            return std::nullopt;
         }
     }
-    parseRes pr1 = parseExpression(sii);
-    if(!pr1.success) {
+    parseRes pr1 = parseExpression();
+    if (!pr1.has_value()) {
         DBG("parseTail fail");
-        return parseRes(Ptr::anil, si, false);
+        return std::nullopt;
     }
-    parseRes pr2 = parseTail(pr1.rest);
-    if(!pr2.success) {
+    parseRes pr2 = parseTail();
+    if (!pr2.has_value()) {
         DBG("parseTail fail");
-        return parseRes(Ptr::anil, si, false);
+        return std::nullopt;
     }
-    return parseRes(new Pair(pr1.e, pr2.e), pr2.rest, true);
+    return Ob::of<Pair>(pr1.value(), pr2.value());
 }
 
-parseRes FirstParser::FirstParserImpl::parseAtom(string_pos si) {
-    parseRes pr = parseNumber(si);
-    if(pr.success) return pr;
-    pr = parseString(si);
-    if(pr.success) return pr;
-    pr = parseChar(si);
-    if(pr.success) return pr;
-    pr = parseSymbol(si);
-    return pr.success ? pr : parseRes(Ptr::anil, si, false);
-}
-
-parseRes FirstParser::FirstParserImpl::parseChar(string_pos si) {
+parseRes Parser::parseAtom() {
     string_pos sii = si;
-    if(sii == s.end() || *sii != '&')
-        return parseRes(Ptr::anil, si, false);
-    else
-        ++sii;
-    if(sii == s.end() || *sii != '\"')
-        return parseRes(Ptr::anil, si, false);
-    else
-        ++sii;
-    std::string chars;
-    for( ; sii != s.end() && *sii != '\"'; ++sii)
-        chars.push_back(*sii);
-    if(sii != s.end())
-        ++sii;
-    return parseRes(new Value<char>(chars.size() > 0 ? chars[0] : '\"'), sii, true);
+    parseRes pr = parseNumber();
+    if (pr.has_value()) return pr;
+
+    si = sii;
+    pr = parseString();
+    if (pr.has_value()) return pr;
+
+    si = sii;
+    pr = parseChar();
+    if (pr.has_value()) return pr;
+
+    si = sii;
+    pr = parseSymbol();
+    if (pr.has_value()) return pr;
+
+    return std::nullopt;
 }
 
-parseRes FirstParser::FirstParserImpl::parseString(string_pos si) {
-    string_pos sii = si;
-    if(sii == s.end() || *sii != '\"')
-        return parseRes(Ptr::anil, si, false);
-    else
-        ++sii;
-    std::string chars;
-    for( ; sii != s.end() && *sii != '\"'; ++sii)
-        chars.push_back(*sii);
-    if(sii != s.end())
-        ++sii;
-    return parseRes(ByteArray::fromChars(chars.size(), chars.c_str()), sii, true);
+parseRes Parser::parseChar() {
+    if (eos() || *si != '&')
+        return std::nullopt;
+
+    ++si;
+    if (eos() || *si != '\"')
+        return std::nullopt;
+
+    ++si;
+    std::string chars; // TODO: Add interpretation of escape sequences and unicoode
+    for ( ; !eos() && *si != '\"'; ++si)
+        chars.push_back(*si);
+    if (!eos())
+        ++si;
+    return Ob::of<Value<char>>(chars.size() > 0 ? chars[0] : '\"');
 }
 
-parseRes FirstParser::FirstParserImpl::parseSymbol(string_pos si) {
+parseRes Parser::parseString() {
+    if (eos() || *si != '\"')
+        return std::nullopt;
+
+    ++si;
+    std::string chars; // TODO: Add interpretation of escape sequences and unicoode
+    for ( ; !eos() && *si != '\"'; ++si)
+        chars.push_back(*si);
+    if (!eos())
+        ++si;
+    return Ob::of<ByteArray>(chars.c_str(), chars.size());
+}
+
+parseRes Parser::parseSymbol() {
     std::string symbolString;
-    string_pos sii = si;
-    if(sii == s.end() || isspace(*sii) || (nosymbol.find(*sii) != string_end)) {
-        DBG("symbol fail first char ") << "\"" << *sii << "\"" << std::endl;
-        if(sii == s.end()) DBG("isend");
-        else if(isspace(*sii)) DBG("isspace");
-        else if((nosymbol.find(*sii) != string_end)) DBG("nosym");
-        return parseRes(Ptr::anil, si, false);
+    if (eos()) {
+        DBG("Fail to parse symbol: eos has reached");
+        return std::nullopt;
     }
-    symbolString.push_back(*sii);
-    ++sii;
-    while(sii != s.end() && !isspace(*sii) && (nosymbol.find(*sii) == string_end)) {
-        symbolString.push_back(*sii);
-        ++sii;
+    if (isspace(*si) || punctuation()) {
+        DBG("Fail to parse symbol first char: ") << "\"" << *si << "\"" << std::endl;
+        return std::nullopt;
     }
-    for(Ptr p = symbols; p != Ptr::anil; p = p.cdr()) {
+
+    symbolString.push_back(*si);
+    ++si;
+    for ( ; !eos() && !isspace(*si) && !punctuation(); ++si) {
+        symbolString.push_back(*si);
+    }
+    for (Ptr p = symbols; p != Ptr::anil(); p = p.cdr()) {
         ByteArray * ba = p.car().cdr().as<ByteArray>();
         if(ba->getSize() == symbolString.size() &&
                 !memcmp(ba->getData(), symbolString.data(), symbolString.size()))
-            return parseRes(p.car().car(), sii, true);
+            return p.car().car();
     }
-    Symbol * sym = new Symbol();
-    symbols = new Pair(new Pair(sym, ByteArray::fromChars(symbolString.size(), symbolString.data())), symbols);
-    return parseRes(sym, sii, true);
+
+    Ptr sym = Ob::of<Symbol>();
+    symbols = Ob::of<Pair>(
+        Ob::of<Pair>(
+            sym,
+            Ob::of<ByteArray>(symbolString.data(), symbolString.size())
+        ),
+        symbols
+    );
+    return sym;
 }
 
-parseRes FirstParser::FirstParserImpl::parseNumber(string_pos si) {
+parseRes Parser::parseNumber() {
     std::string number;
-    string_pos sii = si;
-    if(sii == s.end() || !isdigit(*sii) && *sii != '-' || isspace(*sii) || (nosymbol.find(*sii) != string_end)) {
-        return parseRes(Ptr::anil, si, false);
+    if (eos() || (!isdigit(*si) && *si != '-') || isspace(*si) || punctuation()) {
+        return std::nullopt;
     }
-    number.push_back(*sii);
-    ++sii;
-    while(sii != s.end() && isdigit(*sii) && !isspace(*sii) && (nosymbol.find(*sii) == string_end)) {
-        number.push_back(*sii);
-        ++sii;
+
+    number.push_back(*si);
+    ++si;
+    for ( ; !eos() && isdigit(*si) && !isspace(*si) && !punctuation(); ++si) {
+        number.push_back(*si);
     }
-    if(sii == s.end() || *sii != '.') {
+
+    if (eos() || *si != '.') {
         std::istringstream ss(number);
         int i;
-        if(ss >> i)
-            return parseRes(new Value<int>(i), sii, true);
-        else {
-            DBG("int is not int");
+        if (ss >> i) {
+            return Ob::of<Value<int>>(i);
         }
     } else {
-        number.push_back(*sii);
-        ++sii;
-        while(sii != s.end() && isdigit(*sii) && !isspace(*sii) && (nosymbol.find(*sii) == string_end)) {
-            number.push_back(*sii);
-            ++sii;
+        number.push_back(*si);
+        ++si;
+        for ( ; !eos() && isdigit(*si) && !isspace(*si) && !punctuation(); ++si) {
+            number.push_back(*si);
         }
         float f;
         std::istringstream ss(number);
-        if(ss >> f)
-            return parseRes(new Value<float>(f), sii, true);
-        else {
-            DBG("float is not float");
+        if (ss >> f) {
+            return Ob::of<Value<float>>(f);
         }
     }
-    return parseRes(Ptr::anil, si, false);
+    return std::nullopt;
 }
 
-bool FirstParser::FirstParserImpl::lexem(const std::string &lex, string_pos &si) {
-    string_pos sii = si;
-    for(string_pos it = lex.begin(); it != lex.end(); ++it) {
-        if(sii == s.end() || *sii != *it)
-            return false;
-        ++sii;
+bool Parser::lexem(std::string_view lex) {
+    if (std::search(si, s.end(), lex.begin(), lex.end()) == si) {
+        si += lex.size();
+        return true;
     }
-    si = sii;
-    return true;
+    return false;
 }
 
-void FirstParser::FirstParserImpl::spaces(string_pos &si) {
-    while(si != s.end() && isspace(*si))
+void Parser::spaces() {
+    while(!eos() && isspace(*si))
         ++si;
 }
 
-parseRes FirstParser::FirstParserImpl::parseExpression(string_pos si) {
-    spaces(si);
-    bool success = lexem("(", si);
-    return success ? parseTail(si) : parseAtom(si);
+parseRes Parser::parseExpression() {
+    spaces();
+    if (lexem("("))
+        return parseTail();
+    return parseAtom();
 }
 
-}} // namespaces
+} // namespaces

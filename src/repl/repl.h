@@ -1,8 +1,8 @@
 #pragma once
 
-namespace stepone { namespace parser {
+namespace stepone::parser {
     class FirstParser;
-}}
+}
 
 class REPL {
 public:

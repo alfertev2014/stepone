@@ -1,67 +1,79 @@
 #pragma once
 
-namespace stepone {
+#include <utility>
 
-namespace core {
-class Ob;
-}
+namespace stepone {
 
 class Ptr;
 
 class WPtr {
     friend class Ptr;
-    core::Ob * ob;
+    void * ob; // Always not nullptr
 
-    WPtr(core::Ob * _ob) : ob(_ob) {}
+    WPtr(void * const &_ob) : ob(_ob) {}
 public:
-    friend bool operator==(const core::Ob * const & ob, const WPtr & p);
-    friend bool operator!=(const core::Ob * const & ob, const WPtr & p);
+    friend bool operator==(void *const &ob, const WPtr &p);
+    friend bool operator!=(void *const &ob, const WPtr &p);
 
-    bool operator==(const WPtr & p) const {return ob == p;}
-    bool operator!=(const WPtr & p) const {return ob != p;}
+    bool operator==(const WPtr &p) const {return ob == p;}
+    bool operator!=(const WPtr &p) const {return ob != p;}
 
-    bool operator==(const core::Ob * const p) const {return ob == p;}
-    bool operator!=(const core::Ob * const p) const {return !(ob == p);}
+    bool operator==(void *const &p) const {return ob == p;}
+    bool operator!=(void *const &p) const {return !(ob == p);}
 
     Ptr car() const;
     Ptr cdr() const;
 
-    Ptr eval(const Ptr & a) const;
-    Ptr apply(const Ptr & p, const Ptr & a) const;
+    Ptr eval(const Ptr &a) const;
+    Ptr apply(const Ptr &p, const Ptr &a) const;
     Ptr unlazy() const;
-    Ptr assoc(const Ptr & s) const;
-
-    Ptr typeId() const;
 
     template <class T>
     T * as() const;
     template <class T>
     bool is() const;
     template <class T>
-    T * cast() const;
+    T &cast() const;
 };
-inline bool operator==(const core::Ob * const & ob, const WPtr & p) {return ob == p.ob;}
-inline bool operator!=(const core::Ob * const & ob, const WPtr & p) {return ob != p.ob;}
+inline bool operator==(void *const &ob, const WPtr &p) {return ob == p.ob;}
+inline bool operator!=(void *const &ob, const WPtr &p) {return ob != p.ob;}
 
 class Ptr : public WPtr {
-    void acqure();
-    void release();
-    void assing(core::Ob * _ob);
+    void acquire() const;
+    void release() const;
 public:
-    static const Ptr anil;
-    static const Ptr at;
+    static const Ptr anil();
+    static const Ptr at();
 
-    Ptr(core::Ob * _ob) : WPtr(_ob) {acqure();}
-    Ptr(const Ptr & p) : WPtr(p.ob) {acqure();}
-    Ptr(const WPtr & p) : WPtr(p.ob) {acqure();}
-    Ptr(bool b) : WPtr(b ? at.ob : anil.ob) {acqure();}
-    ~Ptr() {release();}
+    Ptr() : Ptr(Ptr::anil()) {}
 
-    Ptr & operator=(const Ptr & p) {return operator=(p.ob);}
-    Ptr & operator=(const WPtr & p) {return operator=(p.ob);}
-    Ptr & operator=(core::Ob * _ob) {
-        assing(_ob);
+    // TODO: Ensure _ob is not nullptr
+    Ptr(void *const &_ob) : WPtr(_ob) {
+        acquire();
+    }
+    Ptr(const Ptr &p) : Ptr(p.ob) {}
+    Ptr(Ptr &&p) : WPtr(p.ob) {
+        p.ob = Ptr::anil().ob;
+	Ptr::anil().acquire();
+    }
+    Ptr(const WPtr &p) : Ptr(p.ob) {}
+    ~Ptr() {
+        release();
+    }
+
+    Ptr &operator=(const Ptr &p) {
+        p.acquire();
+        release();
+        ob = p.ob;
         return *this;
+    }
+    Ptr &operator=(Ptr &&p) {
+        swap(p);
+        return *this;
+    }
+
+    void swap(Ptr &p) noexcept {
+        std::swap(ob, p.ob);
     }
 };
 

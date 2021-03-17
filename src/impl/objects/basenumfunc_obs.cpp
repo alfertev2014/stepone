@@ -1,95 +1,131 @@
-#include <impl/objects/basenumfunc_obs.h>
+#include <objects/basenumfunc_obs.h>
 
-#include <impl/operations/cppoperators.h>
-#include <impl/operations/value_operations.h>
-#include <impl/base/operations.h>
+#include <operations/value_operations.h>
+#include <operations/typepredicates_ops.h>
+#include <base/operations.h>
 
-namespace stepone { namespace objects {
+#include <functional>
+#include <type_traits>
+
+namespace stepone::objects {
 
 using namespace base;
 using namespace operations;
 
-BaseNumFunc::BaseNumFunc() :
-    fintNeg(new FUnaryOp<ValueUnOp<int, MinusUnOp<int> > >),
-    fintPlus(new FBinaryOp<ValueBinOp<int, PlusBinOp<int> > >),
-    fintMinus(new FBinaryOp<ValueBinOp<int, MinusBinOp<int> > >),
-    fintProduct(new FBinaryOp<ValueBinOp<int, ProductBinOp<int> > >),
-    fintDivision(new FBinaryOp<ValueBinOp<int, DivisionBinOp<int> > >),
-    fintMod(new FBinaryOp<ValueBinOp<int, ModBinOp<int> > >),
-    fintp(new FTypeP<Value<int> >),
+template <typename T>
+BaseNumOps<T>::BaseNumOps() :
+    aNeg(Ob::of<Symbol>()),
+    aPlus(Ob::of<Symbol>()),
+    aMinus(Ob::of<Symbol>()),
+    aProduct(Ob::of<Symbol>()),
+    aDivision(Ob::of<Symbol>()),
+    aMod(Ob::of<Symbol>()),
+    aIs(Ob::of<Symbol>()),
 
-    fintand(new FBinaryOp<ValueBinOp<int, BitAndBinOp<int> > >),
-    fintor(new FBinaryOp<ValueBinOp<int, BitOrBinOp<int> > >),
-    fintxor(new FBinaryOp<ValueBinOp<int, BitXorBinOp<int> > >),
-    fintnot(new FUnaryOp<ValueUnOp<int, BitNotUnOp<int> > >),
+    aAnd(Ob::of<Symbol>()),
+    aOr(Ob::of<Symbol>()),
+    aXor(Ob::of<Symbol>()),
+    aNot(Ob::of<Symbol>()),
 
-    fintshl(new FBinaryOp<ValueBinOp<int, BitSHLBinOp<int> > >),
-    fintshr(new FBinaryOp<ValueBinOp<int, BitSHRBinOp<int> > >),
+    aShl(Ob::of<Symbol>()),
+    aShr(Ob::of<Symbol>()),
 
-    fintEql(new FBinaryOp<ValueCmpOp<int, EqlCmpOp<int> > >),
-    fintNE(new FBinaryOp<ValueCmpOp<int, NECmpOp<int> > >),
-    fintGT(new FBinaryOp<ValueCmpOp<int, GTCmpOp<int> > >),
-    fintLT(new FBinaryOp<ValueCmpOp<int, LTCmpOp<int> > >),
-    fintGE(new FBinaryOp<ValueCmpOp<int, GECmpOp<int> > >),
-    fintLE(new FBinaryOp<ValueCmpOp<int, LECmpOp<int> > >),
+    aEql(Ob::of<Symbol>()),
+    aNE(Ob::of<Symbol>()),
+    aGT(Ob::of<Symbol>()),
+    aLT(Ob::of<Symbol>()),
+    aGE(Ob::of<Symbol>()),
+    aLE(Ob::of<Symbol>()),
 
-    flongp(new FTypeP<Value<long long> >),
-    flongand(new FBinaryOp<ValueBinOp<long long, BitAndBinOp<long long> > >),
-    flongor(new FBinaryOp<ValueBinOp<long long, BitOrBinOp<long long> > >),
-    flongxor(new FBinaryOp<ValueBinOp<long long, BitXorBinOp<long long> > >),
-    flongnot(new FUnaryOp<ValueUnOp<long long, BitNotUnOp<long long> > >),
-
-    flongshl(new FBinaryOp<ValueBinOp<long long, BitSHLBinOp<long long> > >),
-    flongshr(new FBinaryOp<ValueBinOp<long long, BitSHRBinOp<long long> > >),
-
-    flongEql(new FBinaryOp<ValueCmpOp<long long, EqlCmpOp<long long> > >),
-    flongNE(new FBinaryOp<ValueCmpOp<long long, NECmpOp<long long> > >),
-    flongGT(new FBinaryOp<ValueCmpOp<long long, LTCmpOp<long long> > >),
-    flongLT(new FBinaryOp<ValueCmpOp<long long, GTCmpOp<long long> > >),
-    flongGE(new FBinaryOp<ValueCmpOp<long long, LECmpOp<long long> > >),
-    flongLE(new FBinaryOp<ValueCmpOp<long long, GECmpOp<long long> > >),
-
-    ffloatNeg(new FUnaryOp<ValueUnOp<float, MinusUnOp<float> > >),
-    ffloatPlus(new FBinaryOp<ValueBinOp<float, PlusBinOp<float> > >),
-    ffloatMinus(new FBinaryOp<ValueBinOp<float, MinusBinOp<float> > >),
-    ffloatProduct(new FBinaryOp<ValueBinOp<float, ProductBinOp<float> > >),
-    ffloatDivision(new FBinaryOp<ValueBinOp<float, DivisionBinOp<float> > >),
-    ffloatp(new FTypeP<Value<float> >),
-    ffloatEql(new FBinaryOp<ValueCmpOp<float, EqlCmpOp<float> > >),
-    ffloatNE(new FBinaryOp<ValueCmpOp<float, NECmpOp<float> > >),
-    ffloatGT(new FBinaryOp<ValueCmpOp<float, GTCmpOp<float> > >),
-    ffloatLT(new FBinaryOp<ValueCmpOp<float, LTCmpOp<float> > >),
-    ffloatGE(new FBinaryOp<ValueCmpOp<float, GECmpOp<float> > >),
-    ffloatLE(new FBinaryOp<ValueCmpOp<float, LECmpOp<float> > >),
-
-    fint2long(new FUnaryOp<ValueCastUnOp<int, long long> >),
-    flong2int(new FUnaryOp<ValueCastUnOp<long long, int> >),
-
-    ffloat2int(new FUnaryOp<ValueCastUnOp<float, int> >),
-    fint2float(new FUnaryOp<ValueCastUnOp<int, float> >),
-
-    fchar2int(new FUnaryOp<ValueCastUnOp<char, long long> >),
-    fint2char(new FUnaryOp<ValueCastUnOp<long long, char> >),
-
-    fchar2long(new FUnaryOp<ValueCastUnOp<char, int> >),
-    flong2char(new FUnaryOp<ValueCastUnOp<int, char> >),
-
-    fcharp(new FTypeP<Value<char> >),
-    fcharand(new FBinaryOp<ValueBinOp<char, BitAndBinOp<char> > >),
-    fcharor(new FBinaryOp<ValueBinOp<char, BitOrBinOp<char> > >),
-    fcharxor(new FBinaryOp<ValueBinOp<char, BitXorBinOp<char> > >),
-    fcharnot(new FUnaryOp<ValueUnOp<char, BitNotUnOp<char> > >),
-
-    fcharshl(new FBinaryOp<ValueBinOp<char, BitSHLBinOp<char> > >),
-    fcharshr(new FBinaryOp<ValueBinOp<char, BitSHRBinOp<char> > >),
-
-    fcharEql(new FBinaryOp<ValueCmpOp<char, EqlCmpOp<char> > >),
-    fcharNE(new FBinaryOp<ValueCmpOp<char, NECmpOp<char> > >),
-    fcharGT(new FBinaryOp<ValueCmpOp<char, GTCmpOp<char> > >),
-    fcharLT(new FBinaryOp<ValueCmpOp<char, LTCmpOp<char> > >),
-    fcharGE(new FBinaryOp<ValueCmpOp<char, GECmpOp<char> > >),
-    fcharLE(new FBinaryOp<ValueCmpOp<char, LECmpOp<char> > >)
+    aSz(Ob::of<Symbol>())
 {}
+
+namespace {
+// constexpr lambdas
+
+template <typename T>
+struct Shl { auto operator()(const T &lhs, const T &rhs) const { return lhs << rhs;}};
+
+template <typename T>
+struct Shr { auto operator()(const T &lhs, const T &rhs) const { return lhs >> rhs;}};
+
+}
+
+template <typename T>
+Ptr BaseNumOps<T>::populateContext(const Ptr &a) const
+{
+    Ptr ctx = Context::make(aNeg, Ob::of<BaseMacro>(Function<std::negate<T>>()), a);
+    ctx = Context::make(aPlus, Ob::of<BaseMacro>(Function<std::plus<T>>()), ctx);
+    ctx = Context::make(aMinus, Ob::of<BaseMacro>(Function<std::minus<T>>()), ctx);
+    ctx = Context::make(aProduct, Ob::of<BaseMacro>(Function<std::multiplies<T>>()), ctx);
+    ctx = Context::make(aDivision, Ob::of<BaseMacro>(Function<std::divides<T>>()), ctx);
+    
+    ctx = Context::make(aIs, Ob::of<BaseMacro>(Function<TypePUnOp<Value<T>>>()), ctx);
+
+    if constexpr (std::is_integral_v<T>) {
+        ctx = Context::make(aMod, Ob::of<BaseMacro>(Function<std::modulus<T>>()), ctx);
+        
+        ctx = Context::make(aAnd, Ob::of<BaseMacro>(Function<std::bit_and<T>>()), ctx);
+        ctx = Context::make(aOr, Ob::of<BaseMacro>(Function<std::bit_or<T>>()), ctx);
+        ctx = Context::make(aXor, Ob::of<BaseMacro>(Function<std::bit_xor<T>>()), ctx);
+        ctx = Context::make(aNot, Ob::of<BaseMacro>(Function<std::bit_not<T>>()), ctx);
+
+        ctx = Context::make(aShl, Ob::of<BaseMacro>(Function<Shl<T>>()), ctx);
+        ctx = Context::make(aShr, Ob::of<BaseMacro>(Function<Shr<T>>()), ctx);
+    }
+
+    ctx = Context::make(aEql, Ob::of<BaseMacro>(Function<std::equal_to<T>>()), ctx);
+    ctx = Context::make(aNE, Ob::of<BaseMacro>(Function<std::not_equal_to<T>>()), ctx);
+    ctx = Context::make(aGT, Ob::of<BaseMacro>(Function<std::greater<T>>()), ctx);
+    ctx = Context::make(aLT, Ob::of<BaseMacro>(Function<std::less<T>>()), ctx);
+    ctx = Context::make(aGE, Ob::of<BaseMacro>(Function<std::greater_equal<T>>()), ctx);
+    ctx = Context::make(aLE, Ob::of<BaseMacro>(Function<std::less_equal<T>>()), ctx);
+    
+    ctx = Context::make(aSz, core::Ob::of<core::Value<int>>(sizeof(T)), ctx);
+
+    return ctx;
+}
+
+BaseNumFunc::BaseNumFunc() :
+    intOps(),
+    longOps(),
+    floatOps(),
+    charOps(),
+
+    along2int(Ob::of<Symbol>()),
+    aint2long(Ob::of<Symbol>()),
+
+    afloat2int(Ob::of<Symbol>()),
+    aint2float(Ob::of<Symbol>()),
+
+    achar2int(Ob::of<Symbol>()),
+    aint2char(Ob::of<Symbol>()),
+
+    achar2long(Ob::of<Symbol>()),
+    along2char(Ob::of<Symbol>())
+{}
+
+Ptr BaseNumFunc::populateContext(const Ptr &a) const
+{
+    Ptr ctx = intOps.populateContext(a);
+    ctx = longOps.populateContext(ctx);
+    ctx = floatOps.populateContext(ctx);
+    ctx = charOps.populateContext(ctx);
+
+    ctx = Context::make(aint2long, Ob::of<BaseMacro>(Function<ValueCastUnOp<int, long long>>()), ctx);
+    ctx = Context::make(along2int, Ob::of<BaseMacro>(Function<ValueCastUnOp<long long, int>>()), ctx);
+
+    ctx = Context::make(afloat2int, Ob::of<BaseMacro>(Function<ValueCastUnOp<float, int>>()), ctx);
+    ctx = Context::make(aint2float, Ob::of<BaseMacro>(Function<ValueCastUnOp<int, float>>()), ctx);
+
+    ctx = Context::make(achar2int, Ob::of<BaseMacro>(Function<ValueCastUnOp<char, long long>>()), ctx);
+    ctx = Context::make(aint2char, Ob::of<BaseMacro>(Function<ValueCastUnOp<long long, char>>()), ctx);
+
+    ctx = Context::make(achar2long, Ob::of<BaseMacro>(Function<ValueCastUnOp<char, int>>()), ctx);
+    ctx = Context::make(along2char, Ob::of<BaseMacro>(Function<ValueCastUnOp<int, char>>()), ctx);
+
+    return ctx;
+}
 
 const BaseNumFunc &BaseNumFunc::inst()
 {
@@ -97,4 +133,4 @@ const BaseNumFunc &BaseNumFunc::inst()
     return instance;
 }
 
-}} // namespaces
+} // namespaces
