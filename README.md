@@ -1,4 +1,4 @@
 stepone
 =======
 
-yet another Lisp implementation over C++
+LISP-like experimental language. C++ demo runtime implementation and documentation.
