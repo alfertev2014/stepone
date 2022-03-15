@@ -1,7 +1,7 @@
 #include <base/basemacro.h>
 #include <error_exception.h>
 
-#include <core/ob.h>
+#include <ptr_impl.h>
 
 namespace stepone::base {
 
@@ -28,7 +28,7 @@ Ptr MLet::operator()(const Ptr &p, const Ptr &a) const {
 }
 
 Ptr MLazy::operator()(const Ptr &p, const Ptr &a) const {
-    return Ob::of<Lazy>(p, a);
+    return Ptr::of<Lazy>(p, a);
 }
 
 Ptr MUnlazy::operator()(const Ptr &p, const Ptr &a) const {
@@ -40,17 +40,17 @@ Ptr MLabel::operator()(const Ptr &p, const Ptr &a) const {
 }
 
 Ptr MMacro::operator()(const Ptr &p, const Ptr &a) const {
-    return Ob::of<MacroClosure>(p.car(), p.cdr(), a);
+    return Ptr::of<MacroClosure>(p.car(), p.cdr(), a);
 }
 
 Ptr MCurrentContext::operator()(const Ptr &p, const Ptr &a) const {
-    return Ob::of<CurrentContext>(p.car(), p.cdr(), a);
+    return Ptr::of<CurrentContext>(p.car(), p.cdr(), a);
 }
 
 Ptr MTry::operator()(const Ptr &p, const Ptr &a) const {
     try {
         return p.car().eval(a);
-    } catch(SemanticError e) {
+    } catch(SemanticError &e) {
         return p.cdr().eval(a);
     }
 }
@@ -60,7 +60,7 @@ Ptr MBot::operator()(const Ptr &p, const Ptr &a) const {
 }
 
 Ptr MGenSymbol::operator()(const Ptr &p, const Ptr &a) const {
-    return Ob::of<Symbol>();
+    return Ptr::of<Symbol>();
 }
 
 } // namespaces

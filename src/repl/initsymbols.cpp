@@ -18,7 +18,7 @@ namespace stepone::init {
 
 
 static inline void addSymbol(Ptr & symbolTable, const std::string & s, const Ptr & p) {
-    symbolTable = Ob::of<Pair>(Ob::of<Pair>(p, Ob::of<ByteArray>(s.data(), s.size())), symbolTable);
+    symbolTable = Ptr::of<Pair>(Ptr::of<Pair>(p, Ptr::of<ByteArray>(s.data(), s.size())), symbolTable);
 }
 
 Ptr BaseSymbolTable::createSymbolTable() {

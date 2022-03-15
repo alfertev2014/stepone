@@ -92,10 +92,12 @@ Ptr FirstParser::parse(const std::string &_s) {
     return impl->parse(_s);
 }
 
+Ptr FirstParser::eval(const Ptr &p) {
+    return p.eval(a).unlazy();
+}
+
 Ptr FirstParser::parseEval(const std::string &s) {
-    Ptr parsed = parse(s);
-    Ptr evaluated = parsed.eval(a).unlazy();
-    return evaluated;
+    return eval(parse(s));
 }
 
 std::string FirstParser::evalToString(const std::string &_s) {
@@ -233,7 +235,7 @@ parseRes Parser::parseTail() {
         DBG("parseTail fail");
         return std::nullopt;
     }
-    return Ob::of<Pair>(pr1.value(), pr2.value());
+    return Ptr::of<Pair>(pr1.value(), pr2.value());
 }
 
 parseRes Parser::parseAtom() {
@@ -270,7 +272,7 @@ parseRes Parser::parseChar() {
         chars.push_back(*si);
     if (!eos())
         ++si;
-    return Ob::of<Value<char>>(chars.size() > 0 ? chars[0] : '\"');
+    return Ptr::of<Value<char>>(chars.size() > 0 ? chars[0] : '\"');
 }
 
 parseRes Parser::parseString() {
@@ -283,7 +285,7 @@ parseRes Parser::parseString() {
         chars.push_back(*si);
     if (!eos())
         ++si;
-    return Ob::of<ByteArray>(chars.c_str(), chars.size());
+    return Ptr::of<ByteArray>(chars.c_str(), chars.size());
 }
 
 parseRes Parser::parseSymbol() {
@@ -309,11 +311,11 @@ parseRes Parser::parseSymbol() {
             return p.car().car();
     }
 
-    Ptr sym = Ob::of<Symbol>();
-    symbols = Ob::of<Pair>(
-        Ob::of<Pair>(
+    Ptr sym = Ptr::of<Symbol>();
+    symbols = Ptr::of<Pair>(
+        Ptr::of<Pair>(
             sym,
-            Ob::of<ByteArray>(symbolString.data(), symbolString.size())
+            Ptr::of<ByteArray>(symbolString.data(), symbolString.size())
         ),
         symbols
     );
@@ -336,7 +338,7 @@ parseRes Parser::parseNumber() {
         std::istringstream ss(number);
         int i;
         if (ss >> i) {
-            return Ob::of<Value<int>>(i);
+            return Ptr::of<Value<int>>(i);
         }
     } else {
         number.push_back(*si);
@@ -347,7 +349,7 @@ parseRes Parser::parseNumber() {
         float f;
         std::istringstream ss(number);
         if (ss >> f) {
-            return Ob::of<Value<float>>(f);
+            return Ptr::of<Value<float>>(f);
         }
     }
     return std::nullopt;

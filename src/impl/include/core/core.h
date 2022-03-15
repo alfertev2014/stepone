@@ -52,12 +52,12 @@ public:
 
 
 class Label final {
-    friend class Ob;
+    friend class stepone::Ptr;
 private:
-    WPtr v;
+    Ptr v;
     const Ptr * pa;
 
-    Label(const WPtr _v, const Ptr * _a)
+    Label(const Ptr _v, const Ptr * _a)
         : v(_v), pa(_a) {}
 
     Ptr ptr();

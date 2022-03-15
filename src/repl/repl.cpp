@@ -17,7 +17,12 @@ int REPL::do_loop(stepone::parser::FirstParser &fp) {
             break;
 	else if (s.empty())
             continue;
-        fp.print(std::cout, fp.parseEval(s));
+        auto parsed = fp.parse(s);
+        std::cout << " echo:    ";
+        fp.print(std::cout, parsed);
+        std::cout << std::endl;
+        std::cout << " result:  ";
+        fp.print(std::cout, fp.eval(parsed));
         std::cout << std::endl;
     }
     return 0;

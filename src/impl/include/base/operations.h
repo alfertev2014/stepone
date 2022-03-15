@@ -37,7 +37,7 @@ class TypeMapping<long long> : public Type<Value<long long>> {
 
 template <typename T>
 inline Ptr convertToOb(T &&value) {
-    return Ob::of<typename TypeMapping<T>::type>(std::forward<T>(value));
+    return Ptr::of<typename TypeMapping<T>::type>(std::forward<T>(value));
 }
 
 template <>

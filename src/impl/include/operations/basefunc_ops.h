@@ -19,7 +19,7 @@ public:
 
 class ConsBinOp {
 public:
-    Ptr operator()(const Ptr &x1, const Ptr &x2) const {return Ob::of<Pair>(x1, x2);}
+    Ptr operator()(const Ptr &x1, const Ptr &x2) const {return Ptr::of<Pair>(x1, x2);}
 };
 
 class EqBinOp {
