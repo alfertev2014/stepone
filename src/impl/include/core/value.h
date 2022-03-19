@@ -17,7 +17,7 @@ template <typename T>
 std::string cppTypeToString() {return "cppType";}
 
 template <> inline std::string cppTypeToString<int>() {return "int";}
-template <> inline std::string cppTypeToString<float>() {return "float";}
+template <> inline std::string cppTypeToString<double>() {return "double";}
 template <> inline std::string cppTypeToString<char>() {return "char";}
 
 

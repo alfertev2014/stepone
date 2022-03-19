@@ -24,7 +24,7 @@ class TypeMapping<int> : public Type<Value<int>> {
 };
 
 template <>
-class TypeMapping<float> : public Type<Value<float>> {
+class TypeMapping<double> : public Type<Value<double>> {
 };
 
 template <>

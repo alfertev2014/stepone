@@ -115,8 +115,8 @@ Ptr BaseNumFunc::populateContext(const Ptr &a) const
     ctx = Context::make(aint2long, Ptr::of<BaseMacro>(Function<ValueCastUnOp<int, long long>>()), ctx);
     ctx = Context::make(along2int, Ptr::of<BaseMacro>(Function<ValueCastUnOp<long long, int>>()), ctx);
 
-    ctx = Context::make(afloat2int, Ptr::of<BaseMacro>(Function<ValueCastUnOp<float, int>>()), ctx);
-    ctx = Context::make(aint2float, Ptr::of<BaseMacro>(Function<ValueCastUnOp<int, float>>()), ctx);
+    ctx = Context::make(afloat2int, Ptr::of<BaseMacro>(Function<ValueCastUnOp<double, int>>()), ctx);
+    ctx = Context::make(aint2float, Ptr::of<BaseMacro>(Function<ValueCastUnOp<int, double>>()), ctx);
 
     ctx = Context::make(achar2int, Ptr::of<BaseMacro>(Function<ValueCastUnOp<char, long long>>()), ctx);
     ctx = Context::make(aint2char, Ptr::of<BaseMacro>(Function<ValueCastUnOp<long long, char>>()), ctx);

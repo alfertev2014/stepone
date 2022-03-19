@@ -44,7 +44,7 @@ public:
 
     BaseNumOps<int> intOps;
     BaseNumOps<long long> longOps;
-    BaseNumOps<float> floatOps;
+    BaseNumOps<double> floatOps;
     BaseNumOps<char> charOps;
 
     const Ptr along2int;

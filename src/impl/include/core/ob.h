@@ -32,7 +32,7 @@ class Ob final {
         Vector,
         ByteArray,
         Value<int>,
-        Value<float>,
+        Value<double>,
         Value<long long>,
         Value<char>
     > v;

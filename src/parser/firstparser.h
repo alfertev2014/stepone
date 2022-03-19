@@ -18,6 +18,7 @@ public:
     std::string evalToString(const std::string & _s);
 
     void print(std::ostream & ts, const Ptr & p);
+    std::string printToString(const Ptr & p);
 
 private:
     class FirstParserImpl;

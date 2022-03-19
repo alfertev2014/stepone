@@ -101,8 +101,12 @@ Ptr FirstParser::parseEval(const std::string &s) {
 }
 
 std::string FirstParser::evalToString(const std::string &_s) {
+    return printToString(parseEval(_s));
+}
+
+std::string FirstParser::printToString(const Ptr &p) {
     std::stringstream ss;
-    print(ss, parseEval(_s));
+    print(ss, p);
     return ss.str();
 }
 
@@ -128,7 +132,7 @@ void Printer::printValue(std::ostream &ts, const Ptr &p) {
 
     if (Value<int> *val = p.as<Value<int> >(); val)
         ts << val->getValue();
-    else if (Value<float> *val = p.as<Value<float> >(); val)
+    else if (Value<double> *val = p.as<Value<double> >(); val)
         ts << val->getValue();
     else if (Value<char> *val = p.as<Value<char> >(); val) {
         char c = val->getValue();
@@ -349,7 +353,7 @@ parseRes Parser::parseNumber() {
         float f;
         std::istringstream ss(number);
         if (ss >> f) {
-            return Ptr::of<Value<float>>(f);
+            return Ptr::of<Value<double>>(f);
         }
     }
     return std::nullopt;
