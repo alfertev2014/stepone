@@ -214,25 +214,25 @@ parseRes Parser::parseTail() {
         spaces();
         parseRes pr = parseExpression();
         if(!pr.has_value()) {
-            DBG("parseTail fail");
+            logging::error("parseTail fail");
             return std::nullopt;
         }
         spaces();
         if(lexem(")"))  {
             return pr;
         } else {
-            DBG("fail ) expected");
+            logging::error("fail ) expected");
             return std::nullopt;
         }
     }
     parseRes pr1 = parseExpression();
     if (!pr1.has_value()) {
-        DBG("parseTail fail");
+        logging::error("parseTail fail");
         return std::nullopt;
     }
     parseRes pr2 = parseTail();
     if (!pr2.has_value()) {
-        DBG("parseTail fail");
+        logging::error("parseTail fail");
         return std::nullopt;
     }
     return Ptr::of<Pair>(pr1.value(), pr2.value());
@@ -291,11 +291,11 @@ parseRes Parser::parseString() {
 parseRes Parser::parseSymbol() {
     std::string symbolString;
     if (eos()) {
-        DBG("Fail to parse symbol: eos has reached");
+        logging::error("Fail to parse symbol: eos has reached");
         return std::nullopt;
     }
     if (isspace(*si) || punctuation()) {
-        DBG("Fail to parse symbol first char: ") << "\"" << *si << "\"" << std::endl;
+        logging::error("Fail to parse symbol first char: \"", *si, '\"');
         return std::nullopt;
     }
 

@@ -10,6 +10,7 @@
 #include <core/bytearray.h>
 
 #include <ptr_impl.h>
+#include <dbg.h>
 
 using namespace stepone::core;
 using namespace stepone::objects;
@@ -18,10 +19,13 @@ namespace stepone::init {
 
 
 static inline void addSymbol(Ptr & symbolTable, const std::string & s, const Ptr & p) {
+    logging::debug("Adding symbol", s, "to symbol table");
     symbolTable = Ptr::of<Pair>(Ptr::of<Pair>(p, Ptr::of<ByteArray>(s.data(), s.size())), symbolTable);
 }
 
 Ptr BaseSymbolTable::createSymbolTable() {
+    logging::Logger l;
+    l.debug("Initializing of symbol table...");
     Ptr symbolTable(Ptr::anil());
     addSymbol(symbolTable, "-i", BaseNumFunc::inst().intOps.aNeg);
     addSymbol(symbolTable, "i+", BaseNumFunc::inst().intOps.aPlus);
@@ -160,6 +164,7 @@ Ptr BaseSymbolTable::createSymbolTable() {
     addSymbol(symbolTable, "\\", BaseMacroses::inst().alambda);
     addSymbol(symbolTable, ">-", BaseMacroses::inst().alet);
     addSymbol(symbolTable, "'", BaseMacroses::inst().aquote);
+    l.debug("Symbol table is initialized");
     return symbolTable;
 }
 
