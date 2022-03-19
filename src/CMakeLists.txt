@@ -6,7 +6,8 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-add_library(libstepone
+add_library(
+    libstepone
     impl/base/basemacro.cpp
 
     impl/core/bytearray.cpp
@@ -22,32 +23,37 @@ add_library(libstepone
     impl/objects/typepredicates_obs.cpp
     impl/objects/vector_obs.cpp
 
-    impl/dbg.cpp)
+    impl/dbg.cpp
+)
 
-target_include_directories(libstepone
+target_include_directories(
+    libstepone
     PUBLIC include/stepone impl/include
-    )
+)
+
+add_library(
+    steponeinit
+    init/initevaluator.cpp
+    init/initsymbols.cpp
+)
+target_include_directories(
+    steponeinit
+    INTERFACE init
+)
+target_link_libraries(steponeinit PUBLIC libstepone)
+
+add_library(steponeparser  parser/firstparser.cpp)
+target_include_directories(steponeparser INTERFACE parser)
+target_link_libraries(steponeparser PUBLIC steponeinit)
 
 
-add_library(steponeparser
-    parser/firstparser.cpp
-    )
-
-target_link_libraries(steponeparser libstepone)
-
-
-add_executable(steponerepl
-    repl/initevaluator.cpp
-    repl/initsymbols.cpp
+add_executable(
+    steponerepl
     repl/main.cpp
     repl/repl.cpp
-    )
+)
 
-target_include_directories(steponerepl
-    PUBLIC parser
-    )
-
-target_link_libraries(steponerepl steponeparser libstepone)
+target_link_libraries(steponerepl steponeparser)
 
 include(FetchContent)
 FetchContent_Declare(
@@ -68,6 +74,7 @@ target_link_libraries(
   steponetest
   gtest_main
 )
+target_link_libraries(steponetest steponeparser)
 
 include(GoogleTest)
 gtest_discover_tests(steponetest)
