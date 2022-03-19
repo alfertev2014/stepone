@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.14)
 
 project(stepone)
 
@@ -20,7 +20,9 @@ add_library(libstepone
     impl/objects/basenumfunc_obs.cpp
     impl/objects/bytearray_obs.cpp
     impl/objects/typepredicates_obs.cpp
-    impl/objects/vector_obs.cpp)
+    impl/objects/vector_obs.cpp
+
+    impl/dbg.cpp)
 
 target_include_directories(libstepone
     PUBLIC include/stepone impl/include
@@ -47,3 +49,25 @@ target_include_directories(steponerepl
 
 target_link_libraries(steponerepl steponeparser libstepone)
 
+include(FetchContent)
+FetchContent_Declare(
+  googletest
+  URL https://github.com/google/googletest/archive/609281088cfefc76f9d0ce82e1ff6c30cc3591e5.zip
+)
+# For Windows: Prevent overriding the parent project's compiler/linker settings
+set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+FetchContent_MakeAvailable(googletest)
+
+enable_testing()
+
+add_executable(
+  steponetest
+  test/main.cpp
+)
+target_link_libraries(
+  steponetest
+  gtest_main
+)
+
+include(GoogleTest)
+gtest_discover_tests(steponetest)
