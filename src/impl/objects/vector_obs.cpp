@@ -1,6 +1,6 @@
 #include <objects/vector_obs.h>
 
-#include <core/ob.h>
+#include <ob.h>
 #include <operations/vector_ops.h>
 #include <operations/typepredicates_ops.h>
 #include <base/operations.h>

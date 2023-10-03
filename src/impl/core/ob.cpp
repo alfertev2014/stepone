@@ -1,5 +1,5 @@
 #include <ptr.h>
-#include <core/ob.h>
+#include <ob.h>
 #include <error_exception.h>
 
 #include <type_traits>
@@ -18,15 +18,14 @@ const Ptr Ptr::at() {
 
 }
 
-namespace stepone::core {
-
+namespace stepone {
 
 Ptr Ob::car() {
-    return cast<Pair>().car();
+    return cast<core::Pair>().car();
 }
 
 Ptr Ob::cdr() {
-    return cast<Pair>().cdr();
+    return cast<core::Pair>().cdr();
 }
 
 } // namespaces

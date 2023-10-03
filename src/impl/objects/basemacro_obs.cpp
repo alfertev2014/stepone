@@ -1,6 +1,6 @@
 #include <objects/basemacro_obs.h>
 
-#include <core/ob.h>
+#include <ob.h>
 #include <base/basemacro.h>
 #include <base/operations.h>
 

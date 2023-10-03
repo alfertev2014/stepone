@@ -1,13 +1,13 @@
 #pragma once
 
 #include <ptr.h>
-#include <core/ob.h>
+#include <ob.h>
 
 namespace stepone {
 
 struct Ptr::RefCounter final {
     int refcount {0};
-    core::Ob ob;
+    Ob ob;
 
     template <class T>
     inline RefCounter(T&& t): ob(std::forward<T>(t)) {}
@@ -55,7 +55,7 @@ inline Ptr Ptr::cdr() const {
 }
 
 inline Ptr Ptr::eval(const Ptr & a) const {
-    return rcob->ob.visit(core::overloaded {
+    return rcob->ob.visit(overloaded {
         [&](core::Pair &p) { return p.eval(a); },
         [&, *this](core::Symbol &s) { return core::Context::assoc(a, *this); },
         [&](core::Lazy &p) { return p.eval(a); },
@@ -66,8 +66,8 @@ inline Ptr Ptr::eval(const Ptr & a) const {
 }
 
 inline Ptr Ptr::apply(const Ptr & p, const Ptr & a) const {
-    if(p == Ptr::anil()) return *this;
-    return rcob->ob.visit(core::overloaded {
+    if (p == Ptr::anil()) return *this;
+    return rcob->ob.visit(overloaded {
         [&](core::Lazy &t) { return t.apply(p, a); },
         [&](core::Label &t) { return t.apply(p, a); },
         [&](auto& t) -> Ptr {
@@ -82,7 +82,7 @@ inline Ptr Ptr::apply(const Ptr & p, const Ptr & a) const {
 }
 
 inline Ptr Ptr::unlazy() const {
-    return rcob->ob.visit(core::overloaded {
+    return rcob->ob.visit(overloaded {
         [&](core::Lazy &t) { return t.unlazy(); },
         [&](core::Label &t) { return t.unlazy(); },
         [*this](auto&) -> Ptr { return *this; }

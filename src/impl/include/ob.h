@@ -1,40 +1,37 @@
 #pragma once
 
 #include <ptr.h>
-#include "core.h"
-#include "macro.h"
-#include "value.h"
-#include "bytearray.h"
-#include "vector.h"
+#include "core/core.h"
+#include "core/macro.h"
+#include "core/value.h"
+#include "core/bytearray.h"
+#include "core/vector.h"
 #include "error_exception.h"
 
 #include <variant>
 
-namespace stepone::core {
+#include "util.h"
 
-// helper type for the visitor #4
-template<class... Ts> struct overloaded : Ts... { using Ts::operator()...; };
-// explicit deduction guide (not needed as of C++20)
-template<class... Ts> overloaded(Ts...) -> overloaded<Ts...>;
+namespace stepone {
 
 class Ob final {
     friend class Ptr;
 
     std::variant<
-        Pair,
-        Symbol,
-        Lazy,
-        Label,
-        Evaluator,
-        BaseMacro,
-        MacroClosure,
-        CurrentContext,
-        Vector,
-        ByteArray,
-        Value<int>,
-        Value<double>,
-        Value<long long>,
-        Value<char>
+        core::Pair,
+        core::Symbol,
+        core::Lazy,
+        core::Label,
+        core::Evaluator,
+        core::BaseMacro,
+        core::MacroClosure,
+        core::CurrentContext,
+        core::Vector,
+        core::ByteArray,
+        core::Value<int>,
+        core::Value<double>,
+        core::Value<long long>,
+        core::Value<char>
     > v;
 
 public:
