@@ -6,7 +6,7 @@
 #include <core/bytearray.h>
 #include <core/vector.h>
 
-#include <dbg.h>
+#include <logging.h>
 
 #include <cstring>
 #include <sstream>

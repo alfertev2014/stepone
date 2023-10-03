@@ -13,7 +13,6 @@ add_library(
     impl/core/bytearray.cpp
     impl/core/core.cpp
     impl/core/macro.cpp
-    impl/core/ob.cpp
     impl/core/vector.cpp
 
     impl/objects/basefunc_obs.cpp
@@ -23,7 +22,8 @@ add_library(
     impl/objects/typepredicates_obs.cpp
     impl/objects/vector_obs.cpp
 
-    impl/dbg.cpp
+    impl/ob.cpp
+    impl/logging.cpp
 )
 
 target_include_directories(

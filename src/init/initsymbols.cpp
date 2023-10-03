@@ -10,7 +10,7 @@
 #include <core/bytearray.h>
 
 #include <ptr_impl.h>
-#include <dbg.h>
+#include <logging.h>
 
 using namespace stepone::core;
 using namespace stepone::objects;
