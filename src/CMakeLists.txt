@@ -68,7 +68,9 @@ enable_testing()
 
 add_executable(
   steponetest
-  test/main.cpp
+  test/parser.cpp
+  test/runtime.cpp
+  test/info.cpp
 )
 target_link_libraries(
   steponetest
