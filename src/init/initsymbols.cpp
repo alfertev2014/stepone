@@ -27,40 +27,21 @@ Ptr BaseSymbolTable::createSymbolTable() {
     logging::Logger l;
     l.debug("Initializing of symbol table...");
     Ptr symbolTable(Ptr::anil());
-    addSymbol(symbolTable, "-i", BaseNumFunc::inst().intOps.aNeg);
-    addSymbol(symbolTable, "i+", BaseNumFunc::inst().intOps.aPlus);
-    addSymbol(symbolTable, "i-", BaseNumFunc::inst().intOps.aMinus);
-    addSymbol(symbolTable, "i*", BaseNumFunc::inst().intOps.aProduct);
-    addSymbol(symbolTable, "i/", BaseNumFunc::inst().intOps.aDivision);
-    addSymbol(symbolTable, "i%", BaseNumFunc::inst().intOps.aMod);
-    addSymbol(symbolTable, "i?", BaseNumFunc::inst().intOps.aIs);
-    addSymbol(symbolTable, "i-not", BaseNumFunc::inst().intOps.aNot);
-    addSymbol(symbolTable, "i-and", BaseNumFunc::inst().intOps.aAnd);
-    addSymbol(symbolTable, "i-or", BaseNumFunc::inst().intOps.aOr);
-    addSymbol(symbolTable, "i-xor", BaseNumFunc::inst().intOps.aXor);
-    addSymbol(symbolTable, "i-shl", BaseNumFunc::inst().intOps.aShl);
-    addSymbol(symbolTable, "i-shr", BaseNumFunc::inst().intOps.aShr);
-    addSymbol(symbolTable, "i=", BaseNumFunc::inst().intOps.aEql);
-    addSymbol(symbolTable, "i!=", BaseNumFunc::inst().intOps.aNE);
-    addSymbol(symbolTable, "i<", BaseNumFunc::inst().intOps.aLT);
-    addSymbol(symbolTable, "i>", BaseNumFunc::inst().intOps.aGT);
-    addSymbol(symbolTable, "i<=", BaseNumFunc::inst().intOps.aLE);
-    addSymbol(symbolTable, "i>=", BaseNumFunc::inst().intOps.aGE);
 
-    addSymbol(symbolTable, "u?", BaseNumFunc::inst().longOps.aIs);
-    addSymbol(symbolTable, "u-not", BaseNumFunc::inst().longOps.aNot);
-    addSymbol(symbolTable, "u-and", BaseNumFunc::inst().longOps.aAnd);
-    addSymbol(symbolTable, "u-or", BaseNumFunc::inst().longOps.aOr);
-    addSymbol(symbolTable, "u-xor", BaseNumFunc::inst().longOps.aXor);
-    addSymbol(symbolTable, "u-shl", BaseNumFunc::inst().longOps.aShl);
-    addSymbol(symbolTable, "u-shr", BaseNumFunc::inst().longOps.aShr);
+    addSymbol(symbolTable, "i?", BaseNumFunc::inst().longOps.aIs);
+    addSymbol(symbolTable, "i-not", BaseNumFunc::inst().longOps.aNot);
+    addSymbol(symbolTable, "i-and", BaseNumFunc::inst().longOps.aAnd);
+    addSymbol(symbolTable, "i-or", BaseNumFunc::inst().longOps.aOr);
+    addSymbol(symbolTable, "i-xor", BaseNumFunc::inst().longOps.aXor);
+    addSymbol(symbolTable, "i-shl", BaseNumFunc::inst().longOps.aShl);
+    addSymbol(symbolTable, "i-shr", BaseNumFunc::inst().longOps.aShr);
 
-    addSymbol(symbolTable, "u=", BaseNumFunc::inst().longOps.aEql);
-    addSymbol(symbolTable, "u!=", BaseNumFunc::inst().longOps.aNE);
-    addSymbol(symbolTable, "u<", BaseNumFunc::inst().longOps.aLT);
-    addSymbol(symbolTable, "u>", BaseNumFunc::inst().longOps.aGT);
-    addSymbol(symbolTable, "u<=", BaseNumFunc::inst().longOps.aLE);
-    addSymbol(symbolTable, "u>=", BaseNumFunc::inst().longOps.aGE);
+    addSymbol(symbolTable, "i=", BaseNumFunc::inst().longOps.aEql);
+    addSymbol(symbolTable, "i!=", BaseNumFunc::inst().longOps.aNE);
+    addSymbol(symbolTable, "i<", BaseNumFunc::inst().longOps.aLT);
+    addSymbol(symbolTable, "i>", BaseNumFunc::inst().longOps.aGT);
+    addSymbol(symbolTable, "i<=", BaseNumFunc::inst().longOps.aLE);
+    addSymbol(symbolTable, "i>=", BaseNumFunc::inst().longOps.aGE);
 
     addSymbol(symbolTable, "c?", BaseNumFunc::inst().charOps.aIs);
     addSymbol(symbolTable, "c-not", BaseNumFunc::inst().charOps.aNot);
@@ -98,10 +79,9 @@ Ptr BaseSymbolTable::createSymbolTable() {
     addSymbol(symbolTable, "c2u", BaseNumFunc::inst().achar2long);
     addSymbol(symbolTable, "u2c", BaseNumFunc::inst().along2char);
 
-    addSymbol(symbolTable, "sz-i", BaseNumFunc::inst().intOps.aSz);
     addSymbol(symbolTable, "sz-f", BaseNumFunc::inst().floatOps.aSz);
     addSymbol(symbolTable, "sz-c", BaseNumFunc::inst().charOps.aSz);
-    addSymbol(symbolTable, "sz-u", BaseNumFunc::inst().longOps.aSz);
+    addSymbol(symbolTable, "sz-i", BaseNumFunc::inst().longOps.aSz);
 
     addSymbol(symbolTable, "vec?", VectorFunctions::inst().avecp);
     addSymbol(symbolTable, "mkvec", VectorFunctions::inst().amkvec);

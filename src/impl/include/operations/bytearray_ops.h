@@ -9,7 +9,7 @@ using namespace core;
 class ByteArrayLengthUnOp {
 public:
     Ptr operator()(const Ptr &x) const {
-        return Ptr::of<Value<int>>(x.cast<ByteArray>().getSize());
+        return Ptr::of<Value<long>>(x.cast<ByteArray>().getSize());
     }
 };
 
@@ -23,28 +23,28 @@ public:
 class CompareByteArrayBinOp {
 public:
     Ptr operator()(const Ptr &x1, const Ptr &x2) const {
-        return Ptr::of<Value<int>>(x1.cast<ByteArray>().cmp(x2.cast<ByteArray>()));
+        return Ptr::of<Value<long>>(x1.cast<ByteArray>().cmp(x2.cast<ByteArray>()));
     }
 };
 
 class NCompareByteArrayTerOp {
 public:
     Ptr operator()(const Ptr &x1, const Ptr &x2, const Ptr &x3) const {
-        return Ptr::of<Value<int>>(x1.cast<ByteArray>().ncmp(x2.cast<ByteArray>(), x3.cast<Value<int> >().getValue()));
+        return Ptr::of<Value<long>>(x1.cast<ByteArray>().ncmp(x2.cast<ByteArray>(), x3.cast<Value<long> >().getValue()));
     }
 };
 
 class FindCharByteArrayBinOp {
 public:
     Ptr operator()(const Ptr &x1, const Ptr &x2) const {
-        return Ptr::of<Value<int>>(x1.cast<ByteArray>().findChar(x2.cast<Value<char> >().getValue()));
+        return Ptr::of<Value<long>>(x1.cast<ByteArray>().findChar(x2.cast<Value<char> >().getValue()));
     }
 };
 
 class FindCharsByteArrayBinOp {
 public:
     Ptr operator()(const Ptr &x1, const Ptr &x2) const {
-        return Ptr::of<Value<int>>(x1.cast<ByteArray>().findSubarray(x2.cast<ByteArray>()));
+        return Ptr::of<Value<long>>(x1.cast<ByteArray>().findSubarray(x2.cast<ByteArray>()));
     }
 };
 
@@ -58,7 +58,7 @@ public:
 class MidByteArrayTerOp {
 public:
     Ptr operator()(const Ptr &x1, const Ptr &x2, const Ptr &x3) const {
-        return Ptr::of<ByteArray>(x1.cast<ByteArray>(), x2.cast<Value<int> >().getValue(), x3.cast<Value<int> >().getValue());
+        return Ptr::of<ByteArray>(x1.cast<ByteArray>(), x2.cast<Value<long> >().getValue(), x3.cast<Value<long> >().getValue());
     }
 };
 
@@ -75,7 +75,7 @@ template <class T>
 class ByteArrayGetBinOp {
 public:
     Ptr operator()(const Ptr &x1, const Ptr &x2) const {
-        return Ptr::of<Value<T>>(x1.cast<ByteArray>().get<T>(x2.cast<Value<int> >().getValue()));
+        return Ptr::of<Value<T>>(x1.cast<ByteArray>().get<T>(x2.cast<Value<long> >().getValue()));
     }
 };
 

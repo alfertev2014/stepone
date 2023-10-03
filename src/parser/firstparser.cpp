@@ -130,8 +130,8 @@ Ptr FirstParser::FirstParserImpl::parse(const std::string &_s) {
 
 void Printer::printValue(std::ostream &ts, const Ptr &p) {
 
-    if (Value<int> *val = p.as<Value<int> >(); val)
-        ts << val->getValue();
+    if (Value<long> *val = p.as<Value<long> >(); val)
+            ts << val->getValue();
     else if (Value<double> *val = p.as<Value<double> >(); val)
         ts << val->getValue();
     else if (Value<char> *val = p.as<Value<char> >(); val) {
@@ -139,8 +139,6 @@ void Printer::printValue(std::ostream &ts, const Ptr &p) {
         if(c == '\"') ts << "&\"\"";
         else ts << "&\"" << c << "\"";
     }
-    else if (Value<long long> *val = p.as<Value<long long> >(); val)
-        ts << val->getValue();
     else if (Vector * v = p.as<Vector>(); v) {
         int n = v->getSize();
         if(n == 0)
@@ -340,9 +338,9 @@ parseRes Parser::parseNumber() {
 
     if (eos() || *si != '.') {
         std::istringstream ss(number);
-        int i;
+        long i;
         if (ss >> i) {
-            return Ptr::of<Value<int>>(i);
+            return Ptr::of<Value<long>>(i);
         }
     } else {
         number.push_back(*si);
@@ -350,7 +348,7 @@ parseRes Parser::parseNumber() {
         for ( ; !eos() && isdigit(*si) && !isspace(*si) && !punctuation(); ++si) {
             number.push_back(*si);
         }
-        float f;
+        double f;
         std::istringstream ss(number);
         if (ss >> f) {
             return Ptr::of<Value<double>>(f);

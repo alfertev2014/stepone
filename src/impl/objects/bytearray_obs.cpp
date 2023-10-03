@@ -43,11 +43,11 @@ Ptr ByteArrayFunctions::populateContext(const Ptr &a) const
     ctx = Context::make(abarraycat, Ptr::of<BaseMacro>(Function<ConcatByteArrayBinOp>()), ctx);
     ctx = Context::make(abarraymid, Ptr::of<BaseMacro>(Function<MidByteArrayTerOp>()), ctx);
 
-    ctx = Context::make(aserint, Ptr::of<BaseMacro>(Function<SerializeUnOp<int> >()), ctx);
+    ctx = Context::make(aserint, Ptr::of<BaseMacro>(Function<SerializeUnOp<long> >()), ctx);
     ctx = Context::make(aserfloat, Ptr::of<BaseMacro>(Function<SerializeUnOp<double> >()), ctx);
     ctx = Context::make(aserchar, Ptr::of<BaseMacro>(Function<SerializeUnOp<char> >()), ctx);
 
-    ctx = Context::make(agetint, Ptr::of<BaseMacro>(Function<ByteArrayGetBinOp<int> >()), ctx);
+    ctx = Context::make(agetint, Ptr::of<BaseMacro>(Function<ByteArrayGetBinOp<long> >()), ctx);
     ctx = Context::make(agetfloat, Ptr::of<BaseMacro>(Function<ByteArrayGetBinOp<double> >()), ctx);
     ctx = Context::make(agetchar, Ptr::of<BaseMacro>(Function<ByteArrayGetBinOp<char> >()), ctx);
 

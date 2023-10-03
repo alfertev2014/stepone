@@ -16,7 +16,7 @@ std::string valueToString(T x) {
 template <typename T>
 std::string cppTypeToString() {return "cppType";}
 
-template <> inline std::string cppTypeToString<int>() {return "int";}
+template <> inline std::string cppTypeToString<long>() {return "int";}
 template <> inline std::string cppTypeToString<double>() {return "double";}
 template <> inline std::string cppTypeToString<char>() {return "char";}
 

@@ -42,8 +42,7 @@ class BaseNumFunc {
 public:
     static const BaseNumFunc &inst();
 
-    BaseNumOps<int> intOps;
-    BaseNumOps<long long> longOps;
+    BaseNumOps<long> longOps;
     BaseNumOps<double> floatOps;
     BaseNumOps<char> charOps;
 

@@ -20,10 +20,6 @@ class TypeMapping : TypeMapping<std::remove_cv_t<std::remove_reference_t<T>>> {
 };
 
 template <>
-class TypeMapping<int> : public Type<Value<int>> {
-};
-
-template <>
 class TypeMapping<double> : public Type<Value<double>> {
 };
 
@@ -32,7 +28,11 @@ class TypeMapping<char> : public Type<Value<char>> {
 };
 
 template <>
-class TypeMapping<long long> : public Type<Value<long long>> {
+class TypeMapping<int> : public Type<Value<long>> {
+};
+
+template <>
+class TypeMapping<long> : public Type<Value<long>> {
 };
 
 template <typename T>

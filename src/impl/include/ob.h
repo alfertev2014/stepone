@@ -28,9 +28,8 @@ class Ob final {
         core::CurrentContext,
         core::Vector,
         core::ByteArray,
-        core::Value<int>,
         core::Value<double>,
-        core::Value<long long>,
+        core::Value<long>,
         core::Value<char>
     > v;
 

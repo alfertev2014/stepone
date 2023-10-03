@@ -81,13 +81,12 @@ Ptr BaseNumOps<T>::populateContext(const Ptr &a) const
     ctx = Context::make(aGE, Ptr::of<BaseMacro>(Function<std::greater_equal<T>>()), ctx);
     ctx = Context::make(aLE, Ptr::of<BaseMacro>(Function<std::less_equal<T>>()), ctx);
 
-    ctx = Context::make(aSz, Ptr::of<core::Value<int>>(sizeof(T)), ctx);
+    ctx = Context::make(aSz, Ptr::of<core::Value<long>>(sizeof(T)), ctx);
 
     return ctx;
 }
 
 BaseNumFunc::BaseNumFunc() :
-    intOps(),
     longOps(),
     floatOps(),
     charOps(),
@@ -107,22 +106,18 @@ BaseNumFunc::BaseNumFunc() :
 
 Ptr BaseNumFunc::populateContext(const Ptr &a) const
 {
-    Ptr ctx = intOps.populateContext(a);
-    ctx = longOps.populateContext(ctx);
+    Ptr ctx = longOps.populateContext(ctx);
     ctx = floatOps.populateContext(ctx);
     ctx = charOps.populateContext(ctx);
 
-    ctx = Context::make(aint2long, Ptr::of<BaseMacro>(Function<ValueCastUnOp<int, long long>>()), ctx);
-    ctx = Context::make(along2int, Ptr::of<BaseMacro>(Function<ValueCastUnOp<long long, int>>()), ctx);
+    ctx = Context::make(afloat2int, Ptr::of<BaseMacro>(Function<ValueCastUnOp<double, long>>()), ctx);
+    ctx = Context::make(aint2float, Ptr::of<BaseMacro>(Function<ValueCastUnOp<long, double>>()), ctx);
 
-    ctx = Context::make(afloat2int, Ptr::of<BaseMacro>(Function<ValueCastUnOp<double, int>>()), ctx);
-    ctx = Context::make(aint2float, Ptr::of<BaseMacro>(Function<ValueCastUnOp<int, double>>()), ctx);
+    ctx = Context::make(achar2int, Ptr::of<BaseMacro>(Function<ValueCastUnOp<char, long>>()), ctx);
+    ctx = Context::make(aint2char, Ptr::of<BaseMacro>(Function<ValueCastUnOp<long, char>>()), ctx);
 
-    ctx = Context::make(achar2int, Ptr::of<BaseMacro>(Function<ValueCastUnOp<char, long long>>()), ctx);
-    ctx = Context::make(aint2char, Ptr::of<BaseMacro>(Function<ValueCastUnOp<long long, char>>()), ctx);
-
-    ctx = Context::make(achar2long, Ptr::of<BaseMacro>(Function<ValueCastUnOp<char, int>>()), ctx);
-    ctx = Context::make(along2char, Ptr::of<BaseMacro>(Function<ValueCastUnOp<int, char>>()), ctx);
+    ctx = Context::make(achar2long, Ptr::of<BaseMacro>(Function<ValueCastUnOp<char, long>>()), ctx);
+    ctx = Context::make(along2char, Ptr::of<BaseMacro>(Function<ValueCastUnOp<long, char>>()), ctx);
 
     return ctx;
 }

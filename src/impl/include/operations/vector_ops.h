@@ -8,13 +8,13 @@ using namespace stepone::core;
 
 class VectorLengthUnOp {
 public:
-    Ptr operator()(const Ptr &x) const {return Ptr::of<Value<int>>(static_cast<int>(x.cast<Vector>().getSize()));}
+    Ptr operator()(const Ptr &x) const {return Ptr::of<Value<long>>(static_cast<int>(x.cast<Vector>().getSize()));}
 };
 
 class FMakeVector {
 public:
     Ptr operator()(const Ptr &p, const Ptr &a) const {
-        int n = p.car().eval(a).cast<Value<int> >().getValue();
+        long n = p.car().eval(a).cast<Value<long> >().getValue();
         return Ptr::of<Vector>(n, p.cdr(), a);
     }
 };
@@ -22,7 +22,7 @@ public:
 class VectorElBinOp {
 public:
     Ptr operator()(const Ptr &x1, const Ptr &x2) const {
-        return x1.cast<Vector>().getElement(x2.cast<Value<int> >().getValue());
+        return x1.cast<Vector>().getElement(x2.cast<Value<long> >().getValue());
     }
 };
 
@@ -43,7 +43,7 @@ public:
 class VectorMidTerOp {
 public:
     Ptr operator()(const Ptr &x1, const Ptr &x2, const Ptr &x3) const {
-        return Ptr::of<Vector>(x1.cast<Vector>(), x2.cast<Value<int> >().getValue(), x3.cast<Value<int> >().getValue());
+        return Ptr::of<Vector>(x1.cast<Vector>(), x2.cast<Value<long> >().getValue(), x3.cast<Value<long> >().getValue());
     }
 };
 
