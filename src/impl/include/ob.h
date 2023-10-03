@@ -50,7 +50,7 @@ public:
     bool is() const {
         return visit(overloaded {
             [](const T &) { return true; },
-            [](const auto&) { return false; }
+            [](const core::Any&) { return false; }
         });
     }
 

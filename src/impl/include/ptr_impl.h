@@ -61,7 +61,7 @@ inline Ptr Ptr::eval(const Ptr & a) const {
         [&](core::Lazy &p) { return p.eval(a); },
         [&](core::Label &p) { return p.eval(a); },
         [&, *this](core::Const &p) { return *this; },
-        [](auto&) -> Ptr { throw SemanticError("eval"); }
+        [](core::Any&) -> Ptr { throw SemanticError("eval"); }
     });
 }
 
@@ -85,7 +85,7 @@ inline Ptr Ptr::unlazy() const {
     return rcob->ob.visit(overloaded {
         [&](core::Lazy &t) { return t.unlazy(); },
         [&](core::Label &t) { return t.unlazy(); },
-        [*this](auto&) -> Ptr { return *this; }
+        [*this](core::Any&) -> Ptr { return *this; }
     });
 }
 

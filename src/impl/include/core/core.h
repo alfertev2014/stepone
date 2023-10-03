@@ -4,7 +4,9 @@
 
 namespace stepone::core {
 
-class Pair final {
+class Any {};
+
+class Pair final : public Any {
 private:
     Ptr pcar;
     Ptr pcdr;
@@ -19,10 +21,10 @@ public:
 };
 
 
-class Atom {};
+class Atom : public Any {};
 
 
-class Context final {
+class Context final : public Any {
     Context() = delete;
 public:
     static Ptr make(const Ptr & _s, const Ptr & _e, const Ptr & _next);
@@ -30,7 +32,7 @@ public:
 };
 
 
-class Lazy final {
+class Lazy final : public Any {
 private:
     Ptr e;
     Ptr a;
@@ -51,7 +53,7 @@ public:
 };
 
 
-class Label final {
+class Label final : public Any {
     friend class stepone::Ptr;
 private:
     Ptr v;
