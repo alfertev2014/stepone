@@ -7,12 +7,12 @@
 namespace stepone {
 
 const Ptr Ptr::anil() {
-    static const Ptr p = Ptr::of<core::Symbol>();
+    static const Ptr p = Ptr::of<types::Symbol>();
     return p;
 }
 
 const Ptr Ptr::at() {
-    static const Ptr p = Ptr::of<core::Symbol>();
+    static const Ptr p = Ptr::of<types::Symbol>();
     return p;
 }
 
@@ -21,11 +21,11 @@ const Ptr Ptr::at() {
 namespace stepone {
 
 Ptr Ob::car() {
-    return cast<core::Pair>().car();
+    return cast<types::Pair>().car();
 }
 
 Ptr Ob::cdr() {
-    return cast<core::Pair>().cdr();
+    return cast<types::Pair>().cdr();
 }
 
 } // namespaces

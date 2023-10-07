@@ -1,7 +1,7 @@
 
 #include <ptr_impl.h>
 
-namespace stepone::core {
+namespace stepone::types {
 
 Ptr Pair::car() {return pcar;}
 

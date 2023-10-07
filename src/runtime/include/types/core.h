@@ -2,7 +2,7 @@
 
 #include <ptr.h>
 
-namespace stepone::core {
+namespace stepone::types {
 
 class Any {};
 

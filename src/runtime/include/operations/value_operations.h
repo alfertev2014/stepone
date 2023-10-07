@@ -4,7 +4,7 @@
 
 namespace stepone::operations {
 
-using namespace stepone::core;
+using namespace stepone::types;
 
 template <class T1, class T2>
 class ValueCastUnOp {

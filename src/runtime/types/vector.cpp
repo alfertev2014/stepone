@@ -1,9 +1,9 @@
-#include <core/vector.h>
+#include <types/vector.h>
 #include <error_exception.h>
 
 #include <utility>
 
-namespace stepone::core {
+namespace stepone::types {
 
 Vector::Vector(int _length, const Ptr &list, const Ptr &a) {
     Ptr p = list;

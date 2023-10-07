@@ -7,12 +7,12 @@
 #include <objects/bytearray_obs.h>
 #include <objects/vector_obs.h>
 
-#include <core/bytearray.h>
+#include <types/bytearray.h>
 
 #include <ptr_impl.h>
 #include <logging.h>
 
-using namespace stepone::core;
+using namespace stepone::types;
 using namespace stepone::objects;
 
 namespace stepone::init {

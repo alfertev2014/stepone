@@ -1,7 +1,7 @@
 
 #include <ptr_impl.h>
 
-namespace stepone::core {
+namespace stepone::types {
 
 Ptr Evaluator::eempty() {
     static Ptr e = Ptr::of<Evaluator>(Ptr::anil());

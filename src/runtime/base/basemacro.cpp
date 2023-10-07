@@ -5,7 +5,7 @@
 
 namespace stepone::base {
 
-using namespace core;
+using namespace types;
 
 Ptr MQuote::operator()(const Ptr &p, const Ptr &a) const {
     return p;

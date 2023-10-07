@@ -4,7 +4,7 @@
 
 #include <sstream>
 
-namespace stepone::core {
+namespace stepone::types {
 
 template <class T>
 std::string valueToString(T x) {

@@ -1,11 +1,11 @@
 #pragma once
 
 #include <ptr.h>
-#include "core/core.h"
-#include "core/macro.h"
-#include "core/value.h"
-#include "core/bytearray.h"
-#include "core/vector.h"
+#include "types/core.h"
+#include "types/macro.h"
+#include "types/value.h"
+#include "types/bytearray.h"
+#include "types/vector.h"
 #include "error_exception.h"
 
 #include <variant>
@@ -18,19 +18,19 @@ class Ob final {
     friend class Ptr;
 
     std::variant<
-        core::Pair,
-        core::Symbol,
-        core::Lazy,
-        core::Label,
-        core::Evaluator,
-        core::BaseMacro,
-        core::MacroClosure,
-        core::CurrentContext,
-        core::Vector,
-        core::ByteArray,
-        core::Value<double>,
-        core::Value<long>,
-        core::Value<char>
+        types::Pair,
+        types::Symbol,
+        types::Lazy,
+        types::Label,
+        types::Evaluator,
+        types::BaseMacro,
+        types::MacroClosure,
+        types::CurrentContext,
+        types::Vector,
+        types::ByteArray,
+        types::Value<double>,
+        types::Value<long>,
+        types::Value<char>
     > v;
 
 public:
@@ -49,7 +49,7 @@ public:
     bool is() const {
         return visit(overloaded {
             [](const T &) { return true; },
-            [](const core::Any&) { return false; }
+            [](const types::Any&) { return false; }
         });
     }
 

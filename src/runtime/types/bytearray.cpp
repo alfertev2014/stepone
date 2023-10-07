@@ -1,11 +1,11 @@
 #include <ob.h>
-#include <core/bytearray.h>
+#include <types/bytearray.h>
 
 #include <cstring>
 #include <sstream>
 #include <algorithm>
 
-namespace stepone::core {
+namespace stepone::types {
 ByteArray::ByteArray(const ByteArray &_origin, size_t _begin, size_t _length) {
     if(_begin < 0 || _begin + _length >= _origin.getSize()) {
         throw SemanticError("buffer index out of range");

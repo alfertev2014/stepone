@@ -81,7 +81,7 @@ Ptr BaseNumOps<T>::populateContext(const Ptr &a) const
     ctx = Context::make(aGE, Ptr::of<BaseMacro>(Function<std::greater_equal<T>>()), ctx);
     ctx = Context::make(aLE, Ptr::of<BaseMacro>(Function<std::less_equal<T>>()), ctx);
 
-    ctx = Context::make(aSz, Ptr::of<core::Value<long>>(sizeof(T)), ctx);
+    ctx = Context::make(aSz, Ptr::of<types::Value<long>>(sizeof(T)), ctx);
 
     return ctx;
 }

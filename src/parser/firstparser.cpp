@@ -3,8 +3,8 @@
 #include <ptr.h>
 #include <ptr_impl.h>
 
-#include <core/bytearray.h>
-#include <core/vector.h>
+#include <types/bytearray.h>
+#include <types/vector.h>
 
 #include <logging.h>
 
@@ -16,7 +16,7 @@
 
 namespace stepone::parser {
 
-using namespace core;
+using namespace types;
 
 using string_pos = std::string_view::const_iterator;
 

@@ -4,7 +4,7 @@
 
 #include <vector>
 
-namespace stepone::core {
+namespace stepone::types {
 
 class Vector : public ValueBase {
 private:

@@ -10,10 +10,10 @@ add_library(
     stepone_runtime
     runtime/base/basemacro.cpp
 
-    runtime/core/bytearray.cpp
-    runtime/core/core.cpp
-    runtime/core/macro.cpp
-    runtime/core/vector.cpp
+    runtime/types/bytearray.cpp
+    runtime/types/core.cpp
+    runtime/types/macro.cpp
+    runtime/types/vector.cpp
 
     runtime/objects/basefunc_obs.cpp
     runtime/objects/basemacro_obs.cpp

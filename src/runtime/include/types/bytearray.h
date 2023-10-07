@@ -4,7 +4,7 @@
 #include <error_exception.h>
 #include <vector>
 
-namespace stepone::core {
+namespace stepone::types {
 
 class ByteArray final : public ValueBase {
 private:

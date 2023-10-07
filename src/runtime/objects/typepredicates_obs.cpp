@@ -2,8 +2,8 @@
 
 #include <operations/typepredicates_ops.h>
 #include <base/operations.h>
-#include <core/macro.h>
-#include <core/value.h>
+#include <types/macro.h>
+#include <types/value.h>
 
 namespace stepone::objects {
 

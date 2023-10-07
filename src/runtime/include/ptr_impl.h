@@ -56,23 +56,23 @@ inline Ptr Ptr::cdr() const {
 
 inline Ptr Ptr::eval(const Ptr & a) const {
     return rcob->ob.visit(overloaded {
-        [&](core::Pair &p) { return p.eval(a); },
-        [&, *this](core::Symbol &s) { return core::Context::assoc(a, *this); },
-        [&](core::Lazy &p) { return p.eval(a); },
-        [&](core::Label &p) { return p.eval(a); },
-        [&, *this](core::Const &p) { return *this; },
-        [](core::Any&) -> Ptr { throw SemanticError("eval"); }
+        [&](types::Pair &p) { return p.eval(a); },
+        [&, *this](types::Symbol &s) { return types::Context::assoc(a, *this); },
+        [&](types::Lazy &p) { return p.eval(a); },
+        [&](types::Label &p) { return p.eval(a); },
+        [&, *this](types::Const &p) { return *this; },
+        [](types::Any&) -> Ptr { throw SemanticError("eval"); }
     });
 }
 
 inline Ptr Ptr::apply(const Ptr & p, const Ptr & a) const {
     if (p == Ptr::anil()) return *this;
     return rcob->ob.visit(overloaded {
-        [&](core::Lazy &t) { return t.apply(p, a); },
-        [&](core::Label &t) { return t.apply(p, a); },
+        [&](types::Lazy &t) { return t.apply(p, a); },
+        [&](types::Label &t) { return t.apply(p, a); },
         [&](auto& t) -> Ptr {
             using T = std::decay_t<decltype(t)>;
-            if constexpr (std::is_base_of_v<core::Macro, T>) {
+            if constexpr (std::is_base_of_v<types::Macro, T>) {
                 return t.apply(p, a);
             } else {
                 throw SemanticError("apply of not applyable");
@@ -83,9 +83,9 @@ inline Ptr Ptr::apply(const Ptr & p, const Ptr & a) const {
 
 inline Ptr Ptr::unlazy() const {
     return rcob->ob.visit(overloaded {
-        [&](core::Lazy &t) { return t.unlazy(); },
-        [&](core::Label &t) { return t.unlazy(); },
-        [*this](core::Any&) -> Ptr { return *this; }
+        [&](types::Lazy &t) { return t.unlazy(); },
+        [&](types::Label &t) { return t.unlazy(); },
+        [*this](types::Any&) -> Ptr { return *this; }
     });
 }
 

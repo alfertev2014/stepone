@@ -3,7 +3,7 @@
 #include "core.h"
 #include <functional>
 
-namespace stepone::core {
+namespace stepone::types {
 
 class Macro : public Const {};
 

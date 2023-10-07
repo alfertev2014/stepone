@@ -4,7 +4,7 @@
 
 namespace stepone::base {
 
-using namespace core;
+using namespace types;
 
 namespace {
 

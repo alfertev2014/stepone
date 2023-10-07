@@ -4,7 +4,7 @@
 
 namespace stepone::operations {
 
-using namespace stepone::core;
+using namespace stepone::types;
 
 class VectorLengthUnOp {
 public:

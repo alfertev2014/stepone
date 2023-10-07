@@ -4,7 +4,7 @@
 
 namespace stepone::operations {
 
-using namespace core;
+using namespace types;
 
 class CarUnOp {
 public:

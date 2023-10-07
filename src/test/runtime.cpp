@@ -1,9 +1,9 @@
 #include <gtest/gtest.h>
 
-#include <core/core.h>
+#include <types/core.h>
 
 using namespace stepone;
-using namespace stepone::core;
+using namespace stepone::types;
 
 TEST(Obs,CheckObType) {
     Ptr nil = Ptr::anil();

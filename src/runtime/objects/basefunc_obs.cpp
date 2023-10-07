@@ -27,7 +27,7 @@ Ptr BaseFunctions::populateContext(const Ptr &a) const
     ctx = Context::make(aeq, Ptr::of<BaseMacro>(Function<EqBinOp>()), ctx);
     ctx = Context::make(actxget, Ptr::of<BaseMacro>(Function<ContextGetBinOp>()), ctx);
     ctx = Context::make(actxpush, Ptr::of<BaseMacro>(Function<ContextPushTerOp>()), ctx);
-    ctx = Context::make(aeempty, core::Evaluator::eempty(), ctx);
+    ctx = Context::make(aeempty, types::Evaluator::eempty(), ctx);
 
     return ctx;
 }
