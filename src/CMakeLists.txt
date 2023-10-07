@@ -7,28 +7,28 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 add_library(
-    libstepone
-    impl/base/basemacro.cpp
+    stepone_runtime
+    runtime/base/basemacro.cpp
 
-    impl/core/bytearray.cpp
-    impl/core/core.cpp
-    impl/core/macro.cpp
-    impl/core/vector.cpp
+    runtime/core/bytearray.cpp
+    runtime/core/core.cpp
+    runtime/core/macro.cpp
+    runtime/core/vector.cpp
 
-    impl/objects/basefunc_obs.cpp
-    impl/objects/basemacro_obs.cpp
-    impl/objects/basenumfunc_obs.cpp
-    impl/objects/bytearray_obs.cpp
-    impl/objects/typepredicates_obs.cpp
-    impl/objects/vector_obs.cpp
+    runtime/objects/basefunc_obs.cpp
+    runtime/objects/basemacro_obs.cpp
+    runtime/objects/basenumfunc_obs.cpp
+    runtime/objects/bytearray_obs.cpp
+    runtime/objects/typepredicates_obs.cpp
+    runtime/objects/vector_obs.cpp
 
-    impl/ob.cpp
-    impl/logging.cpp
+    runtime/ob.cpp
+    runtime/logging.cpp
 )
 
 target_include_directories(
-    libstepone
-    PUBLIC include/stepone impl/include
+    stepone_runtime
+    PUBLIC include/stepone runtime/include
 )
 
 add_library(
@@ -40,7 +40,7 @@ target_include_directories(
     steponeinit
     INTERFACE init
 )
-target_link_libraries(steponeinit PUBLIC libstepone)
+target_link_libraries(steponeinit PUBLIC stepone_runtime)
 
 add_library(steponeparser  parser/firstparser.cpp)
 target_include_directories(steponeparser INTERFACE parser)
