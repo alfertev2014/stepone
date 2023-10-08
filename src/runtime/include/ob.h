@@ -21,7 +21,7 @@ class Ob final {
         types::Pair,
         types::Symbol,
         types::Lazy,
-        types::Label,
+        types::Loop,
         types::Evaluator,
         types::BaseMacro,
         types::MacroClosure,

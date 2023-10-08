@@ -169,7 +169,7 @@ std::ostream &Printer::printOb(std::ostream &ts, const Ptr &p) {
     }
     if (p.is<Lazy>())
         ts << "{lazy}";
-    else if (p.is<Label>())
+    else if (p.is<Loop>())
         ts << "{label}";
     else if (p.is<ValueBase>()) {
         printValue(ts, p);

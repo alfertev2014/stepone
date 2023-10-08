@@ -12,7 +12,7 @@ TEST(CompilationInfo,SiteOfTypes) {
     std::cout << "sizeof types::Pair = " << sizeof(Pair) << std::endl;
     std::cout << "sizeof types::Symbol = " << sizeof(Symbol) << std::endl;
     std::cout << "sizeof types::Lazy = " << sizeof(Lazy) << std::endl;
-    std::cout << "sizeof types::Label = " << sizeof(Label) << std::endl;
+    std::cout << "sizeof types::Label = " << sizeof(Loop) << std::endl;
     std::cout << "sizeof types::Evaluator = " << sizeof(Evaluator) << std::endl;
     std::cout << "sizeof types::BaseMacro = " << sizeof(BaseMacro) << std::endl;
     std::cout << "sizeof types::MacroClosure = " << sizeof(MacroClosure) << std::endl;

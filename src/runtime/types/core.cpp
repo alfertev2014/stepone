@@ -10,7 +10,7 @@ Ptr Pair::cdr() {return pcdr;}
 Ptr Pair::eval(const Ptr &a) {return pcar.eval(a).apply(pcdr, a);}
 
 Ptr Context::make(const Ptr & _s, const Ptr & _e, const Ptr & _next) {
-    return Ptr::of<Pair>(Ptr::of<Pair>(_s, _e), _next);
+    return Ptr::of<Pair>(Ptr::of<Pair>(symbol, value), next);
 }
 
 Ptr Context::assoc(const Ptr & ctx, const Ptr & s) {
@@ -25,44 +25,44 @@ Ptr Context::assoc(const Ptr & ctx, const Ptr & s) {
 }
 
 inline void Lazy::ev() {
-    if(!(a == Ptr::anil())) {
-        e = e.eval(a);
-        a = Ptr::anil();
+    if(!(context == Ptr::anil())) {
+        expression = expression.eval(context);
+        context = Ptr::anil();
     }
 }
 
 inline void Lazy::evw() {
     ev();
-    Lazy * l = e.as<Lazy>();
+    Lazy * l = expression.as<Lazy>();
     while(l != 0) {
         l->ev();
-        e = l->e;
-        l = e.as<Lazy>();
+        expression = l->expression;
+        l = expression.as<Lazy>();
     }
 }
 
-Ptr Lazy::car() {evw(); return e.car();}
+Ptr Lazy::car() {evw(); return expression.car();}
 
-Ptr Lazy::cdr() {evw(); return e.cdr();}
+Ptr Lazy::cdr() {evw(); return expression.cdr();}
 
-Ptr Lazy::eval(const Ptr &a) {evw(); return e.eval(a);}
+Ptr Lazy::eval(const Ptr &a) {evw(); return expression.eval(a);}
 
 Ptr Lazy::apply(const Ptr &p, const Ptr &a) {
-    evw(); return e.apply(p, a);
+    evw(); return expression.apply(p, a);
 }
 
-Ptr Lazy::unlazy() {evw(); return e;}
+Ptr Lazy::unlazy() {evw(); return expression;}
 
-inline Ptr Label::ptr() {
+inline Ptr Loop::ptr() {
     if(pa) {
         return v.eval(*pa);
     }
     return v;
 }
 
-Ptr Label::loop(const Ptr &f, const Ptr &e, const Ptr &a) {
-    Ptr lbl = Ptr::of<Label>(e, &a);
-    Label &l = lbl.cast<Label>();
+Ptr Loop::loop(const Ptr &f, const Ptr &e, const Ptr &a) {
+    Ptr lbl = Ptr::of<Loop>(e, &a);
+    Loop &l = lbl.cast<Loop>();
     Ptr res = e.eval(Context::make(f, lbl, a));
     l.v = res;
     l.pa = 0;
@@ -71,15 +71,15 @@ Ptr Label::loop(const Ptr &f, const Ptr &e, const Ptr &a) {
 
 
 
-Ptr Label::car() {return ptr().car();}
+Ptr Loop::car() {return ptr().car();}
 
-Ptr Label::cdr() {return ptr().cdr();}
+Ptr Loop::cdr() {return ptr().cdr();}
 
-Ptr Label::eval(const Ptr &a) {return ptr().eval(a);}
+Ptr Loop::eval(const Ptr &a) {return ptr().eval(a);}
 
-Ptr Label::apply(const Ptr &p, const Ptr &a) {return ptr().apply(p, a);}
+Ptr Loop::apply(const Ptr &p, const Ptr &a) {return ptr().apply(p, a);}
 
-Ptr Label::unlazy() {return ptr().unlazy();}
+Ptr Loop::unlazy() {return ptr().unlazy();}
 
 
 } // namespaces

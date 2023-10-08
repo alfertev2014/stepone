@@ -36,7 +36,7 @@ Ptr MUnlazy::operator()(const Ptr &p, const Ptr &a) const {
 }
 
 Ptr MLabel::operator()(const Ptr &p, const Ptr &a) const {
-    return Label::loop(p.car(), p.cdr(), a);
+    return Loop::loop(p.car(), p.cdr(), a);
 }
 
 Ptr MMacro::operator()(const Ptr &p, const Ptr &a) const {
