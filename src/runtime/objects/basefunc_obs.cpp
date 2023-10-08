@@ -1,11 +1,11 @@
 #include <objects/basefunc_obs.h>
 
 #include <operations/basefunc_ops.h>
-#include <base/operations.h>
+#include <builtin/operations.h>
 
 namespace stepone::objects {
 
-using namespace base;
+using namespace builtin;
 using namespace operations;
 
 BaseFunctions::BaseFunctions() :

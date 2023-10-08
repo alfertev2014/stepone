@@ -2,11 +2,11 @@
 
 #include <operations/bytearray_ops.h>
 #include <operations/typepredicates_ops.h>
-#include <base/operations.h>
+#include <builtin/operations.h>
 
 namespace stepone::objects {
 
-using namespace base;
+using namespace builtin;
 using namespace operations;
 
 ByteArrayFunctions::ByteArrayFunctions() :

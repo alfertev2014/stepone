@@ -42,7 +42,7 @@ public:
 };
 
 /**
- * The base type for any other objects that is not pairs.
+ * The builtin type for any other objects that is not pairs.
  *
  * The therm "atom" is borrowed from LISP.
  */
@@ -127,16 +127,36 @@ public:
  * Evaluation of symbol object usually assumes finding bound value in current evaluation context.
  */
 class Symbol final : public Atom {
+    // TODO: Should we allocate memory for these empty objects? Think about embedding Symbol semantics into Ptr.
 public:
     Ptr eval(const Ptr & context);
 };
 
 /**
- * Base type for all constant objects.
+ * Base type of all constant objects.
  *
  * Evaluation of constant always results in the constant object itself.
+ * In most cases evaluation of constant has no mean because it is already the result of evaluation.
  * Some types of constants can be created only in runtime and cannot be constructed in source code.
+ *
+ * It is not recommended to compare these objects by identity. Implementation of runtime will not guarantee to respect identity semantics for Consts.
  */
 class Const : public Atom {};
+
+/**
+ * Base type of all applyable objects.
+ *
+ * Applyable objects are those objects which can be applyed to other objects according to its inner logic.
+ */
+class Macro : public Const {};
+
+/**
+ * Base type for all values.
+ *
+ * Value object contains a payload of some C++ type.
+ * Value object is still an object with its identity. Implementation of runtime will not guarantee to respect identity semantics for Consts.
+ */
+class ValueBase : public Const {};
+
 
 } // namespaces

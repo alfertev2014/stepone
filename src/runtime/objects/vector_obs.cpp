@@ -3,11 +3,11 @@
 #include <ob.h>
 #include <operations/vector_ops.h>
 #include <operations/typepredicates_ops.h>
-#include <base/operations.h>
+#include <builtin/operations.h>
 
 namespace stepone::objects {
 
-using namespace base;
+using namespace builtin;
 using namespace operations;
 
 VectorFunctions::VectorFunctions() :

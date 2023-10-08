@@ -7,38 +7,20 @@
 namespace stepone::types {
 
 template <class T>
-std::string valueToString(T x) {
-    std::stringstream ss;
-    ss << x;
-    return ss.str();
-}
-
-template <typename T>
-std::string cppTypeToString() {return "cppType";}
-
-template <> inline std::string cppTypeToString<long>() {return "int";}
-template <> inline std::string cppTypeToString<double>() {return "double";}
-template <> inline std::string cppTypeToString<char>() {return "char";}
-
-
-class ValueBase : public Const {};
-
-
-class BaseValue : public ValueBase {
-// TODO: Place here a payload for built in cpp types and value type tag
-protected:
-    BaseValue() = default;
-};
-
-
-template <class T>
-class Value : public BaseValue {
+class Value final : public ValueBase {
 private:
-    T t; // TODO: Use place in BaseValue and reinterpret_cast
+    T t;
 public:
     Value(const T & _t) : t(_t) {}
     T getValue() const {return t;}
-    char *getValuePointer() {return reinterpret_cast<char *>(&t);}
+};
+
+// TODO: Add it to Ob payload
+class OtherValue final : public ValueBase {
+private:
+    char payload[sizeof(Ptr) * 3];
+protected:
+    OtherValue() = default;
 };
 
 } // namespaces

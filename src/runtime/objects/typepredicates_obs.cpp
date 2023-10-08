@@ -1,13 +1,13 @@
 #include <objects/typepredicates_obs.h>
 
 #include <operations/typepredicates_ops.h>
-#include <base/operations.h>
+#include <builtin/operations.h>
 #include <types/macro.h>
 #include <types/value.h>
 
 namespace stepone::objects {
 
-using namespace base;
+using namespace builtin;
 using namespace operations;
 
 BaseTypePredicates::BaseTypePredicates() :

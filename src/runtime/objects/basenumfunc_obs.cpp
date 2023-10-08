@@ -2,14 +2,14 @@
 
 #include <operations/value_operations.h>
 #include <operations/typepredicates_ops.h>
-#include <base/operations.h>
+#include <builtin/operations.h>
 
 #include <functional>
 #include <type_traits>
 
 namespace stepone::objects {
 
-using namespace base;
+using namespace builtin;
 using namespace operations;
 
 template <typename T>

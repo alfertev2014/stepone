@@ -8,7 +8,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 add_library(
     stepone_runtime
-    runtime/base/basemacro.cpp
+    runtime/builtin/basemacro.cpp
 
     runtime/types/bytearray.cpp
     runtime/types/core.cpp

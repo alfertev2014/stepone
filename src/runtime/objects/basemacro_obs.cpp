@@ -1,12 +1,12 @@
 #include <objects/basemacro_obs.h>
 
 #include <ob.h>
-#include <base/basemacro.h>
-#include <base/operations.h>
+#include <builtin/basemacro.h>
+#include <builtin/operations.h>
 
 namespace stepone::objects {
 
-using namespace base;
+using namespace builtin;
 
 BaseMacroses::BaseMacroses() :
     aquote(Ptr::of<Symbol>()),

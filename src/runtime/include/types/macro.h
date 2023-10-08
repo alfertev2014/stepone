@@ -1,28 +1,27 @@
 #pragma once
 
 #include "core.h"
-#include <functional>
 
 namespace stepone::types {
 
-class Macro : public Const {};
-
-
+// TODO: De we need separate type for Evaluator? May be Context will be enough?
+// TODO: It could be good idea to pass const Ptr &context arguments as of special Context type.
+// So contexts may have separate memory allocator.
 class Evaluator final : public Macro {
 private:
-    Ptr a;
+    Ptr context;
 public:
     static Ptr eempty();
 
-    Evaluator(Ptr _a) : a(_a) {}
+    Evaluator(Ptr context) : context(context) {}
     Ptr getContext() const;
-    Ptr apply(const Ptr &p, const Ptr &a);
-    Ptr assoc(const Ptr &s) const;
-    Ptr push(const Ptr &s, const Ptr &p) const;
+    Ptr apply(const Ptr &argument, const Ptr &context);
+    Ptr assoc(const Ptr &symbol) const;
+    Ptr push(const Ptr &symbol, const Ptr &value) const;
 };
 
 
-using BaseMacroApplyFunction = Ptr(*)(const Ptr &p, const Ptr &a);
+using BaseMacroApplyFunction = Ptr(*)(const Ptr &argument, const Ptr &context);
 
 class BaseMacro final : public Macro {
 private:
@@ -31,35 +30,35 @@ public:
     BaseMacro(const BaseMacroApplyFunction &applyFunction) : applyFunction(applyFunction) {}
 
     template <typename Func>
-    BaseMacro(const Func &f) : applyFunction([](const Ptr &p, const Ptr &a) { return Func()(p, a); }) {}
+    BaseMacro(const Func &) : applyFunction([](const Ptr &argument, const Ptr &context) { return Func()(argument, context); }) {}
 
-    Ptr apply(const Ptr &p, const Ptr &a) {return applyFunction(p, a);}
+    Ptr apply(const Ptr &argument, const Ptr &context) {return applyFunction(argument, context);}
 };
 
-
+// TODO: Do we need both MacroClosure and CurrentContext to write macros.
 class MacroClosure final : public Macro {
 private:
-    Ptr sp;
-    Ptr e;
-    Ptr a;
+    Ptr symbol;
+    Ptr expression;
+    Ptr context;
 public:
-    MacroClosure(const Ptr & _sp, const Ptr & _e, const Ptr & _a)
-        : sp(_sp), e(_e), a(_a) {}
+    MacroClosure(const Ptr & symbol, const Ptr & expression, const Ptr & context)
+        : symbol(symbol), expression(expression), context(context) {}
 
-    Ptr apply(const Ptr &p, const Ptr &a);
+    Ptr apply(const Ptr &argument, const Ptr &context);
 };
 
 
 class CurrentContext final : public Macro {
 private:
-    Ptr sa;
-    Ptr e;
-    Ptr a;
+    Ptr symbol;
+    Ptr expression;
+    Ptr context;
 public:
-    CurrentContext(const Ptr & _sa, const Ptr & _e, const Ptr & _a)
-        : sa(_sa), e(_e), a(_a) {}
+    CurrentContext(const Ptr &symbol, const Ptr & expression, const Ptr & context)
+        : symbol(symbol), expression(expression), context(context) {}
 
-    Ptr apply(const Ptr &p, const Ptr &a);
+    Ptr apply(const Ptr &argument, const Ptr &context);
 };
 
 } // namespaces

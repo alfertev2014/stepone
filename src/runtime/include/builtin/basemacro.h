@@ -2,7 +2,7 @@
 
 #include <ptr.h>
 
-namespace stepone::base {
+namespace stepone::builtin {
 
 class MQuote {
 public:

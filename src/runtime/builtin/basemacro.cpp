@@ -1,9 +1,9 @@
-#include <base/basemacro.h>
+#include <builtin/basemacro.h>
 #include <error_exception.h>
 
 #include <ptr_impl.h>
 
-namespace stepone::base {
+namespace stepone::builtin {
 
 using namespace types;
 

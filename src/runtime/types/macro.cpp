@@ -8,22 +8,22 @@ Ptr Evaluator::eempty() {
     return e;
 }
 
-Ptr Evaluator::getContext() const {return a;}
+Ptr Evaluator::getContext() const {return context;}
 
-Ptr Evaluator::apply(const Ptr &p, const Ptr &a) {return p.eval(a).eval(this->a);}
+Ptr Evaluator::apply(const Ptr &argument, const Ptr &context) {return argument.eval(context).eval(this->context);}
 
-Ptr Evaluator::assoc(const Ptr &s) const {return Context::assoc(a, s);}
+Ptr Evaluator::assoc(const Ptr &symbol) const {return Context::assoc(context, symbol);}
 
-Ptr Evaluator::push(const Ptr &s, const Ptr &p) const {
-    return Ptr::of<Evaluator>(Context::make(s, p, a));
+Ptr Evaluator::push(const Ptr &symbol, const Ptr &value) const {
+    return Ptr::of<Evaluator>(Context::make(symbol, value, context));
 }
 
-Ptr MacroClosure::apply(const Ptr &p, const Ptr &a) {
-    return e.eval(Context::make(sp, p, this->a));
+Ptr MacroClosure::apply(const Ptr &argument, const Ptr &context) {
+    return expression.eval(Context::make(symbol, argument, this->context));
 }
 
-Ptr CurrentContext::apply(const Ptr &p, const Ptr &a) {
-    return e.eval(Context::make(sa, Ptr::of<Evaluator>(a), this->a)).apply(p, this->a);
+Ptr CurrentContext::apply(const Ptr &argument, const Ptr &context) {
+    return expression.eval(Context::make(symbol, Ptr::of<Evaluator>(context), this->context)).apply(argument, this->context);
 }
 
 } // namespaces

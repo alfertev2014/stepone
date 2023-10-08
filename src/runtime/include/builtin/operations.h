@@ -2,7 +2,7 @@
 
 #include <ptr_impl.h>
 
-namespace stepone::base {
+namespace stepone::builtin {
 
 using namespace types;
 
