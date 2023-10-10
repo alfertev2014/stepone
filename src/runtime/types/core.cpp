@@ -53,33 +53,4 @@ Ptr Lazy::apply(const Ptr &p, const Ptr &a) {
 
 Ptr Lazy::unlazy() {evw(); return expression;}
 
-inline Ptr Loop::ptr() {
-    if(pa) {
-        return v.eval(*pa);
-    }
-    return v;
-}
-
-Ptr Loop::loop(const Ptr &f, const Ptr &e, const Ptr &a) {
-    Ptr lbl = Ptr::of<Loop>(e, &a);
-    Loop &l = lbl.cast<Loop>();
-    Ptr res = e.eval(Context::make(f, lbl, a));
-    l.v = res;
-    l.pa = 0;
-    return res;
-}
-
-
-
-Ptr Loop::car() {return ptr().car();}
-
-Ptr Loop::cdr() {return ptr().cdr();}
-
-Ptr Loop::eval(const Ptr &a) {return ptr().eval(a);}
-
-Ptr Loop::apply(const Ptr &p, const Ptr &a) {return ptr().apply(p, a);}
-
-Ptr Loop::unlazy() {return ptr().unlazy();}
-
-
 } // namespaces

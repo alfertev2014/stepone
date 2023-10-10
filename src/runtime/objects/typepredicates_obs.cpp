@@ -13,7 +13,6 @@ using namespace operations;
 BaseTypePredicates::BaseTypePredicates() :
     apairp(Ptr::of<Symbol>()),
     alazyp(Ptr::of<Symbol>()),
-    alabelp(Ptr::of<Symbol>()),
     aatomp(Ptr::of<Symbol>()),
     asymbolp(Ptr::of<Symbol>()),
     aconstp(Ptr::of<Symbol>()),
@@ -28,7 +27,6 @@ Ptr BaseTypePredicates::populateContext(const Ptr &a) const
 {
     Ptr ctx = Context::make(apairp, Ptr::of<BaseMacro>(Function<TypePUnOp<Pair>>()), a);
     ctx = Context::make(alazyp, Ptr::of<BaseMacro>(Function<TypePUnOp<Lazy>>()), ctx);
-    ctx = Context::make(alabelp, Ptr::of<BaseMacro>(Function<TypePUnOp<Lazy>>()), ctx);
     ctx = Context::make(aatomp, Ptr::of<BaseMacro>(Function<TypePUnOp<Atom>>()), ctx);
     ctx = Context::make(asymbolp, Ptr::of<BaseMacro>(Function<TypePUnOp<Symbol>>()), ctx);
     ctx = Context::make(aconstp, Ptr::of<BaseMacro>(Function<TypePUnOp<Const>>()), ctx);

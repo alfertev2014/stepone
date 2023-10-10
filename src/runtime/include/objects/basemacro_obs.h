@@ -15,7 +15,6 @@ public:
     const Ptr alet;
     const Ptr alazy;
     const Ptr aunlazy;
-    const Ptr alabel;
     const Ptr alambda;
     const Ptr amacro;
     const Ptr acurctx;

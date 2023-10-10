@@ -34,11 +34,6 @@ public:
     Ptr operator()(const Ptr &p, const Ptr &a) const;
 };
 
-class MLabel {
-public:
-    Ptr operator()(const Ptr &p, const Ptr &a) const;
-};
-
 class MLambda {
 public:
     Ptr operator()(const Ptr &p, const Ptr &a) const;

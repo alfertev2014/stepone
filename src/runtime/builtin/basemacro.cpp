@@ -35,10 +35,6 @@ Ptr MUnlazy::operator()(const Ptr &p, const Ptr &a) const {
     return p.eval(a).unlazy();
 }
 
-Ptr MLabel::operator()(const Ptr &p, const Ptr &a) const {
-    return Loop::loop(p.car(), p.cdr(), a);
-}
-
 Ptr MMacro::operator()(const Ptr &p, const Ptr &a) const {
     return Ptr::of<MacroClosure>(p.car(), p.cdr(), a);
 }

@@ -92,33 +92,6 @@ public:
 };
 
 /**
- * Back reference to make a cycle in object graph.
- *
- * Used to make loop in evaluation context for recursive functions and values.
- */
-class Loop final : public Any {
-    friend class stepone::Ptr;
-private:
-    Ptr v;
-    const Ptr * pa;
-
-    Loop(const Ptr _v, const Ptr * _a)
-        : v(_v), pa(_a) {}
-
-    Ptr ptr();
-
-public:
-    static Ptr loop(const Ptr & symbol, const Ptr & expression, const Ptr & context);
-
-    Ptr car();
-    Ptr cdr();
-
-    Ptr eval(const Ptr &a);
-    Ptr apply(const Ptr &p, const Ptr &a);
-    Ptr unlazy();
-};
-
-/**
  * Symbol object to name values.
  *
  * Empty object that is used only for its identity.

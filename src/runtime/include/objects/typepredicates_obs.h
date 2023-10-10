@@ -11,7 +11,6 @@ public:
 
     const Ptr apairp;
     const Ptr alazyp;
-    const Ptr alabelp;
     const Ptr aatomp;
     const Ptr asymbolp;
     const Ptr aconstp;
