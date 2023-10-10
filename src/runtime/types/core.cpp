@@ -24,33 +24,4 @@ Ptr Context::assoc(const Ptr & context, const Ptr & symbol) {
     throw SemanticError("assoc");
 }
 
-inline void Lazy::ev() {
-    if(!(context == Ptr::anil())) {
-        expression = expression.eval(context);
-        context = Ptr::anil();
-    }
-}
-
-inline void Lazy::evw() {
-    ev();
-    Lazy * l = expression.as<Lazy>();
-    while(l != 0) {
-        l->ev();
-        expression = l->expression;
-        l = expression.as<Lazy>();
-    }
-}
-
-Ptr Lazy::car() {evw(); return expression.car();}
-
-Ptr Lazy::cdr() {evw(); return expression.cdr();}
-
-Ptr Lazy::eval(const Ptr &a) {evw(); return expression.eval(a);}
-
-Ptr Lazy::apply(const Ptr &p, const Ptr &a) {
-    evw(); return expression.apply(p, a);
-}
-
-Ptr Lazy::unlazy() {evw(); return expression;}
-
 } // namespaces

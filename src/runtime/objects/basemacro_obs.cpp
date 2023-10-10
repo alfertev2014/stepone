@@ -13,8 +13,6 @@ BaseMacroses::BaseMacroses() :
     aapply(Ptr::of<Symbol>()),
     aif(Ptr::of<Symbol>()),
     alet(Ptr::of<Symbol>()),
-    alazy(Ptr::of<Symbol>()),
-    aunlazy(Ptr::of<Symbol>()),
     alambda(Ptr::of<Symbol>()),
     amacro(Ptr::of<Symbol>()),
     acurctx(Ptr::of<Symbol>()),
@@ -30,8 +28,6 @@ Ptr BaseMacroses::populateContext(const Ptr &a) const
     ctx = Context::make(aapply, Ptr::of<BaseMacro>(MApply()), ctx);
     ctx = Context::make(aif, Ptr::of<BaseMacro>(MIf()), ctx);
     ctx = Context::make(alet, Ptr::of<BaseMacro>(MLet()), ctx);
-    ctx = Context::make(alazy, Ptr::of<BaseMacro>(MLazy()), ctx);
-    ctx = Context::make(aunlazy, Ptr::of<BaseMacro>(MUnlazy()), ctx);
     ctx = Context::make(amacro, Ptr::of<BaseMacro>(MMacro()), ctx);
     ctx = Context::make(acurctx, Ptr::of<BaseMacro>(MCurrentContext()), ctx);
     ctx = Context::make(atry, Ptr::of<BaseMacro>(MTry()), ctx);

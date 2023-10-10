@@ -59,7 +59,6 @@ public:
 
     Ptr eval(const Ptr & a) const;
     Ptr apply(const Ptr & p, const Ptr & a) const;
-    Ptr unlazy() const;
 private:
     void acquire() const;
     void release() const;

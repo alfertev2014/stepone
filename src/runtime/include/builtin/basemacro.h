@@ -24,16 +24,6 @@ public:
     Ptr operator()(const Ptr &p, const Ptr &a) const;
 };
 
-class MLazy {
-public:
-    Ptr operator()(const Ptr &p, const Ptr &a) const;
-};
-
-class MUnlazy {
-public:
-    Ptr operator()(const Ptr &p, const Ptr &a) const;
-};
-
 class MLambda {
 public:
     Ptr operator()(const Ptr &p, const Ptr &a) const;

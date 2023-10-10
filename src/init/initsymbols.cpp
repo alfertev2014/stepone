@@ -110,7 +110,6 @@ Ptr BaseSymbolTable::createSymbolTable() {
     addSymbol(symbolTable, "b-getc", ByteArrayFunctions::inst().agetchar);
 
     addSymbol(symbolTable, "pair?", BaseTypePredicates::inst().apairp);
-    addSymbol(symbolTable, "lazy?", BaseTypePredicates::inst().alazyp);
     addSymbol(symbolTable, "atom?", BaseTypePredicates::inst().aatomp);
     addSymbol(symbolTable, "symbol?", BaseTypePredicates::inst().asymbolp);
     addSymbol(symbolTable, "const?", BaseTypePredicates::inst().aconstp);
@@ -134,8 +133,6 @@ Ptr BaseSymbolTable::createSymbolTable() {
     addSymbol(symbolTable, "~", BaseMacroses::inst().acurctx);
     addSymbol(symbolTable, "_", BaseMacroses::inst().abot);
     addSymbol(symbolTable, "|", BaseMacroses::inst().atry);
-    addSymbol(symbolTable, "$", BaseMacroses::inst().aunlazy);
-    addSymbol(symbolTable, "#", BaseMacroses::inst().alazy);
     addSymbol(symbolTable, "%", BaseMacroses::inst().amacro);
     addSymbol(symbolTable, "`", BaseMacroses::inst().aapply);
     addSymbol(symbolTable, "?", BaseMacroses::inst().aif);

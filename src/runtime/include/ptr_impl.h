@@ -58,7 +58,6 @@ inline Ptr Ptr::eval(const Ptr & a) const {
     return rcob->ob.visit(overloaded {
         [&](types::Pair &p) { return p.eval(a); },
         [&, *this](types::Symbol &s) { return types::Context::assoc(a, *this); },
-        [&](types::Lazy &p) { return p.eval(a); },
         [&, *this](types::Const &p) { return *this; },
         [](types::Any&) -> Ptr { throw SemanticError("eval"); }
     });
@@ -66,8 +65,7 @@ inline Ptr Ptr::eval(const Ptr & a) const {
 
 inline Ptr Ptr::apply(const Ptr & p, const Ptr & a) const {
     if (p == Ptr::anil()) return *this;
-    return rcob->ob.visit(overloaded {
-        [&](types::Lazy &t) { return t.apply(p, a); },
+    return rcob->ob.visit(
         [&](auto& t) -> Ptr {
             using T = std::decay_t<decltype(t)>;
             if constexpr (std::is_base_of_v<types::Macro, T>) {
@@ -76,14 +74,7 @@ inline Ptr Ptr::apply(const Ptr & p, const Ptr & a) const {
                 throw SemanticError("apply of not applyable");
             }
         }
-    });
-}
-
-inline Ptr Ptr::unlazy() const {
-    return rcob->ob.visit(overloaded {
-        [&](types::Lazy &t) { return t.unlazy(); },
-        [*this](types::Any&) -> Ptr { return *this; }
-    });
+    );
 }
 
 } // namespace

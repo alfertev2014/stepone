@@ -93,7 +93,7 @@ Ptr FirstParser::parse(const std::string &_s) {
 }
 
 Ptr FirstParser::eval(const Ptr &p) {
-    return p.eval(a).unlazy();
+    return p.eval(a);
 }
 
 Ptr FirstParser::parseEval(const std::string &s) {
@@ -167,8 +167,6 @@ std::ostream &Printer::printOb(std::ostream &ts, const Ptr &p) {
         ts << "(";
         return printList(ts, p.as<Pair>());
     }
-    if (p.is<Lazy>())
-        ts << "{lazy}";
     else if (p.is<ValueBase>()) {
         printValue(ts, p);
     }

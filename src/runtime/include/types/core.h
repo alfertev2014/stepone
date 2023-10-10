@@ -67,31 +67,6 @@ public:
 };
 
 /**
- * Lazy value which evaluation is delayed.
- *
- * Represents suspended evaluation that could be continued a.k.a. continuation.
- */
-class Lazy final : public Any {
-private:
-    Ptr expression;
-    Ptr context;
-
-    void ev();
-    void evw();
-
-public:
-    Lazy(const Ptr & expression, const Ptr & context)
-        : expression(expression), context(context) {}
-
-    Ptr car();
-    Ptr cdr();
-
-    Ptr eval(const Ptr &a);
-    Ptr apply(const Ptr &p, const Ptr &a);
-    Ptr unlazy();
-};
-
-/**
  * Symbol object to name values.
  *
  * Empty object that is used only for its identity.

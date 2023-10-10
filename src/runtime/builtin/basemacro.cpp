@@ -27,14 +27,6 @@ Ptr MLet::operator()(const Ptr &p, const Ptr &a) const {
     return val.cdr().eval(Context::make(p.car(), val.car().eval(a), a));
 }
 
-Ptr MLazy::operator()(const Ptr &p, const Ptr &a) const {
-    return Ptr::of<Lazy>(p, a);
-}
-
-Ptr MUnlazy::operator()(const Ptr &p, const Ptr &a) const {
-    return p.eval(a).unlazy();
-}
-
 Ptr MMacro::operator()(const Ptr &p, const Ptr &a) const {
     return Ptr::of<MacroClosure>(p.car(), p.cdr(), a);
 }

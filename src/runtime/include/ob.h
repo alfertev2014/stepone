@@ -20,7 +20,6 @@ class Ob final {
     std::variant<
         types::Pair,
         types::Symbol,
-        types::Lazy,
         types::Evaluator,
         types::BaseMacro,
         types::MacroClosure,

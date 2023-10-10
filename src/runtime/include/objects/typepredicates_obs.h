@@ -10,7 +10,6 @@ public:
     static const BaseTypePredicates &inst();
 
     const Ptr apairp;
-    const Ptr alazyp;
     const Ptr aatomp;
     const Ptr asymbolp;
     const Ptr aconstp;

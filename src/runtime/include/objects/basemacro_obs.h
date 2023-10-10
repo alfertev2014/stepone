@@ -13,8 +13,6 @@ public:
     const Ptr aapply;
     const Ptr aif;
     const Ptr alet;
-    const Ptr alazy;
-    const Ptr aunlazy;
     const Ptr alambda;
     const Ptr amacro;
     const Ptr acurctx;
