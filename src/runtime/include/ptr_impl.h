@@ -59,7 +59,7 @@ inline Ptr Ptr::eval(const Ptr & a) const {
         [&](types::Pair &p) { return p.eval(a); },
         [&, *this](types::Symbol &s) { return types::Context::assoc(a, *this); },
         [&, *this](types::Const &p) { return *this; },
-        [](types::Any&) -> Ptr { throw SemanticError("eval"); }
+        [](types::Any&) -> Ptr { throw TypeError("eval"); }
     });
 }
 
@@ -71,7 +71,7 @@ inline Ptr Ptr::apply(const Ptr & p, const Ptr & a) const {
             if constexpr (std::is_base_of_v<types::Macro, T>) {
                 return t.apply(p, a);
             } else {
-                throw SemanticError("apply of not applyable");
+                throw TypeError("apply of not applyable");
             }
         }
     );

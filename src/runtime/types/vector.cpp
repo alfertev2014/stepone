@@ -22,7 +22,7 @@ Vector::Vector(const Vector &v1, const Vector &v2) {
 
 Vector::Vector(const Vector &_origin, int _begin, int _length) {
     if(_begin < 0 || _begin + _length >= _origin.getSize()) {
-        throw SemanticError("vector index out of range");
+        throw TypeError("vector index out of range");
     }
 
     array.reserve(_length);

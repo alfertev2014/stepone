@@ -38,13 +38,13 @@ Ptr MCurrentContext::operator()(const Ptr &p, const Ptr &a) const {
 Ptr MTry::operator()(const Ptr &p, const Ptr &a) const {
     try {
         return p.car().eval(a);
-    } catch(SemanticError &e) {
+    } catch(TypeError &e) {
         return p.cdr().eval(a);
     }
 }
 
 Ptr MBot::operator()(const Ptr &p, const Ptr &a) const {
-    throw SemanticError("Bottom");
+    throw TypeError("Bottom");
 }
 
 Ptr MGenSymbol::operator()(const Ptr &p, const Ptr &a) const {

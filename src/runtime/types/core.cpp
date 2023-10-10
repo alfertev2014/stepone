@@ -21,7 +21,7 @@ Ptr Context::assoc(const Ptr & context, const Ptr & symbol) {
             return pair.cdr();
         p = p.cdr();
     }
-    throw SemanticError("assoc");
+    throw TypeError("assoc");
 }
 
 } // namespaces

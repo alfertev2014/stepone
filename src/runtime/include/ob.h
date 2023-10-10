@@ -54,7 +54,7 @@ public:
     template <class T>
     T &cast() {
         if (auto * p = as<T>(); !p) {
-            throw SemanticError("error cast");
+            throw TypeError("error cast");
         } else {
             return *p;
         }

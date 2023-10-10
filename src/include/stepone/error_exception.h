@@ -4,16 +4,16 @@
 
 namespace stepone {
 
-class SemanticError : public std::exception
-{
+class TypeError : public std::exception {
+private:
     const char * message;
 public:
-    SemanticError() noexcept
-        : message("Unknown SemanticError") {}
-    
-    SemanticError(const char * message) noexcept
+    TypeError() noexcept
+        : message("Unknown TypeError") {}
+
+    TypeError(const char * message) noexcept
         : message(message) {}
-    
+
     const char * what() const noexcept override {
         return message;
     }

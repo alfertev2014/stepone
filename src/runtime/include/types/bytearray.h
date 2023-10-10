@@ -32,7 +32,7 @@ public:
 
     template <class T>
     T get(int i) {
-        if(i < 0 || i + sizeof(T) > getSize()) { throw SemanticError("Error get from bytearray");}
+        if(i < 0 || i + sizeof(T) > getSize()) { throw TypeError("Error get from bytearray");}
         return *(reinterpret_cast<T*>(getData() + i));
     }
 };

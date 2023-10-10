@@ -8,7 +8,7 @@
 namespace stepone::types {
 ByteArray::ByteArray(const ByteArray &_origin, size_t _begin, size_t _length) {
     if(_begin < 0 || _begin + _length >= _origin.getSize()) {
-        throw SemanticError("buffer index out of range");
+        throw TypeError("buffer index out of range");
     }
 
     buffer.reserve(_length);
@@ -24,7 +24,7 @@ ByteArray::ByteArray(const ByteArray &v1, const ByteArray &v2) {
 
 ByteArray::ByteArray(const char *_begin, size_t _length) {
     if(_begin == nullptr || _length < 0) {
-        throw SemanticError("buffer index out of range");
+        throw TypeError("buffer index out of range");
     }
 
     buffer.reserve(_length);
