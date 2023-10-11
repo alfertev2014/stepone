@@ -6,8 +6,8 @@
 namespace stepone {
 
 struct Ptr::RefCounter final {
-    int refcount {0};
-    Ob ob;
+    mutable int refcount {0};
+    const Ob ob;
 
     template <class T>
     inline RefCounter(T&& t): ob(std::forward<T>(t)) {}
@@ -32,7 +32,7 @@ inline void Ptr::release() const {
 }
 
 template <class T>
-inline T * Ptr::as() const {
+inline const T * Ptr::as() const {
     return rcob->ob.as<T>();
 }
 
@@ -42,7 +42,7 @@ inline bool Ptr::is() const {
 }
 
 template <class T>
-inline T &Ptr::cast() const {
+inline const T &Ptr::cast() const {
     return rcob->ob.cast<T>();
 }
 
@@ -56,17 +56,17 @@ inline Ptr Ptr::cdr() const {
 
 inline Ptr Ptr::eval(const Ptr & a) const {
     return rcob->ob.visit(overloaded {
-        [&](types::Pair &p) { return p.eval(a); },
-        [&, *this](types::Symbol &s) { return types::Context::assoc(a, *this); },
-        [&, *this](types::Const &p) { return *this; },
-        [](types::Any&) -> Ptr { throw TypeError("eval"); }
+        [&](const types::Pair &p) { return p.eval(a); },
+        [&, *this](const types::Symbol &s) { return types::Context::assoc(a, *this); },
+        [&, *this](const types::Const &p) { return *this; },
+        [](const types::Any&) -> Ptr { throw TypeError("eval"); }
     });
 }
 
 inline Ptr Ptr::apply(const Ptr & p, const Ptr & a) const {
     if (p == Ptr::anil()) return *this;
     return rcob->ob.visit(
-        [&](auto& t) -> Ptr {
+        [&](const auto& t) -> Ptr {
             using T = std::decay_t<decltype(t)>;
             if constexpr (std::is_base_of_v<types::Macro, T>) {
                 return t.apply(p, a);

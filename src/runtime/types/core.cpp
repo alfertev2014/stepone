@@ -3,11 +3,7 @@
 
 namespace stepone::types {
 
-Ptr Pair::car() {return pcar;}
-
-Ptr Pair::cdr() {return pcdr;}
-
-Ptr Pair::eval(const Ptr &context) {return pcar.eval(context).apply(pcdr, context);}
+Ptr Pair::eval(const Ptr &context) const {return car.eval(context).apply(cdr, context);}
 
 Ptr Context::make(const Ptr & symbol, const Ptr & value, const Ptr & next) {
     return Ptr::of<Pair>(Ptr::of<Pair>(symbol, value), next);

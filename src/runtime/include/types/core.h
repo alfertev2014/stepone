@@ -23,22 +23,19 @@ class Any {};
  * The most frequent data structures in practice that consist of pairs are binary tirees and direct linked lists.
  * But it is possible to construct any kinds of acyclic graphs.
  * Cicles are possible via special type of mutable references.
- * So pcar and pcdr cannot refer to pair itself but can be equal to each other.
+ * So car and cdr cannot refer to pair itself but can be equal to each other.
  *
  * The names CAR and CDR are borrowed from LISP.
  */
 class Pair final : public Any {
-private:
-    Ptr pcar;
-    Ptr pcdr;
 public:
-    Pair(const Ptr & pcar, const Ptr & pcdr)
-        : pcar(pcar), pcdr(pcdr) {}
+    const Ptr car;
+    const Ptr cdr;
 
-    Ptr car();
-    Ptr cdr();
+    Pair(const Ptr & car, const Ptr & cdr)
+        : car(car), cdr(cdr) {}
 
-    Ptr eval(const Ptr & context);
+    Ptr eval(const Ptr & context) const;
 };
 
 /**
@@ -77,7 +74,7 @@ public:
 class Symbol final : public Atom {
     // TODO: Should we allocate memory for these empty objects? Think about embedding Symbol semantics into Ptr.
 public:
-    Ptr eval(const Ptr & context);
+    Ptr eval(const Ptr & context) const;
 };
 
 /**

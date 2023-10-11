@@ -71,7 +71,7 @@ public:
 
     std::ostream & printOb(std::ostream & ts, const Ptr & p);
     std::ostream & printSymbol(std::ostream & ts, const Ptr &sym);
-    std::ostream & printList(std::ostream & ts, Pair * pr);
+    std::ostream & printList(std::ostream & ts, const Pair *pr);
     void printValue(std::ostream &ts, const Ptr &p);
 };
 
@@ -130,16 +130,16 @@ Ptr FirstParser::FirstParserImpl::parse(const std::string &_s) {
 
 void Printer::printValue(std::ostream &ts, const Ptr &p) {
 
-    if (Value<long> *val = p.as<Value<long> >(); val)
-            ts << val->getValue();
-    else if (Value<double> *val = p.as<Value<double> >(); val)
-        ts << val->getValue();
-    else if (Value<char> *val = p.as<Value<char> >(); val) {
-        char c = val->getValue();
+    if (const Value<long> *val = p.as<Value<long> >(); val)
+            ts << val->value;
+    else if (const Value<double> *val = p.as<Value<double> >(); val)
+        ts << val->value;
+    else if (const Value<char> *val = p.as<Value<char> >(); val) {
+        char c = val->value;
         if(c == '\"') ts << "&\"\"";
         else ts << "&\"" << c << "\"";
     }
-    else if (Vector * v = p.as<Vector>(); v) {
+    else if (const Vector * v = p.as<Vector>(); v) {
         int n = v->getSize();
         if(n == 0)
             ts << "[]";
@@ -152,7 +152,7 @@ void Printer::printValue(std::ostream &ts, const Ptr &p) {
             }
             ts << "]";
         }
-    } else if (ByteArray * ba = p.as<ByteArray>(); ba) {
+    } else if (const ByteArray * ba = p.as<ByteArray>(); ba) {
         ts << "\"";
         ts.write(ba->getData(), ba->getSize());
         ts << "\"";
@@ -179,7 +179,7 @@ std::ostream &Printer::printSymbol(std::ostream &ts, const Ptr &sym) {
     } else {
         for(Ptr p = symbols; p != Ptr::anil(); p = p.cdr()) {
             if(p.car().car() == sym) {
-                ByteArray * ba = p.car().cdr().as<ByteArray>();
+                const ByteArray * ba = p.car().cdr().as<ByteArray>();
                 return ts.write(ba->getData(), ba->getSize());
             }
         }
@@ -187,9 +187,9 @@ std::ostream &Printer::printSymbol(std::ostream &ts, const Ptr &sym) {
     return ts << "{sym}";
 }
 
-std::ostream &Printer::printList(std::ostream &ts, Pair *pr) {
-    printOb(ts, pr->car());
-    Ptr pcdr = pr->cdr();
+std::ostream &Printer::printList(std::ostream &ts, const Pair *pr) {
+    printOb(ts, pr->car);
+    Ptr pcdr = pr->cdr;
     if(pcdr.is<Atom>()) {
         if(pcdr != Ptr::anil()) {
             ts << " . ";
@@ -303,7 +303,7 @@ parseRes Parser::parseSymbol() {
         symbolString.push_back(*si);
     }
     for (Ptr p = symbols; p != Ptr::anil(); p = p.cdr()) {
-        ByteArray * ba = p.car().cdr().as<ByteArray>();
+        const ByteArray * ba = p.car().cdr().as<ByteArray>();
         if(ba->getSize() == symbolString.size() &&
                 !memcmp(ba->getData(), symbolString.data(), symbolString.size()))
             return p.car().car();

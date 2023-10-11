@@ -8,11 +8,9 @@ namespace stepone::types {
 
 template <class T>
 class Value final : public ValueBase {
-private:
-    T t;
 public:
-    Value(const T & _t) : t(_t) {}
-    T getValue() const {return t;}
+    const T value;
+    Value(const T &value) : value(value) {}
 };
 
 // TODO: Add it to Ob payload

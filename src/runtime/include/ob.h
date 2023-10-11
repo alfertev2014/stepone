@@ -17,7 +17,7 @@ namespace stepone {
 class Ob final {
     friend class Ptr;
 
-    std::variant<
+    const std::variant<
         types::Pair,
         types::Symbol,
         types::Evaluator,
@@ -35,11 +35,11 @@ public:
     template <class T>
     explicit Ob(T&& t) : v(std::forward<T>(t)) {}
 
-    Ptr car();
-    Ptr cdr();
+    Ptr car() const;
+    Ptr cdr() const;
 
     template <class T>
-    T * as() {
+    const T * as() const {
         return std::get_if<T>(&v);
     }
 
@@ -52,17 +52,12 @@ public:
     }
 
     template <class T>
-    T &cast() {
-        if (auto * p = as<T>(); !p) {
+    const T &cast() const {
+        if (const auto * p = as<T>(); !p) {
             throw TypeError("error cast");
         } else {
             return *p;
         }
-    }
-
-    template <typename Visitor>
-    decltype(auto) visit(Visitor&& visitor) {
-        return std::visit(std::forward<Visitor>(visitor), v);
     }
 
     template <typename Visitor>

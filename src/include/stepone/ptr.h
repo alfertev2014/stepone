@@ -48,11 +48,11 @@ public:
     bool operator!=(const Ptr &p) const {return rcob != p.rcob;}
 
     template <class T>
-    T * as() const;
+    const T * as() const;
     template <class T>
     bool is() const;
     template <class T>
-    T &cast() const;
+    const T &cast() const;
 
     Ptr car() const;
     Ptr cdr() const;

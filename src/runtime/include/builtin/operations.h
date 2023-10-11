@@ -58,10 +58,10 @@ public:
 
     template <typename T>
     operator T() {
-        return ptr.cast<Value<T>>().getValue();
+        return ptr.cast<Value<T>>().value;
     }
 
-    operator const Ptr&() {
+    operator const Ptr&() const {
         return ptr;
     }
 

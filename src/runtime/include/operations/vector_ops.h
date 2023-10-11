@@ -14,7 +14,7 @@ public:
 class FMakeVector {
 public:
     Ptr operator()(const Ptr &p, const Ptr &a) const {
-        long n = p.car().eval(a).cast<Value<long> >().getValue();
+        long n = p.car().eval(a).cast<Value<long> >().value;
         return Ptr::of<Vector>(n, p.cdr(), a);
     }
 };
@@ -22,7 +22,7 @@ public:
 class VectorElBinOp {
 public:
     Ptr operator()(const Ptr &x1, const Ptr &x2) const {
-        return x1.cast<Vector>().getElement(x2.cast<Value<long> >().getValue());
+        return x1.cast<Vector>().getElement(x2.cast<Value<long> >().value);
     }
 };
 
@@ -43,7 +43,7 @@ public:
 class VectorMidTerOp {
 public:
     Ptr operator()(const Ptr &x1, const Ptr &x2, const Ptr &x3) const {
-        return Ptr::of<Vector>(x1.cast<Vector>(), x2.cast<Value<long> >().getValue(), x3.cast<Value<long> >().getValue());
+        return Ptr::of<Vector>(x1.cast<Vector>(), x2.cast<Value<long> >().value, x3.cast<Value<long> >().value);
     }
 };
 

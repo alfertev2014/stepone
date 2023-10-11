@@ -20,12 +20,12 @@ const Ptr Ptr::at() {
 
 namespace stepone {
 
-Ptr Ob::car() {
-    return cast<types::Pair>().car();
+Ptr Ob::car() const {
+    return cast<types::Pair>().car;
 }
 
-Ptr Ob::cdr() {
-    return cast<types::Pair>().cdr();
+Ptr Ob::cdr() const {
+    return cast<types::Pair>().cdr;
 }
 
 } // namespaces
