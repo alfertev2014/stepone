@@ -1,11 +1,11 @@
 #include <objects/basemacro_obs.h>
 
-#include <ob.h>
+#include <ptr_impl.h>
 #include <builtin/basemacro.h>
-#include <builtin/operations.h>
 
 namespace stepone::objects {
 
+using namespace types;
 using namespace builtin;
 
 BaseMacroses::BaseMacroses() :
