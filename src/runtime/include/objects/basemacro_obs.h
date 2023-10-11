@@ -14,7 +14,6 @@ public:
     const Ptr aif;
     const Ptr alet;
     const Ptr amacro;
-    const Ptr acurctx;
     const Ptr atry;
     const Ptr abot;
     const Ptr agensym;

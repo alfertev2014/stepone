@@ -13,7 +13,6 @@ public:
     const Ptr acdr;
     const Ptr acons;
     const Ptr aeq;
-    const Ptr agettype;
     const Ptr actxget;
     const Ptr actxpush;
 

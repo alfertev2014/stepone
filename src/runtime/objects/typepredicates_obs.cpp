@@ -17,22 +17,22 @@ BaseTypePredicates::BaseTypePredicates() :
     aconstp(Ptr::of<Symbol>()),
     amacrop(Ptr::of<Symbol>()),
     aevalp(Ptr::of<Symbol>()),
-    abasemacrop(Ptr::of<Symbol>()),
-    ausermacrop(Ptr::of<Symbol>()),
+    abuiltinmacrop(Ptr::of<Symbol>()),
+    amacroclosurep(Ptr::of<Symbol>()),
     avaluep(Ptr::of<Symbol>())
 {}
 
 Ptr BaseTypePredicates::populateContext(const Ptr &a) const
 {
-    Ptr ctx = Context::make(apairp, Ptr::of<BaseMacro>(Function<TypePUnOp<Pair>>()), a);
-    ctx = Context::make(aatomp, Ptr::of<BaseMacro>(Function<TypePUnOp<Atom>>()), ctx);
-    ctx = Context::make(asymbolp, Ptr::of<BaseMacro>(Function<TypePUnOp<Symbol>>()), ctx);
-    ctx = Context::make(aconstp, Ptr::of<BaseMacro>(Function<TypePUnOp<Const>>()), ctx);
-    ctx = Context::make(amacrop, Ptr::of<BaseMacro>(Function<TypePUnOp<Macro>>()), ctx);
-    ctx = Context::make(aevalp, Ptr::of<BaseMacro>(Function<TypePUnOp<Evaluator>>()), ctx);
-    ctx = Context::make(abasemacrop, Ptr::of<BaseMacro>(Function<TypePUnOp<BaseMacro>>()), ctx);
-    ctx = Context::make(ausermacrop, Ptr::of<BaseMacro>(Function<TypePUnOp<MacroClosure>>()), ctx);
-    ctx = Context::make(avaluep, Ptr::of<BaseMacro>(Function<TypePUnOp<ValueBase>>()), ctx);
+    Ptr ctx = Context::make(apairp, Ptr::of<BuiltInMacro>(Function<TypePUnOp<Pair>>()), a);
+    ctx = Context::make(aatomp, Ptr::of<BuiltInMacro>(Function<TypePUnOp<Atom>>()), ctx);
+    ctx = Context::make(asymbolp, Ptr::of<BuiltInMacro>(Function<TypePUnOp<Symbol>>()), ctx);
+    ctx = Context::make(aconstp, Ptr::of<BuiltInMacro>(Function<TypePUnOp<Const>>()), ctx);
+    ctx = Context::make(amacrop, Ptr::of<BuiltInMacro>(Function<TypePUnOp<Macro>>()), ctx);
+    ctx = Context::make(aevalp, Ptr::of<BuiltInMacro>(Function<TypePUnOp<Evaluator>>()), ctx);
+    ctx = Context::make(abuiltinmacrop, Ptr::of<BuiltInMacro>(Function<TypePUnOp<BuiltInMacro>>()), ctx);
+    ctx = Context::make(amacroclosurep, Ptr::of<BuiltInMacro>(Function<TypePUnOp<MacroClosure>>()), ctx);
+    ctx = Context::make(avaluep, Ptr::of<BuiltInMacro>(Function<TypePUnOp<ValueBase>>()), ctx);
 
     return ctx;
 }

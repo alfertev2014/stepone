@@ -24,13 +24,13 @@ VectorFunctions::VectorFunctions() :
 
 Ptr VectorFunctions::populateContext(const Ptr &a) const
 {
-    Ptr ctx = Context::make(avecp, Ptr::of<BaseMacro>(Function<TypePUnOp<Vector>>()), a);
-    ctx = Context::make(amkvec, Ptr::of<BaseMacro>(Function<FMakeVector>()), ctx);
-    ctx = Context::make(avecclone, Ptr::of<BaseMacro>(Function<VectorCloneUnOp>()), ctx);
-    ctx = Context::make(aveclen, Ptr::of<BaseMacro>(Function<VectorLengthUnOp>()), ctx);
-    ctx = Context::make(avecmid, Ptr::of<BaseMacro>(Function<VectorMidTerOp>()), ctx);
-    ctx = Context::make(avecel, Ptr::of<BaseMacro>(Function<VectorElBinOp>()), ctx);
-    ctx = Context::make(aveccat, Ptr::of<BaseMacro>(Function<VectorConcatBinOp>()), ctx);
+    Ptr ctx = Context::make(avecp, Ptr::of<BuiltInMacro>(Function<TypePUnOp<Vector>>()), a);
+    ctx = Context::make(amkvec, Ptr::of<BuiltInMacro>(Function<FMakeVector>()), ctx);
+    ctx = Context::make(avecclone, Ptr::of<BuiltInMacro>(Function<VectorCloneUnOp>()), ctx);
+    ctx = Context::make(aveclen, Ptr::of<BuiltInMacro>(Function<VectorLengthUnOp>()), ctx);
+    ctx = Context::make(avecmid, Ptr::of<BuiltInMacro>(Function<VectorMidTerOp>()), ctx);
+    ctx = Context::make(avecel, Ptr::of<BuiltInMacro>(Function<VectorElBinOp>()), ctx);
+    ctx = Context::make(aveccat, Ptr::of<BuiltInMacro>(Function<VectorConcatBinOp>()), ctx);
 
     return ctx;
 }

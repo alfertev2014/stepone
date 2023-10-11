@@ -21,7 +21,7 @@ class Ob final {
         types::Pair,
         types::Symbol,
         types::Evaluator,
-        types::BaseMacro,
+        types::BuiltInMacro,
         types::MacroClosure,
         types::Vector,
         types::ByteArray,

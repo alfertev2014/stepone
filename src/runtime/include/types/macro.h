@@ -21,16 +21,16 @@ public:
 };
 
 
-using BaseMacroApplyFunction = Ptr(*)(const Ptr &argument, const Ptr &context);
+using BuiltInMacroApplyFunction = Ptr(*)(const Ptr &argument, const Ptr &context);
 
-class BaseMacro final : public Macro {
+class BuiltInMacro final : public Macro {
 private:
-    const BaseMacroApplyFunction applyFunction;
+    const BuiltInMacroApplyFunction applyFunction;
 public:
-    BaseMacro(const BaseMacroApplyFunction &applyFunction) : applyFunction(applyFunction) {}
+    BuiltInMacro(const BuiltInMacroApplyFunction &applyFunction) : applyFunction(applyFunction) {}
 
     template <typename Func>
-    BaseMacro(const Func &) : applyFunction([](const Ptr &argument, const Ptr &context) { return Func()(argument, context); }) {}
+    BuiltInMacro(const Func &) : applyFunction([](const Ptr &argument, const Ptr &context) { return Func()(argument, context); }) {}
 
     Ptr apply(const Ptr &argument, const Ptr &context) const {return applyFunction(argument, context);}
 };

@@ -15,8 +15,8 @@ public:
     const Ptr aconstp;
     const Ptr amacrop;
     const Ptr aevalp;
-    const Ptr abasemacrop;
-    const Ptr ausermacrop;
+    const Ptr abuiltinmacrop;
+    const Ptr amacroclosurep;
     const Ptr avaluep;
 
     Ptr populateContext(const Ptr &a) const;

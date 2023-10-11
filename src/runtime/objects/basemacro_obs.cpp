@@ -22,14 +22,14 @@ BaseMacroses::BaseMacroses() :
 
 Ptr BaseMacroses::populateContext(const Ptr &a) const
 {
-    Ptr ctx = Context::make(aquote, Ptr::of<BaseMacro>(MQuote()), a);
-    ctx = Context::make(aapply, Ptr::of<BaseMacro>(MApply()), ctx);
-    ctx = Context::make(aif, Ptr::of<BaseMacro>(MIf()), ctx);
-    ctx = Context::make(alet, Ptr::of<BaseMacro>(MLet()), ctx);
-    ctx = Context::make(amacro, Ptr::of<BaseMacro>(MMacro()), ctx);
-    ctx = Context::make(atry, Ptr::of<BaseMacro>(MTry()), ctx);
-    ctx = Context::make(abot, Ptr::of<BaseMacro>(MBot()), ctx);
-    ctx = Context::make(agensym, Ptr::of<BaseMacro>(MGenSymbol()), ctx);
+    Ptr ctx = Context::make(aquote, Ptr::of<BuiltInMacro>(MQuote()), a);
+    ctx = Context::make(aapply, Ptr::of<BuiltInMacro>(MApply()), ctx);
+    ctx = Context::make(aif, Ptr::of<BuiltInMacro>(MIf()), ctx);
+    ctx = Context::make(alet, Ptr::of<BuiltInMacro>(MLet()), ctx);
+    ctx = Context::make(amacro, Ptr::of<BuiltInMacro>(MMacro()), ctx);
+    ctx = Context::make(atry, Ptr::of<BuiltInMacro>(MTry()), ctx);
+    ctx = Context::make(abot, Ptr::of<BuiltInMacro>(MBot()), ctx);
+    ctx = Context::make(agensym, Ptr::of<BuiltInMacro>(MGenSymbol()), ctx);
 
     return ctx;
 }

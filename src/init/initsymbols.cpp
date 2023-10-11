@@ -114,14 +114,13 @@ Ptr BaseSymbolTable::createSymbolTable() {
     addSymbol(symbolTable, "symbol?", BaseTypePredicates::inst().asymbolp);
     addSymbol(symbolTable, "const?", BaseTypePredicates::inst().aconstp);
     addSymbol(symbolTable, "macro?", BaseTypePredicates::inst().amacrop);
-    addSymbol(symbolTable, "basemacro?", BaseTypePredicates::inst().abasemacrop);
-    addSymbol(symbolTable, "usermacro?", BaseTypePredicates::inst().ausermacrop);
-    addSymbol(symbolTable, "spectype?", BaseTypePredicates::inst().avaluep);
+    addSymbol(symbolTable, "builtin-macro?", BaseTypePredicates::inst().abuiltinmacrop);
+    addSymbol(symbolTable, "macro-closure?", BaseTypePredicates::inst().amacroclosurep);
+    addSymbol(symbolTable, "value?", BaseTypePredicates::inst().avaluep);
 
     addSymbol(symbolTable, "ctx-get", BaseFunctions::inst().actxget);
     addSymbol(symbolTable, "ctx-push", BaseFunctions::inst().actxpush);
     addSymbol(symbolTable, "empty-ctx", BaseFunctions::inst().aeempty);
-    addSymbol(symbolTable, "get-type", BaseFunctions::inst().agettype);
     addSymbol(symbolTable, "cons", BaseFunctions::inst().acons);
     addSymbol(symbolTable, "car", BaseFunctions::inst().acar);
     addSymbol(symbolTable, "cdr", BaseFunctions::inst().acdr);
@@ -130,7 +129,6 @@ Ptr BaseSymbolTable::createSymbolTable() {
     addSymbol(symbolTable, "t", Ptr::at());
 
     addSymbol(symbolTable, "^", BaseMacroses::inst().agensym);
-    addSymbol(symbolTable, "~", BaseMacroses::inst().acurctx);
     addSymbol(symbolTable, "_", BaseMacroses::inst().abot);
     addSymbol(symbolTable, "|", BaseMacroses::inst().atry);
     addSymbol(symbolTable, "%", BaseMacroses::inst().amacro);
