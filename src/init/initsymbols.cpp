@@ -136,7 +136,6 @@ Ptr BaseSymbolTable::createSymbolTable() {
     addSymbol(symbolTable, "%", BaseMacroses::inst().amacro);
     addSymbol(symbolTable, "`", BaseMacroses::inst().aapply);
     addSymbol(symbolTable, "?", BaseMacroses::inst().aif);
-    addSymbol(symbolTable, "\\", BaseMacroses::inst().alambda);
     addSymbol(symbolTable, ">-", BaseMacroses::inst().alet);
     addSymbol(symbolTable, "'", BaseMacroses::inst().aquote);
     l.debug("Symbol table is initialized");

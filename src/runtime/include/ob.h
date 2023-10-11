@@ -23,7 +23,6 @@ class Ob final {
         types::Evaluator,
         types::BaseMacro,
         types::MacroClosure,
-        types::CurrentContext,
         types::Vector,
         types::ByteArray,
         types::Value<double>,

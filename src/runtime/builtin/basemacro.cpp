@@ -28,11 +28,7 @@ Ptr MLet::operator()(const Ptr &p, const Ptr &a) const {
 }
 
 Ptr MMacro::operator()(const Ptr &p, const Ptr &a) const {
-    return Ptr::of<MacroClosure>(p.car(), p.cdr(), a);
-}
-
-Ptr MCurrentContext::operator()(const Ptr &p, const Ptr &a) const {
-    return Ptr::of<CurrentContext>(p.car(), p.cdr(), a);
+    return Ptr::of<MacroClosure>(p.car(), p.cdr().car(), p.cdr().cdr(), a);
 }
 
 Ptr MTry::operator()(const Ptr &p, const Ptr &a) const {

@@ -17,11 +17,7 @@ Ptr Evaluator::push(const Ptr &symbol, const Ptr &value) const {
 }
 
 Ptr MacroClosure::apply(const Ptr &argument, const Ptr &context) const {
-    return expression.eval(Context::make(symbol, argument, this->context));
-}
-
-Ptr CurrentContext::apply(const Ptr &argument, const Ptr &context) const {
-    return expression.eval(Context::make(symbol, Ptr::of<Evaluator>(context), this->context)).apply(argument, this->context);
+    return bodyExpression.eval(Context::make(argumentSymbol, argument, this->creationContext));
 }
 
 } // namespaces

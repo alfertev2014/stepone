@@ -14,7 +14,6 @@ TEST(CompilationInfo,SiteOfTypes) {
     std::cout << "sizeof types::Evaluator = " << sizeof(Evaluator) << std::endl;
     std::cout << "sizeof types::BaseMacro = " << sizeof(BaseMacro) << std::endl;
     std::cout << "sizeof types::MacroClosure = " << sizeof(MacroClosure) << std::endl;
-    std::cout << "sizeof types::CurrentContext = " << sizeof(CurrentContext) << std::endl;
     std::cout << "sizeof types::Vector = " << sizeof(Vector) << std::endl;
     std::cout << "sizeof types::ByteArray = " << sizeof(ByteArray) << std::endl;
     std::cout << "sizeof types::Value<double> = " << sizeof(Value<double>) << std::endl;

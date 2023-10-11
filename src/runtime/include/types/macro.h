@@ -38,25 +38,16 @@ public:
 // TODO: Do we need both MacroClosure and CurrentContext to write macros.
 class MacroClosure final : public Macro {
 private:
-    const Ptr symbol;
-    const Ptr expression;
-    const Ptr context;
+    const Ptr argumentSymbol;
+    const Ptr callingContextSymbol;
+    const Ptr bodyExpression;
+    const Ptr creationContext;
 public:
-    MacroClosure(const Ptr &symbol, const Ptr &expression, const Ptr &context)
-        : symbol(symbol), expression(expression), context(context) {}
-
-    Ptr apply(const Ptr &argument, const Ptr &context) const;
-};
-
-
-class CurrentContext final : public Macro {
-private:
-    const Ptr symbol;
-    const Ptr expression;
-    const Ptr context;
-public:
-    CurrentContext(const Ptr &symbol, const Ptr &expression, const Ptr &context)
-        : symbol(symbol), expression(expression), context(context) {}
+    MacroClosure(const Ptr &argumentSymbol, const Ptr &callingContextSymbol, const Ptr &expression, const Ptr &context)
+        : argumentSymbol(argumentSymbol),
+          callingContextSymbol(callingContextSymbol),
+          bodyExpression(expression),
+          creationContext(context) {}
 
     Ptr apply(const Ptr &argument, const Ptr &context) const;
 };

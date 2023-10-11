@@ -24,17 +24,7 @@ public:
     Ptr operator()(const Ptr &p, const Ptr &a) const;
 };
 
-class MLambda {
-public:
-    Ptr operator()(const Ptr &p, const Ptr &a) const;
-};
-
 class MMacro {
-public:
-    Ptr operator()(const Ptr &p, const Ptr &a) const;
-};
-
-class MCurrentContext {
 public:
     Ptr operator()(const Ptr &p, const Ptr &a) const;
 };

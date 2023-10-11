@@ -8,7 +8,7 @@ using namespace stepone::types;
 
 class VectorLengthUnOp {
 public:
-    Ptr operator()(const Ptr &x) const {return Ptr::of<Value<long>>(static_cast<int>(x.cast<Vector>().getSize()));}
+    Ptr operator()(const Ptr &x) const {return Ptr::of<Value<long>>(static_cast<long>(x.cast<Vector>().getSize()));}
 };
 
 class FMakeVector {
